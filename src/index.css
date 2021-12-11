@@ -19,6 +19,15 @@ code {
 .App {
   display: flex;
   height: 100vh;
+  position: relative;
+}
+
+.sidebar-wrapper {
+  /* position: absolute;
+  top: 0;
+  left: 0; */
+  height: 100vh;
+  overflow: hidden;
 }
 
 .pro-sidebar {
@@ -27,6 +36,11 @@ code {
 
 .pro-sidebar-inner {
   /* background: green !important; */
+  overflow: hidden;
+}
+
+.pro-sidebar-layout {
+  overflow: hidden;
 }
 
 .sidebar-title {
@@ -44,5 +58,8 @@ code {
 }
 
 .page-wrapper {
+  width: 100%;
   padding: 26px 40px;
+  /* padding-left: 106px; */
+  overflow: auto;
 }

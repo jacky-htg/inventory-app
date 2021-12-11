@@ -62,7 +62,7 @@ const Router = props => {
       {/* <GlobalStyles /> */ }
       {/* <ScrollToTop /> */ }
 
-      <ReactHoverObserver>
+      <ReactHoverObserver className='sidebar-wrapper'>
         { ({ isHovering }) => (
           <ProSidebar
             width={ '270px' }
