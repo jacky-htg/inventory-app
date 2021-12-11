@@ -9,6 +9,11 @@ import {
   isBrowser,
   isMobile
 } from 'react-device-detect';
+import { ProSidebar, SidebarHeader, SidebarFooter, SidebarContent, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import 'react-pro-sidebar/dist/css/styles.css';
+import { FaGem, FaHeart, FaUserCircle } from "react-icons/fa";
+import { BsSun } from 'react-icons/bs';
+import ReactHoverObserver from 'react-hover-observer';
 
 import {
   Dashboard,
@@ -52,24 +57,77 @@ const Router = props => {
       {/* <GlobalStyles /> */ }
       {/* <ScrollToTop /> */ }
 
-      <Switch>
-        {
-          publicRoutes.map(route =>
-            <Route
-              key={ route.path }
-              exact
-              path={ route.path }
-              component={ route.component }
-            />
-          )
-        }
+      <ReactHoverObserver>
+        { ({ isHovering }) => (
+          <ProSidebar
+            width={ '270px' }
+            collapsedWidth={ '80px' }
+            collapsed={ !isHovering }
+          >
+            <SidebarHeader>
+              {/**
+             *  You can add a header for the sidebar ex: logo
+             */}
+              <div className="sidebar-title">
+                <BsSun size={ 30 } />
+                {
+                  isHovering &&
+                  <h1>Sunright ERP</h1>
+                }
+              </div>
+            </SidebarHeader>
+            <SidebarContent>
+              {/**
+             *  You can add the content of the sidebar ex: menu, profile details, ...
+             */}
+              <Menu iconShape="circle">
+                <MenuItem icon={ <FaGem /> }>Menu 1</MenuItem>
+                <MenuItem icon={ <FaGem /> }>Menu 2</MenuItem>
+                <MenuItem icon={ <FaGem /> }>Menu 3</MenuItem>
+                <MenuItem icon={ <FaGem /> }>Menu 4</MenuItem>
+                <MenuItem icon={ <FaGem /> }>Menu 5</MenuItem>
 
-        {/* {
-          privateRoutes.map(route => <PrivateRoute key={ route.path } path={ route.path } component={ route.component } langContent={ langContent } />)
-        } */}
+                <SubMenu title="Menu with Submenu" icon={ <FaHeart /> }>
+                  <MenuItem>Submenu 1</MenuItem>
+                  <MenuItem>Submenu 2</MenuItem>
+                </SubMenu>
+              </Menu>
+            </SidebarContent>
+            <SidebarFooter>
+              {/**
+             *  You can add a footer for the sidebar ex: copyright
+             */}
+              <Menu iconShape="circle">
+                <SubMenu title="username" icon={ <FaUserCircle /> }>
+                  <MenuItem>Setting</MenuItem>
+                  <MenuItem>Logout</MenuItem>
+                </SubMenu>
+              </Menu>
+            </SidebarFooter>
+          </ProSidebar>
+        ) }
+      </ReactHoverObserver>
 
-        {/* <Route component={ Page404 }/> */ }
-      </Switch>
+      <div className="page-wrapper">
+        <Switch>
+          {
+            publicRoutes.map(route =>
+              <Route
+                key={ route.path }
+                exact
+                path={ route.path }
+                component={ route.component }
+              />
+            )
+          }
+
+          {/* {
+            privateRoutes.map(route => <PrivateRoute key={ route.path } path={ route.path } component={ route.component } langContent={ langContent } />)
+          } */}
+
+          {/* <Route component={ Page404 }/> */ }
+        </Switch>
+      </div>
 
     </BrowserRouter>
   );
