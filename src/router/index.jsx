@@ -17,7 +17,8 @@ import ReactHoverObserver from 'react-hover-observer';
 
 import {
   Dashboard,
-  Master
+  Master,
+  Inm00001
 } from '../screens';
 import { Colors } from '../constant';
 
@@ -35,6 +36,10 @@ const publicRoutes = [
   {
     path: '/master',
     component: Master,
+  },
+  {
+    path: '/inm00001',
+    component: Inm00001,
   },
 
 ];
