@@ -1,34 +1,3 @@
-.maincontent {
-  padding:1%;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.container {
-  flex: 78%;
-}
-
-.header-list {
-  padding:2%;
-}
-
-.header-list h2 {
-  font-size: 160%;
-  text-align: right;
-  color: darkblue;
-}
-
-button.create {
-  border:1px solid black;
-  padding: 1%;
-  background-color: #f2f2f2;
-  margin-bottom: 1%;
-}
-
-button.create:hover {
-  background-color: whitesmoke;
-}
-
 .filter {
   background-color: #fefefe;
   padding: 1%;
@@ -46,6 +15,18 @@ button.create:hover {
 
 .filter input {
   border: 1px solid #eee;
+}
+
+.filter button {
+  background-color: rgb(104, 103, 103);
+  padding: 0.5% 2%;
+  border: 1px solid darkblue;
+  color : whitesmoke;
+}
+
+.filter button:hover {
+  color: black;
+  background-color: whitesmoke;
 }
 
 table {

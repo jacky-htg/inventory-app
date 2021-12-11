@@ -86,16 +86,34 @@ const Router = props => {
              *  You can add the content of the sidebar ex: menu, profile details, ...
              */}
               <Menu iconShape="circle">
-                <MenuItem icon={ <FaGem /> }>Menu 1</MenuItem>
-                <MenuItem icon={ <FaGem /> }>Menu 2</MenuItem>
-                <MenuItem icon={ <FaGem /> }>Menu 3</MenuItem>
-                <MenuItem icon={ <FaGem /> }>Menu 4</MenuItem>
-                <MenuItem icon={ <FaGem /> }>Menu 5</MenuItem>
-
-                <SubMenu title="Menu with Submenu" icon={ <FaHeart /> }>
-                  <MenuItem>Submenu 1</MenuItem>
-                  <MenuItem>Submenu 2</MenuItem>
+                <SubMenu title="Maintenance" icon={ <FaHeart /> }>
+                  <MenuItem>Item Master</MenuItem>
+                  <MenuItem>GRN Entry (with PO)</MenuItem>
+                  <MenuItem>Manual GRN Entry</MenuItem>
+                  <MenuItem>SIV Entry</MenuItem>
+                  <MenuItem>Manual SIV Entry</MenuItem>
+                  <MenuItem>SIV Combine Entry</MenuItem>
+                  <MenuItem>SIV Consigned Entry</MenuItem>
+                  <MenuItem>MSR Entry</MenuItem>
+                  <MenuItem>MRV Entry</MenuItem>
+                  <MenuItem>Stock Location</MenuItem>
+                  <MenuItem>UOM</MenuItem>
+                  <MenuItem>Item Category</MenuItem>
+                  <MenuItem>Inventory Control</MenuItem>
+                  <MenuItem>Reversal of RSI</MenuItem>
+                  <MenuItem>GRN Reversal</MenuItem>
+                  <MenuItem>Project - Stock Allocation</MenuItem>
+                  <MenuItem>Project - Stock Release</MenuItem>
                 </SubMenu>
+                <SubMenu title="Batch" icon={ <FaHeart /> }>
+                  <MenuItem>Batch 1</MenuItem>
+                  <MenuItem>Batch 2</MenuItem>
+                </SubMenu>
+                <SubMenu title="Report" icon={ <FaHeart /> }>
+                  <MenuItem>Report 1</MenuItem>
+                  <MenuItem>Report 2</MenuItem>
+                </SubMenu>
+                <MenuItem icon={ <FaGem /> }>End of Period</MenuItem>
               </Menu>
             </SidebarContent>
             <SidebarFooter>

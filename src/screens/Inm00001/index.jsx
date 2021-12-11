@@ -1,186 +1,195 @@
-import React from 'react';
-import {Sidemenu} from '../../components';
-import './list.css';
+import React, { useState } from 'react';
+import { Table, Button, Space, AutoComplete, Form } from 'antd';
 
 function Inm00001() {
-  const items = [];
-  for (const item of getItem()) {
-    items.push(<tr key={item.ItemNo}>
-      <td>
-        {item.ItemNo}
-      </td>
-      <td>
-      {item.PartNo}
-      </td>
-      <td>{item.Manufacturer}</td>
-      <td>{item.UOM}</td>
-      <td>{item.BoardSize}</td>
-      <td>{item.Leadtime}</td>
-      <td>{item.Requestor}</td>
-      <td><button>View</button><button>Edit</button> <button>Delete</button></td>
-    </tr>);
-  }
+  
+  const { Column } = Table;
+  const mockVal = (str, repeat= 1) => ({
+    value: str.repeat(repeat),
+  });
 
-  const pagination = (
-    <div className="pagination">
-    <a href="#">&laquo;</a>
-    <a className="active" href="#">1</a>
-    <a href="#">2</a>
-    <a href="#">3</a>
-    <a href="#">4</a>
-    <a href="#">5</a>
-    <a href="#">6</a>
-    <a href="#">&raquo;</a>
-  </div>);
+  const [value, setValue] = useState('');
+  const [options, setOptions] = useState([]);
+  const onSearch = searchText => {
+    setOptions(
+      !searchText ? [] : [mockVal(searchText), mockVal(searchText, 2), mockVal(searchText, 3)],
+    );
+  };
+
+  const onSelect = data => {
+    console.log('onSelect', data);
+  };
+  const onChange = data => {
+    setValue(data);
+  };
 
   const filter = (
-    <div className='filter'>
-      <div>
-        <label>Search</label>
-        <input/>
-      </div>
-      <div>
-        <label>Item No</label>
-        <input/>
-      </div>
-      <div>
-        <label>Item No</label>
-        <input/>
-      </div><div>
-        <label>Part No</label>
-        <input/>
-      </div>
-      <div>
-        <label>Requestor</label>
-        <input/>
-      </div>
-      <button>Filter</button>
-    </div>
+    <>
+      <Form.Item
+        label="Item No"
+        name="itemNo"
+      >
+        <AutoComplete
+          options={options}
+          style={{ width: 200 }}
+          onSelect={onSelect}
+          onSearch={onSearch}
+          placeholder="input here"
+        />
+      </Form.Item>
+      <Form.Item
+        label="Part No"
+        name="partNo"
+      >
+        <AutoComplete
+          value={value}
+          options={options}
+          style={{ width: 200 }}
+          onSelect={onSelect}
+          onSearch={onSearch}
+          onChange={onChange}
+          placeholder="input here"
+        />
+      </Form.Item>
+      <Form.Item>
+        <Button size='large'>Filter</Button>
+      </Form.Item>
+    </>
   );
 
   return (
-    <div className="maincontent">
-      <Sidemenu/>
-      <div className='container'>
-        <div className='header-list'><h2>Item Master Maintenance</h2></div>
-        <button className="create">Create Item Master Maintenance</button>
-        {filter}
-        <table>
-          <tbody>
-          <tr>
-            <th>
-              Item No
-            </th>
-            <th>
-              Part No
-            </th>
-            <th>Manufacturer</th>
-            <th>UOM</th>
-            <th>Board Size</th>
-            <th>Leadtime</th>
-            <th>Requestor</th>
-            <th></th>
-          </tr>
-          {items}
-          </tbody>
-        </table>
-        {pagination}
+    <div>
+      {filter}
+      <div style={{textAlign:'right' }}>
+        <Button type="primary" style={{ marginBottom: 16 }}>
+          Add a row
+        </Button>
       </div>
-    </div>
+      <Table dataSource={getItem()}>
+      <Column title="Item No" dataIndex="itemNo" key="itemNo" />
+      <Column title="Part No" dataIndex="partNo" key="partNo" />
+      <Column title="Manufacturer" dataIndex="manufacturer" key="manufacturer" />
+      <Column title="UOM" dataIndex="uom" key="uom" />
+      <Column title="Board Size" dataIndex="boardSize" key="boardSize" />
+      <Column title="Leadtime" dataIndex="leadtime" key="leadtime" />
+      <Column title="Requestor" dataIndex="requestor" key="urequestorom" />
+      <Column
+        title="Action"
+        key="action"
+        render={(text, record) => (
+          <Space size="middle">
+            <a>View</a>
+            <a>Edit</a>
+            <a>Delete</a>
+          </Space>
+        )}
+      />
+    </Table>
+  </div>
   );
 }
 
 function getItem() {
   return [
     {
-      ItemNo : "Item0001",
-      PartNo : "Part0001",
-      Manufacturer : "Manufacturer 00005",
-      UOM: "mm",
-      BoardSize: "12",
-      Leadtime: "40",
-      Requestor: "Ramdani"
+      key : 1,
+      itemNo : "Item0001",
+      partNo : "Part0001",
+      manufacturer : "manufacturer 00005",
+      uom: "mm",
+      boardSize: "12",
+      leadtime: "40",
+      requestor: "Ramdani"
     },
     {
-      ItemNo : "Item0002",
-      PartNo : "Part0002",
-      Manufacturer : "Manufacturer 00005",
-      UOM: "mm",
-      BoardSize: "12",
-      Leadtime: "40",
-      Requestor: "Ramdani"
+      key : 2,
+      itemNo : "Item0002",
+      partNo : "Part0002",
+      manufacturer : "manufacturer 00005",
+      uom: "mm",
+      boardSize: "12",
+      leadtime: "40",
+      requestor: "Ramdani"
     },
     {
-      ItemNo : "Item0003",
-      PartNo : "Part0003",
-      Manufacturer : "Manufacturer 00005",
-      UOM: "mm",
-      BoardSize: "12",
-      Leadtime: "40",
-      Requestor: "Ramdani"
+      key : 3,
+      itemNo : "Item0003",
+      partNo : "Part0003",
+      manufacturer : "manufacturer 00005",
+      uom: "mm",
+      boardSize: "12",
+      leadtime: "40",
+      requestor: "Ramdani"
     },
     {
-      ItemNo : "Item0004",
-      PartNo : "Part0004",
-      Manufacturer : "Manufacturer 00005",
-      UOM: "mm",
-      BoardSize: "12",
-      Leadtime: "40",
-      Requestor: "Ramdani"
+      key : 4,
+      itemNo : "Item0004",
+      partNo : "Part0004",
+      manufacturer : "manufacturer 00005",
+      uom: "mm",
+      boardSize: "12",
+      leadtime: "40",
+      requestor: "Ramdani"
     },
     {
-      ItemNo : "Item0005",
-      PartNo : "Part0005",
-      Manufacturer : "Manufacturer 00005",
-      UOM: "mm",
-      BoardSize: "12",
-      Leadtime: "40",
-      Requestor: "Ramdani"
+      key : 5,
+      itemNo : "Item0005",
+      partNo : "Part0005",
+      manufacturer : "manufacturer 00005",
+      uom: "mm",
+      boardSize: "12",
+      leadtime: "40",
+      requestor: "Ramdani"
     },
     {
-      ItemNo : "Item0006",
-      PartNo : "Part0006",
-      Manufacturer : "Manufacturer 00006",
-      UOM: "mm",
-      BoardSize: "12",
-      Leadtime: "40",
-      Requestor: "Ramdani"
+      key : 6,
+      itemNo : "Item0006",
+      partNo : "Part0006",
+      manufacturer : "manufacturer 00006",
+      uom: "mm",
+      boardSize: "12",
+      leadtime: "40",
+      requestor: "Ramdani"
     },
     {
-      ItemNo : "Item0007",
-      PartNo : "Part0007",
-      Manufacturer : "Manufacturer 00007",
-      UOM: "mm",
-      BoardSize: "12",
-      Leadtime: "40",
-      Requestor: "Ramdani"
+      key : 7,
+      itemNo : "Item0007",
+      partNo : "Part0007",
+      manufacturer : "manufacturer 00007",
+      uom: "mm",
+      boardSize: "12",
+      leadtime: "40",
+      requestor: "Ramdani"
     },
     {
-      ItemNo : "Item0008",
-      PartNo : "Part0008",
-      Manufacturer : "Manufacturer 00008",
-      UOM: "mm",
-      BoardSize: "12",
-      Leadtime: "40",
-      Requestor: "Ramdani"
+      key : 8,
+      itemNo : "Item0008",
+      partNo : "Part0008",
+      manufacturer : "manufacturer 00008",
+      uom: "mm",
+      boardSize: "12",
+      leadtime: "40",
+      requestor: "Ramdani"
     },
     {
-      ItemNo : "Item0009",
-      PartNo : "Part0009",
-      Manufacturer : "Manufacturer 00009",
-      UOM: "mm",
-      BoardSize: "12",
-      Leadtime: "40",
-      Requestor: "Ramdani"
+      key : 9,
+      itemNo : "Item0009",
+      partNo : "Part0009",
+      manufacturer : "manufacturer 00009",
+      uom: "mm",
+      boardSize: "12",
+      leadtime: "40",
+      requestor: "Ramdani"
     },
     {
-      ItemNo : "Item0010",
-      PartNo : "Part0010",
-      Manufacturer : "Manufacturer 00010",
-      UOM: "mm",
-      BoardSize: "12",
-      Leadtime: "40",
-      Requestor: "Ramdani"
+      key : 10,
+      itemNo : "Item0010",
+      partNo : "Part0010",
+      manufacturer : "manufacturer 00010",
+      uom: "mm",
+      boardSize: "12",
+      leadtime: "40",
+      requestor: "Ramdani"
     }
   ]
 }
