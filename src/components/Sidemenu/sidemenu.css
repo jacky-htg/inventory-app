@@ -1,0 +1,17 @@
+.sidemenu {
+  flex:22%;
+  background-color: #fdfdfd;
+}
+
+h2 {
+  font-size: 160%;
+  color: darkblue;
+}
+
+li {
+  padding:1%;
+}
+
+a:hover {
+  color: dodgerblue;
+}
