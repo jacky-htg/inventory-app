@@ -59,6 +59,7 @@ function Inm00001() {
 
   return (
     <div>
+      <h2 style={{ fontSize:'180%', color:'darkblue', marginBottom:'3%' }}>Item Master Maintenance</h2>
       {filter}
       <div style={{textAlign:'right' }}>
         <Button type="primary" style={{ marginBottom: 16 }}>
