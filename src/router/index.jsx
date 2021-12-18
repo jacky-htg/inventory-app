@@ -18,9 +18,10 @@ import ReactHoverObserver from 'react-hover-observer';
 import {
   Dashboard,
   Master,
-  Inm00001
+  Inm00001,
+  Form
 } from '../screens';
-import { Colors } from '../constant';
+import { Colors, Images } from '../constant';
 
 
 // import PrivateRoute from './private';
@@ -40,6 +41,10 @@ const publicRoutes = [
   {
     path: '/inm00001',
     component: Inm00001,
+  },
+  {
+    path: '/form',
+    component: Form,
   },
 
 ];
@@ -74,11 +79,12 @@ const Router = props => {
              *  You can add a header for the sidebar ex: logo
              */}
               <div className="sidebar-title">
-                <BsSun size={ 30 } />
+                <img src={ Images.sunrightLogo } alt="" />
+                {/* <BsSun size={ 30 } />
                 {
                   isHovering &&
                   <h1>Sunright ERP</h1>
-                }
+                } */}
               </div>
             </SidebarHeader>
             <SidebarContent>

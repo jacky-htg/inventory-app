@@ -16,6 +16,55 @@ code {
     monospace;
 }
 
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
 .App {
   display: flex;
   height: 100vh;
@@ -27,7 +76,7 @@ code {
   top: 0;
   left: 0; */
   height: 100vh;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .pro-sidebar {
@@ -35,26 +84,48 @@ code {
 }
 
 .pro-sidebar-inner {
-  /* background: green !important; */
-  overflow: hidden;
+  background: #1990ff !important;
+  /* overflow: hidden; */
+}
+
+.pro-sidebar-header {
+  height: 80px;
 }
 
 .pro-sidebar-layout {
   overflow: hidden;
 }
 
+.pro-sidebar-layout::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.pro-sidebar-layout {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.pro-item-content {
+  color: white;
+}
+
 .sidebar-title {
   display: flex;
   align-items: center;
-  padding: 30px 20px 30px 24px;
-  margin: 10px 0px;
+  justify-content: center;
+  /* padding: 30px 20px 30px 24px; */
+  /* margin: 10px 0px; */
   overflow: hidden;
-  width: 250px;
-  height: 50px;
+  width: 100%;
+  /* width: 250px; */
+  /* height: 50px; */
 }
 
-.sidebar-title svg {
-  margin-right: 20px;
+.sidebar-title img {
+  margin-left: -4px;
+  width: auto;
+  max-height: 70px;
 }
 
 .page-wrapper {
