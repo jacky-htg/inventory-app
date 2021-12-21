@@ -9,6 +9,7 @@ import {
   isBrowser,
   isMobile
 } from 'react-device-detect';
+import moment from 'moment';
 
 import {
   Dashboard,
@@ -60,7 +61,9 @@ const privateRoutes = [
 
 const Router = props => {
   const history = useHistory();
-  console.log('useHistory() :>> ', useHistory());
+  const [userName, setUserName] = useState('username');
+  const [company, setCompany] = useState('company name');
+  const [loginDate, setLoginDate] = useState(moment().format("YYYY-MM-DD HH:mm:ss"));
   // const dispatch = useDispatch();
 
   return (
@@ -71,6 +74,17 @@ const Router = props => {
       <Sidebar />
 
       <div className="page-wrapper">
+        {
+          <div className="userInfo">
+            <div className="left">
+              <p className="username">Username: { userName }</p>
+              <p className="company">Company: { company }</p>
+            </div>
+            <div className="right">
+              <p className="login">Login Date: { loginDate }</p>
+            </div>
+          </div>
+        }
         <Switch>
           {
             publicRoutes.map(route =>

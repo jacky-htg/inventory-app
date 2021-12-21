@@ -145,7 +145,6 @@ function Sidebar() {
   ]);
 
   useEffect(() => {
-    console.log('location.pathname :>> ', location.pathname);
     const unlisten = history.listen((location, action) => {
       switch (history.location.pathname) {
         case '/items':

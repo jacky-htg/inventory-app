@@ -103,10 +103,10 @@ const Dashboard = (props) => {
 
   return (
     <StyledDiv>
-      <div className="hi">
+      {/* <div className="hi">
         <h4>{ getGreetingTime(moment()) }</h4>
         <h3>username</h3>
-      </div>
+      </div> */}
       <div className="card-wrapper">
         {
           menus.map((menu, menuIdx) => {

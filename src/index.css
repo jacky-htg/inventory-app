@@ -109,12 +109,12 @@ table {
 .pro-menu-item.nonactive,
 .pro-menu-item.nonactive .pro-inner-item {
   pointer-events: none;
-  color: #d8d8d8 !important;
+  color: grey !important;
   cursor: not-allowed !important;
 }
 
 .pro-menu-item {
-  color: black;
+  color: white;
 }
 
 .pro-inner-item {
@@ -122,13 +122,13 @@ table {
 }
 
 .pro-inner-item:hover {
-  color: black !important;
+  color: white !important;
   opacity: 0.7;
 }
 
 .pro-inner-item:focus {
   font-weight: 700;
-  color: black !important;
+  color: white !important;
 }
 
 .pro-icon-wrapper {
@@ -140,7 +140,7 @@ table {
 }
 
 .pro-menu-item.nonactive .pro-icon-wrapper svg {
-  fill: #d8d8d8;
+  fill: grey;
 }
 
 .pro-arrow {
@@ -148,8 +148,8 @@ table {
 }
 
 .pro-inner-list-item {
-  background-color: whitesmoke !important;
-  color: black !important;
+  background-color: #0d47a1 !important;
+  color: white !important;
   padding-left: 0px !important;
 }
 
@@ -166,13 +166,13 @@ table {
 .pro-menu-item .nonactive,
 .pro-menu-item .nonactive .pro-inner-item {
   pointer-events: none;
-  color: #d8d8d8 !important;
+  color: grey !important;
   cursor: not-allowed !important;
 }
 
 .pro-menu-item .nonactive .pro-item-content {
   pointer-events: none;
-  color: #d8d8d8;
+  color: grey;
   cursor: not-allowed !important;
 }
 
@@ -204,4 +204,11 @@ table {
   padding: 26px 40px;
   /* padding-left: 106px; */
   overflow: auto;
+}
+
+.userInfo {
+  /* margin-bottom: 40px; */
+  display: flex;
+  justify-content: space-between;
+  /* border-bottom: 1px dashed; */
 }

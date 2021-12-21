@@ -4,7 +4,7 @@ import { isMobile } from "react-device-detect";
 import { Images } from "../../constant";
 
 const StyledDiv = styled.div`
-  .userInfo {
+  .header {
     margin-bottom: 40px;
     display: flex;
     justify-content: space-between;

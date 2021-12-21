@@ -13,17 +13,9 @@ const FormPage = (props) => {
 
   return (
     <StyledDiv>
-      <div className="userInfo">
-        <div className="left">
-          <p className="username">Username: { userName }</p>
-          <p className="company">Company: { company }</p>
-          <h2>{ code }</h2>
-
-        </div>
-        <div className="right">
-          <p className="login">Login Date: { loginDate }</p>
-          <h2>Item Master Maintenance</h2>
-        </div>
+      <div className="header">
+        <h2>{ code }</h2>
+        <h2>Item Master Maintenance</h2>
       </div>
       <div className="formWrapper">
         <Form form={ form } name="control-hooks">
