@@ -146,7 +146,6 @@ function StockLocation() {
           <Space size="middle">
             <a>View</a>
             <a>Edit</a>
-            <a>Delete</a>
           </Space>
         )}
       />
