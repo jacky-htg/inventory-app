@@ -1,10 +1,10 @@
 Frontend applivcation for Sunright ERP using reactjs. 
 Stack Technology :
-- ReactJS v17.x
-- Vitejs
-- styled
-- antd
-- React Redux 
+1. ReactJS v17.x
+2. Vitejs
+3. styled
+4. antd
+5. React Redux 
 
 ---
 
