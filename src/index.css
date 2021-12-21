@@ -205,3 +205,10 @@ table {
   /* padding-left: 106px; */
   overflow: auto;
 }
+
+.userInfo {
+  /* margin-bottom: 40px; */
+  display: flex;
+  justify-content: space-between;
+  /* border-bottom: 1px dashed; */
+}
