@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ProSidebar, SidebarHeader, SidebarFooter, SidebarContent, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { FaDotCircle, FaUserCircle } from "react-icons/fa";
 import { BsCircle } from "react-icons/bs";
 import { AiTwotoneCiCircle } from "react-icons/ai";
@@ -13,6 +13,7 @@ import { Colors, Images } from '../../constant';
 
 
 function Sidebar() {
+  const { menu } = useParams();
   const history = useHistory();
   const [reRender, setReRender] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState([]);
@@ -144,20 +145,28 @@ function Sidebar() {
     }
   ]);
 
-  useEffect(() => {
-    const unlisten = history.listen((location, action) => {
-      switch (history.location.pathname) {
-        case '/items':
-          setSelectedMenu(itemMenu);
-          break;
-        case '/stock-locations':
-          setSelectedMenu(itemMenu);
-          break;
+  const whichMenuLogic = () => {
+    let menu = '';
+    if (history.location.search && history.location.search.includes('?menu=')) {
+      menu = history.location.search.replace('?menu=', '');
+    }
+    if (
+      menu === 'inventory' ||
+      history.location.pathname === '/items' ||
+      history.location.pathname === '/stock-locations' ||
+      history.location.pathname === '/stock-locations/create'
+    ) {
+      setSelectedMenu(itemMenu);
+    }
+    else {
+      setSelectedMenu([]);
+    }
+  };
 
-        default:
-          setSelectedMenu([]);
-          break;
-      }
+  useEffect(() => {
+    console.log('history.location :>> ', history.location);
+    const unlisten = history.listen((location, action) => {
+      whichMenuLogic();
     });
     return () => {
       unlisten();
@@ -165,18 +174,7 @@ function Sidebar() {
   }, []);
 
   useEffect(() => {
-    switch (history.location.pathname) {
-      case '/items':
-        setSelectedMenu(itemMenu);
-        break;
-      case '/stock-locations':
-        setSelectedMenu(itemMenu);
-        break;
-
-      default:
-        setSelectedMenu([]);
-        break;
-    }
+    whichMenuLogic();
   }, [history.location.pathname]);
 
   useEffect(() => {

@@ -16,7 +16,8 @@ import {
   Master,
   Inm00001,
   Form,
-  StockLocation
+  StockLocation,
+  StockLocationForm
 } from '../screens';
 import { Sidebar } from '../components';
 import { Colors, Images } from '../constant';
@@ -47,6 +48,10 @@ const publicRoutes = [
   {
     path: '/stock-locations',
     component: StockLocation,
+  },
+  {
+    path: '/stock-locations/create',
+    component: StockLocationForm,
   },
 
 ];
