@@ -106,8 +106,78 @@ table {
   scrollbar-width: none;  /* Firefox */
 }
 
-.pro-item-content {
-  color: white;
+.pro-menu-item.nonactive,
+.pro-menu-item.nonactive .pro-inner-item {
+  pointer-events: none;
+  color: #d8d8d8 !important;
+  cursor: not-allowed !important;
+}
+
+.pro-menu-item {
+  color: black;
+}
+
+.pro-inner-item {
+  transition: 0.15s all ease-out;
+}
+
+.pro-inner-item:hover {
+  color: black !important;
+  opacity: 0.7;
+}
+
+.pro-inner-item:focus {
+  font-weight: 700;
+  color: black !important;
+}
+
+.pro-icon-wrapper {
+  background-color: white !important;
+}
+
+.pro-icon-wrapper svg {
+  fill: black;
+}
+
+.pro-menu-item.nonactive .pro-icon-wrapper svg {
+  fill: #d8d8d8;
+}
+
+.pro-arrow {
+  border-color: black !important;
+}
+
+.pro-inner-list-item {
+  background-color: whitesmoke !important;
+  color: black !important;
+  padding-left: 0px !important;
+}
+
+.pro-menu-item .actived .pro-inner-item:hover {
+   opacity: 0.7;
+ }
+
+.pro-menu-item .nonactive,
+.pro-menu-item .actived
+ {
+  padding-left: 24px;
+}
+
+.pro-menu-item .nonactive,
+.pro-menu-item .nonactive .pro-inner-item {
+  pointer-events: none;
+  color: #d8d8d8 !important;
+  cursor: not-allowed !important;
+}
+
+.pro-menu-item .nonactive .pro-item-content {
+  pointer-events: none;
+  color: #d8d8d8;
+  cursor: not-allowed !important;
+}
+
+.pro-sidebar .pro-menu .pro-menu-item .pro-item-content:focus {
+  font-weight: 700 !important;
 }
 
 .sidebar-title {
