@@ -16,7 +16,7 @@ const Dashboard = (props) => {
   const [menus, setMenus] = useState([
     {
       title: 'Inventory',
-      link: '/items',
+      link: '/?menu=inventory',
       isActive: true,
       icon: <MdInventory size={ 80 } />
     },

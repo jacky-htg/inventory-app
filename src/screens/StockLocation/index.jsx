@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Space, Select, Form, Input } from 'antd';
+import { useHistory } from 'react-router-dom';
+
+import { StyledDiv } from './styled';
 
 function StockLocation() {
-
+  const history = useHistory();
   const { Column } = Table;
   const [countries, setCountries] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -30,7 +33,7 @@ function StockLocation() {
     data.then(result => {
       const myData = result.rows;
       result.rows.forEach((element, index) => {
-        myData[index]["key"] = index; 
+        myData[index]["key"] = index;
       });
       setLocations(myData);
       setLoading(false);
@@ -68,7 +71,7 @@ function StockLocation() {
     setFilterSearch({
       "filters": filters,
       "limit": pagination.pageSize,
-      "page": (pagination.current -1)
+      "page": (pagination.current - 1)
     });
   };
 
@@ -81,77 +84,78 @@ function StockLocation() {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
-  
+
   const filter = (
-    <>
-      <Form.Item {...layout}
+    <Form className='filter'>
+      <Form.Item
         label="Country"
         name="countryCode"
-        style={{width: 400}}
+      // style={ { width: 400 } }
       >
         <Select
-        // mode="multiple"
-        showSearch
-        // allowClear
-        style={{ width: 200 }}
-        placeholder="Please select"
-        onChange={changeCountryCode}
-        filterOption={(input, option) =>
-          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        }
-      >
-        {optionCountries}
-      </Select>
+          // mode="multiple"
+          showSearch
+          // allowClear
+          style={ { width: 200 } }
+          placeholder="Please select"
+          onChange={ changeCountryCode }
+          filterOption={ (input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+          { optionCountries }
+        </Select>
       </Form.Item>
-      <Form.Item {...layout}
+      <Form.Item
         label="Description"
         name="description"
+      // style={ { width: 400 } }
       >
         <Input
-          style={{ width: 200 }}
+          style={ { width: 200 } }
           placeholder="input here"
-          onBlur={changeDescription}
+          onBlur={ changeDescription }
         />
       </Form.Item>
       <Form.Item>
-        <Button onClick={clickFilter} size='large'>Filter</Button>
+        <Button onClick={ clickFilter } size='large'>Filter</Button>
       </Form.Item>
-    </>
+    </Form>
   );
 
   return (
-    <div>
-      <h2 style={{ fontSize:'180%', color:'darkblue', marginBottom:'3%' }}>Stock Location</h2>
-      {filter}
-      <div style={{textAlign:'right' }}>
-        <Button type="primary" style={{ marginBottom: 16 }}>
+    <StyledDiv>
+      <h2 style={ { fontSize: '180%', color: 'darkblue', marginBottom: '3%' } }>Stock Location</h2>
+      { filter }
+      <div style={ { textAlign: 'right' } }>
+        <Button onClick={ () => history.push('/stock-locations/create') } type="primary" style={ { marginBottom: 16 } }>
           Add a row
         </Button>
       </div>
-      <Table 
-        dataSource={locations}
-        pagination={pagination}
-        onChange={handleTableChange}
-        loading={loading}
+      <Table
+        dataSource={ locations }
+        pagination={ pagination }
+        onChange={ handleTableChange }
+        loading={ loading }
       >
-      <Column title="Location" dataIndex="loc" key="loc" />
-      <Column title="Description" dataIndex="description" key="description" />
-      <Column title="Address" dataIndex="address1" key="address1" />
-      <Column title="Country Code" dataIndex="countryCode" key="countryCode" />
-      <Column title="PIC" dataIndex="personInCharge" key="personInCharge" />
-      <Column
-        title="Action"
-        key="action"
-        render={(text, record) => (
-          <Space size="middle">
-            <a>View</a>
-            <a>Edit</a>
-            <a>Delete</a>
-          </Space>
-        )}
-      />
-    </Table>
-  </div>
+        <Column title="Location" dataIndex="loc" key="loc" />
+        <Column title="Description" dataIndex="description" key="description" />
+        <Column title="Address" dataIndex="address1" key="address1" />
+        <Column title="Country Code" dataIndex="countryCode" key="countryCode" />
+        <Column title="PIC" dataIndex="personInCharge" key="personInCharge" />
+        <Column
+          title="Action"
+          key="action"
+          render={ (text, record) => (
+            <Space size="middle">
+              <a>View</a>
+              <a>Edit</a>
+              <a>Delete</a>
+            </Space>
+          ) }
+        />
+      </Table>
+    </StyledDiv>
   );
 }
 
@@ -161,13 +165,13 @@ async function getCountries() {
 }
 
 async function getItems(filterSearch) {
-  return await fetch("http://sun17.sunright.com/companies/JX/plants/12/locations/search", 
+  return await fetch("http://sun17.sunright.com/companies/JX/plants/12/locations/search",
     {
-      method: 'POST', 
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(filterSearch),  
+      body: JSON.stringify(filterSearch),
     })
     .then(res => res.json());
 }
@@ -176,7 +180,7 @@ function getOptionCountries(countries) {
   const { Option } = Select;
   let optionCountries = [];
   for (const country of countries) {
-    optionCountries.push(<Option key={country.countryCode} value={country.countryCode} >{country.description}</Option>);
+    optionCountries.push(<Option key={ country.countryCode } value={ country.countryCode } >{ country.description }</Option>);
   }
   return optionCountries;
 }
