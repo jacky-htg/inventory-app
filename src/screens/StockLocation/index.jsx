@@ -1,18 +1,81 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, Button, Space, Select, Form, Input } from 'antd';
 
 function StockLocation() {
-  
-  const { Column } = Table;
-  const { Option } = Select;
 
-  const countries = [];
-  for (const country of getCountries()) {
-    countries.push(<Option key={country.code} value={country.code}>{country.name}</Option>);
-  }
-  function handleChange(value) {
-    console.log(`selected ${value}`);
-  }
+  const { Column } = Table;
+  const [countries, setCountries] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  });
+  const [loading, setLoading] = useState(false);
+  const [filterSearch, setFilterSearch] = useState({});
+  const [filterCountryCode, setFilterCountryCode] = useState({});
+  const [filterDescription, setFilterDescription] = useState({});
+  let optionCountries = getOptionCountries(countries);
+
+  useEffect(() => {
+    let data = getCountries();
+    data.then(result => {
+      setCountries(result);
+      optionCountries = getOptionCountries(countries);
+    });
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    let data = getItems(filterSearch);
+    data.then(result => {
+      const myData = result.rows;
+      result.rows.forEach((element, index) => {
+        myData[index]["key"] = index; 
+      });
+      setLocations(myData);
+      setLoading(false);
+    });
+  }, [filterSearch]);
+
+  const changeCountryCode = value => {
+    setFilterCountryCode({
+      "field": "countryCode",
+      "operator": "EQUALS",
+      "value": value
+    });
+  };
+
+  const changeDescription = event => {
+    if (event.target.value) {
+      setFilterDescription({
+        "field": "description",
+        "operator": "LIKE",
+        "value": event.target.value
+      });
+    }
+  };
+
+  const clickFilter = () => {
+    let filters = [];
+    if (JSON.stringify(filterCountryCode) !== '{}') {
+      filters.push(filterCountryCode);
+    }
+
+    if (JSON.stringify(filterDescription) !== '{}') {
+      filters.push(filterDescription);
+    }
+
+    setFilterSearch({
+      "filters": filters,
+      "limit": pagination.pageSize,
+      "page": (pagination.current -1)
+    });
+  };
+
+  const handleTableChange = pagination => {
+    console.log('pag', pagination);
+    clickFilter();
+  };
 
   const layout = {
     labelCol: { span: 8 },
@@ -27,13 +90,17 @@ function StockLocation() {
         style={{width: 400}}
       >
         <Select
-        mode="multiple"
-        allowClear
+        // mode="multiple"
+        showSearch
+        // allowClear
         style={{ width: 200 }}
         placeholder="Please select"
-        onChange={handleChange}
+        onChange={changeCountryCode}
+        filterOption={(input, option) =>
+          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }
       >
-        {countries}
+        {optionCountries}
       </Select>
       </Form.Item>
       <Form.Item {...layout}
@@ -43,10 +110,11 @@ function StockLocation() {
         <Input
           style={{ width: 200 }}
           placeholder="input here"
+          onBlur={changeDescription}
         />
       </Form.Item>
       <Form.Item>
-        <Button size='large'>Filter</Button>
+        <Button onClick={clickFilter} size='large'>Filter</Button>
       </Form.Item>
     </>
   );
@@ -60,13 +128,17 @@ function StockLocation() {
           Add a row
         </Button>
       </div>
-      <Table dataSource={getItem()}>
-      <Column title="Location" dataIndex="location" key="location" />
+      <Table 
+        dataSource={locations}
+        pagination={pagination}
+        onChange={handleTableChange}
+        loading={loading}
+      >
+      <Column title="Location" dataIndex="loc" key="loc" />
       <Column title="Description" dataIndex="description" key="description" />
-      <Column title="Address" dataIndex="address" key="address" />
+      <Column title="Address" dataIndex="address1" key="address1" />
       <Column title="Country Code" dataIndex="countryCode" key="countryCode" />
-      <Column title="Country" dataIndex="country" key="country" />
-      <Column title="PIC" dataIndex="pic" key="pic" />
+      <Column title="PIC" dataIndex="personInCharge" key="personInCharge" />
       <Column
         title="Action"
         key="action"
@@ -83,128 +155,30 @@ function StockLocation() {
   );
 }
 
-function getCountries() {
-  return [
-    {
-      code: "ITA",
-      name: "Italy"
-    },
-    {
-      code: "SGP",
-      name: "Singapure"
-    },
-    {
-      code: "JPN",
-      name: "Japan"
-    },
-    {
-      code: "USA",
-      name: "United States of America"
-    },
-    {
-      code: "CHN",
-      name: "China"
-    },
-    {
-      code: "THA",
-      name: "Thailand"
-    },
-  ];
+
+async function getCountries() {
+  return await fetch("http://sun17.sunright.com/lov/countries").then(res => res.json());
 }
 
-function getItem() {
-  return [
+async function getItems(filterSearch) {
+  return await fetch("http://sun17.sunright.com/companies/JX/plants/12/locations/search", 
     {
-      key : 1,
-      location : "SE",
-      description : "description-1",
-      address : "address-1",
-      countryCode: "INA",
-      country: "Indonesia",
-      pic: "John"
-    },
-    {
-      key : 2,
-      location : "SE",
-      description : "description-2",
-      address : "address-2",
-      countryCode: "INA",
-      country: "Indonesia",
-      pic: "John"
-    },
-    {
-      key : 3,
-      location : "SE",
-      description : "description-3",
-      address : "address-3",
-      countryCode: "INA",
-      country: "Indonesia",
-      pic: "John"
-    },
-    {
-      key : 4,
-      location : "SE",
-      description : "description-4",
-      address : "address-4",
-      countryCode: "INA",
-      country: "Indonesia",
-      pic: "John"
-    },
-    {
-      key : 5,
-      location : "SE",
-      description : "description-5",
-      address : "address-5",
-      countryCode: "INA",
-      country: "Indonesia",
-      pic: "John"
-    },
-    {
-      key : 6,
-      location : "SE",
-      description : "description-6",
-      address : "address-6",
-      countryCode: "INA",
-      country: "Indonesia",
-      pic: "John"
-    },
-    {
-      key : 7,
-      location : "SE",
-      description : "description-7",
-      address : "address-7",
-      countryCode: "INA",
-      country: "Indonesia",
-      pic: "John"
-    },
-    {
-      key : 8,
-      location : "SE",
-      description : "description-8",
-      address : "address-8",
-      countryCode: "INA",
-      country: "Indonesia",
-      pic: "John"
-    },
-    {
-      key : 9,
-      location : "SE",
-      description : "description-9",
-      address : "address-9",
-      countryCode: "INA",
-      country: "Indonesia",
-      pic: "John"
-    },
-    {
-      key : 10,
-      location : "SE",
-      description : "description-10",
-      address : "address-10",
-      countryCode: "INA",
-      country: "Indonesia",
-      pic: "John"
-    }
-  ]
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(filterSearch),  
+    })
+    .then(res => res.json());
+}
+
+function getOptionCountries(countries) {
+  const { Option } = Select;
+  let optionCountries = [];
+  for (const country of countries) {
+    optionCountries.push(<Option key={country.countryCode} value={country.countryCode} >{country.description}</Option>);
+  }
+  return optionCountries;
 }
 
 export default StockLocation;
