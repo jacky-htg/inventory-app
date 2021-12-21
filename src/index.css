@@ -193,6 +193,7 @@ table {
 }
 
 .sidebar-title img {
+  cursor: pointer;
   margin-left: -4px;
   width: auto;
   max-height: 70px;

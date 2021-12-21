@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ProSidebar, SidebarHeader, SidebarFooter, SidebarContent, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
+import { useHistory } from 'react-router-dom';
 import { FaDotCircle, FaUserCircle } from "react-icons/fa";
 import { BsCircle } from "react-icons/bs";
 import { AiTwotoneCiCircle } from "react-icons/ai";
@@ -12,7 +13,9 @@ import { Colors, Images } from '../../constant';
 
 
 function Sidebar() {
-
+  const history = useHistory();
+  const [reRender, setReRender] = useState(false);
+  const [selectedMenu, setSelectedMenu] = useState([]);
   const [itemMenu, setItemMenu] = useState([
     {
       title: 'Maintenance',
@@ -64,7 +67,7 @@ function Sidebar() {
         },
         {
           title: 'Stock Location',
-          link: '',
+          link: '/stock-locations',
           isActive: true
         },
         {
@@ -141,6 +144,105 @@ function Sidebar() {
     }
   ]);
 
+  useEffect(() => {
+    console.log('location.pathname :>> ', location.pathname);
+    const unlisten = history.listen((location, action) => {
+      switch (history.location.pathname) {
+        case '/items':
+          setSelectedMenu(itemMenu);
+          break;
+        case '/stock-locations':
+          setSelectedMenu(itemMenu);
+          break;
+
+        default:
+          setSelectedMenu([]);
+          break;
+      }
+    });
+    return () => {
+      unlisten();
+    };
+  }, []);
+
+  useEffect(() => {
+    switch (history.location.pathname) {
+      case '/items':
+        setSelectedMenu(itemMenu);
+        break;
+      case '/stock-locations':
+        setSelectedMenu(itemMenu);
+        break;
+
+      default:
+        setSelectedMenu([]);
+        break;
+    }
+  }, [history.location.pathname]);
+
+  useEffect(() => {
+    setReRender(!reRender);
+  }, [selectedMenu]);
+
+  const renderMenu = () => {
+    return (
+      <Menu iconShape="circle">
+        {
+          selectedMenu.map((menu, idx) => {
+            return (
+              <>
+                {
+                  menu.submenu ?
+                    <SubMenu title={ menu.title } icon={ <AiTwotoneCiCircle /> }>
+                      {
+                        menu.submenu.map((submenu, idx) => {
+                          return (
+                            <MenuItem onClick={ () => submenu.link ? history.push(submenu.link) : {} } className={ `${ submenu.isActive ? 'actived' : 'nonactive' }` } >{ submenu.title }</MenuItem>
+                          );
+                        })
+                      }
+                    </SubMenu>
+                    :
+                    <MenuItem className={ `${ menu.isActive || menu.submenu ? 'actived' : 'nonactive' }` } icon={ <AiTwotoneCiCircle /> }>{ menu.title }</MenuItem>
+
+                }
+              </>
+
+            );
+          })
+        }
+        {/* <SubMenu title="Maintenance" icon={ <AiTwotoneCiCircle /> }>
+        <MenuItem>Item Master</MenuItem>
+        <MenuItem>GRN Entry (with PO)</MenuItem>
+        <MenuItem>Manual GRN Entry</MenuItem>
+        <MenuItem>SIV Entry</MenuItem>
+        <MenuItem>Manual SIV Entry</MenuItem>
+        <MenuItem>SIV Combine Entry</MenuItem>
+        <MenuItem>SIV Consigned Entry</MenuItem>
+        <MenuItem>MSR Entry</MenuItem>
+        <MenuItem>MRV Entry</MenuItem>
+        <MenuItem>Stock Location</MenuItem>
+        <MenuItem>UOM</MenuItem>
+        <MenuItem>Item Category</MenuItem>
+        <MenuItem>Inventory Control</MenuItem>
+        <MenuItem>Reversal of RSI</MenuItem>
+        <MenuItem>GRN Reversal</MenuItem>
+        <MenuItem>Project - Stock Allocation</MenuItem>
+        <MenuItem>Project - Stock Release</MenuItem>
+      </SubMenu>
+      <SubMenu title="Batch" icon={ <AiTwotoneCiCircle /> }>
+        <MenuItem>Batch 1</MenuItem>
+        <MenuItem>Batch 2</MenuItem>
+      </SubMenu>
+      <SubMenu title="Report" icon={ <AiTwotoneCiCircle /> }>
+        <MenuItem>Report 1</MenuItem>
+        <MenuItem>Report 2</MenuItem>
+      </SubMenu>
+      <MenuItem icon={ <AiTwotoneCiCircle /> }>End of Period</MenuItem> */}
+      </Menu>
+    );
+  };
+
   return (
     <ReactHoverObserver className='sidebar-wrapper'>
       { ({ isHovering }) => (
@@ -154,7 +256,7 @@ function Sidebar() {
          *  You can add a header for the sidebar ex: logo
          */}
             <div className="sidebar-title">
-              <img src={ Images.sunrightLogo } alt="" />
+              <img onClick={ () => history.push('/') } src={ Images.sunrightLogo } alt="" />
               {/* <BsSun size={ 30 } />
             {
               isHovering &&
@@ -164,60 +266,13 @@ function Sidebar() {
           </SidebarHeader>
 
           <SidebarContent>
-            <Menu iconShape="circle">
-              {
-                itemMenu.map((menu, idx) => {
-                  return (
-                    <>
-                      {
-                        menu.submenu ?
-                          <SubMenu title={ menu.title } icon={ <AiTwotoneCiCircle /> }>
-                            {
-                              menu.submenu.map((submenu, idx) => {
-                                return (
-                                  <MenuItem className={ `${ submenu.isActive ? 'actived' : 'nonactive' }` } >{ submenu.title }</MenuItem>
-                                );
-                              })
-                            }
-                          </SubMenu>
-                          :
-                          <MenuItem className={ `${ menu.isActive || menu.submenu ? 'actived' : 'nonactive' }` } icon={ <AiTwotoneCiCircle /> }>{ menu.title }</MenuItem>
-
-                      }
-                    </>
-
-                  );
-                })
-              }
-              {/* <SubMenu title="Maintenance" icon={ <AiTwotoneCiCircle /> }>
-                <MenuItem>Item Master</MenuItem>
-                <MenuItem>GRN Entry (with PO)</MenuItem>
-                <MenuItem>Manual GRN Entry</MenuItem>
-                <MenuItem>SIV Entry</MenuItem>
-                <MenuItem>Manual SIV Entry</MenuItem>
-                <MenuItem>SIV Combine Entry</MenuItem>
-                <MenuItem>SIV Consigned Entry</MenuItem>
-                <MenuItem>MSR Entry</MenuItem>
-                <MenuItem>MRV Entry</MenuItem>
-                <MenuItem>Stock Location</MenuItem>
-                <MenuItem>UOM</MenuItem>
-                <MenuItem>Item Category</MenuItem>
-                <MenuItem>Inventory Control</MenuItem>
-                <MenuItem>Reversal of RSI</MenuItem>
-                <MenuItem>GRN Reversal</MenuItem>
-                <MenuItem>Project - Stock Allocation</MenuItem>
-                <MenuItem>Project - Stock Release</MenuItem>
-              </SubMenu>
-              <SubMenu title="Batch" icon={ <AiTwotoneCiCircle /> }>
-                <MenuItem>Batch 1</MenuItem>
-                <MenuItem>Batch 2</MenuItem>
-              </SubMenu>
-              <SubMenu title="Report" icon={ <AiTwotoneCiCircle /> }>
-                <MenuItem>Report 1</MenuItem>
-                <MenuItem>Report 2</MenuItem>
-              </SubMenu>
-              <MenuItem icon={ <AiTwotoneCiCircle /> }>End of Period</MenuItem> */}
-            </Menu>
+            {
+              reRender
+                ?
+                renderMenu()
+                :
+                renderMenu()
+            }
           </SidebarContent>
 
           <SidebarFooter>

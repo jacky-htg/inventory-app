@@ -36,7 +36,7 @@ const publicRoutes = [
     component: Master,
   },
   {
-    path: '/inm00001',
+    path: '/items',
     component: Inm00001,
   },
   {

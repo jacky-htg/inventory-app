@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from 'antd';
 import moment from 'moment';
+import { useHistory } from 'react-router-dom';
 import { MdInventory } from 'react-icons/md';
 import { AiFillFileText } from 'react-icons/ai';
 import { RiHandCoinLine } from 'react-icons/ri';
@@ -10,30 +11,32 @@ import { StyledDiv } from './styled';
 
 const Dashboard = (props) => {
 
+  const history = useHistory();
+
   const [menus, setMenus] = useState([
     {
       title: 'Inventory',
-      link: '',
+      link: '/items',
       isActive: true,
       icon: <MdInventory size={ 80 } />
     },
     {
-      title: 'GL',
-      link: '',
-      isActive: true,
-      icon: <AiFillFileText size={ 80 } />
-    },
-    {
-      title: 'Receiveable',
+      title: '',
       link: '',
       isActive: false,
-      icon: <RiHandCoinLine size={ 80 } />
+      // icon: <AiFillFileText size={ 80 } />
     },
     {
-      title: 'Payable',
+      title: '',
       link: '',
       isActive: false,
-      icon: <GiPayMoney size={ 80 } />
+      // icon: <RiHandCoinLine size={ 80 } />
+    },
+    {
+      title: '',
+      link: '',
+      isActive: false,
+      // icon: <GiPayMoney size={ 80 } />
     },
     {
       title: '',
@@ -109,6 +112,7 @@ const Dashboard = (props) => {
           menus.map((menu, menuIdx) => {
             return (
               <Card
+                onClick={ () => menu.link ? history.push(menu.link) : {} }
                 hoverable={ menu.isActive }
                 className={ `menuCard ${ !menu.isActive && 'disabled' }` }
               >
