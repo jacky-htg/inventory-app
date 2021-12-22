@@ -18,7 +18,7 @@ const Dashboard = (props) => {
       title: 'Inventory',
       link: '/?menu=inventory',
       isActive: true,
-      icon: <MdInventory size={ 80 } />
+      icon: <MdInventory color={ 'white' } size={ 80 } />
     },
     {
       title: '',

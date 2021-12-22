@@ -28,6 +28,7 @@ const StyledDiv = styled.div`
       height: 200px;
       width: 100%;
       background-color: #1990ff;
+      color: white;
     }
 
     .disabled {

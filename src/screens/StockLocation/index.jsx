@@ -9,6 +9,7 @@ function StockLocation() {
   const history = useHistory();
   const { Column } = Table;
   const [countries, setCountries] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const [locations, setLocations] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
@@ -36,7 +37,11 @@ function StockLocation() {
 
   useEffect(() => {
     setLoading(true);
-    let data = getItems(filterSearch);
+    getStockData(filterSearch);
+  }, [filterSearch]);
+
+  const getStockData = (filter) => {
+    let data = getItems(filter);
     data.then(result => {
       if (result.status && (
         result.status === 500 ||
@@ -51,14 +56,21 @@ function StockLocation() {
       setLocations(myData);
       setLoading(false);
     });
-  }, [filterSearch]);
+  };
 
   const changeCountryCode = value => {
-    setFilterCountryCode({
-      "field": "countryCode",
-      "operator": "EQUALS",
-      "value": value
-    });
+    if (value !== 'all') {
+      setSelectedCountry(value);
+      setFilterCountryCode({
+        "field": "countryCode",
+        "operator": "EQUALS",
+        "value": value
+      });
+    } else {
+      setFilterCountryCode({});
+      setSelectedCountry(null);
+      setFilterDescription({});
+    }
   };
 
   const changeDescription = event => {
@@ -88,6 +100,12 @@ function StockLocation() {
     });
   };
 
+  const resetFilter = () => {
+    setSelectedCountry(null);
+    setFilterDescription({});
+    setFilterSearch({});
+  };
+
   const handleTableChange = pagination => {
     console.log('pag', pagination);
     clickFilter();
@@ -106,11 +124,14 @@ function StockLocation() {
       // style={ { width: 400 } }
       >
         <Select
+          defaultValue={ selectedCountry }
           // mode="multiple"
           showSearch
+          value={ selectedCountry }
+          // searchValue={ selectedCountry }
           // allowClear
           style={ { width: 200 } }
-          placeholder="Please select"
+          placeholder="Select Country"
           onChange={ changeCountryCode }
           filterOption={ (input, option) =>
             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -132,6 +153,7 @@ function StockLocation() {
       </Form.Item>
       <Form.Item>
         <Button onClick={ clickFilter } size='large'>Filter</Button>
+        {/* <Button className='reset' onClick={ resetFilter } size='large'>Reset</Button> */ }
       </Form.Item>
     </Form>
   );
@@ -200,6 +222,7 @@ function getOptionCountries(countries) {
   for (const country of countries) {
     optionCountries.push(<Option key={ country.countryCode } value={ country.countryCode } >{ country.description }</Option>);
   }
+  optionCountries.unshift(<Option key={ 'all' } value={ 'all' } >{ 'ALL COUNTRIES' }</Option>);
   return optionCountries;
 }
 
