@@ -1,5 +1,5 @@
 const staging = {
-  companyCode: "50",
+  companyCode: "050",
   plantNo: 0,
 };
 

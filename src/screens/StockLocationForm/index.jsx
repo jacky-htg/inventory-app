@@ -325,6 +325,17 @@ const StockLocationForm = (props) => {
                   </Form.Item>
                 </div>
               }
+
+{
+                (id && !isEdit) &&
+                <div className="submit">
+                  <Form.Item>
+                    <Button onClick={ () => history.push(`/stock-locations`) } type="primary" htmlType="submit">
+                          Back To Stock Locations
+                    </Button>
+                  </Form.Item>
+                </div>
+              }
             </Form>
         }
       </div>

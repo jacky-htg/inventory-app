@@ -138,7 +138,7 @@ function StockLocation() {
 
   return (
     <StyledDiv>
-      <h2 style={ { fontSize: '180%', color: 'darkblue', marginBottom: '3%' } }>Stock Location</h2>
+      <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>Stock Location</h2>
       { filter }
       <div style={ { textAlign: 'right' } }>
         <Button onClick={ () => history.push('/stock-locations/create') } type="primary" style={ { marginBottom: 16 } }>

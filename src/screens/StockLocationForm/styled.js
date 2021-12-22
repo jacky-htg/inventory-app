@@ -12,7 +12,7 @@ const StyledDiv = styled.div`
 
     h2 {
       font-size: 30px;
-      color: darkblue;
+      color: #1990ff;
     }
 
     .right {

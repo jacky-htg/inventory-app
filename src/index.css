@@ -116,7 +116,7 @@ table {
 }
 
 .pro-menu-item {
-  color: black;
+  color: white;
 }
 
 .pro-inner-item {
@@ -124,13 +124,13 @@ table {
 }
 
 .pro-inner-item:hover {
-  color: black !important;
+  color: white !important;
   opacity: 0.7;
 }
 
 .pro-inner-item:focus {
   font-weight: 700;
-  color: black !important;
+  color: white !important;
 }
 
 .pro-icon-wrapper {
@@ -146,7 +146,7 @@ table {
 }
 
 .pro-arrow {
-  border-color: black !important;
+  border-color: white !important;
 }
 
 .pro-inner-list-item {
@@ -225,5 +225,5 @@ table {
 .userInfo span {
   font-weight: 700;
   font-size: 20px;
-  color: darkblue;
+  color: #1990ff; /*darkblue;*/
 }
