@@ -23,9 +23,9 @@ function StockLocation() {
   useEffect(() => {
     let data = getCountries();
     data.then(result => {
-      if (result.status && result.status !== 200 || result.status !== 201) {
-        message.error(result.error);
-      }
+      // if (result.status && result.status !== 200 || result.status !== 201) {
+      //   message.error(result.error);
+      // }
       setCountries(result);
       optionCountries = getOptionCountries(countries);
     });
@@ -35,9 +35,9 @@ function StockLocation() {
     setLoading(true);
     let data = getItems(filterSearch);
     data.then(result => {
-      if (result.status && result.status !== 200 || result.status !== 201) {
-        message.error(result.error);
-      }
+      // if (result.status && result.status !== 200 || result.status !== 201) {
+      //   message.error(result.error);
+      // }
       const myData = result.rows;
       result.rows.forEach((element, index) => {
         myData[index]["key"] = index;

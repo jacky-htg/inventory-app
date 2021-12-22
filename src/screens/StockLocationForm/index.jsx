@@ -65,9 +65,9 @@ const StockLocationForm = (props) => {
       if (id) {
         const data = getStockLoc(id);
         data.then(result => {
-          if (result.status && result.status !== 200 || result.status !== 201) {
-            message.error(result.error);
-          }
+          // if (result.status && result.status !== 200 || result.status !== 201) {
+          //   message.error(result.error);
+          // }
           result.address1 && setAddress1(result.address1);
           result.address2 && setAddress2(result.address2);
           result.address3 && setAddress3(result.address3);
