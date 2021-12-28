@@ -128,18 +128,11 @@ function Items() {
       // style={ { width: 400 } }
       >
         <AutoComplete
-<<<<<<< HEAD
           options={options}
           style={{ width: 200 }}
           onSelect={changeLocation}
           onBlur={blurLocation}
           onSearch={getListLocations}
-=======
-          options={ options }
-          style={ { width: 200 } }
-          onSelect={ changeLocation }
-          onSearch={ getListLocations }
->>>>>>> cc49c36579635e8c863fe2bde614a49930b294e6
           placeholder="input here"
         />
       </Form.Item>
