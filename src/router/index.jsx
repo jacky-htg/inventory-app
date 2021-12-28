@@ -39,10 +39,6 @@ const publicRoutes = [
     component: Master,
   },
   {
-    path: '/items',
-    component: Inm00001,
-  },
-  {
     path: '/form',
     component: Form,
   },

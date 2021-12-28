@@ -1,7 +1,7 @@
 import env from '../env';
 
 async function list(filterSearch) {
-  return await fetch(`${env.url}/itens/search`,
+  return await fetch(`${env.url}/items/search`,
     {
       method: 'POST',
       headers: {
