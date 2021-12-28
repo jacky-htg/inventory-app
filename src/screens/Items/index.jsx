@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import { StyledDiv } from './styled';
 
-import { Country, Location } from '../../services';
+import { Item, Location } from '../../services';
 
 function Items() {
   const history = useHistory();
