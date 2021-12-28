@@ -28,7 +28,6 @@ async function remove(loc) {
       "X-PLANTNO": env.plantNo,
     },
   })
-    .then((res) => res.json())
     .catch((err) => {
       console.log("err :>> ", err);
       message.error(JSON.stringify(err));

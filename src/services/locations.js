@@ -19,16 +19,16 @@ async function list(filterSearch) {
 }
 
 async function remove(loc) {
-  return await fetch(`${env.url}/locations/${loc}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      "X-USERNAME": env.username,
-      "X-COMPANYCODE": env.companyCode,
-      "X-PLANTNO": env.plantNo,
-    },
-  })
-    .then((res) => res.json())
+  return await fetch(`${env.url}/locations/${loc}`, 
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "X-USERNAME": env.username,
+        "X-COMPANYCODE": env.companyCode,
+        "X-PLANTNO": env.plantNo,
+      },
+    })
     .catch((err) => {
       console.log("err :>> ", err);
       message.error(JSON.stringify(err));

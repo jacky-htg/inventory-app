@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Select, Form, Input, message } from 'antd';
+import { Table, Button, Space, Select, Form, Input, message, Popconfirm } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import { StyledDiv } from './styled';
@@ -12,10 +12,7 @@ function StockLocation() {
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [locations, setLocations] = useState([]);
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 10,
-  });
+  const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(false);
   const [filterSearch, setFilterSearch] = useState({});
   const [filterCountryCode, setFilterCountryCode] = useState({});
@@ -48,6 +45,11 @@ function StockLocation() {
       result.rows.forEach((element, index) => {
         myData[index]["key"] = index;
       });
+      setPagination({
+        current: (result.currentPageNumber + 1),
+        pageSize: 10,
+        total: result.totalRows
+      });
       setLocations(myData);
       setLoading(false);
     });
@@ -78,7 +80,14 @@ function StockLocation() {
     }
   };
 
-  const clickFilter = () => {
+  const clickFilter = p => {
+    if (!p) {
+      p = {
+        "limit": 10,
+        "page": 0
+      };
+    }
+
     let filters = [];
     if (JSON.stringify(filterCountryCode) !== '{}') {
       filters.push(filterCountryCode);
@@ -90,8 +99,8 @@ function StockLocation() {
 
     setFilterSearch({
       "filters": filters,
-      "limit": pagination.pageSize,
-      "page": (pagination.current - 1)
+      "limit": p.pageSize,
+      "page": (p.current - 1)
     });
   };
 
@@ -99,11 +108,6 @@ function StockLocation() {
     setSelectedCountry(null);
     setFilterDescription({});
     setFilterSearch({});
-  };
-
-  const handleTableChange = pagination => {
-    console.log('pag', pagination);
-    clickFilter();
   };
 
   const handleDelete = loc => {
@@ -176,7 +180,7 @@ function StockLocation() {
       <Table
         dataSource={ locations }
         pagination={ pagination }
-        onChange={ handleTableChange }
+        onChange={ clickFilter }
         loading={ loading }
       >
         <Column title="Location" dataIndex="loc" key="loc" />
@@ -192,7 +196,14 @@ function StockLocation() {
               <Space size="middle">
                 <a onClick={ () => history.push(`/stock-locations/${ record.loc }`) }>View</a>
                 <a onClick={ () => history.push(`/stock-locations/${ record.loc }?edit=true`) }>Edit</a>
-                <a onClick={ () => handleDelete(record.loc) }>Delete</a>
+                <Popconfirm
+                  title="Are you sure to delete this record?"
+                  onConfirm={() => handleDelete(record.loc)}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <a href="#">Delete</a>
+                </Popconfirm>
               </Space>
             );
           } }
