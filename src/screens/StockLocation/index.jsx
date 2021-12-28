@@ -22,9 +22,9 @@ function StockLocation() {
   useEffect(() => {
     let data = Country.list();
     data.then(result => {
-      if (result.status && result.status !== 200) {
-        message.error(result.error);
-      }
+      // if (result.status && result.status !== 200) {
+      //   message.error(result.error);
+      // }
       setCountries(result);
       optionCountries = getOptionCountries(countries);
     });
@@ -38,9 +38,9 @@ function StockLocation() {
   const getStockData = (filter) => {
     let data = Location.list(filter);
     data.then(result => {
-      if (result.status && result.status !== 200) {
-        message.error(result.error);
-      }
+      // if (result.status && result.status !== 200) {
+      //   message.error(result.error);
+      // }
       const myData = result.rows;
       result.rows.forEach((element, index) => {
         myData[index]["key"] = index;
@@ -198,7 +198,7 @@ function StockLocation() {
                 <a onClick={ () => history.push(`/stock-locations/${ record.loc }?edit=true`) }>Edit</a>
                 <Popconfirm
                   title="Are you sure to delete this record?"
-                  onConfirm={() => handleDelete(record.loc)}
+                  onConfirm={ () => handleDelete(record.loc) }
                   okText="Yes"
                   cancelText="No"
                 >

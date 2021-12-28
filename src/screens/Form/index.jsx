@@ -185,9 +185,9 @@ const FormPage = (props) => {
   useEffect(() => {
     let data = Location.list({});
     data.then(result => {
-      if (result.status && result.status !== 200) {
-        message.error(result.error);
-      }
+      // if (result.status && result.status !== 200) {
+      //   message.error(result.error);
+      // }
       console.log('location :>> ', result.rows);
       setLocData(result.rows);
       let temp = [];
@@ -416,6 +416,7 @@ const FormPage = (props) => {
       // };
       console.log('obj :>> ', obj);
       if (isEdit) {
+        obj.version = parseInt(version);
         Item.edit(id, obj);
       } else {
         Item.create(obj);
@@ -1053,6 +1054,17 @@ const FormPage = (props) => {
                           :
                           "Create Item"
                       }
+                    </Button>
+                  </Form.Item>
+                </div>
+              }
+
+              {
+                (id && !isEdit) &&
+                <div className="submit">
+                  <Form.Item>
+                    <Button onClick={ () => history.push(`/items`) } type="primary" htmlType="submit">
+                      Back To Items
                     </Button>
                   </Form.Item>
                 </div>

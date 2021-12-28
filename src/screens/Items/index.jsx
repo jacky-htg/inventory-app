@@ -33,9 +33,9 @@ function Items() {
     let data = Location.list({});
     let optionData = [];
     data.then(result => {
-      if (result.status && result.status !== 200) {
-        message.error(result.error);
-      }
+      // if (result.status && result.status !== 200) {
+      //   message.error(result.error);
+      // }
       result.rows.forEach((element, index) => {
         if (!search || (search && element.loc.includes(search))) {
           optionData.push({
@@ -51,9 +51,9 @@ function Items() {
   const getListData = (filter) => {
     let data = Item.list(filter);
     data.then(result => {
-      if (result.status && result.status !== 200) {
-        message.error(result.error);
-      }
+      // if (result.status && result.status !== 200) {
+      //   message.error(result.error);
+      // }
       const myData = result.rows;
       result.rows.forEach((element, index) => {
         myData[index]["key"] = index;
