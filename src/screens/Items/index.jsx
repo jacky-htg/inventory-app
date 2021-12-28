@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Select, Form, Input, message, AutoComplete } from 'antd';
+import { Table, Button, Space, Select, Form, Input, message, AutoComplete, Popconfirm } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import { StyledDiv } from './styled';
@@ -9,20 +9,19 @@ import { Item, Location } from '../../services';
 function Items() {
   const history = useHistory();
   const { Column } = Table;
-  const [locations, setLocations] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(null);
   const [options, setOptions] = useState([]);
   const [items, setItems] = useState([]);
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 10,
-  });
+  const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(false);
   const [filterSearch, setFilterSearch] = useState({});
   const [filterLocation, setFilterLocation] = useState({});
   
   useEffect(() => {
     getListLocations();
+  }, []);
+
+  useEffect(() => {
+    clickFilter();
   }, []);
 
   useEffect(() => {
@@ -41,7 +40,7 @@ function Items() {
         if (!search || (search && element.loc.includes(search))) {
           optionData.push({
             key: index,
-          value: element.loc
+            value: element.loc
           });
         }
       });
@@ -59,36 +58,50 @@ function Items() {
       result.rows.forEach((element, index) => {
         myData[index]["key"] = index;
       });
+      setPagination({
+        current: (result.currentPageNumber + 1),
+        pageSize: 10,
+        total: result.totalRows
+      });
       setItems(myData);
       setLoading(false);
     });
   };
 
+  const blurLocation = event => {
+    changeLocation(event.target.value);
+  }
+
   const changeLocation = value => {
-    setSelectedLocation(value);
-    setFilterLocation({
-      "field": "loc",
-      "operator": "EQUALS",
-      "value": value
-    });
+    let temp = {};
+    if (value) {
+      temp = {
+        "field": "loc",
+        "operator": "EQUALS",
+        "value": value
+      };
+    }
+    setFilterLocation(temp);
   };
 
-  const clickFilter = () => {
+  const clickFilter = (p) => {
+    if (!p) {
+      p = {
+        "limit": 10,
+        "page": 0
+      };
+    }
+    
     let filters = [];
     if (JSON.stringify(filterLocation) !== '{}') {
       filters.push(filterLocation);
     }
-
-    setFilterSearch({
+    const filterSearch = {
       "filters": filters,
-      "limit": pagination.pageSize,
-      "page": (pagination.current - 1)
-    });
-  };
-
-  const handleTableChange = pagination => {
-    console.log('pag', pagination);
-    clickFilter();
+      "limit": p.pageSize,
+      "page": (p.current - 1)
+    }; 
+    setFilterSearch(filterSearch);
   };
 
   const handleDelete = loc => {
@@ -118,6 +131,7 @@ function Items() {
           options={options}
           style={{ width: 200 }}
           onSelect={changeLocation}
+          onBlur={blurLocation}
           onSearch={getListLocations}
           placeholder="input here"
         />
@@ -141,7 +155,7 @@ function Items() {
       <Table
         dataSource={ items }
         pagination={ pagination }
-        onChange={ handleTableChange }
+        onChange={ clickFilter }
         loading={ loading }
       >
         <Column title="Item No" dataIndex="itemNo" key="itemNo" />
@@ -160,7 +174,14 @@ function Items() {
               <Space size="middle">
                 <a onClick={ () => history.push(`/items/${ record.loc }`) }>View</a>
                 <a onClick={ () => history.push(`/items/${ record.loc }?edit=true`) }>Edit</a>
-                <a onClick={ () => handleDelete(record.loc) }>Delete</a>
+                <Popconfirm
+                  title="Are you sure to delete this record?"
+                  onConfirm={() => handleDelete(record.itemNo)}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <a href="#">Delete</a>
+                </Popconfirm>
               </Space>
             );
           } }
