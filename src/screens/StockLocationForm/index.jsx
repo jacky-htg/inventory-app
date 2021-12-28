@@ -156,7 +156,11 @@ const StockLocationForm = (props) => {
         "version": version,
       };
       console.log('obj :>> ', obj);
-      Location.create(obj);
+      if (isEdit) {
+        Location.edit(obj);
+      } else {
+        Location.create(obj);
+      }
       history.push('/stock-locations');
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
