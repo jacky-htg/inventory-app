@@ -3,9 +3,11 @@ import { ProSidebar, SidebarHeader, SidebarFooter, SidebarContent, Menu, MenuIte
 import 'react-pro-sidebar/dist/css/styles.css';
 import { useHistory, useParams } from 'react-router-dom';
 import { FaDotCircle, FaUserCircle } from "react-icons/fa";
-import { BsCircle } from "react-icons/bs";
+import { GrHostMaintenance } from "react-icons/gr";
+import { BsCircle, BsCalendar2WeekFill } from "react-icons/bs";
+import { MdBatchPrediction, MdQueryStats } from "react-icons/md";
 import { AiTwotoneCiCircle } from "react-icons/ai";
-
+import { HiOutlineDocumentReport } from "react-icons/hi";
 import { BsSun } from 'react-icons/bs';
 import ReactHoverObserver from 'react-hover-observer';
 
@@ -20,6 +22,7 @@ function Sidebar() {
   const [itemMenu, setItemMenu] = useState([
     {
       title: 'Maintenance',
+      icon: <GrHostMaintenance />,
       submenu: [
         {
           title: 'Item Master',
@@ -110,6 +113,7 @@ function Sidebar() {
     },
     {
       title: 'Batch',
+      icon: <MdBatchPrediction />,
       submenu: [
         {
           title: 'Batch 1',
@@ -124,7 +128,24 @@ function Sidebar() {
       ]
     },
     {
+      title: 'Query',
+      icon: <MdQueryStats />,
+      submenu: [
+        {
+          title: 'Query 1',
+          link: '',
+          isActive: false
+        },
+        {
+          title: 'Query 2',
+          link: '',
+          isActive: false
+        }
+      ]
+    },
+    {
       title: 'Report',
+      icon: <HiOutlineDocumentReport />,
       submenu: [
         {
           title: 'Report 1',
@@ -140,6 +161,7 @@ function Sidebar() {
     },
     {
       title: 'End of Period',
+      icon: <BsCalendar2WeekFill />,
       link: '',
       isActive: false
     }
@@ -189,7 +211,7 @@ function Sidebar() {
               <>
                 {
                   menu.submenu ?
-                    <SubMenu title={ menu.title } icon={ <AiTwotoneCiCircle /> }>
+                    <SubMenu title={ menu.title } icon={ menu.icon ? menu.icon : <AiTwotoneCiCircle /> }>
                       {
                         menu.submenu.map((submenu, idx) => {
                           return (
@@ -199,7 +221,7 @@ function Sidebar() {
                       }
                     </SubMenu>
                     :
-                    <MenuItem className={ `${ menu.isActive || menu.submenu ? 'actived' : 'nonactive' }` } icon={ <AiTwotoneCiCircle /> }>{ menu.title }</MenuItem>
+                    <MenuItem className={ `${ menu.isActive || menu.submenu ? 'actived' : 'nonactive' }` } icon={ menu.icon ? menu.icon : <AiTwotoneCiCircle /> }>{ menu.title }</MenuItem>
 
                 }
               </>
@@ -245,7 +267,7 @@ function Sidebar() {
         <ProSidebar
           width={ '270px' }
           collapsedWidth={ '80px' }
-          collapsed={ selectedMenu.length === 0 }
+          collapsed={ !isHovering }
         >
           <SidebarHeader>
             {/**
@@ -272,7 +294,7 @@ function Sidebar() {
           </SidebarContent>
 
           <SidebarFooter>
-            <Menu iconShape="circle">
+            <Menu className='footer' iconShape="circle">
               <SubMenu title="username" icon={ <FaUserCircle /> }>
                 <MenuItem>Setting</MenuItem>
                 <MenuItem>Logout</MenuItem>
