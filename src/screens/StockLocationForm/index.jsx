@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Select, Checkbox, AutoComplete, message } from 'antd';
-import moment from 'moment';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Country, Location } from '../../services';
 
@@ -20,11 +19,6 @@ const StockLocationForm = (props) => {
   let query = useQuery();
 
   const [form] = Form.useForm();
-  const { TextArea } = Input;
-  const [userName, setUserName] = useState('username');
-  const [company, setCompany] = useState('company name');
-  const [loginDate, setLoginDate] = useState(moment().format("YYYY-MM-DD HH:mm:ss"));
-  const [code, setCode] = useState('INM00001');
   const [countriesData, setCountriesData] = useState([]);
   const [countriesOpt, setCountriesOpt] = useState([]);
   const [loadingPage, setLoadingPage] = useState(id ? true : false);

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Table, Button, Space, AutoComplete, Form } from 'antd';
+import { useHistory } from 'react-router-dom';
 
 import { StyledDiv } from './styled';
 
 function Inm00001() {
-
+  const history = useHistory();
   const { Column } = Table;
   const mockVal = (str, repeat = 1) => ({
     value: str.repeat(repeat),
@@ -66,7 +67,7 @@ function Inm00001() {
       </div>
       { filter }
       <div style={ { textAlign: 'right' } }>
-        <Button type="primary" style={ { marginBottom: 16 } }>
+        <Button onClick={ () => history.push('/items/create') } type="primary" style={ { marginBottom: 16 } }>
           Add a row
         </Button>
       </div>
