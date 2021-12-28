@@ -26,8 +26,8 @@ function Sidebar() {
       submenu: [
         {
           title: 'Item Master',
-          link: '',
-          isActive: false
+          link: '/items',
+          isActive: true
         },
         {
           title: 'GRN Entry (with PO)',
