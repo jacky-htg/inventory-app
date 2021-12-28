@@ -151,7 +151,7 @@ const StockLocationForm = (props) => {
       };
       console.log('obj :>> ', obj);
       if (isEdit) {
-        Location.edit(obj);
+        Location.edit(id, obj);
       } else {
         Location.create(obj);
       }

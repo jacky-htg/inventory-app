@@ -58,8 +58,8 @@ async function create(data) {
     });
 }
 
-async function edit(data) {
-  return await fetch(`${env.url}/locations`, {
+async function edit(loc, data) {
+  return await fetch(`${env.url}/locations/${loc}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

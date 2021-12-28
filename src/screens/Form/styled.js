@@ -32,6 +32,17 @@ const StyledDiv = styled.div`
   }
 
   .formWrapper {
+    .loading {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 100px;
+      }
+    }
+
     .group {
       margin-bottom: 60px;
     }
@@ -39,6 +50,31 @@ const StyledDiv = styled.div`
       display: grid;
       grid-template-columns: 48% 48.8%;
       grid-gap: 40px;
+    }
+
+    .normal[disabled] {
+        color: rgba(0, 0, 0, 0.85);
+        background-color: transparent;
+        border: unset;
+        box-shadow: none;
+        /* cursor: not-allowed; */
+        opacity: 1;
+        border-bottom: 1px solid black;
+      }
+
+      .ant-select-disabled.ant-select:not(.ant-select-customize-input)
+        .ant-select-selector {
+        color: rgba(0, 0, 0, 0.85);
+        background: transparent;
+        border: unset;
+        box-shadow: none;
+        border-bottom: 1px solid black;
+        /* cursor: not-allowed; */
+      }
+
+      .ant-select-single:not(.ant-select-customize-input) .ant-select-selector::after {
+          display: none;
+      }
     }
   }
 

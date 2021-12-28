@@ -160,8 +160,8 @@ function Items() {
           render={ (text, record) => {
             return (
               <Space size="middle">
-                <a onClick={ () => history.push(`/items/${ record.loc }`) }>View</a>
-                <a onClick={ () => history.push(`/items/${ record.loc }?edit=true`) }>Edit</a>
+                <a onClick={ () => history.push(`/items/${ record.itemNo }`) }>View</a>
+                <a onClick={ () => history.push(`/items/${ record.itemNo }?edit=true`) }>Edit</a>
                 <a onClick={ () => handleDelete(record.loc) }>Delete</a>
               </Space>
             );
