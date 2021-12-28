@@ -180,130 +180,220 @@ const StockLocationForm = (props) => {
             :
             <Form form={ form } name="control-hooks">
               <div className="group">
-                <Form.Item
-                  name="Loc"
-                  label="Loc"
-                  rules={ [
-                    {
-                      required: true,
-                    },
-                  ] }
-                >
-                  <Input disabled={ isDisabled } defaultValue={ loc } value={ loc } onChange={ e => setLoc(e.target.value) } placeholder='Type loc here...' />
-                </Form.Item>
+                {
+                  !loc && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Loc"
+                      label="Loc"
+                      rules={ [
+                        {
+                          required: true,
+                        },
+                      ] }
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ loc } value={ loc } onChange={ e => setLoc(e.target.value) } placeholder={ 'Type loc here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="Descripction"
-                  label="Descripction"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ description } value={ description } onChange={ e => setDescription(e.target.value) } placeholder='Type descripction here...' />
-                </Form.Item>
+                {
+                  !description && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Descripction"
+                      label="Descripction"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ description } value={ description } onChange={ e => setDescription(e.target.value) } placeholder={ 'Type descripction here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="Address 1"
-                  label="Address 1"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ address1 } value={ address1 } onChange={ e => setAddress1(e.target.value) } placeholder='Type address here...' />
-                </Form.Item>
+                {
+                  !address1 && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Address 1"
+                      label="Address 1"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ address1 } value={ address1 } onChange={ e => setAddress1(e.target.value) } placeholder={ 'Type address here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="Address 2"
-                  label="Address 2"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ address2 } value={ address2 } onChange={ e => setAddress2(e.target.value) } placeholder='Type address here...' />
-                </Form.Item>
+                {
+                  !address2 && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Address 2"
+                      label="Address 2"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ address2 } value={ address2 } onChange={ e => setAddress2(e.target.value) } placeholder={ 'Type address here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="Address 3"
-                  label="Address 3"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ address3 } value={ address3 } onChange={ e => setAddress3(e.target.value) } placeholder='Type address here...' />
-                </Form.Item>
+                {
+                  !address3 && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Address 3"
+                      label="Address 3"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ address3 } value={ address3 } onChange={ e => setAddress3(e.target.value) } placeholder={ 'Type address here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="Address 4"
-                  label="Address 4"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ address4 } value={ address4 } onChange={ e => setAddress4(e.target.value) } placeholder='Type address here...' />
-                </Form.Item>
+                {
+                  !address4 && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Address 4"
+                      label="Address 4"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ address4 } value={ address4 } onChange={ e => setAddress4(e.target.value) } placeholder={ 'Type address here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="Postal Code"
-                  label="Postal Code"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ postalCode } value={ postalCode } onChange={ e => setPostalCode(e.target.value) } placeholder='Type postal code here...' />
-                </Form.Item>
+                {
+                  !postalCode && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Postal Code"
+                      label="Postal Code"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ postalCode } value={ postalCode } onChange={ e => setPostalCode(e.target.value) } placeholder={ 'Type postal code here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="Country Name"
-                  label="Country Name"
-                  rules={ [
-                    {
-                      required: true,
-                    },
-                  ] }
-                >
-                  <AutoComplete
-                    disabled={ isDisabled }
-                    defaultValue={ countryName }
-                    value={ countryName }
-                    options={ countriesOpt }
-                    onSelect={ onSelectCountry }
-                    placeholder="Type country name here..."
-                    filterOption={ (inputValue, option) =>
-                      option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                    }
-                  />
-                </Form.Item>
+                {
+                  !countryName && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Country Name"
+                      label="Country Name"
+                      rules={ [
+                        {
+                          required: true,
+                        },
+                      ] }
+                    >
+                      <AutoComplete
+                        disabled={ isDisabled }
+                        defaultValue={ countryName }
+                        value={ countryName }
+                        options={ countriesOpt }
+                        onSelect={ onSelectCountry }
+                        placeholder={ "Type country name here..." }
+                        filterOption={ (inputValue, option) =>
+                          option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                        }
+                      />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="Region Code"
-                  label="Region Code"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ regionCode } value={ regionCode } onChange={ e => setRegionCode(e.target.value) } placeholder='Type region code here...' />
-                </Form.Item>
+                {
+                  !regionCode && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Region Code"
+                      label="Region Code"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ regionCode } value={ regionCode } onChange={ e => setRegionCode(e.target.value) } placeholder={ 'Type region code here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="State Code"
-                  label="State Code"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ stateCode } value={ stateCode } onChange={ e => setStateCode(e.target.value) } placeholder='Type state code here...' />
-                </Form.Item>
+                {
+                  !stateCode && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="State Code"
+                      label="State Code"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ stateCode } value={ stateCode } onChange={ e => setStateCode(e.target.value) } placeholder={ 'Type state code here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="City Code"
-                  label="City Code"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ cityCode } value={ cityCode } onChange={ e => setCityCode(e.target.value) } placeholder='Type city code here...' />
-                </Form.Item>
+                {
+                  !cityCode && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="City Code"
+                      label="City Code"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ cityCode } value={ cityCode } onChange={ e => setCityCode(e.target.value) } placeholder={ 'Type city code here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="Telephone No"
-                  label="Telephone No"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ telNum } value={ telNum } onChange={ e => setTelNum(e.target.value) } placeholder='Type telephone number here...' />
-                </Form.Item>
+                {
+                  !telNum && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Telephone No"
+                      label="Telephone No"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ telNum } value={ telNum } onChange={ e => setTelNum(e.target.value) } placeholder={ 'Type telephone number here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="Fax No"
-                  label="Fax No"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ faxNum } value={ faxNum } onChange={ e => setFaxNum(e.target.value) } placeholder='Type fax number here...' />
-                </Form.Item>
+                {
+                  !faxNum && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Fax No"
+                      label="Fax No"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ faxNum } value={ faxNum } onChange={ e => setFaxNum(e.target.value) } placeholder={ 'Type fax number here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="Person In Charge"
-                  label="Person In Charge"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ pic } value={ pic } onChange={ e => setPic(e.target.value) } placeholder='Type Person In Charge here...' />
-                </Form.Item>
+                {
+                  !pic && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Person In Charge"
+                      label="Person In Charge"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ pic } value={ pic } onChange={ e => setPic(e.target.value) } placeholder={ 'Type Person In Charge here...' } />
+                    </Form.Item>
+                }
 
-                <Form.Item
-                  name="Remarks"
-                  label="Remarks"
-                >
-                  <Input disabled={ isDisabled } defaultValue={ remarks } value={ remarks } onChange={ e => setRemarks(e.target.value) } placeholder='Type remarks here...' />
-                </Form.Item>
+                {
+                  !remarks && id
+                    ?
+                    <></>
+                    :
+                    <Form.Item
+                      name="Remarks"
+                      label="Remarks"
+                    >
+                      <Input disabled={ isDisabled } defaultValue={ remarks } value={ remarks } onChange={ e => setRemarks(e.target.value) } placeholder={ 'Type remarks here...' } />
+                    </Form.Item>
+                }
 
               </div>
 
@@ -324,12 +414,12 @@ const StockLocationForm = (props) => {
                 </div>
               }
 
-{
+              {
                 (id && !isEdit) &&
                 <div className="submit">
                   <Form.Item>
                     <Button onClick={ () => history.push(`/stock-locations`) } type="primary" htmlType="submit">
-                          Back To Stock Locations
+                      Back To Stock Locations
                     </Button>
                   </Form.Item>
                 </div>

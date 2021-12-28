@@ -108,6 +108,17 @@ table {
   scrollbar-width: none;  /* Firefox */
 }
 
+.pro-sidebar > .pro-sidebar-inner > .pro-sidebar-layout .pro-sidebar-content::-webkit-scrollbar {
+  display: none;
+}
+
+.pro-sidebar > .pro-sidebar-inner > .pro-sidebar-layout .pro-sidebar-content {
+    max-height: calc(100vh - 152px);
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
 .pro-menu-item.nonactive,
 .pro-menu-item.nonactive .pro-inner-item {
   pointer-events: none;
@@ -211,19 +222,30 @@ table {
   padding: 26px 40px;
   /* padding-left: 106px; */
   overflow: auto;
+  background-color: white;
 }
 
 .userInfo {
-  margin-bottom: 20px;
+  margin-top: -26px;
+  padding-top: 26px;
+  /* margin-bottom: 20px; */
   display: flex;
   justify-content: space-between;
   border-bottom: 1px dashed;
   padding-bottom: 10px;
   font-size: 14px;
+  position: sticky;
+  top: -26px;
+  background-color: white;
+  z-index: 2;
 }
 
 .userInfo span {
   font-weight: 700;
   font-size: 20px;
   color: #1990ff; /*darkblue;*/
+}
+
+.footer {
+  padding: 0px !important;
 }
