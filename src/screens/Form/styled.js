@@ -5,13 +5,18 @@ import { Images } from "../../constant";
 
 const StyledDiv = styled.div`
   .header {
+    position: sticky;
+    top: 102px;
+    padding-top: 20px;
     margin-bottom: 40px;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px dashed;
+    background: white;
+    z-index: 2;
 
     h2 {
       font-size: 30px;
+      color: #1990ff;
     }
 
     .right {
@@ -23,7 +28,7 @@ const StyledDiv = styled.div`
   }
 
   label {
-    min-width: 100px;
+    min-width: 200px;
   }
 
   .formWrapper {
@@ -35,6 +40,10 @@ const StyledDiv = styled.div`
       grid-template-columns: 48% 48.8%;
       grid-gap: 40px;
     }
+  }
+
+  .submit {
+    text-align: right;
   }
 `;
 

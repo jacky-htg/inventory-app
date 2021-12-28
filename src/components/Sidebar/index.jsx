@@ -174,7 +174,7 @@ function Sidebar() {
     }
     if (
       menu === 'inventory' ||
-      history.location.pathname === '/items' ||
+      history.location.pathname.includes('/items') ||
       history.location.pathname.includes('/stock-locations')
     ) {
       setSelectedMenu(itemMenu);

@@ -1,20 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox } from 'antd';
-import moment from 'moment';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message } from 'antd';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { Country } from '../../services';
 
 import { StyledDiv } from './styled';
+import env from '../../env';
+import { Images } from '../../constant';
 
 const FormPage = (props) => {
+  const history = useHistory();
+  const { id } = useParams();
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
+
+  let query = useQuery();
+
   const [form] = Form.useForm();
-  const [userName, setUserName] = useState('username');
-  const [company, setCompany] = useState('company name');
-  const [loginDate, setLoginDate] = useState(moment().format("YYYY-MM-DD HH:mm:ss"));
-  const [code, setCode] = useState('INM00001');
+  const [isEdit, setIsEdit] = useState(query.get("edit") ? query.get('edit') === 'true' : false);
+
+
+  const submit = () => {
+    let obj = {
+      balbfQty: 0,
+      categoryCode: "string",
+      categorySubCode: "string",
+      description: "string",
+      dimension: "string",
+      issueNo: "string",
+      itemNo: "string",
+      leadtime: 0,
+      loc: "string",
+      manufacturer: "string",
+      mslCode: "string",
+      obsoleteCode: "OBSOLETE",
+      obsoleteItem: "string",
+      openClose: "CLOSED",
+      orderQty: 0,
+      partNo: "string",
+      prodnResv: 0,
+      productGroup: "string",
+      qoh: 0,
+      qryObsItem: "string",
+      refUrl: "string",
+      remarks: "string",
+      reorder: 0,
+      requestor: "string",
+      rev: "string",
+      rohsStatus: true,
+      source: "string",
+      status: "ACTIVE",
+      stdMaterial: 0,
+      storageShelf: "string",
+      uom: "string",
+      version: 0
+    };
+  };
 
   return (
     <StyledDiv>
       <div className="header">
-        <h2>{ code }</h2>
+        <h2>{ id ? id : "FORM_ID" }</h2>
         <h2>Item Master Maintenance</h2>
       </div>
       <div className="formWrapper">
@@ -515,13 +563,62 @@ const FormPage = (props) => {
                 <Input />
               </Form.Item>
             </div>
+            <div className="row">
+              <Form.Item
+                name="Requestor"
+                label="Requestor"
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="EOH ="
+                label="EOH ="
+              >
+                <Input />
+              </Form.Item>
+            </div>
+            <div className="row">
+              <Form.Item
+                name="Last Modified Date"
+                label="Last Modified Date"
+              >
+                <Input />
+              </Form.Item>
+            </div>
+            <div className="row">
+              <Form.Item
+                name="Entry User"
+                label="Entry User"
+              >
+                <Input />
+              </Form.Item>
+            </div>
+            <div className="row">
+              <Form.Item
+                name="Entry Date"
+                label="Entry Date"
+              >
+                <Input />
+              </Form.Item>
+            </div>
           </div>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
+          {
+            (!id || isEdit) &&
+            <div className="submit">
+              <Form.Item>
+                <Button onClick={ submit } type="primary" htmlType="submit">
+                  {
+                    isEdit
+                      ?
+                      "Edit Item"
+                      :
+                      "Create Item"
+                  }
+                </Button>
+              </Form.Item>
+            </div>
+          }
         </Form>
       </div>
     </StyledDiv>

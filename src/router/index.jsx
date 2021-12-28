@@ -42,7 +42,11 @@ const publicRoutes = [
     component: Inm00001,
   },
   {
-    path: '/form',
+    path: '/items/create',
+    component: Form,
+  },
+  {
+    path: '/items/:id',
     component: Form,
   },
   {
