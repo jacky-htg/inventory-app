@@ -6,6 +6,7 @@ import { Lov, Location, Item } from '../../services';
 import { StyledDiv } from './styled';
 import env from '../../env';
 import { Images } from '../../constant';
+import { parse } from 'postcss';
 
 const FormPage = (props) => {
   const history = useHistory();
@@ -226,38 +227,38 @@ const FormPage = (props) => {
         console.log('Success:', values);
       }
       let obj = {
-        balbfQty,
+        balbfQty: parseInt(balbfQty),
         categoryCode,
         categorySubCode,
         description,
         dimension,
         issueNo,
         itemNo,
-        leadtime,
+        leadtime: parseInt(leadtime),
         loc,
         manufacturer,
         mslCode,
-        obsoleteCode,
+        // obsoleteCode,
         obsoleteItem,
-        openClose,
-        orderQty,
+        // openClose,
+        orderQty: parseInt(orderQty),
         partNo,
-        prodnResv,
+        prodnResv: parseInt(prodnResv),
         productGroup,
-        qoh,
+        qoh: parseInt(qoh),
         qryObsItem,
         refUrl,
         remarks,
-        reorder,
-        requestor,
+        reorder: parseInt(reorder),
+        // requestor,
         rev,
         rohsStatus,
         source,
-        status,
-        stdMaterial,
+        // status,
+        stdMaterial: parseInt(stdMaterial),
         storageShelf,
         uom,
-        version,
+        // version: parseInt(version),
       };
       // let obj = {
       //   balbfQty: 0,

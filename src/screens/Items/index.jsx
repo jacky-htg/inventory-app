@@ -20,7 +20,7 @@ function Items() {
   const [loading, setLoading] = useState(false);
   const [filterSearch, setFilterSearch] = useState({});
   const [filterLocation, setFilterLocation] = useState({});
-  
+
   useEffect(() => {
     getListLocations();
   }, []);
@@ -41,7 +41,7 @@ function Items() {
         if (!search || (search && element.loc.includes(search))) {
           optionData.push({
             key: index,
-          value: element.loc
+            value: element.loc
           });
         }
       });
@@ -115,10 +115,10 @@ function Items() {
       // style={ { width: 400 } }
       >
         <AutoComplete
-          options={options}
-          style={{ width: 200 }}
-          onSelect={changeLocation}
-          onSearch={getListLocations}
+          options={ options }
+          style={ { width: 200 } }
+          onSelect={ changeLocation }
+          onSearch={ getListLocations }
           placeholder="input here"
         />
       </Form.Item>
@@ -131,7 +131,9 @@ function Items() {
 
   return (
     <StyledDiv>
-      <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>Items</h2>
+      <div className="header">
+        <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>Items</h2>
+      </div>
       { filter }
       <div style={ { textAlign: 'right' } }>
         <Button onClick={ () => history.push('/items/create') } type="primary" style={ { marginBottom: 16 } }>
