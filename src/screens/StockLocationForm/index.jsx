@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Select, Checkbox, AutoComplete, message } from 'antd';
 import moment from 'moment';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { Country, Location } from '../../services';
 
 import { StyledDiv } from './styled';
 import env from '../../env';
@@ -51,7 +52,7 @@ const StockLocationForm = (props) => {
   const [plantNumber, setPlantNumber] = useState(env.plantNo);
 
   useEffect(() => {
-    const data = getCountries();
+    const data = Country.list();
     data.then(res => {
       setCountriesData(res);
       let temp = [];
@@ -63,12 +64,9 @@ const StockLocationForm = (props) => {
       });
       setCountriesOpt(temp);
       if (id) {
-        const data = getStockLoc(id);
+        const data = Location.view(id);
         data.then(result => {
-          if (result.status && (
-            result.status === 500 ||
-            result.status === 400
-          )) {
+          if (result.status && result.status !== 200) {
             message.error(result.error);
           }
           result.address1 && setAddress1(result.address1);
@@ -158,7 +156,7 @@ const StockLocationForm = (props) => {
         "version": version,
       };
       console.log('obj :>> ', obj);
-      createStockLoc(obj);
+      Location.create(obj);
       history.push('/stock-locations');
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
@@ -342,38 +340,5 @@ const StockLocationForm = (props) => {
     </StyledDiv >
   );
 };
-
-async function getCountries() {
-  return await fetch("http://sun17.sunright.com/lov/countries").then(res => res.json());
-}
-
-async function createStockLoc(data) {
-  return await fetch(`http://sun17.sunright.com/companies/${ env.companyCode }/plants/${ env.plantNo }/locations`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-    .then(res => {
-      return res.json();
-    })
-    .then(res => {
-      console.log('res :>> ', res);
-    })
-    .catch(err => {
-      console.log('err :>> ', err);
-      message.error(JSON.stringify(err));
-    })
-    ;
-}
-
-async function getStockLoc(id) {
-  return await fetch(`http://sun17.sunright.com/companies/${ env.companyCode }/plants/${ env.plantNo }/locations/${ id }`)
-    .then(res => res.json())
-    .catch(err => console.log('err :>> ', err));
-}
-
 
 export default StockLocationForm;

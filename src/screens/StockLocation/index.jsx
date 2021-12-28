@@ -3,7 +3,8 @@ import { Table, Button, Space, Select, Form, Input, message } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import { StyledDiv } from './styled';
-import env from '../../env';
+
+import { Country, Location } from '../../services';
 
 function StockLocation() {
   const history = useHistory();
@@ -22,12 +23,9 @@ function StockLocation() {
   let optionCountries = getOptionCountries(countries);
 
   useEffect(() => {
-    let data = getCountries();
+    let data = Country.list();
     data.then(result => {
-      if (result.status && (
-        result.status === 500 ||
-        result.status === 400
-      )) {
+      if (result.status && result.status !== 200) {
         message.error(result.error);
       }
       setCountries(result);
@@ -41,12 +39,9 @@ function StockLocation() {
   }, [filterSearch]);
 
   const getStockData = (filter) => {
-    let data = getItems(filter);
+    let data = Location.list(filter);
     data.then(result => {
-      if (result.status && (
-        result.status === 500 ||
-        result.status === 400
-      )) {
+      if (result.status && result.status !== 200) {
         message.error(result.error);
       }
       const myData = result.rows;
@@ -109,6 +104,17 @@ function StockLocation() {
   const handleTableChange = pagination => {
     console.log('pag', pagination);
     clickFilter();
+  };
+
+  const handleDelete = loc => {
+    let data = Location.remove(loc);
+    data.then(result => {
+      if (result.status && result.status !== 204) {
+        message.error(result.error);
+      }
+      setLoading(true);
+      getStockData(filterSearch);
+    });
   };
 
   const layout = {
@@ -186,6 +192,7 @@ function StockLocation() {
               <Space size="middle">
                 <a onClick={ () => history.push(`/stock-locations/${ record.loc }`) }>View</a>
                 <a onClick={ () => history.push(`/stock-locations/${ record.loc }?edit=true`) }>Edit</a>
+                <a onClick={ () => handleDelete(record.loc) }>Delete</a>
               </Space>
             );
           } }
@@ -193,27 +200,6 @@ function StockLocation() {
       </Table>
     </StyledDiv>
   );
-}
-
-
-async function getCountries() {
-  return await fetch("http://sun17.sunright.com/lov/countries").then(res => res.json());
-}
-
-async function getItems(filterSearch) {
-  return await fetch(`http://sun17.sunright.com/companies/${ env.companyCode }/plants/${ env.plantNo }/locations/search`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(filterSearch),
-    })
-    .then(res => res.json())
-    .catch(err => {
-      console.log('err :>> ', err);
-      message.error(JSON.stringify(err));
-    });
 }
 
 function getOptionCountries(countries) {
