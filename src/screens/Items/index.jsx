@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Select, Form, Input, message } from 'antd';
+import { Table, Button, Space, Select, Form, Input, message, AutoComplete } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import { StyledDiv } from './styled';
@@ -22,19 +22,32 @@ function Items() {
   const [filterLocation, setFilterLocation] = useState({});
   
   useEffect(() => {
-    let data = Location.list();
-    data.then(result => {
-      if (result.status && result.status !== 200) {
-        message.error(result.error);
-      }
-      setLocations(result);
-    });
+    getListLocations();
   }, []);
 
   useEffect(() => {
     setLoading(true);
     getListData(filterSearch);
   }, [filterSearch]);
+
+  const getListLocations = search => {
+    let data = Location.list({});
+    let optionData = [];
+    data.then(result => {
+      if (result.status && result.status !== 200) {
+        message.error(result.error);
+      }
+      result.rows.forEach((element, index) => {
+        if (!search || (search && element.loc.includes(search))) {
+          optionData.push({
+            key: index,
+          value: element.loc
+          });
+        }
+      });
+      setOptions(optionData);
+    });
+  };
 
   const getListData = (filter) => {
     let data = Item.list(filter);
@@ -58,10 +71,6 @@ function Items() {
       "operator": "EQUALS",
       "value": value
     });
-  };
-
-  const onSearch = searchText => {
-    console.log(searchText);
   };
 
   const clickFilter = () => {
@@ -109,9 +118,13 @@ function Items() {
           options={options}
           style={{ width: 200 }}
           onSelect={changeLocation}
-          onSearch={onSearch}
+          onSearch={getListLocations}
           placeholder="input here"
         />
+      </Form.Item>
+      <Form.Item>
+        <Button onClick={ clickFilter } size='large'>Filter</Button>
+        {/* <Button className='reset' onClick={ resetFilter } size='large'>Reset</Button> */ }
       </Form.Item>
     </Form>
   );

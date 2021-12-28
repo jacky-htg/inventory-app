@@ -5,3 +5,4 @@ export { default as Inm00001 } from "./Inm00001";
 export { default as Items } from "./Items";
 export { default as StockLocation } from "./StockLocation";
 export { default as StockLocationForm } from "./StockLocationForm";
+export { default as Item } from "./Items";
