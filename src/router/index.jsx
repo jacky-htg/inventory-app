@@ -23,6 +23,8 @@ import {
 import { Sidebar } from '../components';
 import { Colors, Images } from '../constant';
 
+import env from '../env';
+
 
 // import PrivateRoute from './private';
 // import { scrollToTop as ScrollToTop } from '../helpers';
@@ -91,8 +93,8 @@ const Router = props => {
         {
           <div className="userInfo">
             <div className="left">
-              <p className="username">Username: <span>{ userName }</span></p>
-              <p className="company">Company: <span>{ company }</span></p>
+              <p className="username">Username: <span>{ env.username }</span></p>
+              <p className="company">Company: <span>{ env.companyName }</span></p>
             </div>
             <div className="right">
               <p className="login">Login Date: <span>{ loginDate }</span></p>
