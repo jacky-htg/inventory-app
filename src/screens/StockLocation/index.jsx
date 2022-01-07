@@ -15,7 +15,6 @@ function StockLocation() {
   const history = useHistory();
   const { Column } = Table;
   const [countries, setCountries] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState(null);
   const [locations, setLocations] = useState([]);
   const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(false);
@@ -33,16 +32,13 @@ function StockLocation() {
       setCountries(result);
       optionCountries = getOptionCountries(countries);
     });
+    setFilterForm(fieldFilter(0));
   }, []);
 
   useEffect(() => {
     setLoading(true);
     getStockData(filterSearch);
   }, [filterSearch]);
-
-  useEffect(() => {
-    setFilterForm(fieldFilter(0));
-  }, []);
 
   const getStockData = (filter) => {
     let data = Location.list(filter);
@@ -79,12 +75,6 @@ function StockLocation() {
     });
   };
 
-  const resetFilter = () => {
-    setSelectedCountry(null);
-    setFilterDescription({});
-    setFilterSearch({});
-  };
-
   const handleDelete = loc => {
     let data = Location.remove(loc);
     data.then(result => {
@@ -96,27 +86,20 @@ function StockLocation() {
     });
   };
 
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
-
   const optionFilters = ['countryCode', 'description'];
   const changeData = (n, data, type) => {
-    const temp = filters;
-    if (!temp[n]) {
-      temp[n] = {
+    if (!filters[n]) {
+      filters[n] = {
         field: "",
         operator: "LIKE",
         value: ""
       };
     }
-    temp[n][type] = data;  
-    setFilters(temp);
+    filters[n][type] = data;  
+    setFilters(filters);
 
-    console.log("kulkul", type);
     if (type === "field") {
-      const [f, c] = renderFilter(); 
+      const [f] = renderFilter(); 
       setFilterForm(f);
     }
   };
@@ -147,13 +130,10 @@ function StockLocation() {
   };
 
   const removeFilter = (n) => {
-    const array = filters;
-    const index = n;
-    console.log(index);
-    if (index > -1 && index < array.length) {
-      array.splice(index, 1);
+    if (n > -1 && n < filters.length) {
+      filters.splice(n, 1);
     }
-    setFilters(array);
+    setFilters(filters);
     
     const [temp, counter] = renderFilter();
     if (n < filter.length) {
@@ -172,15 +152,12 @@ function StockLocation() {
       />
     );
 
-    console.log('busan', filters[n]);
-
     if (filters[n] && filters[n].field === "countryCode") {
-      console.log('coco');
       valueForm = (
         <Select
           // mode="multiple"
           showSearch
-          // allowClear
+          allowClear
           style={ { width: 200 } }
           placeholder="Please select"
           onChange={ (value) => changeData(n, value, 'value') }
@@ -283,7 +260,6 @@ function getOptionCountries(countries) {
   for (const country of countries) {
     optionCountries.push(<Option key={ country.countryCode } value={ country.countryCode } >{ country.description }</Option>);
   }
-  optionCountries.unshift(<Option key={ 'all' } value={ 'all' } >{ 'ALL COUNTRIES' }</Option>);
   return optionCountries;
 }
 
