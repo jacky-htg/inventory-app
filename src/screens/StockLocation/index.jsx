@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { Table, Button, Space, Select, Form, Input, message, Popconfirm } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import { StyledDiv } from './styled';
 
 import { Country, Location } from '../../services';
+import { e } from '../../../dist/assets/vendor.5ce9889e';
 
 function StockLocation() {
+
+  const { Option } = Select;
+
   const history = useHistory();
   const { Column } = Table;
   const [countries, setCountries] = useState([]);
@@ -15,8 +20,8 @@ function StockLocation() {
   const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(false);
   const [filterSearch, setFilterSearch] = useState({});
-  const [filterCountryCode, setFilterCountryCode] = useState({});
-  const [filterDescription, setFilterDescription] = useState({});
+  const [filters, setFilters] = useState([]);
+  const [filterForm, setFilterForm] = useState();
   let optionCountries = getOptionCountries(countries);
 
   useEffect(() => {
@@ -34,6 +39,10 @@ function StockLocation() {
     setLoading(true);
     getStockData(filterSearch);
   }, [filterSearch]);
+
+  useEffect(() => {
+    setFilterForm(fieldFilter(0));
+  }, []);
 
   const getStockData = (filter) => {
     let data = Location.list(filter);
@@ -55,46 +64,12 @@ function StockLocation() {
     });
   };
 
-  const changeCountryCode = value => {
-    if (value !== 'all') {
-      setSelectedCountry(value);
-      setFilterCountryCode({
-        "field": "countryCode",
-        "operator": "EQUALS",
-        "value": value
-      });
-    } else {
-      setFilterCountryCode({});
-      setSelectedCountry(null);
-      setFilterDescription({});
-    }
-  };
-
-  const changeDescription = event => {
-    if (event.target.value) {
-      setFilterDescription({
-        "field": "description",
-        "operator": "LIKE",
-        "value": event.target.value
-      });
-    }
-  };
-
   const clickFilter = p => {
     if (!p) {
       p = {
         "limit": 10,
         "page": 0
       };
-    }
-
-    let filters = [];
-    if (JSON.stringify(filterCountryCode) !== '{}') {
-      filters.push(filterCountryCode);
-    }
-
-    if (JSON.stringify(filterDescription) !== '{}') {
-      filters.push(filterDescription);
     }
 
     setFilterSearch({
@@ -126,43 +101,132 @@ function StockLocation() {
     wrapperCol: { span: 16 },
   };
 
-  const filter = (
-    <Form className='filter'>
-      <Form.Item
-        label="Country"
-        name="countryCode"
-      // style={ { width: 400 } }
-      >
+  const optionFilters = ['countryCode', 'description'];
+  const changeData = (n, data, type) => {
+    const temp = filters;
+    if (!temp[n]) {
+      temp[n] = {
+        field: "",
+        operator: "LIKE",
+        value: ""
+      };
+    }
+    temp[n][type] = data;  
+    setFilters(temp);
+
+    console.log("kulkul", type);
+    if (type === "field") {
+      const [f, c] = renderFilter(); 
+      setFilterForm(f);
+    }
+  };
+
+  const renderFilter = () => {
+    let temp = [];
+    let counter = 0;
+    filters.map((e, i) => {
+      counter++;
+      if (i === 0) {
+        temp.push(fieldFilter(i));
+      } else {
+        temp.push(fieldFilter(i, true));
+      }
+    }); 
+    return [temp, counter];
+  }
+
+  const addFilter = () => {
+    const [temp, counter] = renderFilter(); 
+    
+    if (counter == 0) {
+      temp.push(fieldFilter(counter));
+    } else if (counter < optionFilters.length) {
+      temp.push(fieldFilter(counter, true));
+    }
+    setFilterForm(temp);
+  };
+
+  const removeFilter = (n) => {
+    const array = filters;
+    const index = n;
+    console.log(index);
+    if (index > -1 && index < array.length) {
+      array.splice(index, 1);
+    }
+    setFilters(array);
+    
+    const [temp, counter] = renderFilter();
+    if (n < filter.length) {
+      temp.push(fieldFilter(counter, true));
+    }
+    setFilterForm(temp);
+  };
+
+  const fieldFilter = (n, useDelete = false) => {
+    let valueForm = (
+      <Input
+        style={ { width: 200 } }
+        placeholder="input here"
+        onBlur={ (data) => changeData(n, data.target.value, 'value') }
+        defaultValue={filters[n]?filters[n].value:""}
+      />
+    );
+
+    console.log('busan', filters[n]);
+
+    if (filters[n] && filters[n].field === "countryCode") {
+      console.log('coco');
+      valueForm = (
         <Select
-          defaultValue={ selectedCountry }
           // mode="multiple"
           showSearch
-          value={ selectedCountry }
-          // searchValue={ selectedCountry }
           // allowClear
           style={ { width: 200 } }
-          placeholder="Select Country"
-          onChange={ changeCountryCode }
+          placeholder="Please select"
+          onChange={ (value) => changeData(n, value, 'value') }
           filterOption={ (input, option) =>
             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
         >
           { optionCountries }
         </Select>
-      </Form.Item>
-      <Form.Item
-        label="Description"
-        name="description"
-      // style={ { width: 400 } }
-      >
-        <Input
+      );
+    }
+
+    return (
+      <div data-order={n}>
+        <Select
           style={ { width: 200 } }
-          placeholder="input here"
-          onBlur={ changeDescription }
-        />
-      </Form.Item>
+          placeholder="Select Field"
+          onChange={ (data) => changeData(n, data, 'field')}
+          defaultValue={filters[n]?filters[n].field:""}
+        >
+          <Option key="none" value="none">NONE</Option>
+          { optionFilters.map((o, i) => (<Option key={ i } value={ o } >{ o }</Option>))}
+        </Select>
+
+        <Select
+          style={ { width: 100 } }
+          onChange={ (data) => changeData(n, data, 'operator')} 
+          defaultValue={filters[n]?filters[n].operator:"LIKE"}
+        >
+          <Option key="0" value="EQUALS">EQUALS</Option>
+          <Option key="1" value="LIKE">LIKE</Option>
+        </Select>
+    
+        { valueForm }
+        { useDelete && <Button onClick={ () => removeFilter(n)}>-</Button>}
+
+      </div>
+    )
+  };
+
+  const filter = (
+    <Form className='filter'>
+      {filterForm}
       <Form.Item>
         <Button onClick={ clickFilter } size='large'>Filter</Button>
+        <Button onClick={ addFilter } size='large'>Add Filter</Button>
         {/* <Button className='reset' onClick={ resetFilter } size='large'>Reset</Button> */ }
       </Form.Item>
     </Form>
