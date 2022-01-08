@@ -9,7 +9,7 @@ import { Country, Location } from '../../services';
 import { e } from '../../../dist/assets/vendor.5ce9889e';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
 
-function StockLocation() {
+function List() {
 
   const { Option } = Select;
 
@@ -22,11 +22,11 @@ function StockLocation() {
   const [filterSearch, setFilterSearch] = useState({});
   const [filters, setFilters] = useState([]);
   const [filterForm, setFilterForm] = useState();
-  const [fields, setFields] = useState(['loc', 'description', 'address1', 'countryCode', 'personInCharge']);
+  const [fields, setFields] = useState(['grnNo', 'msrNo', 'doNo', 'currencyCode', 'currencyRate', 'recdDate', 'entryUser', 'entryDate']);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [contentModal, setContentModal] = useState([]);
 
-  const allFields = ['loc', 'description', 'address1', 'countryCode', 'personInCharge'];
+  const allFields = ['grnNo', 'msrNo', 'doNo', 'currencyCode', 'currencyRate', 'recdDate', 'entryUser', 'entryDate'];
 
   let optionCountries = getOptionCountries(countries);
 
@@ -101,7 +101,7 @@ function StockLocation() {
     });
   };
 
-  const optionFilters = ['countryCode', 'description'];
+  const optionFilters = ['grnNo', 'msrNo', 'doNo', 'currencyCode'];
   const changeData = (n, data, type) => {
     if (!filters[n]) {
       filters[n] = {
@@ -232,11 +232,14 @@ function StockLocation() {
         onChange={ clickFilter }
         loading={ loading }
       >
-        { fields.includes('loc') && <Column title="Location" dataIndex="loc" key="loc" /> }
-        { fields.includes('description') && <Column title="Description" dataIndex="description" key="description" /> }
-        { fields.includes('address1') && <Column title="Address" dataIndex="address1" key="address1" /> }
-        { fields.includes('countryCode') && <Column title="Country Code" dataIndex="countryCode" key="countryCode" /> }
-        { fields.includes('personInCharge') && <Column title="PIC" dataIndex="personInCharge" key="personInCharge" /> }
+        { fields.includes('grnNo') && <Column title="GRN No" dataIndex="grnNo" key="grnNo" /> }
+        { fields.includes('doNo') && <Column title="DO No" dataIndex="doNo" key="doNo" /> }
+        { fields.includes('msrNo') && <Column title="MSR No" dataIndex="msrNo" key="msrNo" /> }
+        { fields.includes('currencyCode') && <Column title="Currency Code" dataIndex="currencyCode" key="currencyCode" /> }
+        { fields.includes('currencyRate') && <Column title="Currency Rate" dataIndex="currencyRate" key="currencyRate" /> }
+        { fields.includes('recdDate') && <Column title="Recd Date" dataIndex="recdDate" key="recdDate" /> }
+        { fields.includes('entryUser') && <Column title="Entry User" dataIndex="entryUser" key="entryUser" /> }
+        { fields.includes('entryDate') && <Column title="Entry Date" dataIndex="entryDate" key="entryDate" /> }
         <Column
           title="Action"
           key="action"
@@ -244,15 +247,6 @@ function StockLocation() {
             return (
               <Space size="middle">
                 <a onClick={ () => history.push(`/stock-locations/${ record.loc }`) }>View</a>
-                <a onClick={ () => history.push(`/stock-locations/${ record.loc }?edit=true`) }>Edit</a>
-                <Popconfirm
-                  title="Are you sure to delete this record?"
-                  onConfirm={ () => handleDelete(record.loc) }
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <a href="#">Delete</a>
-                </Popconfirm>
               </Space>
             );
           } }
@@ -313,7 +307,7 @@ function StockLocation() {
   return (
     <StyledDiv>
       {modal()}
-      <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>Stock Location</h2>
+      <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>GRN Manual</h2>
       { filter }
       <div style={ { textAlign: 'right' } }>
         <Button onClick={showModal}>Settings</Button> 
@@ -336,4 +330,4 @@ function getOptionCountries(countries) {
   return optionCountries;
 }
 
-export default StockLocation;
+export default List;

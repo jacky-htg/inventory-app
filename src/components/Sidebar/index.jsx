@@ -31,13 +31,13 @@ function Sidebar() {
         },
         {
           title: 'GRN Entry (with PO)',
-          link: '',
-          isActive: false
+          link: '/grn-with-po',
+          isActive: true
         },
         {
           title: 'Manual GRN Entry',
-          link: '',
-          isActive: false
+          link: '/grn-manual',
+          isActive: true
         },
         {
           title: 'SIV Entry',
@@ -175,7 +175,9 @@ function Sidebar() {
     if (
       menu === 'inventory' ||
       history.location.pathname.includes('/items') ||
-      history.location.pathname.includes('/stock-locations')
+      history.location.pathname.includes('/stock-locations') ||
+      history.location.pathname.includes('/grn-with-po') ||
+      history.location.pathname.includes('/grn-manual')
     ) {
       setSelectedMenu(itemMenu);
     }
