@@ -1,7 +1,7 @@
 import env from "../env";
 
 async function list(filterSearch) {
-  return await fetch(`${env.url}/items/search`, {
+  return await fetch(`${env.url}/grns/search`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,50 +18,10 @@ async function list(filterSearch) {
     });
 }
 
-async function remove(loc) {
-  return await fetch(`${env.url}/items/${loc}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      "X-USERNAME": env.username,
-      "X-COMPANYCODE": env.companyCode,
-      "X-PLANTNO": env.plantNo,
-    },
-  })
-    .catch((err) => {
-      console.log("err :>> ", err);
-      message.error(JSON.stringify(err));
-    });
-}
-
 async function create(data) {
   console.log(`JSON.stringify(data)`, JSON.stringify(data));
-  return await fetch(`${env.url}/items`, {
+  return await fetch(`${env.url}/grns`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-USERNAME": env.username,
-      "X-COMPANYCODE": env.companyCode,
-      "X-PLANTNO": env.plantNo,
-    },
-    body: JSON.stringify(data),
-  })
-    .then((res) => {
-      return res.json();
-    })
-    .then((res) => {
-      console.log("res :>> ", res);
-    })
-    .catch((err) => {
-      console.log("err :>> ", err);
-      message.error(JSON.stringify(err));
-    });
-}
-
-async function edit(itemNo, data) {
-  console.log(`JSON.stringify(data)`, JSON.stringify(data));
-  return await fetch(`${env.url}/items/${itemNo}`, {
-    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "X-USERNAME": env.username,
@@ -83,7 +43,7 @@ async function edit(itemNo, data) {
 }
 
 async function view(id) {
-  return await fetch(`${env.url}/items/${id}`, {
+  return await fetch(`${env.url}/grns/${id}`, {
     method: "GET",
     headers: {
       "X-USERNAME": env.username,
@@ -95,4 +55,4 @@ async function view(id) {
     .catch((err) => console.log("err :>> ", err));
 }
 
-export default { list, remove, create, edit, view };
+export default { list, create, view };

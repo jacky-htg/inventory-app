@@ -59,11 +59,11 @@ const publicRoutes = [
     component: StockLocationForm,
   },
   {
-    path: '/grn-with-po',
+    path: '/grn-with-pos',
     component: GrnWithPo
   },
   {
-    path: '/grn-manual',
+    path: '/grn-manuals',
     component: GrnManual
   }
 

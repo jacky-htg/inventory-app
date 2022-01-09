@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
-import { Table, Button, Space, Select, Form, Input, message, Popconfirm, Modal, Divider } from 'antd';
+import { Table, Button, Space, Select, Form, Input, message, Checkbox, Modal, Divider } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import { StyledDiv } from './styled';
 
-import { Country, Location } from '../../services';
-import { e } from '../../../dist/assets/vendor.5ce9889e';
-import Checkbox from 'antd/lib/checkbox/Checkbox';
+import { Grn } from '../../services';
 
 function List() {
 
@@ -15,41 +12,30 @@ function List() {
 
   const history = useHistory();
   const { Column } = Table;
-  const [countries, setCountries] = useState([]);
-  const [locations, setLocations] = useState([]);
+  const [listData, setListData] = useState([]);
   const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(false);
   const [filterSearch, setFilterSearch] = useState({});
   const [filters, setFilters] = useState([]);
   const [filterForm, setFilterForm] = useState();
-  const [fields, setFields] = useState(['grnNo', 'poNo', 'supplierCode', 'recdDate', 'buyer', 'doNO']);
+  const [fields, setFields] = useState(['grnNo', 'closedDate', 'buyer', 'doNo']);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [contentModal, setContentModal] = useState([]);
 
-  const allFields = ['grnNo', 'poNo', 'supplierCode', 'recdDate', 'buyer', 'doNO'];
-
-  let optionCountries = getOptionCountries(countries);
+  const allFields = ['grnNo', 'closedDate', 'buyer', 'doNo'];
 
   useEffect(() => {
-    let data = Country.list();
-    data.then(result => {
-      // if (result.status && result.status !== 200) {
-      //   message.error(result.error);
-      // }
-      setCountries(result);
-      optionCountries = getOptionCountries(countries);
-    });
     setFilterForm(fieldFilter(0));
     setModal();
   }, []);
 
   useEffect(() => {
     setLoading(true);
-    getStockData(filterSearch);
+    getData(filterSearch);
   }, [filterSearch]);
 
-  const getStockData = (filter) => {
-    let data = Location.list(filter);
+  const getData = (filter) => {
+    let data = Grn.list(filter);
     data.then(result => {
       // if (result.status && result.status !== 200) {
       //   message.error(result.error);
@@ -63,7 +49,7 @@ function List() {
         pageSize: 10,
         total: result.totalRows
       });
-      setLocations(myData);
+      setListData(myData);
       setLoading(false);
     });
   };
@@ -90,18 +76,7 @@ function List() {
     });
   };
 
-  const handleDelete = loc => {
-    let data = Location.remove(loc);
-    data.then(result => {
-      if (result.status && result.status !== 204) {
-        message.error(result.error);
-      }
-      setLoading(true);
-      getStockData(filterSearch);
-    });
-  };
-
-  const optionFilters = ['grnNo', 'poNo', 'doNo'];
+  const optionFilters = ['grnNo', 'doNo'];
   const changeData = (n, data, type) => {
     if (!filters[n]) {
       filters[n] = {
@@ -167,24 +142,6 @@ function List() {
       />
     );
 
-    if (filters[n] && filters[n].field === "countryCode") {
-      valueForm = (
-        <Select
-          // mode="multiple"
-          showSearch
-          allowClear
-          style={ { width: 200, marginRight: '1%'  } }
-          placeholder="Please select"
-          onChange={ (value) => changeData(n, value, 'value') }
-          filterOption={ (input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          { optionCountries }
-        </Select>
-      );
-    }
-
     return (
       <div data-order={n} style={{paddingBottom: '0.5%', width: 556 }}>
         <Select
@@ -227,15 +184,13 @@ function List() {
 
   const TableList = (
     <Table
-        dataSource={ locations }
+        dataSource={ listData }
         pagination={ pagination }
         onChange={ clickFilter }
         loading={ loading }
       >
         { fields.includes('grnNo') && <Column title="GRN No" dataIndex="grnNo" key="grnNo" /> }
-        { fields.includes('poNo') && <Column title="PO No" dataIndex="poNo" key="poNo" /> }
-        { fields.includes('supplierCode') && <Column title="Supplier Code" dataIndex="supplierCode" key="addsupplierCoderess1" /> }
-        { fields.includes('recdDate') && <Column title="Recd Date" dataIndex="recdDate" key="recdDate" /> }
+        { fields.includes('closedDate') && <Column title="Closed Date" dataIndex="closedDate" key="closedDate" /> }
         { fields.includes('buyer') && <Column title="Buyer" dataIndex="buyer" key="buyer" /> }
         { fields.includes('doNo') && <Column title="DO No" dataIndex="doNo" key="doNo" /> }
         <Column
@@ -244,7 +199,7 @@ function List() {
           render={ (text, record) => {
             return (
               <Space size="middle">
-                <a onClick={ () => history.push(`/stock-locations/${ record.loc }`) }>View</a>
+                <a onClick={ () => history.push(`/grn-with-pos/${ record.grnNo }`) }>View</a>
               </Space>
             );
           } }
@@ -310,22 +265,13 @@ function List() {
       <div style={ { textAlign: 'right' } }>
         <Button onClick={showModal}>Settings</Button> 
         <Divider type="vertical" />
-        <Button onClick={ () => history.push('/stock-locations/create') } type="primary" style={ { marginBottom: 16 } }>
+        <Button onClick={ () => history.push('/grn-with-pos/create') } type="primary" style={ { marginBottom: 16 } }>
           Add a row
         </Button>
       </div>
       { TableList }
     </StyledDiv>
   );
-}
-
-function getOptionCountries(countries) {
-  const { Option } = Select;
-  let optionCountries = [];
-  for (const country of countries) {
-    optionCountries.push(<Option key={ country.countryCode } value={ country.countryCode } >{ country.description }</Option>);
-  }
-  return optionCountries;
 }
 
 export default List;
