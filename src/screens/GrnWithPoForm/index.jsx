@@ -41,15 +41,15 @@ const GrnWithPoForm = (props) => {
   const [uomData, setUomData] = useState([]);
   const [uomOpt, setUomOpt] = useState([]); */
   const [grnNo, setGrnNo] = useState('');
-  const [poNo, setPoNo] = useState();
-  const [supplierCode, setSupplierCode] = useState();
-  const [currencyCode, setCurrencyCode] = useState();
-  const [currencyRate, setCurrencyRate] = useState();
-  const [recdDate, setRecdDate] = useState();
-  const [poRemarks, setPoRemarks] = useState();
-  const [buyer, setBuyer] = useState();
-  const [releaseDate, setReleaseDate] = useState();
-  const [doNo, setDoNo] = useState();
+  const [poNo, setPoNo] = useState('');
+  const [supplierCode, setSupplierCode] = useState('');
+  const [currencyCode, setCurrencyCode] = useState('');
+  const [currencyRate, setCurrencyRate] = useState('');
+  const [recdDate, setRecdDate] = useState('');
+  const [poRemarks, setPoRemarks] = useState('');
+  const [buyer, setBuyer] = useState('');
+  const [releaseDate, setReleaseDate] = useState('');
+  const [doNo, setDoNo] = useState('');
   const [loadingPage, setLoadingPage] = useState(id ? true : false);
   const [isDisabled, setIsDisabled] = useState(id ? true : false);
   const [poNoOpt, setPoNoOpt] = useState([]);
@@ -259,19 +259,24 @@ const GrnWithPoForm = (props) => {
       parts.map((el, i) => {
         let data = Grn.detailByPartNo(poNo, el.partNo, el.poRecSeq);
         data.then(result => {
-          console.log(result);
           const temp = {
-            partNo: el.partNo,
+            seqNo: el.seqNo,
+            partNo: "C232HM-DDHSL-0", //el.partNo,
             loc: result[0].loc,
             projectNo: result[0].projectNo,
-            poReqSeq: el.poRecSeq,
+            poRecSeq: el.poRecSeq,
             uom: result[0].uom,
-            unitPrice: result[0].poPrice,
-            stdPack: result[0].stdPackQty,
+            poPrice: result[0].poPrice,
+            recdPrice: result[0].poPrice,
+            stdPackQty: result[0].stdPackQty,
             remarks: result[0].remarks,
-            orderQty: result[0].orderQty,
+            recdQty: result[0].orderQty,
             dueDate: result[0].dueDate,
-            description: result[0].description
+            description: result[0].description,
+            issuedQty: 1,
+            labelQty: 1,
+            itemNo: null,
+            itemType: 0
           };
           details.push(temp);
         });    
@@ -422,45 +427,19 @@ const GrnWithPoForm = (props) => {
 
   const submit = async () => {
     try {
-      console.log('details', details);
-      console.log('header', grnNo, supplierCode, currencyCode, currencyRate);
-      
+      console.log(details);
       const values = await form.validateFields();
       console.log('Success:', values);
       
       let obj = {
-        /*balbfQty: parseInt(balbfQty),
-        categoryCode,
-        categorySubCode,
-        description,
-        dimension,
-        issueNo,
-        itemNo,
-        leadtime: parseInt(leadtime),
-        loc,
-        manufacturer,
-        mslCode,
-        // obsoleteCode,
-        obsoleteItem,
-        // openClose,
-        orderQty: parseInt(orderQty),
-        partNo,
-        prodnResv: parseInt(prodnResv),
-        productGroup,
-        qoh: parseInt(qoh),
-        qryObsItem,
-        refUrl,
-        remarks,
-        reorder: parseInt(reorder),
-        // requestor,
-        rev,
-        rohsStatus,
-        source,
-        // status,
-        stdMaterial: parseInt(stdMaterial),
-        storageShelf,
-        uom,*/
-        // version: parseInt(version),
+        subtype: 'N',
+        grnNo,
+        poNo,
+        doNo,
+        supplierCode,
+        currencyCode,
+        currencyRate,
+        grnDetList: details
       };
       console.log('obj :>> ', obj);
       Grn.create(obj);
@@ -732,7 +711,7 @@ const GrnWithPoForm = (props) => {
                                   name="GRN Qty"
                                   label="GRN Qty"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' />
+                                  <Input className='smallInput' defaultValue={ el.issuedQty } value={ el.issuedQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' />
                                 </Form.Item>
                               }
                             </div>
@@ -778,7 +757,7 @@ const GrnWithPoForm = (props) => {
                                   name="QTY/Label"
                                   label="QTY/Label"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.qtyLabel } value={ el.qtyLabel } onChange={ e => changeDetail(idx, 'qtyLabel', e.target.value) } placeholder='Type Qty/Label here...' />
+                                  <Input className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' />
                                 </Form.Item>
                               }
                             </div>
@@ -812,7 +791,7 @@ const GrnWithPoForm = (props) => {
                                 name="Order Qty"
                                 label="Order Qty"
                               >
-                                <Input className='smallInput' defaultValue={ el.orderQty } value={ el.orderQty } onChange={ e => changeDetail(idx, 'orderQty', e.target.value) } placeholder='Type order qty here...' readOnly />
+                                <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type order qty here...' readOnly />
                               </Form.Item>
                               }
 
@@ -833,7 +812,7 @@ const GrnWithPoForm = (props) => {
                                   name="Std Pack"
                                   label="Std Pack"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.stdPack } value={ el.stdPack } onChange={ e => changeDetail(idx, 'stdPack', e.target.value) } placeholder='Type std pack here...' readOnly />
+                                  <Input className='smallInput' defaultValue={ el.stdPackQty } value={ el.stdPackQty } onChange={ e => changeDetail(idx, 'stdPackQty', e.target.value) } placeholder='Type std pack here...' readOnly />
                                 </Form.Item>
                               }
 
