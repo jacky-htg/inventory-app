@@ -31,6 +31,10 @@ const StyledDiv = styled.div`
     min-width: 120px;
   }
 
+  .red label {
+    color: red;
+  }
+
   .formWrapper {
     .loading {
       height: 100%;
@@ -46,10 +50,17 @@ const StyledDiv = styled.div`
     .group {
       margin-bottom: 60px;
     }
+
     .row {
       display: grid;
       grid-template-columns: 48% 48.8%;
       grid-gap: 40px;
+    }
+
+    .currInput {
+      display: grid;
+      grid-template-columns: 49% 2% 49%;
+      grid-gap: 5px;
     }
 
     .row2 {

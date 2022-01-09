@@ -9,6 +9,7 @@ import { StyledDiv } from './styled';
 import env from '../../env';
 import { Images } from '../../constant';
 import { parse } from 'postcss';
+import TextArea from 'antd/lib/input/TextArea';
 
 const GrnWithPoForm = (props) => {
   const history = useHistory();
@@ -427,7 +428,7 @@ const GrnWithPoForm = (props) => {
             :
             <Form form={ form } name="control-hooks">
               <div className="group">
-                <div className="row2">
+                <div className="row">
                   {
                     !loc && id && !isEdit
                       ?
@@ -457,8 +458,27 @@ const GrnWithPoForm = (props) => {
                       <></>
                       :
                       <Form.Item
-                        name="Currency Code"
-                        label="Currency Code"
+                        name="Currency Code / Rate"
+                        label="Currency Code / Rate"
+                      >
+                        <div className="currInput">
+                          <Input className='smallInput' defaultValue={ null } value={ null } onChange={ e => console.log(e.target.value) } placeholder='Type Currency code here...' />
+                          <span>/</span>
+                          <Input className='smallInput' defaultValue={ null } value={ null } onChange={ e => console.log(e.target.value) } placeholder='Type rate here...' />
+                        </div>
+                      </Form.Item>
+                  }
+                </div>
+
+                <div className="row">
+                  {
+                    !loc && id && !isEdit
+                      ?
+                      <></>
+                      :
+                      <Form.Item
+                        name="PO No"
+                        label="PO No"
                       >
                         <AutoComplete
                           className='normal' disabled={ isDisabled }
@@ -466,7 +486,7 @@ const GrnWithPoForm = (props) => {
                           value={ loc }
                           options={ locOpt }
                           onSelect={ data => setLoc(data) }
-                          placeholder={ "Type currency code here..." }
+                          placeholder={ "Type PO No here..." }
                           filterOption={ (inputValue, option) =>
                             option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                           }
@@ -496,40 +516,17 @@ const GrnWithPoForm = (props) => {
                         />
                       </Form.Item>
                   }
-
-                  {/* {
-                    !categoryName && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="catCode"
-                        label="Category Code"
-                      >
-                        <AutoComplete
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ categoryName }
-                          value={ categoryName }
-                          options={ itemCategoriesOpt }
-                          onSelect={ onSelectCategoryCode }
-                          placeholder={ "Type category code here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
-                      </Form.Item>
-                  } */}
                 </div>
 
-                <div className="row2">
+                <div className="row">
                   {
                     !loc && id && !isEdit
                       ?
                       <></>
                       :
                       <Form.Item
-                        name="MSR No"
-                        label="MSR No"
+                        name="Supplier Code"
+                        label="Supplier Code"
                       >
                         <AutoComplete
                           className='normal' disabled={ isDisabled }
@@ -537,7 +534,7 @@ const GrnWithPoForm = (props) => {
                           value={ loc }
                           options={ locOpt }
                           onSelect={ data => setLoc(data) }
-                          placeholder={ "Type MSR No here..." }
+                          placeholder={ "Type Supplier Code here..." }
                           filterOption={ (inputValue, option) =>
                             option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                           }
@@ -551,8 +548,8 @@ const GrnWithPoForm = (props) => {
                       <></>
                       :
                       <Form.Item
-                        name="Currency Rate"
-                        label="Currency Rate"
+                        name="Buyer"
+                        label="Buyer"
                       >
                         <AutoComplete
                           className='normal' disabled={ isDisabled }
@@ -560,138 +557,78 @@ const GrnWithPoForm = (props) => {
                           value={ loc }
                           options={ locOpt }
                           onSelect={ data => setLoc(data) }
-                          placeholder={ "Type currency rate here..." }
+                          placeholder={ "Type buyer here.." }
                           filterOption={ (inputValue, option) =>
                             option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                           }
                         />
                       </Form.Item>
                   }
-
-                  {
-                    !loc && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="Entry User"
-                        label="Entry User"
-                      >
-                        <AutoComplete
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Entry user..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
-                      </Form.Item>
-                  }
-
-                  {/* {
-                    !categoryName && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="catCode"
-                        label="Category Code"
-                      >
-                        <AutoComplete
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ categoryName }
-                          value={ categoryName }
-                          options={ itemCategoriesOpt }
-                          onSelect={ onSelectCategoryCode }
-                          placeholder={ "Type category code here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
-                      </Form.Item>
-                  } */}
                 </div>
 
-                <div className="row2">
+                <div className="row">
                   {
                     !loc && id && !isEdit
                       ?
                       <></>
                       :
                       <Form.Item
-                        name="DO No"
-                        label="DO No"
+                        name="PO Remarks"
+                        label="PO Remarks"
                       >
-                        <AutoComplete
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Type DO No here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
+                        <Input.TextArea rows={ 4 } />
                       </Form.Item>
                   }
 
-                  {
-                    !loc && id && !isEdit
-                      ?
-                      <Form.Item></Form.Item>
-                      :
-                      <Form.Item></Form.Item>
-                  }
+                  <div className="column">
 
-                  {
-                    !loc && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="Entry Date"
-                        label="Entry Date"
-                      >
-                        <AutoComplete
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Entry date.." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
-                      </Form.Item>
-                  }
+                    {
+                      !loc && id && !isEdit
+                        ?
+                        <></>
+                        :
+                        <Form.Item
+                          name="Release Date"
+                          label="Release Date"
+                        >
+                          <AutoComplete
+                            className='normal' disabled={ isDisabled }
+                            defaultValue={ loc }
+                            value={ loc }
+                            options={ locOpt }
+                            onSelect={ data => setLoc(data) }
+                            placeholder={ "Type buyer here.." }
+                            filterOption={ (inputValue, option) =>
+                              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                            }
+                          />
+                        </Form.Item>
+                    }
 
-                  {/* {
-                    !categoryName && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="catCode"
-                        label="Category Code"
-                      >
-                        <AutoComplete
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ categoryName }
-                          value={ categoryName }
-                          options={ itemCategoriesOpt }
-                          onSelect={ onSelectCategoryCode }
-                          placeholder={ "Type category code here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
-                      </Form.Item>
-                  } */}
+                    {
+                      !loc && id && !isEdit
+                        ?
+                        <></>
+                        :
+                        <Form.Item
+                          name="DO No"
+                          label="DO No"
+                          className='red'
+                        >
+                          <AutoComplete
+                            className='normal' disabled={ isDisabled }
+                            defaultValue={ loc }
+                            value={ loc }
+                            options={ locOpt }
+                            onSelect={ data => setLoc(data) }
+                            placeholder={ "Type buyer here.." }
+                            filterOption={ (inputValue, option) =>
+                              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                            }
+                          />
+                        </Form.Item>
+                    }
+                  </div>
                 </div>
               </div>
 
