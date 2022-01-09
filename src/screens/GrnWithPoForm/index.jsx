@@ -902,7 +902,7 @@ const GrnWithPoForm = (props) => {
               {
                 <div className="submit">
                   <Form.Item>
-                    <Button onClick={ () => history.push(`/grn-manuals`) } type="default" htmlType="submit">
+                    <Button onClick={ () => history.push(`/grn-with-pos`) } type="default" htmlType="submit">
                       Back To GRN
                     </Button>
                   </Form.Item>
