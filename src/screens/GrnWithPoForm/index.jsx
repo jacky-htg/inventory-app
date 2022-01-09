@@ -682,19 +682,19 @@ const GrnWithPoForm = (props) => {
                             <div className="dual">
                               {
                                 <Form.Item
-                                  name="Recd Price"
-                                  label="Recd Price"
+                                  name="Unit Price"
+                                  label="Unit Price"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'recdPrice', e.target.value) } placeholder='Type Recd Price here...' />
+                                  <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' />
                                 </Form.Item>
                               }
 
                               {
                                 <Form.Item
-                                  name="Recd Qty"
-                                  label="Recd Qty"
+                                  name="GRN Qty"
+                                  label="GRN Qty"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type Recd Qty here...' />
+                                  <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' />
                                 </Form.Item>
                               }
                             </div>
@@ -733,35 +733,35 @@ const GrnWithPoForm = (props) => {
                             <div className="dual">
                               {
                                 <Form.Item
-                                  name="QTY/Label"
-                                  label="QTY/Label"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.qtyLabel } value={ el.qtyLabel } onChange={ e => changeDetail(idx, 'qtyLabel', e.target.value) } placeholder='Type Qty/Label here...' />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
                                   name="Date Code"
                                   label="Date Code"
                                 >
                                   <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' />
                                 </Form.Item>
                               }
+
+                              {
+                                <Form.Item
+                                  name="QTY/Label"
+                                  label="QTY/Label"
+                                >
+                                  <Input className='smallInput' defaultValue={ el.qtyLabel } value={ el.qtyLabel } onChange={ e => changeDetail(idx, 'qtyLabel', e.target.value) } placeholder='Type Qty/Label here...' />
+                                </Form.Item>
+                              }
                             </div>
                           </div>
 
                           <div className="row2">
-                            {
-                              <Form.Item
-                                name="Part No"
-                                label="Part No"
-                              >
-                                <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' />
-                              </Form.Item>
-                            }
-
                             <div className="dual">
+                              {
+                                <Form.Item
+                                  name="Part No"
+                                  label="Part No"
+                                >
+                                  <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' />
+                                </Form.Item>
+                              }
+
                               {
                                 <Form.Item
                                   name="Project No"
@@ -770,13 +770,46 @@ const GrnWithPoForm = (props) => {
                                   <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' />
                                 </Form.Item>
                               }
+                            </div>
+
+                            <div className="dual">
+
+                              {
+                              <Form.Item
+                                name="Order Qty"
+                                label="Order Qty"
+                              >
+                                <Input className='smallInput' defaultValue={ el.orderQty } value={ el.orderQty } onChange={ e => changeDetail(idx, 'orderQty', e.target.value) } placeholder='Type order qty here...' />
+                              </Form.Item>
+                              }
 
                               {
                                 <Form.Item
-                                  name="PO No"
-                                  label="PO No"
+                                  name="SIV No"
+                                  label="SIV No"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'poNo', e.target.value) } placeholder='Insert PO No here...' />
+                                  <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' />
+                                </Form.Item>
+                              }
+                            </div>
+                            
+                            <div className="dual">
+                              
+                              {
+                                <Form.Item
+                                  name="Std Pack"
+                                  label="Std Pack"
+                                >
+                                  <Input className='smallInput' defaultValue={ el.stdPack } value={ el.stdPack } onChange={ e => changeDetail(idx, 'stdPack', e.target.value) } placeholder='Type std pack here...' />
+                                </Form.Item>
+                              }
+
+                              {
+                                <Form.Item
+                                  name="Due Date"
+                                  label="Due date"
+                                >
+                                  <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' />
                                 </Form.Item>
                               }
                             </div>
@@ -802,6 +835,7 @@ const GrnWithPoForm = (props) => {
                                 <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' />
                               </Form.Item>
                             }
+
                           </div>
                         </div>
 
