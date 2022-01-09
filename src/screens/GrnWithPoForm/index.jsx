@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Select, Checkbox, AutoComplete, message } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { Lov, Location, Item } from '../../services';
+import { Grn } from '../../services';
 import { MdAddCircle } from 'react-icons/md';
 import { TiDelete } from 'react-icons/ti';
 
@@ -28,7 +28,7 @@ const GrnWithPoForm = (props) => {
 
     }
   ]);
-  const [locData, setLocData] = useState([]);
+  /*const [locData, setLocData] = useState([]);
   const [locOpt, setLocOpt] = useState([]);
   const [itemCategoriesData, setItemCategoriesData] = useState([]);
   const [itemCategoriesOpt, setItemCategoriesOpt] = useState([]);
@@ -39,12 +39,24 @@ const GrnWithPoForm = (props) => {
   const [sourcesData, setSourcesData] = useState([]);
   const [sourcesOpt, setSourcesOpt] = useState([]);
   const [uomData, setUomData] = useState([]);
-  const [uomOpt, setUomOpt] = useState([]);
+  const [uomOpt, setUomOpt] = useState([]); */
+  const [grnNo, setGrnNo] = useState('');
+  const [poNo, setPoNo] = useState();
+  const [supplierCode, setSupplierCode] = useState();
+  const [currencyCode, setCurrencyCode] = useState();
+  const [currencyRate, setCurrencyRate] = useState();
+  const [recdDate, setRecdDate] = useState();
+  const [poRemarks, setPoRemarks] = useState();
+  const [buyer, setBuyer] = useState();
+  const [releaseDate, setReleaseDate] = useState();
+  const [doNo, setDoNo] = useState();
   const [loadingPage, setLoadingPage] = useState(id ? true : false);
-  const [isEdit, setIsEdit] = useState(query.get("edit") ? query.get('edit') === 'true' : false);
-  const [isDisabled, setIsDisabled] = useState(id && !isEdit ? true : false);
+  const [isDisabled, setIsDisabled] = useState(id ? true : false);
+  const [poNoOpt, setPoNoOpt] = useState([]);
 
-  const [balbfQty, setBalbfQty] = useState(0);
+  const [parts, setParts] = useState([]);
+
+  /*const [balbfQty, setBalbfQty] = useState(0);
   const [categoryCode, setCategoryCode] = useState('');
   const [categoryName, setCategoryName] = useState('');
   const [categorySubCode, setCategorySubCode] = useState('');
@@ -80,9 +92,9 @@ const GrnWithPoForm = (props) => {
   const [storageShelf, setStorageShelf] = useState('');
   const [uom, setUom] = useState('');
   const [uomName, setUomName] = useState('');
-  const [version, setVersion] = useState(0);
+  const [version, setVersion] = useState(0); */
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (
       id &&
       locData.length > 0 &&
@@ -188,27 +200,87 @@ const GrnWithPoForm = (props) => {
         // }
       });
     }
-  }, [id, locData, itemCategoriesData, mslData, sourcesData, uomData]);
+  }, [id, locData, itemCategoriesData, mslData, sourcesData, uomData]); */
 
   useEffect(() => {
-    let data = Location.list({});
+    let data = Grn.pono();
     data.then(result => {
       // if (result.status && result.status !== 200) {
       //   message.error(result.error);
       // }
-      console.log('location :>> ', result.rows);
-      setLocData(result.rows);
       let temp = [];
-      result.rows.forEach(el => {
+      result.forEach(el => {
         temp.push({
-          value: el.loc
+          value: el.poNo
         });
       });
-      setLocOpt(temp);
+      setPoNoOpt(temp);
     });
   }, []);
 
   useEffect(() => {
+    if (poNo) {
+      let data = Grn.headerByPono(poNo);
+      data.then(result => {
+        // if (result.status && result.status !== 200) {
+        //   message.error(result.error);
+        // }
+        setGrnNo(result[0].grnNo);
+        setSupplierCode(result[0].supplierCode);
+        setCurrencyCode(result[0].currencyCode);
+        setCurrencyRate(result[0].currencyRate);
+        setRecdDate(result[0].recdDate);
+        setPoRemarks(result[0].poRemarks);
+        setBuyer(result[0].buyer);
+      });
+
+      let detailPart = Grn.partsByPono(poNo);
+      detailPart.then(result => {
+        setParts(result);
+      });
+    } else {
+        setGrnNo('');
+        setSupplierCode('');
+        setCurrencyCode('');
+        setCurrencyRate('');
+        setRecdDate('');
+        setPoRemarks('');
+        setBuyer('');
+    }
+  }, [poNo]);
+
+  useEffect(() => {
+    console.log('grnNo', grnNo);
+  }, [grnNo]);
+
+  useEffect(() => {
+    if (poNo) {
+      const details = [];
+      parts.map((el, i) => {
+        let data = Grn.detailByPartNo(poNo, el.partNo, el.poRecSeq);
+        data.then(result => {
+          console.log(result);
+          const temp = {
+            partNo: el.partNo,
+            loc: result[0].loc,
+            projectNo: result[0].projectNo,
+            poReqSeq: el.poRecSeq,
+            uom: result[0].uom,
+            unitPrice: result[0].poPrice,
+            stdPack: result[0].stdPackQty,
+            remarks: result[0].remarks,
+            orderQty: result[0].orderQty,
+            dueDate: result[0].dueDate,
+            description: result[0].description
+          };
+          details.push(temp);
+        });    
+      });
+      setDetails(details);
+    }
+  }, [poNo, parts]);
+
+  /*useEffect(() => {
     const data = Lov.getItemCategories();
     data.then(res => {
       console.log('getItemCategories :>> ', res);
@@ -222,9 +294,9 @@ const GrnWithPoForm = (props) => {
       });
       setItemCategoriesOpt(temp);
     });
-  }, []);
+  }, []); */
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (categoryCode) {
       console.log('categoryCode :>> ', categoryCode);
       const data = Lov.getSubCategories(categoryCode);
@@ -241,9 +313,9 @@ const GrnWithPoForm = (props) => {
         setSubCategoriesOpt(temp);
       });
     }
-  }, [categoryCode]);
+  }, [categoryCode]);*/
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (subCategoriesData.length > 0 && id && categorySubCode) {
       subCategoriesData.forEach(el => {
         if (el.categorySubCode === categorySubCode) {
@@ -253,9 +325,9 @@ const GrnWithPoForm = (props) => {
       });
       setLoadingPage(false);
     }
-  }, [subCategoriesData]);
+  }, [subCategoriesData]);*/
 
-  useEffect(() => {
+  /*useEffect(() => {
     const data = Lov.getMsl();
     data.then(res => {
       console.log('getMsl :>> ', res);
@@ -269,9 +341,9 @@ const GrnWithPoForm = (props) => {
       });
       setMslOpt(temp);
     });
-  }, []);
+  }, []);*/
 
-  useEffect(() => {
+  /*useEffect(() => {
     const data = Lov.getSources();
     data.then(res => {
       console.log('getSources :>> ', res);
@@ -285,9 +357,9 @@ const GrnWithPoForm = (props) => {
       });
       setSourcesOpt(temp);
     });
-  }, []);
+  }, []);*/
 
-  useEffect(() => {
+  /*useEffect(() => {
     const data = Lov.getUOM();
     data.then(res => {
       console.log('getUOM :>> ', res);
@@ -301,9 +373,9 @@ const GrnWithPoForm = (props) => {
       });
       setUomOpt(temp);
     });
-  }, []);
+  }, []);*/
 
-  const onSelectCategoryCode = (data) => {
+  /*const onSelectCategoryCode = (data) => {
     itemCategoriesData.forEach(el => {
       if (el.description === data) {
         setCategoryCode(el.categoryCode);
@@ -346,16 +418,18 @@ const GrnWithPoForm = (props) => {
         setUomName(el.codeDesc);
       }
     });
-  };
+  };*/
 
   const submit = async () => {
     try {
-      if (!isEdit) {
-        const values = await form.validateFields();
-        console.log('Success:', values);
-      }
+      console.log('details', details);
+      console.log('header', grnNo, supplierCode, currencyCode, currencyRate);
+      
+      const values = await form.validateFields();
+      console.log('Success:', values);
+      
       let obj = {
-        balbfQty: parseInt(balbfQty),
+        /*balbfQty: parseInt(balbfQty),
         categoryCode,
         categorySubCode,
         description,
@@ -385,17 +459,12 @@ const GrnWithPoForm = (props) => {
         // status,
         stdMaterial: parseInt(stdMaterial),
         storageShelf,
-        uom,
+        uom,*/
         // version: parseInt(version),
       };
       console.log('obj :>> ', obj);
-      if (isEdit) {
-        obj.version = parseInt(version);
-        Item.edit(id, obj);
-      } else {
-        Item.create(obj);
-      }
-      history.push('/grn-manuals');
+      Grn.create(obj);
+      history.push('/grn-with-pos');
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
@@ -410,6 +479,11 @@ const GrnWithPoForm = (props) => {
     let arr = [...details];
     arr.splice(id, 1);
     setDetails(arr);
+  };
+
+  const changeDetail = (idx, field, value) => {
+    details[idx][field] = value;
+    setDetails(details);
   };
 
   return (
@@ -430,7 +504,7 @@ const GrnWithPoForm = (props) => {
               <div className="group">
                 <div className="row">
                   {
-                    !loc && id && !isEdit
+                    id
                       ?
                       <></>
                       :
@@ -438,22 +512,12 @@ const GrnWithPoForm = (props) => {
                         name="GRN No"
                         label="GRN No"
                       >
-                        <AutoComplete
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Type GRN No here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
+                        <Input className='smallInput' nitialValues={ grnNo } value={ grnNo } placeholder='Type Currency code here...' readOnly disabled={ isDisabled }/>
                       </Form.Item>
                   }
 
                   {
-                    !loc && id && !isEdit
+                    id
                       ?
                       <></>
                       :
@@ -462,9 +526,9 @@ const GrnWithPoForm = (props) => {
                         label="Currency Code / Rate"
                       >
                         <div className="currInput">
-                          <Input className='smallInput' defaultValue={ null } value={ null } onChange={ e => console.log(e.target.value) } placeholder='Type Currency code here...' />
+                          <Input className='smallInput' value={ currencyCode } placeholder='Type Currency code here...' readOnly disabled={ isDisabled }/>
                           <span>/</span>
-                          <Input className='smallInput' defaultValue={ null } value={ null } onChange={ e => console.log(e.target.value) } placeholder='Type rate here...' />
+                          <Input className='smallInput' value={ currencyRate } placeholder='Type rate here...' readOnly disabled={ isDisabled } />
                         </div>
                       </Form.Item>
                   }
@@ -472,7 +536,7 @@ const GrnWithPoForm = (props) => {
 
                 <div className="row">
                   {
-                    !loc && id && !isEdit
+                    id
                       ?
                       <></>
                       :
@@ -480,12 +544,14 @@ const GrnWithPoForm = (props) => {
                         name="PO No"
                         label="PO No"
                       >
-                        <AutoComplete
+                        <Select
+                          showSearch
+                          allowClear
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
+                          defaultValue={ poNo }
+                          value={ poNo }
+                          options={ poNoOpt }
+                          onSelect={ data => setPoNo(data) }
                           placeholder={ "Type PO No here..." }
                           filterOption={ (inputValue, option) =>
                             option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
@@ -495,7 +561,7 @@ const GrnWithPoForm = (props) => {
                   }
 
                   {
-                    !loc && id && !isEdit
+                    id
                       ?
                       <></>
                       :
@@ -503,16 +569,11 @@ const GrnWithPoForm = (props) => {
                         name="Recd Date"
                         label="Recd Date"
                       >
-                        <AutoComplete
+                        <Input
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
+                          value={ recdDate }
                           placeholder={ "Type recd date here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
+                          readOnly
                         />
                       </Form.Item>
                   }
@@ -520,7 +581,7 @@ const GrnWithPoForm = (props) => {
 
                 <div className="row">
                   {
-                    !loc && id && !isEdit
+                    id
                       ?
                       <></>
                       :
@@ -528,22 +589,12 @@ const GrnWithPoForm = (props) => {
                         name="Supplier Code"
                         label="Supplier Code"
                       >
-                        <AutoComplete
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Type Supplier Code here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
+                        <Input className='smallInput' value={ supplierCode } placeholder='Type Supplier code here...' readOnly disabled={ isDisabled }/>
                       </Form.Item>
                   }
 
                   {
-                    !loc && id && !isEdit
+                    id
                       ?
                       <></>
                       :
@@ -551,16 +602,11 @@ const GrnWithPoForm = (props) => {
                         name="Buyer"
                         label="Buyer"
                       >
-                        <AutoComplete
+                        <Input
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
+                          value={ buyer }
                           placeholder={ "Type buyer here.." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
+                          readOnly
                         />
                       </Form.Item>
                   }
@@ -568,7 +614,7 @@ const GrnWithPoForm = (props) => {
 
                 <div className="row">
                   {
-                    !loc && id && !isEdit
+                    id
                       ?
                       <></>
                       :
@@ -576,14 +622,14 @@ const GrnWithPoForm = (props) => {
                         name="PO Remarks"
                         label="PO Remarks"
                       >
-                        <Input.TextArea rows={ 4 } />
+                        <Input.TextArea rows={ 4 } readOnly value={ poRemarks }/>
                       </Form.Item>
                   }
 
                   <div className="column">
 
                     {
-                      !loc && id && !isEdit
+                      id
                         ?
                         <></>
                         :
@@ -591,22 +637,17 @@ const GrnWithPoForm = (props) => {
                           name="Release Date"
                           label="Release Date"
                         >
-                          <AutoComplete
+                          <Input
                             className='normal' disabled={ isDisabled }
-                            defaultValue={ loc }
-                            value={ loc }
-                            options={ locOpt }
-                            onSelect={ data => setLoc(data) }
-                            placeholder={ "Type buyer here.." }
-                            filterOption={ (inputValue, option) =>
-                              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                            }
+                            defaultValue={ releaseDate }
+                            placeholder={ "Type Release Date here.." }
+                            readOnly
                           />
                         </Form.Item>
                     }
 
                     {
-                      !loc && id && !isEdit
+                      id
                         ?
                         <></>
                         :
@@ -615,16 +656,12 @@ const GrnWithPoForm = (props) => {
                           label="DO No"
                           className='red'
                         >
-                          <AutoComplete
+                          <Input
                             className='normal' disabled={ isDisabled }
-                            defaultValue={ loc }
-                            value={ loc }
-                            options={ locOpt }
-                            onSelect={ data => setLoc(data) }
-                            placeholder={ "Type buyer here.." }
-                            filterOption={ (inputValue, option) =>
-                              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                            }
+                            defaultValue={ doNo }
+                            value={ doNo }
+                            onBlur={ data => setDoNo(data) }
+                            placeholder={ "Type DO No here.." }
                           />
                         </Form.Item>
                     }
@@ -633,8 +670,9 @@ const GrnWithPoForm = (props) => {
               </div>
 
               <div className="detail-wrapper">
-                {
+                { 
                   details.map((el, idx) => {
+                    console.log('halo', el);   
                     return (
                       <div className="detail-card">
                         <div className="border">
@@ -645,7 +683,7 @@ const GrnWithPoForm = (props) => {
                                   name="SN"
                                   label="SN"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.sn } value={ el.sn } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' />
+                                  <Input className='smallInput' defaultValue={ el.sn } value={ el.sn } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly />
                                 </Form.Item>
                               }
 
@@ -654,7 +692,7 @@ const GrnWithPoForm = (props) => {
                                   name="Type"
                                   label="Type"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.type } value={ el.type } onChange={ e => changeDetail(idx, 'type', e.target.value) } placeholder='Insert type here...' />
+                                  <Input className='smallInput' defaultValue={ el.type } value={ el.type } onChange={ e => changeDetail(idx, 'type', e.target.value) } placeholder='Insert type here...' readOnly />
                                 </Form.Item>
                               }
                             </div>
@@ -665,7 +703,7 @@ const GrnWithPoForm = (props) => {
                                   name="UOM"
                                   label="UOM"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' />
+                                  <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' readOnly />
                                 </Form.Item>
                               }
 
@@ -674,7 +712,7 @@ const GrnWithPoForm = (props) => {
                                   name="MSL"
                                   label="MSL"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' />
+                                  <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' readOnly />
                                 </Form.Item>
                               }
                             </div>
@@ -685,7 +723,7 @@ const GrnWithPoForm = (props) => {
                                   name="Unit Price"
                                   label="Unit Price"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' />
+                                  <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly />
                                 </Form.Item>
                               }
 
@@ -707,27 +745,22 @@ const GrnWithPoForm = (props) => {
                                 name="Item No"
                                 label="Item No"
                               >
-                                <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' />
+                                <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly />
                               </Form.Item>
                             }
 
-                            {
+                            { 
                               <Form.Item
                                 name="Loc"
                                 label="Loc"
                               >
-                                <AutoComplete
-                                  className='normal' disabled={ isDisabled }
-                                  defaultValue={ loc }
-                                  value={ loc }
-                                  options={ locOpt }
-                                  onSelect={ data => setLoc(data) }
-                                  placeholder={ "Select loc.." }
-                                  filterOption={ (inputValue, option) =>
-                                    option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                                  }
+                                <Input
+                                  className='smallInput' disabled={ isDisabled }
+                                  defaultValue={ el.loc }
+                                  value={ el.loc }
+                                  readOnly
                                 />
-                              </Form.Item>
+                              </Form.Item> 
                             }
 
                             <div className="dual">
@@ -736,7 +769,7 @@ const GrnWithPoForm = (props) => {
                                   name="Date Code"
                                   label="Date Code"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' />
+                                  <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' readOnly />
                                 </Form.Item>
                               }
 
@@ -758,7 +791,7 @@ const GrnWithPoForm = (props) => {
                                   name="Part No"
                                   label="Part No"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' />
+                                  <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly />
                                 </Form.Item>
                               }
 
@@ -767,7 +800,7 @@ const GrnWithPoForm = (props) => {
                                   name="Project No"
                                   label="Project No"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' />
+                                  <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly />
                                 </Form.Item>
                               }
                             </div>
@@ -779,7 +812,7 @@ const GrnWithPoForm = (props) => {
                                 name="Order Qty"
                                 label="Order Qty"
                               >
-                                <Input className='smallInput' defaultValue={ el.orderQty } value={ el.orderQty } onChange={ e => changeDetail(idx, 'orderQty', e.target.value) } placeholder='Type order qty here...' />
+                                <Input className='smallInput' defaultValue={ el.orderQty } value={ el.orderQty } onChange={ e => changeDetail(idx, 'orderQty', e.target.value) } placeholder='Type order qty here...' readOnly />
                               </Form.Item>
                               }
 
@@ -788,7 +821,7 @@ const GrnWithPoForm = (props) => {
                                   name="SIV No"
                                   label="SIV No"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' />
+                                  <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' readOnly />
                                 </Form.Item>
                               }
                             </div>
@@ -800,7 +833,7 @@ const GrnWithPoForm = (props) => {
                                   name="Std Pack"
                                   label="Std Pack"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.stdPack } value={ el.stdPack } onChange={ e => changeDetail(idx, 'stdPack', e.target.value) } placeholder='Type std pack here...' />
+                                  <Input className='smallInput' defaultValue={ el.stdPack } value={ el.stdPack } onChange={ e => changeDetail(idx, 'stdPack', e.target.value) } placeholder='Type std pack here...' readOnly />
                                 </Form.Item>
                               }
 
@@ -809,7 +842,7 @@ const GrnWithPoForm = (props) => {
                                   name="Due Date"
                                   label="Due date"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' />
+                                  <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' readOnly />
                                 </Form.Item>
                               }
                             </div>
@@ -823,7 +856,7 @@ const GrnWithPoForm = (props) => {
                                 name="Description"
                                 label="Description"
                               >
-                                <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' />
+                                <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly />
                               </Form.Item>
                             }
 
@@ -832,7 +865,7 @@ const GrnWithPoForm = (props) => {
                                 name="Remarks"
                                 label="Remarks"
                               >
-                                <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' />
+                                <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' readOnly />
                               </Form.Item>
                             }
 
@@ -854,17 +887,11 @@ const GrnWithPoForm = (props) => {
               </div>
 
               {
-                (!id || isEdit) &&
+                (!id) &&
                 <div className="submit">
                   <Form.Item>
                     <Button onClick={ submit } type="primary" htmlType="submit">
-                      {
-                        isEdit
-                          ?
-                          "Edit GRN"
-                          :
-                          "Create GRN"
-                      }
+                      Create GRN
                     </Button>
                   </Form.Item>
                 </div>
