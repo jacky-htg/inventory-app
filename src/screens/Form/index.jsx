@@ -884,7 +884,7 @@ const FormPage = (props) => {
                         name="stdMaterialPrice"
                         label="Std Material Price"
                       >
-                        <Input type='number' min={ 0 } className='normal' disabled={ isDisabled } defaultValue={ stdMaterial } value={ stdMaterial } onChange={ e => setStdMaterial(e.target.value) } placeholder='Type Std Material Price here...' />
+                        <Input type='number' min={ 0 } disabled={ true } defaultValue={ stdMaterial } value={ stdMaterial } onChange={ e => setStdMaterial(e.target.value) } placeholder='Type Std Material Price here...' />
                       </Form.Item>
                   }
 
@@ -928,7 +928,7 @@ const FormPage = (props) => {
                         name="QtyOnHand"
                         label="QTY On Hand +"
                       >
-                        <Input className='normal' disabled={ isDisabled } />
+                        <Input disabled={ true } />
                       </Form.Item>
                   }
 
@@ -957,7 +957,7 @@ const FormPage = (props) => {
                         name="reservedQty"
                         label="Reserved QTY -"
                       >
-                        <Input className='normal' disabled={ isDisabled } />
+                        <Input disabled={ true } />
                       </Form.Item>
                   }
                 </div>
@@ -985,7 +985,7 @@ const FormPage = (props) => {
                         name="orderQty"
                         label="Order QTY +"
                       >
-                        <Input type='number' min={ 0 } className='normal' disabled={ isDisabled } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) } placeholder='Type order qty here...' />
+                        <Input type='number' min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) } placeholder='Type order qty here...' />
                       </Form.Item>
                   }
                 </div>
@@ -1012,30 +1012,33 @@ const FormPage = (props) => {
                         name="EOH ="
                         label="EOH ="
                       >
-                        <Input className='normal' disabled={ isDisabled } />
+                        <Input disabled={ true } />
                       </Form.Item>
                   }
                 </div>
+                {
+                  id &&
+                  <div className="row">
+                    <Form.Item
+                      name="Last Modified Date"
+                      label="Last Modified Date"
+                    >
+                      <Input disabled />
+                    </Form.Item>
+                  </div>
+                }
                 <div className="row">
                   <Form.Item
-                    name="Last Modified Date"
-                    label="Last Modified Date"
+                    name={ isEdit ? "Edit User" : "Entry User" }
+                    label={ isEdit ? "Edit User" : "Entry User" }
                   >
                     <Input disabled />
                   </Form.Item>
                 </div>
                 <div className="row">
                   <Form.Item
-                    name="Entry User"
-                    label="Entry User"
-                  >
-                    <Input disabled />
-                  </Form.Item>
-                </div>
-                <div className="row">
-                  <Form.Item
-                    name="Entry Date"
-                    label="Entry Date"
+                    name={ isEdit ? "Edit Date" : "Entry Date" }
+                    label={ isEdit ? "Edit Date" : "Entry Date" }
                   >
                     <Input disabled />
                   </Form.Item>
@@ -1059,16 +1062,13 @@ const FormPage = (props) => {
                 </div>
               }
 
-              {
-                (id && !isEdit) &&
-                <div className="submit">
-                  <Form.Item>
-                    <Button onClick={ () => history.push(`/items`) } type="primary" htmlType="submit">
-                      Back To Items
-                    </Button>
-                  </Form.Item>
-                </div>
-              }
+              <div className="submit">
+                <Form.Item>
+                  <Button onClick={ () => history.push(`/items`) } type="primary" htmlType="submit">
+                    Back To Items
+                  </Button>
+                </Form.Item>
+              </div>
             </Form>
         }
       </div >

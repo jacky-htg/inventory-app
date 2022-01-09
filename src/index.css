@@ -249,3 +249,11 @@ table {
 .footer {
   padding: 0px !important;
 }
+
+.ant-form-item {
+  margin-bottom: 12px !important;
+}
+
+.page-wrapper .header {
+  margin-bottom: 28px !important;
+}

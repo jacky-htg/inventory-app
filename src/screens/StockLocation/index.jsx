@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { StyledDiv } from './styled';
 
 import { Country, Location } from '../../services';
-import { e } from '../../../dist/assets/vendor.5ce9889e';
+// import { e } from '../../../dist/assets/vendor.5ce9889e';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
 
 function StockLocation() {
@@ -114,7 +114,7 @@ function StockLocation() {
     setFilters(filters);
 
     if (type === "field") {
-      const [f] = renderFilter(); 
+      const [f] = renderFilter();
       setFilterForm(f);
     }
   };
@@ -129,13 +129,13 @@ function StockLocation() {
       } else {
         temp.push(fieldFilter(i, true));
       }
-    }); 
+    });
     return [temp, counter];
-  }
+  };
 
   const addFilter = () => {
-    const [temp, counter] = renderFilter(); 
-    
+    const [temp, counter] = renderFilter();
+
     if (counter == 0) {
       temp.push(fieldFilter(counter));
     } else if (counter < optionFilters.length) {
@@ -149,7 +149,7 @@ function StockLocation() {
       filters.splice(n, 1);
     }
     setFilters(filters);
-    
+
     const [temp, counter] = renderFilter();
     if (n < filter.length) {
       temp.push(fieldFilter(counter, true));
@@ -163,7 +163,7 @@ function StockLocation() {
         style={ { width: 200, marginRight: '1%' } }
         placeholder="input here"
         onBlur={ (data) => changeData(n, data.target.value, 'value') }
-        defaultValue={filters[n]?filters[n].value:""}
+        defaultValue={ filters[n] ? filters[n].value : "" }
       />
     );
 
@@ -173,7 +173,7 @@ function StockLocation() {
           // mode="multiple"
           showSearch
           allowClear
-          style={ { width: 200, marginRight: '1%'  } }
+          style={ { width: 200, marginRight: '1%' } }
           placeholder="Please select"
           onChange={ (value) => changeData(n, value, 'value') }
           filterOption={ (input, option) =>
@@ -186,36 +186,36 @@ function StockLocation() {
     }
 
     return (
-      <div data-order={n} style={{paddingBottom: '0.5%', width: 556 }}>
+      <div data-order={ n } style={ { paddingBottom: '0.5%', width: 556 } }>
         <Select
           style={ { width: 200, marginRight: '1%' } }
           placeholder="Select Field"
           allowClear
-          onChange={ (data) => changeData(n, data, 'field')}
-          defaultValue={filters[n]?filters[n].field:""}
+          onChange={ (data) => changeData(n, data, 'field') }
+          defaultValue={ filters[n] ? filters[n].field : "" }
         >
-          { optionFilters.map((o, i) => (<Option key={ i } value={ o } >{ o }</Option>))}
+          { optionFilters.map((o, i) => (<Option key={ i } value={ o } >{ o }</Option>)) }
         </Select>
 
         <Select
-          style={ { width: 100, marginRight: '1%'  } }
-          onChange={ (data) => changeData(n, data, 'operator')} 
-          defaultValue={filters[n]?filters[n].operator:"LIKE"}
+          style={ { width: 100, marginRight: '1%' } }
+          onChange={ (data) => changeData(n, data, 'operator') }
+          defaultValue={ filters[n] ? filters[n].operator : "LIKE" }
         >
           <Option key="0" value="EQUALS">EQUALS</Option>
           <Option key="1" value="LIKE">LIKE</Option>
         </Select>
 
         { valueForm }
-        { useDelete && <Button onClick={ () => removeFilter(n)}>-</Button>}
+        { useDelete && <Button onClick={ () => removeFilter(n) }>-</Button> }
 
       </div>
-    )
+    );
   };
 
   const filter = (
     <Form className='filter'>
-      {filterForm}
+      { filterForm }
       <Form.Item>
         <Button onClick={ clickFilter } size='large'>Filter</Button>
         <Divider type="vertical" />
@@ -227,37 +227,37 @@ function StockLocation() {
 
   const TableList = (
     <Table
-        dataSource={ locations }
-        pagination={ pagination }
-        onChange={ clickFilter }
-        loading={ loading }
-      >
-        { fields.includes('loc') && <Column title="Location" dataIndex="loc" key="loc" /> }
-        { fields.includes('description') && <Column title="Description" dataIndex="description" key="description" /> }
-        { fields.includes('address1') && <Column title="Address" dataIndex="address1" key="address1" /> }
-        { fields.includes('countryCode') && <Column title="Country Code" dataIndex="countryCode" key="countryCode" /> }
-        { fields.includes('personInCharge') && <Column title="PIC" dataIndex="personInCharge" key="personInCharge" /> }
-        <Column
-          title="Action"
-          key="action"
-          render={ (text, record) => {
-            return (
-              <Space size="middle">
-                <a onClick={ () => history.push(`/stock-locations/${ record.loc }`) }>View</a>
-                <a onClick={ () => history.push(`/stock-locations/${ record.loc }?edit=true`) }>Edit</a>
-                <Popconfirm
-                  title="Are you sure to delete this record?"
-                  onConfirm={ () => handleDelete(record.loc) }
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <a href="#">Delete</a>
-                </Popconfirm>
-              </Space>
-            );
-          } }
-        />
-      </Table>
+      dataSource={ locations }
+      pagination={ pagination }
+      onChange={ clickFilter }
+      loading={ loading }
+    >
+      { fields.includes('loc') && <Column title="Location" dataIndex="loc" key="loc" /> }
+      { fields.includes('description') && <Column title="Description" dataIndex="description" key="description" /> }
+      { fields.includes('address1') && <Column title="Address" dataIndex="address1" key="address1" /> }
+      { fields.includes('countryCode') && <Column title="Country Code" dataIndex="countryCode" key="countryCode" /> }
+      { fields.includes('personInCharge') && <Column title="PIC" dataIndex="personInCharge" key="personInCharge" /> }
+      <Column
+        title="Action"
+        key="action"
+        render={ (text, record) => {
+          return (
+            <Space size="middle">
+              <a onClick={ () => history.push(`/stock-locations/${ record.loc }`) }>View</a>
+              <a onClick={ () => history.push(`/stock-locations/${ record.loc }?edit=true`) }>Edit</a>
+              <Popconfirm
+                title="Are you sure to delete this record?"
+                onConfirm={ () => handleDelete(record.loc) }
+                okText="Yes"
+                cancelText="No"
+              >
+                <a href="#">Delete</a>
+              </Popconfirm>
+            </Space>
+          );
+        } }
+      />
+    </Table>
   );
 
   const showModal = () => {
@@ -285,14 +285,14 @@ function StockLocation() {
     setModal();
   };
 
-  const setModal= () => {
-    const temp = []; 
+  const setModal = () => {
+    const temp = [];
     allFields.map(e => {
       let isChecked = false;
       if (fields.includes(e)) {
         isChecked = true;
       }
-      temp.push(<p><Checkbox checked={isChecked} onClick={() => changeField(e)}/> {e}</p>);
+      temp.push(<p><Checkbox checked={ isChecked } onClick={ () => changeField(e) } /> { e }</p>);
     });
 
     setContentModal(temp);
@@ -300,23 +300,23 @@ function StockLocation() {
 
   const modal = () => {
     return (
-      <Modal title="Coloumn Setting" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={[
-        <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
+      <Modal title="Coloumn Setting" visible={ isModalVisible } onOk={ handleOk } onCancel={ handleCancel } footer={ [
+        <Button key="submit" type="primary" loading={ loading } onClick={ handleOk }>
           CLOSE
         </Button>
-      ]}>
+      ] }>
         { contentModal }
       </Modal>
-    )
+    );
   };
 
   return (
     <StyledDiv>
-      {modal()}
+      { modal() }
       <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>Stock Location</h2>
       { filter }
       <div style={ { textAlign: 'right' } }>
-        <Button onClick={showModal}>Settings</Button> 
+        <Button onClick={ showModal }>Settings</Button>
         <Divider type="vertical" />
         <Button onClick={ () => history.push('/stock-locations/create') } type="primary" style={ { marginBottom: 16 } }>
           Add a row

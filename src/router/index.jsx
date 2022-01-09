@@ -18,7 +18,10 @@ import {
   StockLocationForm,
   Items,
   GrnWithPo,
-  GrnManual
+  // GrnWithForm,
+  GrnManual,
+  GrnManualForm,
+  GrnWithPoForm,
 } from '../screens';
 import { Sidebar } from '../components';
 import { Colors, Images } from '../constant';
@@ -61,12 +64,20 @@ const publicRoutes = [
     component: StockLocationForm,
   },
   {
+    path: '/grn-with-pos/create',
+    component: GrnWithPoForm
+  },
+  {
     path: '/grn-with-pos',
     component: GrnWithPo
   },
   {
     path: '/grn-manuals',
     component: GrnManual
+  },
+  {
+    path: '/grn-manuals/create',
+    component: GrnManualForm
   }
 
 ];
@@ -83,7 +94,7 @@ const Router = props => {
   const history = useHistory();
   const [userName, setUserName] = useState('username');
   const [company, setCompany] = useState('company_name');
-  const [loginDate, setLoginDate] = useState(moment().format("YYYY-MM-DD HH:mm:ss"));
+  const [loginDate, setLoginDate] = useState(moment().format("LLL"));
   // const dispatch = useDispatch();
 
   return (
