@@ -18,11 +18,11 @@ function List() {
   const [filterSearch, setFilterSearch] = useState({});
   const [filters, setFilters] = useState([]);
   const [filterForm, setFilterForm] = useState();
-  const [fields, setFields] = useState(['grnNo', 'doNo', 'currencyCode', 'currencyRate', 'closedDate', 'entryUser', 'entryDate']);
+  const [fields, setFields] = useState(['grnNo', 'subType', 'currencyCode', 'currencyRate', 'recdDate']);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [contentModal, setContentModal] = useState([]);
 
-  const allFields = ['grnNo', 'doNo', 'docmType', 'currencyCode', 'currencyRate', 'closedDate', 'entryUser', 'entryDate'];
+  const allFields = ['id', 'grnNo', 'subType', 'currencyCode', 'currencyRate', 'recdDate', 'createdAt', 'ctreatedBy', 'updatedAt', 'updatedBy'];
 
   useEffect(() => {
     setFilterForm(fieldFilter(0));
@@ -43,6 +43,10 @@ function List() {
       const myData = result.rows;
       result.rows.forEach((element, index) => {
         myData[index]["key"] = index;
+        const options = {day: "numeric", month: "short", year: "numeric"};
+        myData[index]["recdDate"] = new Date(element.recdDate).toLocaleDateString("en", options);
+        myData[index]["createAt"] = new Date(element.createAt).toLocaleDateString("en", options);
+        myData[index]["updatedAt"] = new Date(element.updatedAt).toLocaleDateString("en", options);
       });
       setPagination({
         current: (result.currentPageNumber + 1),
@@ -76,7 +80,7 @@ function List() {
     });
   };
 
-  const optionFilters = ['grnNo', 'doNo', 'currencyCode'];
+  const optionFilters = ['currencyCode'];
   const changeData = (n, data, type) => {
     if (!filters[n]) {
       filters[n] = {
@@ -188,14 +192,16 @@ function List() {
         onChange={ clickFilter }
         loading={ loading }
       >
+        { fields.includes('id') && <Column title="ID" dataIndex="id" key="id" /> }
         { fields.includes('grnNo') && <Column title="GRN No" dataIndex="grnNo" key="grnNo" /> }
-        { fields.includes('doNo') && <Column title="DO No" dataIndex="doNo" key="doNo" /> }
-        { fields.includes('docmType') && <Column title="DO CM Type" dataIndex="docmType" key="docmType" /> }
+        { fields.includes('subType') && <Column title="Sub Type" dataIndex="subType" key="subType" /> }
         { fields.includes('currencyCode') && <Column title="Currency Code" dataIndex="currencyCode" key="currencyCode" /> }
         { fields.includes('currencyRate') && <Column title="Currency Rate" dataIndex="currencyRate" key="currencyRate" /> }
-        { fields.includes('closedDate') && <Column title="Closed Date" dataIndex="closedDate" key="closedDate" /> }
-        { fields.includes('entryUser') && <Column title="Entry User" dataIndex="entryUser" key="entryUser" /> }
-        { fields.includes('entryDate') && <Column title="Entry Date" dataIndex="entryDate" key="entryDate" /> }
+        { fields.includes('recdDate') && <Column title="Recd Date" dataIndex="recdDate" key="recdDate" /> }
+        { fields.includes('createdBy') && <Column title="Created By" dataIndex="createdBy" key="createdBy" /> }
+        { fields.includes('createdAt') && <Column title="Created At" dataIndex="createdAt" key="createdAt" /> }
+        { fields.includes('updatedBy') && <Column title="Updated By" dataIndex="updatedBy" key="updatedBy" /> }
+        { fields.includes('updatedAt') && <Column title="Updated At" dataIndex="updatedAt" key="updatedAt" /> }
         <Column
           title="Action"
           key="action"
