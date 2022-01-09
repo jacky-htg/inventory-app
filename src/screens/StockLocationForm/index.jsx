@@ -179,7 +179,7 @@ const StockLocationForm = (props) => {
             <Form form={ form } name="control-hooks">
               <div className="group">
                 {
-                  !loc && id
+                  !loc && id && !isEdit
                     ?
                     <></>
                     :
@@ -197,7 +197,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !description && id
+                  !description && id && !isEdit
                     ?
                     <></>
                     :
@@ -210,7 +210,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !address1 && id
+                  !address1 && id && !isEdit
                     ?
                     <></>
                     :
@@ -223,7 +223,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !address2 && id
+                  !address2 && id && !isEdit
                     ?
                     <></>
                     :
@@ -236,7 +236,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !address3 && id
+                  !address3 && id && !isEdit
                     ?
                     <></>
                     :
@@ -249,7 +249,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !address4 && id
+                  !address4 && id && !isEdit
                     ?
                     <></>
                     :
@@ -262,7 +262,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !postalCode && id
+                  !postalCode && id && !isEdit
                     ?
                     <></>
                     :
@@ -275,7 +275,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !countryName && id
+                  !countryName && id && !isEdit
                     ?
                     <></>
                     :
@@ -303,7 +303,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !regionCode && id
+                  !regionCode && id && !isEdit
                     ?
                     <></>
                     :
@@ -316,7 +316,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !stateCode && id
+                  !stateCode && id && !isEdit
                     ?
                     <></>
                     :
@@ -329,7 +329,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !cityCode && id
+                  !cityCode && id && !isEdit
                     ?
                     <></>
                     :
@@ -342,7 +342,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !telNum && id
+                  !telNum && id && !isEdit
                     ?
                     <></>
                     :
@@ -355,7 +355,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !faxNum && id
+                  !faxNum && id && !isEdit
                     ?
                     <></>
                     :
@@ -368,7 +368,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !pic && id
+                  !pic && id && !isEdit
                     ?
                     <></>
                     :
@@ -381,7 +381,7 @@ const StockLocationForm = (props) => {
                 }
 
                 {
-                  !remarks && id
+                  !remarks && id && !isEdit
                     ?
                     <></>
                     :
