@@ -208,7 +208,7 @@ function List() {
           render={ (text, record) => {
             return (
               <Space size="middle">
-                <a onClick={ () => history.push(`/grn-manuals/${ record.grnNo }`) }>View</a>
+                <a onClick={ () => history.push(`/grn-manuals/${ record.grnNo }-${ record.subType}`) }>View</a>
               </Space>
             );
           } }

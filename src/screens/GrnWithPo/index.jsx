@@ -211,7 +211,7 @@ function List() {
           render={ (text, record) => {
             return (
               <Space size="middle">
-                <a onClick={ () => history.push(`/grn-with-pos/${ record.grnNo }`) }>View</a>
+                <a onClick={ () => history.push(`/grn-with-pos/${ record.grnNo }-${ record.subType}`) }>View</a>
               </Space>
             );
           } }
