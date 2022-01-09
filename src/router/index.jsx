@@ -13,12 +13,12 @@ import moment from 'moment';
 
 import {
   Dashboard,
-  Master,
-  Inm00001,
   Form,
   StockLocation,
   StockLocationForm,
-  Items
+  Items,
+  GrnWithPo,
+  GrnManual
 } from '../screens';
 import { Sidebar } from '../components';
 import { Colors, Images } from '../constant';
@@ -35,10 +35,6 @@ const publicRoutes = [
   {
     path: '/',
     component: Dashboard,
-  },
-  {
-    path: '/master',
-    component: Master,
   },
   {
     path: '/items',
@@ -64,6 +60,14 @@ const publicRoutes = [
     path: '/stock-locations/:id',
     component: StockLocationForm,
   },
+  {
+    path: '/grn-with-pos',
+    component: GrnWithPo
+  },
+  {
+    path: '/grn-manuals',
+    component: GrnManual
+  }
 
 ];
 

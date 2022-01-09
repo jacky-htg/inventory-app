@@ -1,55 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
-import { Table, Button, Space, Select, Form, Input, message, Popconfirm, Modal, Divider } from 'antd';
+import { Table, Button, Space, Select, Form, Input, message, Checkbox, Modal, Divider } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import { StyledDiv } from './styled';
 
-import { Country, Location } from '../../services';
-import { e } from '../../../dist/assets/vendor.5ce9889e';
-import Checkbox from 'antd/lib/checkbox/Checkbox';
+import { Grn } from '../../services';
 
-function StockLocation() {
+function List() {
 
   const { Option } = Select;
 
   const history = useHistory();
   const { Column } = Table;
-  const [countries, setCountries] = useState([]);
-  const [locations, setLocations] = useState([]);
+  const [listData, setListData] = useState([]);
   const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(false);
   const [filterSearch, setFilterSearch] = useState({});
   const [filters, setFilters] = useState([]);
   const [filterForm, setFilterForm] = useState();
-  const [fields, setFields] = useState(['loc', 'description', 'address1', 'countryCode', 'personInCharge']);
+  const [fields, setFields] = useState(['grnNo', 'closedDate', 'buyer', 'doNo']);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [contentModal, setContentModal] = useState([]);
 
-  const allFields = ['loc', 'description', 'address1', 'countryCode', 'personInCharge'];
-
-  let optionCountries = getOptionCountries(countries);
+  const allFields = ['grnNo', 'closedDate', 'buyer', 'doNo'];
 
   useEffect(() => {
-    let data = Country.list();
-    data.then(result => {
-      // if (result.status && result.status !== 200) {
-      //   message.error(result.error);
-      // }
-      setCountries(result);
-      optionCountries = getOptionCountries(countries);
-    });
     setFilterForm(fieldFilter(0));
     setModal();
   }, []);
 
   useEffect(() => {
     setLoading(true);
-    getStockData(filterSearch);
+    getData(filterSearch);
   }, [filterSearch]);
 
-  const getStockData = (filter) => {
-    let data = Location.list(filter);
+  const getData = (filter) => {
+    let data = Grn.list(filter);
     data.then(result => {
       // if (result.status && result.status !== 200) {
       //   message.error(result.error);
@@ -63,7 +49,7 @@ function StockLocation() {
         pageSize: 10,
         total: result.totalRows
       });
-      setLocations(myData);
+      setListData(myData);
       setLoading(false);
     });
   };
@@ -90,18 +76,7 @@ function StockLocation() {
     });
   };
 
-  const handleDelete = loc => {
-    let data = Location.remove(loc);
-    data.then(result => {
-      if (result.status && result.status !== 204) {
-        message.error(result.error);
-      }
-      setLoading(true);
-      getStockData(filterSearch);
-    });
-  };
-
-  const optionFilters = ['countryCode', 'description'];
+  const optionFilters = ['grnNo', 'doNo'];
   const changeData = (n, data, type) => {
     if (!filters[n]) {
       filters[n] = {
@@ -167,24 +142,6 @@ function StockLocation() {
       />
     );
 
-    if (filters[n] && filters[n].field === "countryCode") {
-      valueForm = (
-        <Select
-          // mode="multiple"
-          showSearch
-          allowClear
-          style={ { width: 200, marginRight: '1%'  } }
-          placeholder="Please select"
-          onChange={ (value) => changeData(n, value, 'value') }
-          filterOption={ (input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          { optionCountries }
-        </Select>
-      );
-    }
-
     return (
       <div data-order={n} style={{paddingBottom: '0.5%', width: 556 }}>
         <Select
@@ -227,32 +184,22 @@ function StockLocation() {
 
   const TableList = (
     <Table
-        dataSource={ locations }
+        dataSource={ listData }
         pagination={ pagination }
         onChange={ clickFilter }
         loading={ loading }
       >
-        { fields.includes('loc') && <Column title="Location" dataIndex="loc" key="loc" /> }
-        { fields.includes('description') && <Column title="Description" dataIndex="description" key="description" /> }
-        { fields.includes('address1') && <Column title="Address" dataIndex="address1" key="address1" /> }
-        { fields.includes('countryCode') && <Column title="Country Code" dataIndex="countryCode" key="countryCode" /> }
-        { fields.includes('personInCharge') && <Column title="PIC" dataIndex="personInCharge" key="personInCharge" /> }
+        { fields.includes('grnNo') && <Column title="GRN No" dataIndex="grnNo" key="grnNo" /> }
+        { fields.includes('closedDate') && <Column title="Closed Date" dataIndex="closedDate" key="closedDate" /> }
+        { fields.includes('buyer') && <Column title="Buyer" dataIndex="buyer" key="buyer" /> }
+        { fields.includes('doNo') && <Column title="DO No" dataIndex="doNo" key="doNo" /> }
         <Column
           title="Action"
           key="action"
           render={ (text, record) => {
             return (
               <Space size="middle">
-                <a onClick={ () => history.push(`/stock-locations/${ record.loc }`) }>View</a>
-                <a onClick={ () => history.push(`/stock-locations/${ record.loc }?edit=true`) }>Edit</a>
-                <Popconfirm
-                  title="Are you sure to delete this record?"
-                  onConfirm={ () => handleDelete(record.loc) }
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <a href="#">Delete</a>
-                </Popconfirm>
+                <a onClick={ () => history.push(`/grn-with-pos/${ record.grnNo }`) }>View</a>
               </Space>
             );
           } }
@@ -313,12 +260,12 @@ function StockLocation() {
   return (
     <StyledDiv>
       {modal()}
-      <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>Stock Location</h2>
+      <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>GRN With PO</h2>
       { filter }
       <div style={ { textAlign: 'right' } }>
         <Button onClick={showModal}>Settings</Button> 
         <Divider type="vertical" />
-        <Button onClick={ () => history.push('/stock-locations/create') } type="primary" style={ { marginBottom: 16 } }>
+        <Button onClick={ () => history.push('/grn-with-pos/create') } type="primary" style={ { marginBottom: 16 } }>
           Add a row
         </Button>
       </div>
@@ -327,13 +274,4 @@ function StockLocation() {
   );
 }
 
-function getOptionCountries(countries) {
-  const { Option } = Select;
-  let optionCountries = [];
-  for (const country of countries) {
-    optionCountries.push(<Option key={ country.countryCode } value={ country.countryCode } >{ country.description }</Option>);
-  }
-  return optionCountries;
-}
-
-export default StockLocation;
+export default List;
