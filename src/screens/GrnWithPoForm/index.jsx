@@ -261,7 +261,7 @@ const GrnWithPoForm = (props) => {
         data.then(result => {
           const temp = {
             seqNo: el.seqNo,
-            partNo: "C232HM-DDHSL-0", //el.partNo,
+            partNo: el.partNo,
             loc: result[0].loc,
             projectNo: result[0].projectNo,
             poRecSeq: el.poRecSeq,
