@@ -31,13 +31,13 @@ function Sidebar() {
         },
         {
           title: 'GRN Entry (with PO)',
-          link: '/grn-with-pos',
-          isActive: true
+          link: '',
+          isActive: false
         },
         {
           title: 'Manual GRN Entry',
-          link: '/grn-manuals',
-          isActive: true
+          link: '',
+          isActive: false
         },
         {
           title: 'SIV Entry',
