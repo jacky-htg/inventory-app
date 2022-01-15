@@ -2,12 +2,12 @@ import React, {useEffect, useState } from 'react';
 import { Item } from '../../services';
 import PageList from '../../components/PageList';
 
-function StockLocation() {
+function Page() {
   const [fields, setFields] = useState([]);
 
   const setupFields = () => {
     setFields([
-      {label: 'Item No', field: 'itemNo', default: true, filter: true}, 
+      {label: 'Item No', field: 'itemNo', default: true}, 
       {label: 'Part No', field: 'partNo', default: true, filter: true}, 
       {label: 'Description', field: 'description', default: true, filter: true}, 
       {label: 'QOH', field: 'qoh', default: true, filter: true}, 
@@ -37,4 +37,4 @@ function StockLocation() {
   );
 }
 
-export default StockLocation;
+export default Page;

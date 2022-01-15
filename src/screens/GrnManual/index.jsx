@@ -2,7 +2,7 @@ import React, {useEffect, useState } from 'react';
 import { Grn } from '../../services';
 import PageList from '../../components/PageList';
 
-function StockLocation() {
+function Page() {
   const [fields, setFields] = useState([]);
 
   const setupFields = () => {
@@ -31,4 +31,4 @@ function StockLocation() {
   );
 }
 
-export default StockLocation;
+export default Page;

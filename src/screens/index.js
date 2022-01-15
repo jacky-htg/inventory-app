@@ -7,3 +7,7 @@ export { default as GrnWithPo } from "./GrnWithPo";
 export { default as GrnWithPoForm } from "./GrnWithPoForm";
 export { default as GrnManual } from "./GrnManual";
 export { default as GrnManualForm } from "./GrnManualForm";
+export { default as Uom } from "./Uom";
+export { default as UomForm } from "./UomForm";
+export { default as ItemCategory } from "./ItemCategory";
+export { default as ItemCategoryForm } from "./ItemCategoryForm";

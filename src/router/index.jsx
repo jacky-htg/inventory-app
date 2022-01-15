@@ -22,6 +22,10 @@ import {
   GrnManual,
   GrnManualForm,
   GrnWithPoForm,
+  Uom,
+  UomForm,
+  ItemCategory,
+  ItemCategoryForm,
 } from '../screens';
 import { Sidebar } from '../components';
 import { Colors, Images } from '../constant';
@@ -78,6 +82,30 @@ const publicRoutes = [
   {
     path: '/grn-manuals/create',
     component: GrnManualForm
+  },
+  {
+    path: '/uoms',
+    component: Uom,
+  },
+  {
+    path: '/uoms/create',
+    component: UomForm,
+  },
+  {
+    path: '/uoms/:id',
+    component: UomForm,
+  },
+  {
+    path: '/item-categories',
+    component: ItemCategory
+  },
+  {
+    path: '/item-categories/create',
+    component: ItemCategoryForm
+  },
+  {
+    path: '/item-categories/:id',
+    component: ItemCategoryForm
   }
 
 ];

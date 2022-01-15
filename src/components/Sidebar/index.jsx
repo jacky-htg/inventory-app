@@ -31,13 +31,13 @@ function Sidebar() {
         },
         {
           title: 'GRN Entry (with PO)',
-          link: '',
-          isActive: false
+          link: '/grn-with-pos',
+          isActive: true
         },
         {
           title: 'Manual GRN Entry',
-          link: '',
-          isActive: false
+          link: '/grn-manuals',
+          isActive: true
         },
         {
           title: 'SIV Entry',
@@ -76,13 +76,13 @@ function Sidebar() {
         },
         {
           title: 'UOM',
-          link: '',
-          isActive: false
+          link: '/uoms',
+          isActive: true
         },
         {
           title: 'Item Category',
-          link: '',
-          isActive: false
+          link: '/item-categories',
+          isActive: true
         },
         {
           title: 'Inventory Control',
@@ -177,7 +177,9 @@ function Sidebar() {
       history.location.pathname.includes('/items') ||
       history.location.pathname.includes('/stock-locations') ||
       history.location.pathname.includes('/grn-with-pos') ||
-      history.location.pathname.includes('/grn-manuals')
+      history.location.pathname.includes('/grn-manuals') || 
+      history.location.pathname.includes('/uoms') || 
+      history.location.pathname.includes('/item-categories')
     ) {
       setSelectedMenu(itemMenu);
     }

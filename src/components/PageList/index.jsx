@@ -115,7 +115,7 @@ function PageList(props) {
   };
 
   const handleDelete = loc => {
-    let data = Location.remove(loc);
+    let data = props.data.remove(loc);
     data.then(result => {
       if (result.status && result.status !== 204) {
         message.error(result.error);

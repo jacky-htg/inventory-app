@@ -3,7 +3,7 @@ import { Select } from 'antd';
 import { Country, Location } from '../../services';
 import PageList from '../../components/PageList';
 
-function StockLocation() {
+function Page() {
   const { Option } = Select;
       
   const [countries, setCountries] = useState([]);
@@ -48,4 +48,4 @@ function StockLocation() {
   );
 }
 
-export default StockLocation;
+export default Page;
