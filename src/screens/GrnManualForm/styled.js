@@ -63,16 +63,16 @@ const StyledDiv = styled.div`
     }
 
     .normal[disabled] {
-        color: rgba(0, 0, 0, 0.85);
-        background-color: transparent;
-        border: unset;
-        box-shadow: none;
-        /* cursor: not-allowed; */
-        opacity: 1;
-        border-bottom: 1px solid black;
-      }
+      color: rgba(0, 0, 0, 0.85);
+      background-color: transparent;
+      border: unset;
+      box-shadow: none;
+      /* cursor: not-allowed; */
+      opacity: 1;
+      border-bottom: 1px solid black;
+    }
 
-      .ant-select-disabled.ant-select:not(.ant-select-customize-input)
+        .normal[disabled] .ant-select-disabled.ant-select:not(.ant-select-customize-input)
         .ant-select-selector {
         color: rgba(0, 0, 0, 0.85);
         background: transparent;

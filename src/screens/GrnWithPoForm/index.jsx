@@ -479,7 +479,7 @@ const GrnWithPoForm = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks">
+            <Form form={ form } name="control-hooks" scrollToFirstError>
               <div className="group">
                 <div className="row">
                   {
@@ -667,7 +667,7 @@ const GrnWithPoForm = (props) => {
                                   name="SN"
                                   label="SN"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.sn } value={ el.sn } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly />
+                                  <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly />
                                 </Form.Item>
                               }
 
@@ -715,8 +715,22 @@ const GrnWithPoForm = (props) => {
                                 <Form.Item
                                   name="GRN Qty"
                                   label="GRN Qty"
+                                  rules={ [
+                                    {
+                                      required: true,
+                                    },
+                                    ({ getFieldValue }) => ({
+                                      validator(_, value) {
+                                        if (value > 0) {
+                                          return Promise.resolve();
+                                        }
+
+                                        return Promise.reject(new Error('QTY must more than 0'));
+                                      },
+                                    }),
+                                  ] }
                                 >
-                                  <Input className='smallInput' defaultValue={ el.issuedQty } value={ el.issuedQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' />
+                                  <Input type={ 'number' } className='smallInput' defaultValue={ el.issuedQty } value={ el.issuedQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' />
                                 </Form.Item>
                               }
                             </div>
@@ -761,8 +775,29 @@ const GrnWithPoForm = (props) => {
                                 <Form.Item
                                   name="QTY/Label"
                                   label="QTY/Label"
+                                  rules={ [
+                                    {
+                                      required: true,
+                                    },
+                                    ({ getFieldValue }) => ({
+                                      validator(_, value) {
+                                        if (value > 0 && value <= getFieldValue('GRN Qty')) {
+                                          return Promise.resolve();
+                                        }
+
+                                        if (!value || value === 0) {
+                                          return Promise.reject(new Error('QTY/Label must more than 0'));
+                                        }
+
+                                        if (value > getFieldValue('GRN Qty')) {
+                                          return Promise.reject(new Error("QTY/Label can't be more than GRN QTY"));
+                                        }
+
+                                      },
+                                    }),
+                                  ] }
                                 >
-                                  <Input className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' />
+                                  <Input type={ 'number' } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' />
                                 </Form.Item>
                               }
                             </div>
@@ -840,7 +875,7 @@ const GrnWithPoForm = (props) => {
                                 name="Description"
                                 label="Description"
                               >
-                                <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly />
+                                <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' />
                               </Form.Item>
                             }
 
@@ -849,7 +884,7 @@ const GrnWithPoForm = (props) => {
                                 name="Remarks"
                                 label="Remarks"
                               >
-                                <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' readOnly />
+                                <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' />
                               </Form.Item>
                             }
 
@@ -861,7 +896,7 @@ const GrnWithPoForm = (props) => {
                             idx !== 0 &&
                             <TiDelete color='red' size={ 30 } onClick={ () => deleteDetail(idx) } />
                           }
-                          <MdAddCircle color='#1990ff' size={ 24 } onClick={ addNewDetail } />
+                          {/* <MdAddCircle color='#1990ff' size={ 24 } onClick={ addNewDetail } /> */ }
                         </div>
 
                       </div>
