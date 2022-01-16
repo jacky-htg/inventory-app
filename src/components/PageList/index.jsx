@@ -21,6 +21,7 @@ function PageList(props) {
   const [fields, setFields] = useState([]);
   const [optionFilters, setOptionFilters] = useState([]);
   const [lookups, setLookups] = useState([]); 
+  const [disabledCreate, setDisabledCreate] = useState(false);
   
   useEffect(() => {
     if (props.fields.length > 0) {
@@ -88,6 +89,9 @@ function PageList(props) {
         total: result.totalRows
       });
       setDatas(myData);
+      if (props.addButtonLimit && myData.length >= props.addButtonLimit) {
+        setDisabledCreate(true);
+      }
       setLoading(false);
     });
   };
@@ -268,6 +272,9 @@ function PageList(props) {
           props.id.map(el => { 
             ids.push(record[el]);
           });
+          if (ids.length === 0) {
+            ids.push('edit');
+          } 
           const id = ids.join('-');
           
           return (
@@ -344,11 +351,11 @@ function PageList(props) {
     <StyledDiv>
       { modal() }
       <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>{props.title}</h2>
-      { filter }
+      { props.filter && filter }
       <div style={ { textAlign: 'right' } }>
         <Button onClick={ showModal }>Settings</Button>
         <Divider type="vertical" />
-        <Button onClick={ () => history.push(`/${props.url}/create`) } type="primary" style={ { marginBottom: 16 } }>
+        <Button onClick={ () => history.push(`/${props.url}/create`) } type="primary" style={ { marginBottom: 16 } } disabled={disabledCreate}>
           Add a row
         </Button>
       </div>

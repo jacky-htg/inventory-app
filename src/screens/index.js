@@ -11,3 +11,5 @@ export { default as Uom } from "./Uom";
 export { default as UomForm } from "./UomForm";
 export { default as ItemCategory } from "./ItemCategory";
 export { default as ItemCategoryForm } from "./ItemCategoryForm";
+export { default as InventoryControl } from "./InventoryControl";
+export { default as InventoryControlForm } from "./InventoryControlForm";

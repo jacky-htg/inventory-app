@@ -53,6 +53,7 @@ function Page() {
 
   return (
     <PageList 
+      filter={true}
       fields={fields} 
       title="Item Category" 
       url="item-categories" 

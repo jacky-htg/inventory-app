@@ -39,6 +39,7 @@ function Page() {
 
   return (
     <PageList 
+      filter={true}
       fields={fields} 
       title="Stock Location" 
       url="stock-locations" 

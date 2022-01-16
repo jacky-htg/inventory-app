@@ -22,6 +22,7 @@ function Page() {
 
   return (
     <PageList 
+      filter={true}
       fields={fields} 
       title="GRN With PO" 
       url="grn-with-pos" 

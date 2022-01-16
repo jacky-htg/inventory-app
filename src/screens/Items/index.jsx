@@ -28,6 +28,7 @@ function Page() {
 
   return (
     <PageList 
+      filter={true}
       fields={fields} 
       title="Items" 
       url="items" 

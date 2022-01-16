@@ -21,6 +21,7 @@ function Page() {
 
   return (
     <PageList 
+      filter={true}
       fields={fields} 
       title="UOM" 
       url="uoms" 

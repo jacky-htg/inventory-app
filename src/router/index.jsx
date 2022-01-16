@@ -26,6 +26,8 @@ import {
   UomForm,
   ItemCategory,
   ItemCategoryForm,
+  InventoryControl,
+  InventoryControlForm
 } from '../screens';
 import { Sidebar } from '../components';
 import { Colors, Images } from '../constant';
@@ -106,6 +108,18 @@ const publicRoutes = [
   {
     path: '/item-categories/:id',
     component: ItemCategoryForm
+  },
+  {
+    path: '/inventory-controls',
+    component: InventoryControl
+  },
+  {
+    path: '/inventory-controls/create',
+    component: InventoryControlForm
+  },
+  {
+    path: '/inventory-controls/:id',
+    component: InventoryControlForm
   }
 
 ];
