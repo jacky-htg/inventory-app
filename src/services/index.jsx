@@ -3,6 +3,9 @@ import Country from './countries';
 import Item from './items';
 import Lov from './lov';
 import Grn from './grn';
+import Uom from './uom';
+import ItemCategory from './itemCategories';
+import InventoryControl from './inventoryControl';
 
 
 export {
@@ -10,5 +13,8 @@ export {
   Country,
   Item,
   Lov,
-  Grn
+  Grn,
+  Uom,
+  ItemCategory,
+  InventoryControl
 };

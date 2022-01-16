@@ -255,7 +255,7 @@ const GrnWithPoForm = (props) => {
 
   useEffect(() => {
     if (poNo) {
-      const details = [];
+      const arr = [...details];
       parts.map((el, i) => {
         let data = Grn.detailByPartNo(poNo, el.partNo, el.poRecSeq);
         data.then(result => {
@@ -278,10 +278,10 @@ const GrnWithPoForm = (props) => {
             itemNo: null,
             itemType: 0
           };
-          details.push(temp);
+          arr.push(temp);
         });
       });
-      setDetails(details);
+      setDetails(arr);
     }
   }, [poNo, parts]);
 
@@ -492,7 +492,7 @@ const GrnWithPoForm = (props) => {
                         label="GRN No"
                       >
                         <Input hidden />
-                        <Input className='smallInput' defaultValue={ grnNo } value={ grnNo } placeholder='Type Currency code here...' disabled={ isDisabled } />
+                        <Input className='smallInput' InitialValue={ grnNo } defaultValue={ grnNo } value={ grnNo } placeholder='Type Currency code here...' readOnly disabled={ isDisabled } />
                       </Form.Item>
                   }
 
@@ -549,6 +549,7 @@ const GrnWithPoForm = (props) => {
                         name="Recd Date"
                         label="Recd Date"
                       >
+                        <Input hidden />
                         <Input
                           className='normal' disabled={ isDisabled }
                           value={ recdDate }
@@ -569,6 +570,7 @@ const GrnWithPoForm = (props) => {
                         name="Supplier Code"
                         label="Supplier Code"
                       >
+                        <Input hidden />
                         <Input className='smallInput' value={ supplierCode } placeholder='Type Supplier code here...' readOnly disabled={ isDisabled } />
                       </Form.Item>
                   }
@@ -582,6 +584,7 @@ const GrnWithPoForm = (props) => {
                         name="Buyer"
                         label="Buyer"
                       >
+                        <Input hidden />
                         <Input
                           className='normal' disabled={ isDisabled }
                           value={ buyer }
@@ -602,6 +605,7 @@ const GrnWithPoForm = (props) => {
                         name="PO Remarks"
                         label="PO Remarks"
                       >
+                        <Input hidden />
                         <Input.TextArea rows={ 4 } readOnly value={ poRemarks } />
                       </Form.Item>
                   }
