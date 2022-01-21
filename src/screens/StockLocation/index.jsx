@@ -44,7 +44,7 @@ function Page() {
       title="Stock Location" 
       url="stock-locations" 
       data = {Location} 
-      id={['loc']} 
+      id={['id']} 
       actions={['view', 'edit', 'delete']} />
   );
 }

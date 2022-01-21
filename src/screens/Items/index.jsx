@@ -33,7 +33,7 @@ function Page() {
       title="Items" 
       url="items" 
       data = {Item} 
-      id={['itemNo']} 
+      id={['id']} 
       actions={['view', 'edit', 'delete']} />
   );
 }

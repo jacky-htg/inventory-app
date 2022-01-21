@@ -30,7 +30,7 @@ const FormPage = (props) => {
     categorySubCode: "",
     subDescription: "",
     categoryGroup: "",
-    mrpStatus: "",
+    mrpStatus: null,
     designQtya: 0,
     designQtyb: 0,
     designQtyc: 0,
@@ -62,7 +62,6 @@ const FormPage = (props) => {
     }
     state[field] = value;
     setState(state);
-    console.log(value, field, state);
   };
   
   useEffect(() => {
@@ -71,7 +70,6 @@ const FormPage = (props) => {
     ) {
       const data = ItemCategory.view(id);
       data.then(result => {
-        console.log('result :>> ', result);
         // if (result.status && result.status !== 200) {
         //   message.error(result.error);
         // } else {
@@ -91,7 +89,6 @@ const FormPage = (props) => {
         const values = await form.validateFields();
       }
       let obj = state;
-      console.log('obj', obj);
       if (isEdit) {
         obj.version = parseInt(obj.version);
         ItemCategory.edit(id, obj);
@@ -100,7 +97,7 @@ const FormPage = (props) => {
       }
       history.push('/item-categories');
     } catch (errorInfo) {
-      console.log('Failed:', errorInfo);
+      console.error('Failed:', errorInfo);
     }
   };
 
@@ -197,6 +194,11 @@ const FormPage = (props) => {
                       <Form.Item
                         name="categoryGroup"
                         label="Category Group"
+                        rules={ [
+                          {
+                            required: true,
+                          },
+                        ] }
                       >
                         <Select 
                           className='normal' 

@@ -58,7 +58,7 @@ function Page() {
       title="Item Category" 
       url="item-categories" 
       data = {ItemCategory} 
-      id={['categoryCode', 'categorySubCode', 'categoryGroup']} 
+      id={['id']} 
       actions={['view', 'edit', 'delete']} />
   );
 }
