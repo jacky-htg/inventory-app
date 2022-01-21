@@ -239,13 +239,13 @@ const GrnWithPoForm = (props) => {
         setParts(result);
       });
     } else {
-        setGrnNo('');
-        setSupplierCode('');
-        setCurrencyCode('');
-        setCurrencyRate('');
-        setRecdDate('');
-        setPoRemarks('');
-        setBuyer('');
+      setGrnNo('');
+      setSupplierCode('');
+      setCurrencyCode('');
+      setCurrencyRate('');
+      setRecdDate('');
+      setPoRemarks('');
+      setBuyer('');
     }
   }, [poNo]);
 
@@ -279,7 +279,7 @@ const GrnWithPoForm = (props) => {
             itemType: 0
           };
           arr.push(temp);
-        });    
+        });
       });
       setDetails(arr);
     }
@@ -430,7 +430,7 @@ const GrnWithPoForm = (props) => {
       console.log(details);
       const values = await form.validateFields();
       console.log('Success:', values);
-      
+
       let obj = {
         subtype: 'N',
         grnNo,
@@ -479,7 +479,7 @@ const GrnWithPoForm = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks">
+            <Form form={ form } name="control-hooks" scrollToFirstError>
               <div className="group">
                 <div className="row">
                   {
@@ -492,7 +492,7 @@ const GrnWithPoForm = (props) => {
                         label="GRN No"
                       >
                         <Input hidden />
-                        <Input className='smallInput' InitialValue={grnNo} defaultValue={grnNo} value={ grnNo } placeholder='Type Currency code here...' readOnly disabled={ isDisabled }/>
+                        <Input className='smallInput' InitialValue={ grnNo } defaultValue={ grnNo } value={ grnNo } placeholder='Type Currency code here...' readOnly disabled={ isDisabled } />
                       </Form.Item>
                   }
 
@@ -506,7 +506,7 @@ const GrnWithPoForm = (props) => {
                         label="Currency Code / Rate"
                       >
                         <div className="currInput">
-                          <Input className='smallInput' value={ currencyCode } placeholder='Type Currency code here...' readOnly disabled={ isDisabled }/>
+                          <Input className='smallInput' value={ currencyCode } placeholder='Type Currency code here...' readOnly disabled={ isDisabled } />
                           <span>/</span>
                           <Input className='smallInput' value={ currencyRate } placeholder='Type rate here...' readOnly disabled={ isDisabled } />
                         </div>
@@ -571,7 +571,7 @@ const GrnWithPoForm = (props) => {
                         label="Supplier Code"
                       >
                         <Input hidden />
-                        <Input className='smallInput' value={ supplierCode } placeholder='Type Supplier code here...' readOnly disabled={ isDisabled }/>
+                        <Input className='smallInput' value={ supplierCode } placeholder='Type Supplier code here...' readOnly disabled={ isDisabled } />
                       </Form.Item>
                   }
 
@@ -606,7 +606,7 @@ const GrnWithPoForm = (props) => {
                         label="PO Remarks"
                       >
                         <Input hidden />
-                        <Input.TextArea rows={ 4 } readOnly value={ poRemarks }/>
+                        <Input.TextArea rows={ 4 } readOnly value={ poRemarks } />
                       </Form.Item>
                   }
 
@@ -654,9 +654,9 @@ const GrnWithPoForm = (props) => {
               </div>
 
               <div className="detail-wrapper">
-                { 
+                {
                   details.map((el, idx) => {
-                    console.log('halo', el);   
+                    console.log('halo', el);
                     return (
                       <div className="detail-card">
                         <div className="border">
@@ -667,7 +667,7 @@ const GrnWithPoForm = (props) => {
                                   name="SN"
                                   label="SN"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.sn } value={ el.sn } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly />
+                                  <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly />
                                 </Form.Item>
                               }
 
@@ -715,8 +715,22 @@ const GrnWithPoForm = (props) => {
                                 <Form.Item
                                   name="GRN Qty"
                                   label="GRN Qty"
+                                  rules={ [
+                                    {
+                                      required: true,
+                                    },
+                                    ({ getFieldValue }) => ({
+                                      validator(_, value) {
+                                        if (value > 0) {
+                                          return Promise.resolve();
+                                        }
+
+                                        return Promise.reject(new Error('QTY must more than 0'));
+                                      },
+                                    }),
+                                  ] }
                                 >
-                                  <Input className='smallInput' defaultValue={ el.issuedQty } value={ el.issuedQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' />
+                                  <Input type={ 'number' } className='smallInput' defaultValue={ el.issuedQty } value={ el.issuedQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' />
                                 </Form.Item>
                               }
                             </div>
@@ -733,7 +747,7 @@ const GrnWithPoForm = (props) => {
                               </Form.Item>
                             }
 
-                            { 
+                            {
                               <Form.Item
                                 name="Loc"
                                 label="Loc"
@@ -744,7 +758,7 @@ const GrnWithPoForm = (props) => {
                                   value={ el.loc }
                                   readOnly
                                 />
-                              </Form.Item> 
+                              </Form.Item>
                             }
 
                             <div className="dual">
@@ -761,8 +775,29 @@ const GrnWithPoForm = (props) => {
                                 <Form.Item
                                   name="QTY/Label"
                                   label="QTY/Label"
+                                  rules={ [
+                                    {
+                                      required: true,
+                                    },
+                                    ({ getFieldValue }) => ({
+                                      validator(_, value) {
+                                        if (value > 0 && value <= getFieldValue('GRN Qty')) {
+                                          return Promise.resolve();
+                                        }
+
+                                        if (!value || value === 0) {
+                                          return Promise.reject(new Error('QTY/Label must more than 0'));
+                                        }
+
+                                        if (value > getFieldValue('GRN Qty')) {
+                                          return Promise.reject(new Error("QTY/Label can't be more than GRN QTY"));
+                                        }
+
+                                      },
+                                    }),
+                                  ] }
                                 >
-                                  <Input className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' />
+                                  <Input type={ 'number' } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' />
                                 </Form.Item>
                               }
                             </div>
@@ -792,12 +827,12 @@ const GrnWithPoForm = (props) => {
                             <div className="dual">
 
                               {
-                              <Form.Item
-                                name="Order Qty"
-                                label="Order Qty"
-                              >
-                                <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type order qty here...' readOnly />
-                              </Form.Item>
+                                <Form.Item
+                                  name="Order Qty"
+                                  label="Order Qty"
+                                >
+                                  <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type order qty here...' readOnly />
+                                </Form.Item>
                               }
 
                               {
@@ -809,9 +844,9 @@ const GrnWithPoForm = (props) => {
                                 </Form.Item>
                               }
                             </div>
-                            
+
                             <div className="dual">
-                              
+
                               {
                                 <Form.Item
                                   name="Std Pack"
@@ -840,7 +875,7 @@ const GrnWithPoForm = (props) => {
                                 name="Description"
                                 label="Description"
                               >
-                                <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly />
+                                <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' />
                               </Form.Item>
                             }
 
@@ -849,7 +884,7 @@ const GrnWithPoForm = (props) => {
                                 name="Remarks"
                                 label="Remarks"
                               >
-                                <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' readOnly />
+                                <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' />
                               </Form.Item>
                             }
 
@@ -861,7 +896,7 @@ const GrnWithPoForm = (props) => {
                             idx !== 0 &&
                             <TiDelete color='red' size={ 30 } onClick={ () => deleteDetail(idx) } />
                           }
-                          <MdAddCircle color='#1990ff' size={ 24 } onClick={ addNewDetail } />
+                          {/* <MdAddCircle color='#1990ff' size={ 24 } onClick={ addNewDetail } /> */ }
                         </div>
 
                       </div>

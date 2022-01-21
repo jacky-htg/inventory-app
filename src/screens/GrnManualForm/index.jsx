@@ -4,6 +4,7 @@ import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Lov, Location, Item } from '../../services';
 import { MdAddCircle } from 'react-icons/md';
 import { TiDelete } from 'react-icons/ti';
+import moment from 'moment';
 
 import { StyledDiv } from './styled';
 import env from '../../env';
@@ -80,6 +81,12 @@ const GrnManualForm = (props) => {
   const [uom, setUom] = useState('');
   const [uomName, setUomName] = useState('');
   const [version, setVersion] = useState(0);
+
+  const [currencyCode, setCurrencyCode] = useState('');
+  const [currencyRate, setCurrencyRate] = useState('');
+  const [recdDate, setRecdDate] = useState('');
+  const [entryUser, setEntryUser] = useState('');
+  const [entryDate, setEntryDate] = useState('');
 
   useEffect(() => {
     if (
@@ -438,7 +445,8 @@ const GrnManualForm = (props) => {
                         label="GRN No"
                       >
                         <AutoComplete
-                          className='normal' disabled={ isDisabled }
+                          // className='normal'
+                          disabled={ true }
                           defaultValue={ loc }
                           value={ loc }
                           options={ locOpt }
@@ -460,16 +468,10 @@ const GrnManualForm = (props) => {
                         name="Currency Code"
                         label="Currency Code"
                       >
-                        <AutoComplete
+                        <Input
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Type currency code here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
+                          value={ currencyCode }
+                          readOnly
                         />
                       </Form.Item>
                   }
@@ -483,16 +485,10 @@ const GrnManualForm = (props) => {
                         name="Recd Date"
                         label="Recd Date"
                       >
-                        <AutoComplete
+                        <Input
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Type recd date here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
+                          value={ recdDate }
+                          readOnly
                         />
                       </Form.Item>
                   }
@@ -554,16 +550,10 @@ const GrnManualForm = (props) => {
                         name="Currency Rate"
                         label="Currency Rate"
                       >
-                        <AutoComplete
+                        <Input
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Type currency rate here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
+                          value={ currencyRate }
+                          readOnly
                         />
                       </Form.Item>
                   }
@@ -577,16 +567,10 @@ const GrnManualForm = (props) => {
                         name="Entry User"
                         label="Entry User"
                       >
-                        <AutoComplete
+                        <Input
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Entry user..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
+                          value={ currencyCode }
+                          readOnly
                         />
                       </Form.Item>
                   }
@@ -656,16 +640,10 @@ const GrnManualForm = (props) => {
                         name="Entry Date"
                         label="Entry Date"
                       >
-                        <AutoComplete
+                        <Input
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Entry date.." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
+                          value={ entryDate }
+                          readOnly
                         />
                       </Form.Item>
                   }
@@ -708,7 +686,7 @@ const GrnManualForm = (props) => {
                                   name="SN"
                                   label="SN"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.sn } value={ el.sn } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' />
+                                  <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' />
                                 </Form.Item>
                               }
 
@@ -737,7 +715,7 @@ const GrnManualForm = (props) => {
                                   name="MSL"
                                   label="MSL"
                                 >
-                                  <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' />
+                                  <Input disabled className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' />
                                 </Form.Item>
                               }
                             </div>
@@ -747,6 +725,20 @@ const GrnManualForm = (props) => {
                                 <Form.Item
                                   name="Recd Price"
                                   label="Recd Price"
+                                  rules={ [
+                                    {
+                                      required: true,
+                                    },
+                                    ({ getFieldValue }) => ({
+                                      validator(_, value) {
+                                        if (value > 0) {
+                                          return Promise.resolve();
+                                        }
+
+                                        return Promise.reject(new Error('Price must be more than 0'));
+                                      },
+                                    }),
+                                  ] }
                                 >
                                   <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'recdPrice', e.target.value) } placeholder='Type Recd Price here...' />
                                 </Form.Item>
@@ -756,8 +748,22 @@ const GrnManualForm = (props) => {
                                 <Form.Item
                                   name="Recd Qty"
                                   label="Recd Qty"
+                                  rules={ [
+                                    {
+                                      required: true,
+                                    },
+                                    ({ getFieldValue }) => ({
+                                      validator(_, value) {
+                                        if (value > 0) {
+                                          return Promise.resolve();
+                                        }
+
+                                        return Promise.reject(new Error('QTY must be more than 0'));
+                                      },
+                                    }),
+                                  ] }
                                 >
-                                  <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type Recd Qty here...' />
+                                  <Input type={ 'number' } className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type Recd Qty here...' />
                                 </Form.Item>
                               }
                             </div>
@@ -780,7 +786,8 @@ const GrnManualForm = (props) => {
                                 label="Loc"
                               >
                                 <AutoComplete
-                                  className='normal' disabled={ isDisabled }
+                                  disabled
+
                                   defaultValue={ loc }
                                   value={ loc }
                                   options={ locOpt }
@@ -798,6 +805,27 @@ const GrnManualForm = (props) => {
                                 <Form.Item
                                   name="QTY/Label"
                                   label="QTY/Label"
+                                  rules={ [
+                                    {
+                                      required: true,
+                                    },
+                                    ({ getFieldValue }) => ({
+                                      validator(_, value) {
+                                        if (value > 0 && value <= getFieldValue('Recd Qty')) {
+                                          return Promise.resolve();
+                                        }
+
+                                        if (!value || value === 0) {
+                                          return Promise.reject(new Error('QTY/Label must more than 0'));
+                                        }
+
+                                        if (value > getFieldValue('GRN Qty')) {
+                                          return Promise.reject(new Error("QTY/Label can't be more than Recd QTY"));
+                                        }
+
+                                      },
+                                    }),
+                                  ] }
                                 >
                                   <Input className='smallInput' defaultValue={ el.qtyLabel } value={ el.qtyLabel } onChange={ e => changeDetail(idx, 'qtyLabel', e.target.value) } placeholder='Type Qty/Label here...' />
                                 </Form.Item>
@@ -807,6 +835,66 @@ const GrnManualForm = (props) => {
                                 <Form.Item
                                   name="Date Code"
                                   label="Date Code"
+                                  rules={ [
+                                    {
+                                      required: false,
+                                    },
+                                    ({ getFieldValue }) => ({
+                                      validator(_, value) {
+                                        // if ()
+                                        let year = '';
+                                        let week = '';
+                                        let maxWeek = 53;
+                                        let flag = false;
+
+                                        value.split('').forEach((el, id) => {
+                                          if (id < 2) {
+                                            year += el;
+                                          } else {
+                                            week += el;
+                                          }
+                                        });
+
+                                        // year = parseInt(year);
+                                        // week = parseInt(week);
+
+                                        let momentYear = '';
+                                        (moment().year() + '').split('').forEach((el, id) => {
+                                          if (id > 1) {
+                                            momentYear += el;
+                                          }
+                                        });
+                                        momentYear = parseInt(momentYear);
+                                        let momentWeek = moment().week();
+
+                                        console.log('year :>> ', year);
+                                        console.log('week :>> ', week);
+                                        console.log('momentYear :>> ', momentYear);
+                                        console.log('momentWeek :>> ', momentWeek);
+
+                                        if (year < momentYear) {
+                                          if (week > 0 && week <= maxWeek) {
+                                            flag = true;
+                                          }
+                                        }
+
+                                        if (year == momentYear) {
+                                          if (week > 0 && week <= momentWeek) {
+                                            flag = true;
+                                          }
+                                        }
+
+
+                                        if (!value || flag) {
+                                          return Promise.resolve();
+                                        }
+
+                                        return Promise.reject(new Error('Datecode not valid'));
+
+
+                                      },
+                                    }),
+                                  ] }
                                 >
                                   <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' />
                                 </Form.Item>

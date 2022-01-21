@@ -441,7 +441,7 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks">
+            <Form form={ form } name="control-hooks" scrollToFirstError>
               <div className="group">
                 <div className="row">
                   {
