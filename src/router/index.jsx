@@ -27,7 +27,9 @@ import {
   ItemCategory,
   ItemCategoryForm,
   InventoryControl,
-  InventoryControlForm
+  InventoryControlForm,
+  Msr,
+  MsrForm
 } from '../screens';
 import { Sidebar } from '../components';
 import { Colors, Images } from '../constant';
@@ -120,6 +122,18 @@ const publicRoutes = [
   {
     path: '/inventory-controls/:id',
     component: InventoryControlForm
+  },
+  {
+    path: '/msr',
+    component: Msr
+  },
+  {
+    path: '/msr/create',
+    component: MsrForm
+  },
+  {
+    path: '/msr/:id',
+    component: MsrForm
   }
 
 ];

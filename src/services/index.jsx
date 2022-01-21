@@ -6,6 +6,7 @@ import Grn from './grn';
 import Uom from './uom';
 import ItemCategory from './itemCategories';
 import InventoryControl from './inventoryControl';
+import Msr from './msr';
 
 
 export {
@@ -16,5 +17,6 @@ export {
   Grn,
   Uom,
   ItemCategory,
-  InventoryControl
+  InventoryControl,
+  Msr
 };

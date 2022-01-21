@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Space, Select, Form, Input, message, Popconfirm, Modal, Divider, Checkbox } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { StyledDiv } from './styled';
-import { GiConsoleController } from 'react-icons/gi';
 
 function PageList(props) {
   const { Option } = Select;
@@ -50,17 +49,19 @@ function PageList(props) {
   }, [optionFilters]);
 
   useEffect(() => {
-    const temp = [];
-    fields.map(e => {
-      for (let i = 0; i < props.fields.length; i++) {
-        if (props.fields[i] && props.fields[i].field === e)  {
-          temp.push(<Column title={ props.fields[i].label } dataIndex={e} key={e} />);
-          break;
+    if (fields.length > 0) {
+      const temp = [];
+      fields.map(e => {
+        for (let i = 0; i < props.fields.length; i++) {
+          if (props.fields[i] && props.fields[i].field === e)  {
+            temp.push(<Column title={ props.fields[i].label } dataIndex={e} key={e} />);
+            break;
+          }
         }
-      }
-    });
-    setColumns(temp);
-    setModal();
+      });
+      setColumns(temp);
+      setModal();
+    }
   }, [fields]);
 
   const setupFields = (arr) => {
@@ -194,7 +195,7 @@ function PageList(props) {
         defaultValue={ filters[n] ? filters[n].value : "" }
       />
     );
-      console.log('halo', lookups)
+    
     lookups.map( el => {
       if (filters[n] && filters[n].field === el.field) {
         valueForm = (
@@ -317,13 +318,24 @@ function PageList(props) {
     } else if (fields.length < 8) {
       fields.push(e);
     }
+    
     setFields(fields);
+    
+    const temp = [];
+    fields.map(e => {
+      for (let i = 0; i < props.fields.length; i++) {
+        if (props.fields[i] && props.fields[i].field === e)  {
+          temp.push(<Column title={ props.fields[i].label } dataIndex={e} key={e} />);
+          break;
+        }
+      }
+    });
+    setColumns(temp);
     setModal();
   };
 
   const setModal = () => {
     const temp = [];
-    console.log('cek', fields);
     props.fields.map(e => {
       let isChecked = false;
       if (fields.includes(e.field)) {
@@ -353,7 +365,7 @@ function PageList(props) {
       <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>{props.title}</h2>
       { props.filter && filter }
       <div style={ { textAlign: 'right' } }>
-        <Button onClick={ showModal }>Settings</Button>
+        <Button onClick={ showModal }>Column Settings</Button>
         <Divider type="vertical" />
         <Button onClick={ () => history.push(`/${props.url}/create`) } type="primary" style={ { marginBottom: 16 } } disabled={disabledCreate}>
           Add a row

@@ -61,8 +61,8 @@ function Sidebar() {
         },
         {
           title: 'MSR Entry',
-          link: '',
-          isActive: false
+          link: '/msr',
+          isActive: true
         },
         {
           title: 'MRV Entry',
@@ -215,7 +215,8 @@ function Sidebar() {
       history.location.pathname.includes('/grn-manuals') || 
       history.location.pathname.includes('/uoms') || 
       history.location.pathname.includes('/item-categories') ||
-      history.location.pathname.includes('/inventory-controls')
+      history.location.pathname.includes('/inventory-controls') ||
+      history.location.pathname.includes('/msr')
     ) {
       setSelectedMenu(itemMenu);
     }
