@@ -32,7 +32,7 @@ const StockLocationForm = (props) => {
   const [address3, setAddress3] = useState('');
   const [address4, setAddress4] = useState('');
   const [postalCode, setPostalCode] = useState('');
-  const [countryName, setCountryName] = useState('');
+  const [countryName, setCountryName] = useState();
   const [countryCode, setCountryCode] = useState('');
   const [regionCode, setRegionCode] = useState('');
   const [stateCode, setStateCode] = useState('');
@@ -51,10 +51,11 @@ const StockLocationForm = (props) => {
       setCountriesData(res);
       let temp = [];
       res.forEach(el => {
-        temp.push({
+        /*temp.push({
           value: el.description,
           // code: el.code
-        });
+        });*/
+        temp.push(<Option key={ el.description } value={ el.description } >{ el.description }</Option>);
       });
       setCountriesOpt(temp);
       if (id) {
@@ -288,17 +289,20 @@ const StockLocationForm = (props) => {
                         },
                       ] }
                     >
-                      <AutoComplete
-                        disabled={ isDisabled }
-                        defaultValue={ countryName }
-                        value={ countryName }
-                        options={ countriesOpt }
-                        onSelect={ onSelectCountry }
-                        placeholder={ "Type country name here..." }
-                        filterOption={ (inputValue, option) =>
-                          option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                        }
-                      />
+                      <Select
+                          showSearch
+                          allowClear
+                          className='normal' disabled={ isDisabled }
+                          defaultValue={ countryName }
+                          value={ countryName }
+                          placeholder="Please select"
+                          onChange={ (value) => onSelectCountry(value) }
+                          filterOption={ (input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                        >
+                          { countriesOpt }
+                        </Select>
                     </Form.Item>
                 }
 
