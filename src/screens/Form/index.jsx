@@ -38,7 +38,7 @@ const FormPage = (props) => {
 
   const [balbfQty, setBalbfQty] = useState(0);
   const [categoryCode, setCategoryCode] = useState('');
-  const [categoryName, setCategoryName] = useState('');
+  const [categoryName, setCategoryName] = useState();
   const [categorySubCode, setCategorySubCode] = useState('');
   const [categorySubCodeName, setCategorySubCodeName] = useState('');
   const [description, setDescription] = useState('');
@@ -46,13 +46,13 @@ const FormPage = (props) => {
   const [issueNo, setIssueNo] = useState('');
   const [itemNo, setItemNo] = useState('');
   const [leadtime, setLeadtime] = useState(0);
-  const [loc, setLoc] = useState('');
+  const [loc, setLoc] = useState();
   const [manufacturer, setManufacturer] = useState('');
   const [mslCode, setMslCode] = useState('');
-  const [mslCodeName, setMslCodeName] = useState('');
-  const [obsoleteCode, setObsoleteCode] = useState('');
+  const [mslCodeName, setMslCodeName] = useState();
+  const [obsoleteCode, setObsoleteCode] = useState();
   const [obsoleteItem, setObsoleteItem] = useState('');
-  const [openClose, setOpenClose] = useState('');
+  const [openClose, setOpenClose] = useState();
   const [orderQty, setOrderQty] = useState(0);
   const [partNo, setPartNo] = useState('');
   const [prodnResv, setProdnResv] = useState(0);
@@ -66,12 +66,12 @@ const FormPage = (props) => {
   const [rev, setRev] = useState('');
   const [rohsStatus, setRohsStatus] = useState(false);
   const [source, setSource] = useState('');
-  const [sourceName, setSourceName] = useState('');
+  const [sourceName, setSourceName] = useState();
   const [status, setStatus] = useState('ACTIVE');
   const [stdMaterial, setStdMaterial] = useState(0);
   const [storageShelf, setStorageShelf] = useState('');
   const [uom, setUom] = useState('');
-  const [uomName, setUomName] = useState('');
+  const [uomName, setUomName] = useState();
   const [version, setVersion] = useState(0);
 
   useEffect(() => {
@@ -190,12 +190,17 @@ const FormPage = (props) => {
       // }
       console.log('location :>> ', result.rows);
       setLocData(result.rows);
+
       let temp = [];
       result.rows.forEach(el => {
+        temp.push(<Option key={ el.loc } value={ el.loc } >{ el.loc }</Option>);
+      });
+      
+      /*result.rows.forEach(el => {
         temp.push({
           value: el.loc
         });
-      });
+      });*/
       setLocOpt(temp);
     });
   }, []);
@@ -207,10 +212,11 @@ const FormPage = (props) => {
       setItemCategoriesData(res);
       let temp = [];
       res.forEach(el => {
-        temp.push({
+        /*temp.push({
           value: el.description,
           // code: el.code
-        });
+        });*/
+        temp.push(<Option key={ el.description } value={ el.description } >{ el.description }</Option>);
       });
       setItemCategoriesOpt(temp);
     });
@@ -254,10 +260,11 @@ const FormPage = (props) => {
       setMslData(res);
       let temp = [];
       res.forEach(el => {
-        temp.push({
+        /*temp.push({
           value: el.subtypeDesc,
           // code: el.code
-        });
+        });*/
+        temp.push(<Option key={ el.subtypeDesc } value={ el.subtypeDesc } >{ el.subtypeDesc }</Option>);
       });
       setMslOpt(temp);
     });
@@ -270,10 +277,11 @@ const FormPage = (props) => {
       setSourcesData(res);
       let temp = [];
       res.forEach(el => {
-        temp.push({
+        /*temp.push({
           value: el.codeDesc,
           // code: el.code
-        });
+        });*/
+        temp.push(<Option key={ el.codeDesc } value={ el.codeDesc } >{ el.codeDesc }</Option>);
       });
       setSourcesOpt(temp);
     });
@@ -286,10 +294,11 @@ const FormPage = (props) => {
       setUomData(res);
       let temp = [];
       res.forEach(el => {
-        temp.push({
+        /*temp.push({
           value: el.codeDesc,
           // code: el.code
-        });
+        });*/
+        temp.push(<Option key={ el.codeDesc } value={ el.codeDesc } >{ el.codeDesc }</Option>);
       });
       setUomOpt(temp);
     });
@@ -488,18 +497,26 @@ const FormPage = (props) => {
                       <Form.Item
                         name="Location"
                         label="Location"
+                        rules={ [
+                          {
+                            required: true,
+                          },
+                        ] }
                       >
-                        <AutoComplete
+                        <Select
+                          showSearch
+                          allowClear
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Type loc here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                          defaultValue={loc}
+                          value={loc}
+                          placeholder="Please select"
+                          onChange={ (value) => setLoc(value) }
+                          filterOption={ (input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                           }
-                        />
+                        >
+                          { locOpt }
+                        </Select>
                       </Form.Item>
                   }
 
@@ -511,18 +528,26 @@ const FormPage = (props) => {
                       <Form.Item
                         name="catCode"
                         label="Category Code"
+                        rules={ [
+                          {
+                            required: true,
+                          },
+                        ] }
                       >
-                        <AutoComplete
+                        <Select
+                          showSearch
+                          allowClear
                           className='normal' disabled={ isDisabled }
                           defaultValue={ categoryName }
                           value={ categoryName }
-                          options={ itemCategoriesOpt }
-                          onSelect={ onSelectCategoryCode }
-                          placeholder={ "Type category code here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                          placeholder="Please select"
+                          onChange={ (value) => onSelectCategoryCode(value) }
+                          filterOption={ (input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                           }
-                        />
+                        >
+                          { itemCategoriesOpt }
+                        </Select>
                       </Form.Item>
                   }
                 </div>
@@ -535,19 +560,26 @@ const FormPage = (props) => {
                       <Form.Item
                         name="source"
                         label="Source"
-
+                        rules={ [
+                          {
+                            required: true,
+                          },
+                        ] }
                       >
-                        <AutoComplete
+                        <Select
+                          showSearch
+                          allowClear
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ sourceName }
-                          value={ sourceName }
-                          options={ sourcesOpt }
-                          onSelect={ onSelectSource }
-                          placeholder={ "Type source here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                          defaultValue={sourceName}
+                          value={sourceName}
+                          placeholder="Please select"
+                          onChange={ (value) => onSelectSource(value) }
+                          filterOption={ (input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                           }
-                        />
+                        >
+                          { sourcesOpt }
+                        </Select>
                       </Form.Item>
                   }
 
@@ -559,7 +591,11 @@ const FormPage = (props) => {
                       <Form.Item
                         name="catSubCode"
                         label="Category Sub Code"
-
+                        rules={ [
+                          {
+                            required: true,
+                          },
+                        ] }
                       >
                         <AutoComplete
                           disabled={ isDisabled || !categoryCode }
@@ -615,17 +651,20 @@ const FormPage = (props) => {
                         label="Moisture Sensitivity Level"
 
                       >
-                        <AutoComplete
+                        <Select
+                          showSearch
+                          allowClear
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ mslCodeName }
-                          value={ mslCodeName }
-                          options={ mslOpt }
-                          onSelect={ onSelectMsl }
-                          placeholder={ "Type the level here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                          defaultValue={mslCodeName}
+                          value={mslCodeName}
+                          placeholder="Please select"
+                          onChange={ (value) => onSelectMsl(value) }
+                          filterOption={ (input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                           }
-                        />
+                        >
+                          { mslOpt }
+                        </Select>
                       </Form.Item>
                   }
 
@@ -727,17 +766,20 @@ const FormPage = (props) => {
                         name="uom"
                         label="UOM"
                       >
-                        <AutoComplete
+                        <Select
+                          showSearch
+                          allowClear
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ uomName }
-                          value={ uomName }
-                          options={ uomOpt }
-                          onSelect={ onSelectUOM }
-                          placeholder={ "Type uom here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                          defaultValue={uomName}
+                          value={uomName}
+                          placeholder="Please select"
+                          onChange={ (value) => onSelectUOM(value) }
+                          filterOption={ (input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                           }
-                        />
+                        >
+                          { uomOpt }
+                        </Select>
                       </Form.Item>
                   }
 
