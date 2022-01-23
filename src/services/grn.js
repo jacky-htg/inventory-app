@@ -111,7 +111,7 @@ async function headerByPono(poNo) {
 }
 
 async function partsByPono(poNo) {
-  return await fetch(`${env.url}/grns/partno?poNo=${poNo}`, {
+  return await fetch(`${env.url}/grns/partno?poNo=${poNo}&partNo=&itemNo=`, {
     method: "GET",
     headers: {
       "X-USERNAME": env.username,
