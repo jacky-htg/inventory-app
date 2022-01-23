@@ -9,7 +9,17 @@ async function list() {
         'X-COMPANYCODE': env.companyCode,
         'X-PLANTNO': env.plantNo
       }
-    }).then(res => res.json());
+    })
+    .then((res) => {
+      if (!res.ok) {
+        return {ok:false, data: res.json()};
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
 }
 
 export default {list}

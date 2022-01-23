@@ -61,9 +61,6 @@ const StockLocationForm = (props) => {
       if (id) {
         const data = Location.view(id);
         data.then(result => {
-          // if (result.status && result.status !== 200) {
-          //   message.error(result.error);
-          // }
           result.address1 && setAddress1(result.address1);
           result.address2 && setAddress2(result.address2);
           result.address3 && setAddress3(result.address3);
@@ -152,9 +149,17 @@ const StockLocationForm = (props) => {
       };
       console.log('obj :>> ', obj);
       if (isEdit) {
-        Location.edit(id, obj);
+        const hasil = await Location.edit(id, obj);
+        if (hasil.ok !== undefined && !hasil.ok) {
+          const res = await hasil.data;
+          message.error(res.message);
+        }
       } else {
-        Location.create(obj);
+        const hasil = await Location.create(obj);
+        if (hasil.ok !== undefined && !hasil.ok) {
+          const res = await hasil.data;
+          message.error(res.message);
+        }
       }
       history.push('/stock-locations');
     } catch (errorInfo) {
@@ -187,6 +192,7 @@ const StockLocationForm = (props) => {
                     <Form.Item
                       name="Loc"
                       label="Loc"
+                      initialValue={loc}
                       rules={ [
                         {
                           required: true,
@@ -203,8 +209,8 @@ const StockLocationForm = (props) => {
                     <></>
                     :
                     <Form.Item
-                      name="Descripction"
-                      label="Descripction"
+                      name="Description"
+                      label="Description"
                     >
                       <Input disabled={ isDisabled } defaultValue={ description } value={ description } onChange={ e => setDescription(e.target.value) } placeholder={ 'Type descripction here...' } />
                     </Form.Item>
@@ -283,9 +289,11 @@ const StockLocationForm = (props) => {
                     <Form.Item
                       name="Country Name"
                       label="Country Name"
+                      initialValue={countryName}
                       rules={ [
                         {
                           required: true,
+                          message: 'country name is required'
                         },
                       ] }
                     >

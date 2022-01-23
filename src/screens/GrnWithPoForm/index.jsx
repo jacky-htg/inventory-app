@@ -38,7 +38,7 @@ const GrnWithPoForm = (props) => {
   const [uomData, setUomData] = useState([]);
   const [uomOpt, setUomOpt] = useState([]); */
   const [grnNo, setGrnNo] = useState('');
-  const [poNo, setPoNo] = useState('');
+  const [poNo, setPoNo] = useState();
   const [supplierCode, setSupplierCode] = useState('');
   const [currencyCode, setCurrencyCode] = useState('');
   const [currencyRate, setCurrencyRate] = useState('');
@@ -458,9 +458,13 @@ const GrnWithPoForm = (props) => {
         grnDetList: details
       };
       console.log('obj :>> ', obj);
-      Grn.create(obj).then(res => {
-        history.push('/grn-with-pos');
-      });
+      const hasil = await Grn.create(obj);
+      if (hasil.ok !== undefined && !hasil.ok) {
+        const res = await hasil.data;
+        message.error(res.message);
+      }
+
+      history.push('/grn-with-pos');
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }

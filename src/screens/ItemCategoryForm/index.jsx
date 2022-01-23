@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, InputNumber, Button, Select } from 'antd';
+import { Form, Input, InputNumber, Button, Select, message } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { ItemCategory, Lov } from '../../services';
 
@@ -44,9 +44,6 @@ const FormPage = (props) => {
   useEffect(() => {
     let data = Lov.getCategoryGroups();
     data.then(result => {
-      // if (result.status && result.status !== 200) {
-      //   message.error(result.error);
-      // }
       let temp = [];
       for (const c of result) {
         temp.push(<Option key={ c.codeValue } value={ c.codeValue } >{ c.codeDesc }</Option>);
@@ -70,10 +67,6 @@ const FormPage = (props) => {
     ) {
       const data = ItemCategory.view(id);
       data.then(result => {
-        // if (result.status && result.status !== 200) {
-        //   message.error(result.error);
-        // } else {
-        
         setState(result);
 
         if (result.categoryCode) {
@@ -91,9 +84,17 @@ const FormPage = (props) => {
       let obj = state;
       if (isEdit) {
         obj.version = parseInt(obj.version);
-        ItemCategory.edit(id, obj);
+        const hasil = await ItemCategory.edit(id, obj);
+        if (hasil.ok !== undefined && !hasil.ok) {
+          const res = await hasil.data;
+          message.error(res.message);
+        }
       } else {
-        ItemCategory.create(obj);
+        const hasil = await ItemCategory.create(obj);
+        if (hasil.ok !== undefined && !hasil.ok) {
+          const res = await hasil.data;
+          message.error(res.message);
+        }
       }
       history.push('/item-categories');
     } catch (errorInfo) {
@@ -126,9 +127,11 @@ const FormPage = (props) => {
                       <Form.Item
                         name="categoryCode"
                         label="Category Code"
+                        initialValue={state.categoryCode}
                         rules={ [
                           {
                             required: true,
+                            message: "category code is required"
                           },
                         ] }
                       >
@@ -160,9 +163,11 @@ const FormPage = (props) => {
                       <Form.Item
                         name="categorySubCode"
                         label="Category Sub Code"
+                        initialValue={state.categorySubCode}
                         rules={ [
                           {
                             required: true,
+                            message:"category sub code is required"
                           },
                         ] }
                       >
@@ -194,9 +199,11 @@ const FormPage = (props) => {
                       <Form.Item
                         name="categoryGroup"
                         label="Category Group"
+                        initialValue={state.categoryGroup}
                         rules={ [
                           {
                             required: true,
+                            message: 'category group is required'
                           },
                         ] }
                       >

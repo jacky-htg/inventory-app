@@ -11,11 +11,16 @@ async function list(filterSearch) {
     },
     body: JSON.stringify(filterSearch),
   })
-    .then((res) => res.json())
-    .catch((err) => {
-      console.log("err :>> ", err);
-      message.error(JSON.stringify(err));
-    });
+  .then((res) => {
+    if (!res.ok) {
+      return {ok:false, data: res.json()};
+    } else {
+      return res.json();
+    }
+  })
+  .catch((err) => {
+    console.log("err :>> ", err);
+  });
 }
 
 async function remove(loc) {
@@ -28,10 +33,16 @@ async function remove(loc) {
       "X-PLANTNO": env.plantNo,
     },
   })
-    .catch((err) => {
-      console.log("err :>> ", err);
-      message.error(JSON.stringify(err));
-    });
+  .then((res) => {
+    if (!res.ok) {
+      return {ok:false, data: res.json()};
+    } else {
+      return res.json();
+    }
+  })
+  .catch((err) => {
+    console.log("err :>> ", err);
+  });
 }
 
 async function create(data) {
@@ -46,16 +57,16 @@ async function create(data) {
     },
     body: JSON.stringify(data),
   })
-    .then((res) => {
+  .then((res) => {
+    if (!res.ok) {
+      return {ok:false, data: res.json()};
+    } else {
       return res.json();
-    })
-    .then((res) => {
-      console.log("res :>> ", res);
-    })
-    .catch((err) => {
-      console.log("err :>> ", err);
-      message.error(JSON.stringify(err));
-    });
+    }
+  })
+  .catch((err) => {
+    console.log("err :>> ", err);
+  });
 }
 
 async function edit(itemNo, data) {
@@ -70,16 +81,16 @@ async function edit(itemNo, data) {
     },
     body: JSON.stringify(data),
   })
-    .then((res) => {
+  .then((res) => {
+    if (!res.ok) {
+      return {ok:false, data: res.json()};
+    } else {
       return res.json();
-    })
-    .then((res) => {
-      console.log("res :>> ", res);
-    })
-    .catch((err) => {
-      console.log("err :>> ", err);
-      message.error(JSON.stringify(err));
-    });
+    }
+  })
+  .catch((err) => {
+    console.log("err :>> ", err);
+  });
 }
 
 async function view(id) {
@@ -91,8 +102,16 @@ async function view(id) {
       "X-PLANTNO": env.plantNo,
     },
   })
-    .then((res) => res.json())
-    .catch((err) => console.log("err :>> ", err));
+  .then((res) => {
+    if (!res.ok) {
+      return {ok:false, data: res.json()};
+    } else {
+      return res.json();
+    }
+  })
+  .catch((err) => {
+    console.log("err :>> ", err);
+  });
 }
 
 export default { list, remove, create, edit, view };

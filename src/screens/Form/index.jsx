@@ -86,9 +86,6 @@ const FormPage = (props) => {
       const data = Item.view(id);
       data.then(result => {
         console.log('result :>> ', result);
-        // if (result.status && result.status !== 200) {
-        //   message.error(result.error);
-        // } else {
         result.balbfQty && setBalbfQty(result.balbfQty);
         result.categoryCode && setCategoryCode(result.categoryCode);
         if (result.categoryCode) {
@@ -185,9 +182,6 @@ const FormPage = (props) => {
   useEffect(() => {
     let data = Location.list({});
     data.then(result => {
-      // if (result.status && result.status !== 200) {
-      //   message.error(result.error);
-      // }
       console.log('location :>> ', result.rows);
       setLocData(result.rows);
 
@@ -426,9 +420,17 @@ const FormPage = (props) => {
       console.log('obj :>> ', obj);
       if (isEdit) {
         obj.version = parseInt(version);
-        Item.edit(id, obj);
+        const hasil = await Item.edit(id, obj);
+        if (hasil.ok !== undefined && !hasil.ok) {
+          const res = await hasil.data;
+          message.error(res.message);
+        }
       } else {
-        Item.create(obj);
+        const hasil = await Item.create(obj);
+        if (hasil.ok !== undefined && !hasil.ok) {
+          const res = await hasil.data;
+          message.error(res.message);
+        }
       }
       history.push('/items');
     } catch (errorInfo) {
@@ -461,6 +463,7 @@ const FormPage = (props) => {
                       <Form.Item
                         name="Item No"
                         label="Item No"
+                        initialValue={itemNo}
                         rules={ [
                           {
                             required: true,
@@ -497,6 +500,7 @@ const FormPage = (props) => {
                       <Form.Item
                         name="Location"
                         label="Location"
+                        initialValue={loc}
                         rules={ [
                           {
                             required: true,
@@ -528,9 +532,11 @@ const FormPage = (props) => {
                       <Form.Item
                         name="catCode"
                         label="Category Code"
+                        initialValue={categoryName}
                         rules={ [
                           {
                             required: true,
+                            message: 'category is required'
                           },
                         ] }
                       >
@@ -560,6 +566,7 @@ const FormPage = (props) => {
                       <Form.Item
                         name="source"
                         label="Source"
+                        initialValue={sourceName}
                         rules={ [
                           {
                             required: true,
@@ -591,9 +598,11 @@ const FormPage = (props) => {
                       <Form.Item
                         name="catSubCode"
                         label="Category Sub Code"
+                        initialValue={categorySubCodeName}
                         rules={ [
                           {
                             required: true,
+                            message: 'sub category is required'
                           },
                         ] }
                       >
