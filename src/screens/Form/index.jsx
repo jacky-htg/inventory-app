@@ -7,6 +7,7 @@ import { StyledDiv } from './styled';
 import env from '../../env';
 import { Images } from '../../constant';
 import { parse } from 'postcss';
+import { useRef } from 'react';
 
 const FormPage = (props) => {
   const history = useHistory();
@@ -73,6 +74,8 @@ const FormPage = (props) => {
   const [uom, setUom] = useState('');
   const [uomName, setUomName] = useState();
   const [version, setVersion] = useState(0);
+  
+  const [errorFields, setErrorFields] = useState([]); 
 
   useEffect(() => {
     if (
@@ -434,9 +437,35 @@ const FormPage = (props) => {
       }
       history.push('/items');
     } catch (errorInfo) {
-      console.log('Failed:', errorInfo);
+      const temp = [];
+      errorInfo.errorFields.map(e => {
+        temp.push(e.name[0]);
+      });
+      setErrorFields(temp);
+      console.log('Failed:', errorInfo, errorFields);
     }
   };
+
+  const itemNoRef = useRef();
+  const locationRef = useRef();
+  const catCodeRef = useRef();  
+  const sourceRef = useRef();
+  const catSubCodeRef = useRef();
+
+  useEffect(()=> {
+    console.log('errrr', errorFields);
+    if (errorFields.includes("Item No")) {
+      itemNoRef.current.focus();
+    } else if (errorFields.includes("Location")) {
+      locationRef.current.focus();
+    } else if (errorFields.includes("catCode")) {
+      catCodeRef.current.focus();
+    } else if (errorFields.includes("source")) {
+      sourceRef.current.focus();
+    } else if (errorFields.includes("catSubCode")) {
+      catSubCodeRef.current.focus();
+    } 
+  }, [errorFields, itemNoRef, locationRef, catCodeRef, sourceRef, catSubCodeRef]);
 
   return (
     <StyledDiv>
@@ -470,7 +499,7 @@ const FormPage = (props) => {
                           },
                         ] }
                       >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ itemNo } value={ itemNo } onChange={ e => setItemNo(e.target.value) } placeholder='Type item no here...' />
+                        <Input autoFocus={true} ref={itemNoRef} className='normal' disabled={ isDisabled } defaultValue={ itemNo } value={ itemNo } onChange={ e => setItemNo(e.target.value) } placeholder='Type item no here...' />
                       </Form.Item>
                   }
 
@@ -510,6 +539,7 @@ const FormPage = (props) => {
                         <Select
                           showSearch
                           allowClear
+                          ref={locationRef}
                           className='normal' disabled={ isDisabled }
                           defaultValue={loc}
                           value={loc}
@@ -543,6 +573,7 @@ const FormPage = (props) => {
                         <Select
                           showSearch
                           allowClear
+                          ref={catCodeRef}
                           className='normal' disabled={ isDisabled }
                           defaultValue={ categoryName }
                           value={ categoryName }
@@ -576,6 +607,7 @@ const FormPage = (props) => {
                         <Select
                           showSearch
                           allowClear
+                          ref={sourceRef}
                           className='normal' disabled={ isDisabled }
                           defaultValue={sourceName}
                           value={sourceName}
@@ -607,6 +639,7 @@ const FormPage = (props) => {
                         ] }
                       >
                         <AutoComplete
+                          ref={catSubCodeRef}
                           disabled={ isDisabled || !categoryCode }
                           defaultValue={ categorySubCodeName }
                           value={ categorySubCodeName }

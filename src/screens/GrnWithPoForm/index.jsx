@@ -446,6 +446,13 @@ const GrnWithPoForm = (props) => {
       console.log(details);
       const values = await form.validateFields();
       console.log('Success:', values);
+      details.map((e, i) => {
+        details[i]["subType"] = "N";
+        details[i]["grnNo"] = grnNo;
+        details[i]["poNo"] = poNo;
+        details[i]["recdDate"] = e.dueDate;
+      });
+
 
       let obj = {
         subType: 'N',
