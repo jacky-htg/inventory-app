@@ -95,7 +95,23 @@ async function partsByPono(poNo) {
 }
 
 async function detailByPartNo(poNo, partNo, poReqSeq) {
-  return await fetch(`${env.url}/grns/detail?poNo=${poNo}&itemNo=&partNo=${partNo}&poRecSeq=${poReqSeq}`, {
+  return await fetch(
+    `${env.url}/grns/detail?poNo=${poNo}&itemNo=&partNo=${partNo}&poRecSeq=${poReqSeq}`,
+    {
+      method: "GET",
+      headers: {
+        "X-USERNAME": env.username,
+        "X-COMPANYCODE": env.companyCode,
+        "X-PLANTNO": env.plantNo,
+      },
+    }
+  )
+    .then((res) => res.json())
+    .catch((err) => console.log("err :>> ", err));
+}
+
+async function getDefaultGRN() {
+  return await fetch(`${env.url}/grns/default-value`, {
     method: "GET",
     headers: {
       "X-USERNAME": env.username,
@@ -107,4 +123,28 @@ async function detailByPartNo(poNo, partNo, poReqSeq) {
     .catch((err) => console.log("err :>> ", err));
 }
 
-export default { list, create, view, pono, headerByPono, partsByPono, detailByPartNo };
+async function checkNewItem(body) {
+  return await fetch(`${env.url}/grns/check-next-item`, {
+    method: "POST",
+    headers: {
+      "X-USERNAME": env.username,
+      "X-COMPANYCODE": env.companyCode,
+      "X-PLANTNO": env.plantNo,
+    },
+    body: body,
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log("err :>> ", err));
+}
+
+export default {
+  list,
+  create,
+  view,
+  pono,
+  headerByPono,
+  partsByPono,
+  detailByPartNo,
+  getDefaultGRN,
+  checkNewItem,
+};

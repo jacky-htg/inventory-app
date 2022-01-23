@@ -6,12 +6,15 @@ import { MdAddCircle } from 'react-icons/md';
 import { TiDelete } from 'react-icons/ti';
 import moment from 'moment';
 
+import { Grn } from '../../services';
 import { StyledDiv } from './styled';
 import env from '../../env';
 import { Images } from '../../constant';
 import { parse } from 'postcss';
+import GrnDetail from './components/GrnDetail';
 
 const GrnManualForm = (props) => {
+  const { Option } = Select;
   const history = useHistory();
   const { id } = useParams();
   function useQuery() {
@@ -24,9 +27,7 @@ const GrnManualForm = (props) => {
 
   const [form] = Form.useForm();
   const [details, setDetails] = useState([
-    {
-
-    }
+    {}
   ]);
   const [locData, setLocData] = useState([]);
   const [locOpt, setLocOpt] = useState([]);
@@ -81,6 +82,12 @@ const GrnManualForm = (props) => {
   const [uom, setUom] = useState('');
   const [uomName, setUomName] = useState('');
   const [version, setVersion] = useState(0);
+
+  const [grnNo, setGrnNo] = useState(null);
+  const [msrNo, setMsrNo] = useState(null);
+  const [doNo, setDoNo] = useState(null);
+  const [timer, setTimer] = useState(null);
+
 
   const [currencyCode, setCurrencyCode] = useState('');
   const [currencyRate, setCurrencyRate] = useState('');
@@ -215,6 +222,30 @@ const GrnManualForm = (props) => {
   }, []);
 
   useEffect(() => {
+    let data = Grn.getDefaultGRN();
+    data.then(result => {
+      console.log('result :>> ', result);
+      // currencyCode: "USD";
+      // currencyRate: 1;
+      // entryDate: "2022-01-23T00:00:00.000+00:00";
+      // entryUser: "tsagita";
+      // grnNo: "GRM2022-00001";
+      // recdDate: "2022-01-23T00:00:00.000+00:00";
+      // statuz: "Y";
+      // subType: "M"
+      setGrnNo(result.grnNo);
+      setCurrencyCode(result.currencyCode);
+      setCurrencyRate(result.currencyRate);
+      setEntryDate(result.entryDate);
+      setEntryUser(result.entryUser);
+      setRecdDate(result.recdDate);
+      console.log('success');
+    })
+      .catch(err => console.log(err));
+  }, []);
+
+
+  useEffect(() => {
     const data = Lov.getItemCategories();
     data.then(res => {
       console.log('getItemCategories :>> ', res);
@@ -345,7 +376,7 @@ const GrnManualForm = (props) => {
     });
   };
 
-  const onSelectUOM = (data) => {
+  const onSelectUOM = (idx, data) => {
     uomData.forEach(el => {
       if (el.codeDesc === data) {
         setUom(el.codeValue);
@@ -353,6 +384,19 @@ const GrnManualForm = (props) => {
       }
     });
   };
+
+  const changeDetail = (idx, field, value) => {
+    console.log('idx :>> ', idx);
+    console.log('field :>> ', field);
+    console.log('value :>> ', value);
+
+    let temp = [...details];
+    temp[idx][field] = value;
+    setDetails(temp);
+    console.log('details[idx] :>> ', details[idx]);
+    setDetails(details);
+  };
+
 
   const submit = async () => {
     try {
@@ -418,6 +462,52 @@ const GrnManualForm = (props) => {
     setDetails(arr);
   };
 
+  // const onSearchPress = () => {
+  //   clearTimeout(timer);
+  //   setTimer(setTimeout(getPeople, 1000));
+  // }
+
+  const onSearchPress = (idx, field, value) => {
+    console.log('idx, field, value :>> ', idx, field, value);
+    clearTimeout(timer);
+    let temp = [...details];
+    temp[idx][field] = value;
+    setDetails(temp);
+    let body = {
+      "msrNo": msrNo,
+      "grnDetails": details
+      // [
+      // {
+      //   "itemType": 0,
+      //   "itemNo": "801-10033-04",
+      //   "projectNo": "PR2019-00017",
+      //   "poNo": "100014-2019"
+      // }
+      // ]
+    };
+    setTimer(setTimeout(() => {
+      console.log('body :>> ', body);
+      // Grn.checkNewItem(body);
+    }, 1500));
+    // Grn.checkNewItem();
+  };
+
+  const checkRequiredDetail = idx => {
+    let detail = details[idx];
+    console.log('detail :>> ', detail);
+    if (
+      detail.recdPrice &&
+      detail.recdQty &&
+      detail.qtyLabel
+    ) {
+      console.log('sini');
+      return true;
+    }
+    console.log('sono');
+
+    return false;
+  };
+
   return (
     <StyledDiv>
       <div className="header">
@@ -432,11 +522,11 @@ const GrnManualForm = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks">
+            <Form form={ form } name="control-hooks" scrollToFirstError>
               <div className="group">
                 <div className="row2">
                   {
-                    !loc && id && !isEdit
+                    !grnNo && id && !isEdit
                       ?
                       <></>
                       :
@@ -444,23 +534,18 @@ const GrnManualForm = (props) => {
                         name="GRN No"
                         label="GRN No"
                       >
-                        <AutoComplete
-                          // className='normal'
-                          disabled={ true }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Type GRN No here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
+                        <Input hidden />
+                        <Input
+                          className='normal' disabled={ isDisabled }
+                          value={ grnNo }
+                          defaultValue={ grnNo }
+                          readOnly
                         />
                       </Form.Item>
                   }
 
                   {
-                    !loc && id && !isEdit
+                    !currencyCode && id && !isEdit
                       ?
                       <></>
                       :
@@ -468,16 +553,18 @@ const GrnManualForm = (props) => {
                         name="Currency Code"
                         label="Currency Code"
                       >
+                        <Input hidden />
                         <Input
                           className='normal' disabled={ isDisabled }
                           value={ currencyCode }
+                          defaultValue={ currencyCode }
                           readOnly
                         />
                       </Form.Item>
                   }
 
                   {
-                    !loc && id && !isEdit
+                    !recdDate && id && !isEdit
                       ?
                       <></>
                       :
@@ -485,64 +572,43 @@ const GrnManualForm = (props) => {
                         name="Recd Date"
                         label="Recd Date"
                       >
+                        <Input hidden />
                         <Input
                           className='normal' disabled={ isDisabled }
                           value={ recdDate }
+                          defaultValue={ recdDate }
                           readOnly
                         />
                       </Form.Item>
                   }
-
-                  {/* {
-                    !categoryName && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="catCode"
-                        label="Category Code"
-                      >
-                        <AutoComplete
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ categoryName }
-                          value={ categoryName }
-                          options={ itemCategoriesOpt }
-                          onSelect={ onSelectCategoryCode }
-                          placeholder={ "Type category code here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
-                      </Form.Item>
-                  } */}
                 </div>
 
                 <div className="row2">
                   {
-                    !loc && id && !isEdit
+                    !msrNo && id && !isEdit
                       ?
                       <></>
                       :
                       <Form.Item
                         name="MSR No"
                         label="MSR No"
+                        rules={ [
+                          {
+                            required: true,
+                          },
+                        ] }
                       >
-                        <AutoComplete
+                        <Input
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Type MSR No here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
+                          value={ msrNo }
+                          defaultValue={ msrNo }
+                          placeholder='Type MSR No here...'
                         />
                       </Form.Item>
                   }
 
                   {
-                    !loc && id && !isEdit
+                    !currencyRate && id && !isEdit
                       ?
                       <></>
                       :
@@ -550,16 +616,18 @@ const GrnManualForm = (props) => {
                         name="Currency Rate"
                         label="Currency Rate"
                       >
+                        <Input hidden />
                         <Input
                           className='normal' disabled={ isDisabled }
                           value={ currencyRate }
+                          defaultValue={ currencyRate }
                           readOnly
                         />
                       </Form.Item>
                   }
 
                   {
-                    !loc && id && !isEdit
+                    !currencyCode && id && !isEdit
                       ?
                       <></>
                       :
@@ -567,41 +635,20 @@ const GrnManualForm = (props) => {
                         name="Entry User"
                         label="Entry User"
                       >
+                        <Input hidden />
                         <Input
                           className='normal' disabled={ isDisabled }
                           value={ currencyCode }
+                          defaultValue={ currencyCode }
                           readOnly
                         />
                       </Form.Item>
                   }
-
-                  {/* {
-                    !categoryName && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="catCode"
-                        label="Category Code"
-                      >
-                        <AutoComplete
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ categoryName }
-                          value={ categoryName }
-                          options={ itemCategoriesOpt }
-                          onSelect={ onSelectCategoryCode }
-                          placeholder={ "Type category code here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
-                      </Form.Item>
-                  } */}
                 </div>
 
                 <div className="row2">
                   {
-                    !loc && id && !isEdit
+                    !doNo && id && !isEdit
                       ?
                       <></>
                       :
@@ -609,30 +656,20 @@ const GrnManualForm = (props) => {
                         name="DO No"
                         label="DO No"
                       >
-                        <AutoComplete
+                        <Input
                           className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          options={ locOpt }
-                          onSelect={ data => setLoc(data) }
-                          placeholder={ "Type DO No here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
+                          value={ doNo }
+                          defaultValue={ doNo }
+                          placeholder='Type Do No here...'
                         />
                       </Form.Item>
                   }
 
-                  {
-                    !loc && id && !isEdit
-                      ?
-                      <Form.Item></Form.Item>
-                      :
-                      <Form.Item></Form.Item>
-                  }
+
+                  <Form.Item></Form.Item>
 
                   {
-                    !loc && id && !isEdit
+                    !entryDate && id && !isEdit
                       ?
                       <></>
                       :
@@ -640,36 +677,15 @@ const GrnManualForm = (props) => {
                         name="Entry Date"
                         label="Entry Date"
                       >
+                        <Input hidden />
                         <Input
                           className='normal' disabled={ isDisabled }
                           value={ entryDate }
+                          defaultValue={ entryDate }
                           readOnly
                         />
                       </Form.Item>
                   }
-
-                  {/* {
-                    !categoryName && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="catCode"
-                        label="Category Code"
-                      >
-                        <AutoComplete
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ categoryName }
-                          value={ categoryName }
-                          options={ itemCategoriesOpt }
-                          onSelect={ onSelectCategoryCode }
-                          placeholder={ "Type category code here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
-                      </Form.Item>
-                  } */}
                 </div>
               </div>
 
@@ -677,294 +693,16 @@ const GrnManualForm = (props) => {
                 {
                   details.map((el, idx) => {
                     return (
-                      <div className="detail-card">
-                        <div className="border">
-                          <div className="row2">
-                            <div className="dual">
-                              {
-                                <Form.Item
-                                  name="SN"
-                                  label="SN"
-                                >
-                                  <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
-                                  name="Type"
-                                  label="Type"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.type } value={ el.type } onChange={ e => changeDetail(idx, 'type', e.target.value) } placeholder='Insert type here...' />
-                                </Form.Item>
-                              }
-                            </div>
-
-                            <div className="dual">
-                              {
-                                <Form.Item
-                                  name="UOM"
-                                  label="UOM"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
-                                  name="MSL"
-                                  label="MSL"
-                                >
-                                  <Input disabled className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' />
-                                </Form.Item>
-                              }
-                            </div>
-
-                            <div className="dual">
-                              {
-                                <Form.Item
-                                  name="Recd Price"
-                                  label="Recd Price"
-                                  rules={ [
-                                    {
-                                      required: true,
-                                    },
-                                    ({ getFieldValue }) => ({
-                                      validator(_, value) {
-                                        if (value > 0) {
-                                          return Promise.resolve();
-                                        }
-
-                                        return Promise.reject(new Error('Price must be more than 0'));
-                                      },
-                                    }),
-                                  ] }
-                                >
-                                  <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'recdPrice', e.target.value) } placeholder='Type Recd Price here...' />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
-                                  name="Recd Qty"
-                                  label="Recd Qty"
-                                  rules={ [
-                                    {
-                                      required: true,
-                                    },
-                                    ({ getFieldValue }) => ({
-                                      validator(_, value) {
-                                        if (value > 0) {
-                                          return Promise.resolve();
-                                        }
-
-                                        return Promise.reject(new Error('QTY must be more than 0'));
-                                      },
-                                    }),
-                                  ] }
-                                >
-                                  <Input type={ 'number' } className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type Recd Qty here...' />
-                                </Form.Item>
-                              }
-                            </div>
-                          </div>
-
-                          <div className="row2">
-
-                            {
-                              <Form.Item
-                                name="Item No"
-                                label="Item No"
-                              >
-                                <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' />
-                              </Form.Item>
-                            }
-
-                            {
-                              <Form.Item
-                                name="Loc"
-                                label="Loc"
-                              >
-                                <AutoComplete
-                                  disabled
-
-                                  defaultValue={ loc }
-                                  value={ loc }
-                                  options={ locOpt }
-                                  onSelect={ data => setLoc(data) }
-                                  placeholder={ "Select loc.." }
-                                  filterOption={ (inputValue, option) =>
-                                    option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                                  }
-                                />
-                              </Form.Item>
-                            }
-
-                            <div className="dual">
-                              {
-                                <Form.Item
-                                  name="QTY/Label"
-                                  label="QTY/Label"
-                                  rules={ [
-                                    {
-                                      required: true,
-                                    },
-                                    ({ getFieldValue }) => ({
-                                      validator(_, value) {
-                                        if (value > 0 && value <= getFieldValue('Recd Qty')) {
-                                          return Promise.resolve();
-                                        }
-
-                                        if (!value || value === 0) {
-                                          return Promise.reject(new Error('QTY/Label must more than 0'));
-                                        }
-
-                                        if (value > getFieldValue('GRN Qty')) {
-                                          return Promise.reject(new Error("QTY/Label can't be more than Recd QTY"));
-                                        }
-
-                                      },
-                                    }),
-                                  ] }
-                                >
-                                  <Input className='smallInput' defaultValue={ el.qtyLabel } value={ el.qtyLabel } onChange={ e => changeDetail(idx, 'qtyLabel', e.target.value) } placeholder='Type Qty/Label here...' />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
-                                  name="Date Code"
-                                  label="Date Code"
-                                  rules={ [
-                                    {
-                                      required: false,
-                                    },
-                                    ({ getFieldValue }) => ({
-                                      validator(_, value) {
-                                        // if ()
-                                        let year = '';
-                                        let week = '';
-                                        let maxWeek = 53;
-                                        let flag = false;
-
-                                        value.split('').forEach((el, id) => {
-                                          if (id < 2) {
-                                            year += el;
-                                          } else {
-                                            week += el;
-                                          }
-                                        });
-
-                                        // year = parseInt(year);
-                                        // week = parseInt(week);
-
-                                        let momentYear = '';
-                                        (moment().year() + '').split('').forEach((el, id) => {
-                                          if (id > 1) {
-                                            momentYear += el;
-                                          }
-                                        });
-                                        momentYear = parseInt(momentYear);
-                                        let momentWeek = moment().week();
-
-                                        console.log('year :>> ', year);
-                                        console.log('week :>> ', week);
-                                        console.log('momentYear :>> ', momentYear);
-                                        console.log('momentWeek :>> ', momentWeek);
-
-                                        if (year < momentYear) {
-                                          if (week > 0 && week <= maxWeek) {
-                                            flag = true;
-                                          }
-                                        }
-
-                                        if (year == momentYear) {
-                                          if (week > 0 && week <= momentWeek) {
-                                            flag = true;
-                                          }
-                                        }
-
-
-                                        if (!value || flag) {
-                                          return Promise.resolve();
-                                        }
-
-                                        return Promise.reject(new Error('Datecode not valid'));
-
-
-                                      },
-                                    }),
-                                  ] }
-                                >
-                                  <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' />
-                                </Form.Item>
-                              }
-                            </div>
-                          </div>
-
-                          <div className="row2">
-                            {
-                              <Form.Item
-                                name="Part No"
-                                label="Part No"
-                              >
-                                <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' />
-                              </Form.Item>
-                            }
-
-                            <div className="dual">
-                              {
-                                <Form.Item
-                                  name="Project No"
-                                  label="Project No"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
-                                  name="PO No"
-                                  label="PO No"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'poNo', e.target.value) } placeholder='Insert PO No here...' />
-                                </Form.Item>
-                              }
-                            </div>
-
-
-
-                          </div>
-                          <div className="row">
-                            {
-                              <Form.Item
-                                name="Description"
-                                label="Description"
-                              >
-                                <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' />
-                              </Form.Item>
-                            }
-
-                            {
-                              <Form.Item
-                                name="Remarks"
-                                label="Remarks"
-                              >
-                                <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' />
-                              </Form.Item>
-                            }
-                          </div>
-                        </div>
-
-                        <div className="actions">
-                          {
-                            idx !== 0 &&
-                            <TiDelete color='red' size={ 30 } onClick={ () => deleteDetail(idx) } />
-                          }
-                          <MdAddCircle color='#1990ff' size={ 24 } onClick={ addNewDetail } />
-                        </div>
-
-                      </div>
+                      <GrnDetail
+                        el={ el }
+                        idx={ idx }
+                        uomOpt={ uomOpt }
+                        changeDetail={ changeDetail }
+                        addNewDetail={ addNewDetail }
+                        deleteDetail={ deleteDetail }
+                        onSearchPress={ onSearchPress }
+                        details={ details }
+                      />
                     );
                   })
                 }

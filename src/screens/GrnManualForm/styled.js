@@ -121,6 +121,10 @@ const StyledDiv = styled.div`
 
       .smallInput {
         max-width: 90% !important;
+        input {
+          max-width: 90% !important;
+
+        }
       }
 
       .ant-form-item-control {
