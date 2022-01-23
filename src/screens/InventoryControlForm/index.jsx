@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, InputNumber, Button } from 'antd';
+import { Form, InputNumber, Button, message } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { InventoryControl } from '../../services';
 
@@ -21,7 +21,7 @@ const FormPage = (props) => {
   const [loadingPage, setLoadingPage] = useState(id ? true : false);
   const [isEdit, setIsEdit] = useState(query.get("edit") ? query.get('edit') === 'true' : false);
   const [isDisabled, setIsDisabled] = useState(id && !isEdit ? true : false);
-  console.log('id kuuuu',id);
+  
   const [state, setState] = useState({
     stockDepn: "",
     provAge: ""
@@ -39,11 +39,6 @@ const FormPage = (props) => {
     ) {
       const data = InventoryControl.view();
       data.then(result => {
-        console.log('result :>> ', result);
-        // if (result.status && result.status !== 200) {
-        //   message.error(result.error);
-        // } else {
-        
         setState(result);
 
         if (result.provAge) {
@@ -61,9 +56,17 @@ const FormPage = (props) => {
       let obj = state;
       if (isEdit) {
         obj.version = parseInt(obj.version);
-        InventoryControl.edit(obj);
+        const hasil = await InventoryControl.edit(obj);
+        if (hasil.ok !== undefined && !hasil.ok) {
+          const res = await hasil.data;
+          message.error(res.message);
+        }
       } else {
-        InventoryControl.create(obj);
+        const hasil = await InventoryControl.create(obj);
+        if (hasil.ok !== undefined && !hasil.ok) {
+          const res = await hasil.data;
+          message.error(res.message);
+        }
       }
       history.push('/inventory-controls');
     } catch (errorInfo) {
@@ -96,9 +99,11 @@ const FormPage = (props) => {
                       <Form.Item
                         name="stockDepn"
                         label="Stock Depreciation (%)"
+                        initialValue={state.stockDepn}
                         rules={ [
                           {
                             required: true,
+                            message: 'stock depreciation is required'
                           },
                         ] }
                       >
@@ -124,9 +129,11 @@ const FormPage = (props) => {
                       <Form.Item
                         name="provAge"
                         label="Stock Provision Age (Yrs)"
+                        initialValue={state.provAge}
                         rules={ [
                           {
                             required: true,
+                            message: 'stock provision age is required'
                           },
                         ] }
                       >

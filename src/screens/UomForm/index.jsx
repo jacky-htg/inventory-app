@@ -46,11 +46,6 @@ const FormPage = (props) => {
     ) {
       const data = Uom.view(id);
       data.then(result => {
-        console.log('result :>> ', result);
-        // if (result.status && result.status !== 200) {
-        //   message.error(result.error);
-        // } else {
-        
         setState(result);
 
         if (result.uomFrom) {
@@ -69,9 +64,17 @@ const FormPage = (props) => {
       let obj = state;
       if (isEdit) {
         obj.version = parseInt(obj.version);
-        Uom.edit(id, obj);
+        const hasil = await Uom.edit(id, obj);
+        if (hasil.ok !== undefined && !hasil.ok) {
+          const res = await hasil.data;
+          message.error(res.message);
+        }
       } else {
-        Uom.create(obj);
+        const hasil = await Uom.create(obj);
+        if (hasil.ok !== undefined && !hasil.ok) {
+          const res = await hasil.data;
+          message.error(res.message);
+        }
       }
       history.push('/uoms');
     } catch (errorInfo) {
@@ -104,9 +107,11 @@ const FormPage = (props) => {
                       <Form.Item
                         name="uomFrom"
                         label="UOM From"
+                        initialValue={state.uomFrom}
                         rules={ [
                           {
                             required: true,
+                            message: 'UOM From is required'
                           },
                         ] }
                       >
@@ -138,9 +143,11 @@ const FormPage = (props) => {
                       <Form.Item
                         name="uomTo"
                         label="UOM To"
+                        initialValue={state.uomTo}
                         rules={ [
                           {
                             required: true,
+                            message: 'UOM To is required'
                           },
                         ] }
                       >
