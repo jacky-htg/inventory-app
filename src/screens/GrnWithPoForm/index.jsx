@@ -270,6 +270,7 @@ const GrnWithPoForm = (props) => {
             projectNo: result.projectNo,
             poRecSeq: el.poRecSeq,
             uom: result.uom,
+            invUom: result.invUom,
             poPrice: result.poPrice,
             recdPrice: result.poPrice,
             stdPackQty: result.stdPackQty,
@@ -451,6 +452,7 @@ const GrnWithPoForm = (props) => {
         details[i]["grnNo"] = grnNo;
         details[i]["poNo"] = poNo;
         details[i]["recdDate"] = e.dueDate;
+        details[i]["uom"] = e.invUom;
       });
 
       console.log('details', details);
@@ -718,7 +720,7 @@ const GrnWithPoForm = (props) => {
                     name={`Description[${idx}]`}
                     label="Description"
                   >
-                    <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' />
+                    <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly />
                   </Form.Item>
                 }
 
