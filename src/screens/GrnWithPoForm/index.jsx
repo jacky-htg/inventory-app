@@ -25,9 +25,10 @@ const GrnWithPoForm = (props) => {
   const [form] = Form.useForm();
   const [details, setDetails] = useState([
     {
-
+      partNo: null
     }
   ]);
+  const [tempDetails, setTempDetails] = useState([]);
   /*const [locData, setLocData] = useState([]);
   const [locOpt, setLocOpt] = useState([]);
   const [itemCategoriesData, setItemCategoriesData] = useState([]);
@@ -221,21 +222,24 @@ const GrnWithPoForm = (props) => {
   useEffect(() => {
     if (poNo) {
       let data = Grn.headerByPono(poNo);
+      console.log('data :>> ', data);
       data.then(result => {
+        console.log('result :>> ', result);
         // if (result.status && result.status !== 200) {
         //   message.error(result.error);
         // }
-        setGrnNo(result[0].grnNo);
-        setSupplierCode(result[0].supplierCode);
-        setCurrencyCode(result[0].currencyCode);
-        setCurrencyRate(result[0].currencyRate);
-        setRecdDate(result[0].recdDate);
-        setPoRemarks(result[0].poRemarks);
-        setBuyer(result[0].buyer);
+        result.grnNo && setGrnNo(result.grnNo);
+        result.supplierCode && setSupplierCode(result.supplierCode);
+        result.currencyCode && setCurrencyCode(result.currencyCode);
+        result.currencyRate && setCurrencyRate(result.currencyRate);
+        result.recdDate && setRecdDate(result.recdDate);
+        result.poRemarks && setPoRemarks(result.poRemarks);
+        result.buyer && setBuyer(result.buyer);
       });
 
       let detailPart = Grn.partsByPono(poNo);
       detailPart.then(result => {
+        console.log('result part :>> ', result);
         setParts(result);
       });
     } else {
@@ -254,36 +258,50 @@ const GrnWithPoForm = (props) => {
   }, [grnNo]);
 
   useEffect(() => {
-    if (poNo) {
-      const arr = [...details];
+    if (poNo && parts.length > 0) {
+      console.log('masuk');
+      console.log('poNo :>> ', poNo);
+      console.log('parts :>> ', parts);
+      const arr = [];
       parts.map((el, i) => {
         let data = Grn.detailByPartNo(poNo, el.partNo, el.poRecSeq);
         data.then(result => {
           const temp = {
             seqNo: el.seqNo,
             partNo: el.partNo,
-            loc: result[0].loc,
-            projectNo: result[0].projectNo,
+            loc: result.loc,
+            projectNo: result.projectNo,
             poRecSeq: el.poRecSeq,
-            uom: result[0].uom,
-            poPrice: result[0].poPrice,
-            recdPrice: result[0].poPrice,
-            stdPackQty: result[0].stdPackQty,
-            remarks: result[0].remarks,
-            recdQty: result[0].orderQty,
-            dueDate: result[0].dueDate,
-            description: result[0].description,
+            uom: result.uom,
+            poPrice: result.poPrice,
+            recdPrice: result.poPrice,
+            stdPackQty: result.stdPackQty,
+            remarks: result.remarks,
+            recdQty: result.orderQty,
+            dueDate: result.dueDate,
+            description: result.description,
             issuedQty: 1,
             labelQty: 1,
             itemNo: null,
             itemType: 0
           };
+          console.log('temp :>> ', temp);
           arr.push(temp);
+          setDetails([...arr, temp]);
         });
       });
-      setDetails(arr);
+      // console.log('arr :>> ', arr);
+      // setTempDetails([...arr]);
+      // console.log('success');
     }
   }, [poNo, parts]);
+
+  useEffect(() => {
+    if (details.length > 0) {
+      console.log('details :>> ', details);
+    }
+  }, [details]);
+
 
   /*useEffect(() => {
     const data = Lov.getItemCategories();
@@ -655,10 +673,11 @@ const GrnWithPoForm = (props) => {
 
               <div className="detail-wrapper">
                 {
+                  details.length > 0 &&
                   details.map((el, idx) => {
-                    console.log('halo', el);
+                    // console.log('halo', el);
                     return (
-                      <div className="detail-card">
+                      <div key={ el.partNo } className="detail-card">
                         <div className="border">
                           <div className="row2">
                             <div className="dual">
