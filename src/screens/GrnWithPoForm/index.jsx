@@ -283,7 +283,7 @@ const GrnWithPoForm = (props) => {
             itemType: 0
           };
           console.log('temp :>> ', temp);
-          arr.push(temp);
+          // arr.push(temp);
           setDetails([...arr, temp]);
           setReRender(!reRender);
         });
