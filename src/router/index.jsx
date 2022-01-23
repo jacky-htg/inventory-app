@@ -152,6 +152,14 @@ const Router = props => {
   const [company, setCompany] = useState('company_name');
   const [loginDate, setLoginDate] = useState(moment().format("LLL"));
   // const dispatch = useDispatch();
+  const [now, setNow] = useState(moment().format("LLL"));
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(moment().format("LLL"))
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <BrowserRouter history={ history }>
@@ -168,7 +176,7 @@ const Router = props => {
               <p className="company">Company: <span>{ env.companyName }</span></p>
             </div>
             <div className="right">
-              <p className="login">Login Date: <span>{ loginDate }</span></p>
+              <p className="login"><span>{ now }</span></p>
             </div>
           </div>
         }
