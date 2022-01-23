@@ -61,8 +61,8 @@ function Sidebar() {
         },
         {
           title: 'MSR Entry',
-          link: '/msr',
-          isActive: true
+          link: '',
+          isActive: false
         },
         {
           title: 'MRV Entry',

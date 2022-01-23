@@ -28,7 +28,7 @@ function Page() {
       url="grn-manuals" 
       data = {Grn} 
       id={['grnNo', 'subType']} 
-      actions={['view']} />
+      actions={[]} />
   );
 }
 

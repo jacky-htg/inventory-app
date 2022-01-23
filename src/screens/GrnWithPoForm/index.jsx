@@ -503,7 +503,7 @@ const GrnWithPoForm = (props) => {
                 <div className="dual">
                   {
                     <Form.Item
-                      name="SN"
+                      name={`SN[${idx}]`}
                       label="SN"
                     >
                       <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly />
@@ -512,7 +512,7 @@ const GrnWithPoForm = (props) => {
 
                   {
                     <Form.Item
-                      name="Type"
+                      name={`Type[${idx}]`}
                       label="Type"
                     >
                       <Input className='smallInput' defaultValue={ el.type } value={ el.type } onChange={ e => changeDetail(idx, 'type', e.target.value) } placeholder='Insert type here...' readOnly />
@@ -523,7 +523,7 @@ const GrnWithPoForm = (props) => {
                 <div className="dual">
                   {
                     <Form.Item
-                      name="UOM"
+                      name={`UOM[${idx}]`}
                       label="UOM"
                     >
                       <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' readOnly />
@@ -532,7 +532,7 @@ const GrnWithPoForm = (props) => {
 
                   {
                     <Form.Item
-                      name="MSL"
+                      name={`MSL[${idx}]`}
                       label="MSL"
                     >
                       <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' readOnly />
@@ -543,7 +543,7 @@ const GrnWithPoForm = (props) => {
                 <div className="dual">
                   {
                     <Form.Item
-                      name="Unit Price"
+                      name={`UnitPrice[${idx}]`}
                       label="Unit Price"
                     >
                       <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly />
@@ -552,7 +552,7 @@ const GrnWithPoForm = (props) => {
 
                   {
                     <Form.Item
-                      name="GRN Qty"
+                      name={`GRNQty[${idx}]`}
                       label="GRN Qty"
                       initialValue={el.issuedQty}
                       rules={ [
@@ -580,7 +580,7 @@ const GrnWithPoForm = (props) => {
 
                 {
                   <Form.Item
-                    name="Item No"
+                    name={`ItemNo[${idx}]`}
                     label="Item No"
                   >
                     <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly />
@@ -589,7 +589,7 @@ const GrnWithPoForm = (props) => {
 
                 {
                   <Form.Item
-                    name="Loc"
+                    name={`Loc[${idx}]`}
                     label="Loc"
                   >
                     <Input
@@ -604,7 +604,7 @@ const GrnWithPoForm = (props) => {
                 <div className="dual">
                   {
                     <Form.Item
-                      name="Date Code"
+                      name={`DateCode[${idx}]`}
                       label="Date Code"
                     >
                       <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' readOnly />
@@ -613,7 +613,7 @@ const GrnWithPoForm = (props) => {
 
                   {
                     <Form.Item
-                      name="QTY/Label"
+                      name={`QTYLabel[${idx}]`}
                       label="QTY/Label"
                       initialValue={el.labelQty}
                       rules={ [
@@ -648,7 +648,7 @@ const GrnWithPoForm = (props) => {
                 <div className="dual">
                   {
                     <Form.Item
-                      name="Part No"
+                      name={`PartNo[${idx}]`}
                       label="Part No"
                     >
                       <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly />
@@ -657,7 +657,7 @@ const GrnWithPoForm = (props) => {
 
                   {
                     <Form.Item
-                      name="Project No"
+                      name={`ProjectNo[${idx}]`}
                       label="Project No"
                     >
                       <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly />
@@ -669,7 +669,7 @@ const GrnWithPoForm = (props) => {
 
                   {
                     <Form.Item
-                      name="Order Qty"
+                      name={`OrderQty[${idx}]`}
                       label="Order Qty"
                     >
                       <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type order qty here...' readOnly />
@@ -678,7 +678,7 @@ const GrnWithPoForm = (props) => {
 
                   {
                     <Form.Item
-                      name="SIV No"
+                      name={`SIVNo[${idx}]`}
                       label="SIV No"
                     >
                       <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' readOnly />
@@ -690,7 +690,7 @@ const GrnWithPoForm = (props) => {
 
                   {
                     <Form.Item
-                      name="Std Pack"
+                      name={`StdPack[${idx}]`}
                       label="Std Pack"
                     >
                       <Input className='smallInput' defaultValue={ el.stdPackQty } value={ el.stdPackQty } onChange={ e => changeDetail(idx, 'stdPackQty', e.target.value) } placeholder='Type std pack here...' readOnly />
@@ -699,7 +699,7 @@ const GrnWithPoForm = (props) => {
 
                   {
                     <Form.Item
-                      name="Due Date"
+                      name={`DueDate[${idx}]`}
                       label="Due date"
                     >
                       <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' readOnly />
@@ -713,7 +713,7 @@ const GrnWithPoForm = (props) => {
               <div className="row">
                 {
                   <Form.Item
-                    name="Description"
+                    name={`Description[${idx}]`}
                     label="Description"
                   >
                     <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' />
@@ -722,7 +722,7 @@ const GrnWithPoForm = (props) => {
 
                 {
                   <Form.Item
-                    name="Remarks"
+                    name={`Remarks[${idx}]`}
                     label="Remarks"
                   >
                     <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' />
@@ -748,7 +748,7 @@ const GrnWithPoForm = (props) => {
   return (
     <StyledDiv>
       <div className="header">
-        <h2>{ id ? id : "FORM_ID" }</h2>
+        <h2></h2>
         <h2>GRN Entry (with PO)</h2>
       </div>
       <div className="formWrapper">

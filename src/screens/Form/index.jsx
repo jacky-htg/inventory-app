@@ -470,7 +470,7 @@ const FormPage = (props) => {
   return (
     <StyledDiv>
       <div className="header">
-        <h2>{ id ? id : "FORM_ID" }</h2>
+        <h2></h2>
         <h2>Item Master Maintenance</h2>
       </div>
       <div className="formWrapper">
