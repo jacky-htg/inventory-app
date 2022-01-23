@@ -23,11 +23,8 @@ const GrnWithPoForm = (props) => {
   let query = useQuery();
 
   const [form] = Form.useForm();
-  const [details, setDetails] = useState([
-    {
-
-    }
-  ]);
+  const [details, setDetails] = useState([]);
+  const [tempDetails, setTempDetails] = useState([]);
   /*const [locData, setLocData] = useState([]);
   const [locOpt, setLocOpt] = useState([]);
   const [itemCategoriesData, setItemCategoriesData] = useState([]);
@@ -53,6 +50,7 @@ const GrnWithPoForm = (props) => {
   const [loadingPage, setLoadingPage] = useState(id ? true : false);
   const [isDisabled, setIsDisabled] = useState(id ? true : false);
   const [poNoOpt, setPoNoOpt] = useState([]);
+  const [reRender, setReRender] = useState(false);
 
   const [parts, setParts] = useState([]);
 
@@ -221,21 +219,24 @@ const GrnWithPoForm = (props) => {
   useEffect(() => {
     if (poNo) {
       let data = Grn.headerByPono(poNo);
+      console.log('data :>> ', data);
       data.then(result => {
+        console.log('result :>> ', result);
         // if (result.status && result.status !== 200) {
         //   message.error(result.error);
         // }
-        setGrnNo(result[0].grnNo);
-        setSupplierCode(result[0].supplierCode);
-        setCurrencyCode(result[0].currencyCode);
-        setCurrencyRate(result[0].currencyRate);
-        setRecdDate(result[0].recdDate);
-        setPoRemarks(result[0].poRemarks);
-        setBuyer(result[0].buyer);
+        result.grnNo && setGrnNo(result.grnNo);
+        result.supplierCode && setSupplierCode(result.supplierCode);
+        result.currencyCode && setCurrencyCode(result.currencyCode);
+        result.currencyRate && setCurrencyRate(result.currencyRate);
+        result.recdDate && setRecdDate(result.recdDate);
+        result.poRemarks && setPoRemarks(result.poRemarks);
+        result.buyer && setBuyer(result.buyer);
       });
 
       let detailPart = Grn.partsByPono(poNo);
       detailPart.then(result => {
+        console.log('result part :>> ', result);
         setParts(result);
       });
     } else {
@@ -254,36 +255,51 @@ const GrnWithPoForm = (props) => {
   }, [grnNo]);
 
   useEffect(() => {
-    if (poNo) {
-      const arr = [...details];
+    if (poNo && parts.length > 0) {
+      console.log('masuk');
+      console.log('poNo :>> ', poNo);
+      console.log('parts :>> ', parts);
+      const arr = [];
       parts.map((el, i) => {
         let data = Grn.detailByPartNo(poNo, el.partNo, el.poRecSeq);
         data.then(result => {
           const temp = {
             seqNo: el.seqNo,
             partNo: el.partNo,
-            loc: result[0].loc,
-            projectNo: result[0].projectNo,
+            loc: result.loc,
+            projectNo: result.projectNo,
             poRecSeq: el.poRecSeq,
-            uom: result[0].uom,
-            poPrice: result[0].poPrice,
-            recdPrice: result[0].poPrice,
-            stdPackQty: result[0].stdPackQty,
-            remarks: result[0].remarks,
-            recdQty: result[0].orderQty,
-            dueDate: result[0].dueDate,
-            description: result[0].description,
+            uom: result.uom,
+            poPrice: result.poPrice,
+            recdPrice: result.poPrice,
+            stdPackQty: result.stdPackQty,
+            remarks: result.remarks,
+            recdQty: result.orderQty,
+            dueDate: result.dueDate,
+            description: result.description,
             issuedQty: 1,
             labelQty: 1,
             itemNo: null,
             itemType: 0
           };
+          console.log('temp :>> ', temp);
           arr.push(temp);
+          setDetails([...arr, temp]);
+          setReRender(!reRender);
         });
       });
-      setDetails(arr);
+      // console.log('arr :>> ', arr);
+      // setTempDetails([...arr]);
+      // console.log('success');
     }
   }, [poNo, parts]);
+
+  useEffect(() => {
+    if (details.length > 0) {
+      console.log('details :>> ', details);
+    }
+  }, [details]);
+
 
   /*useEffect(() => {
     const data = Lov.getItemCategories();
@@ -442,8 +458,9 @@ const GrnWithPoForm = (props) => {
         grnDetList: details
       };
       console.log('obj :>> ', obj);
-      Grn.create(obj);
-      history.push('/grn-with-pos');
+      Grn.create(obj).then(res => {
+        history.push('/grn-with-pos');
+      });
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
@@ -463,6 +480,256 @@ const GrnWithPoForm = (props) => {
   const changeDetail = (idx, field, value) => {
     details[idx][field] = value;
     setDetails(details);
+  };
+
+  const renderDetails = () => {
+    return details.length > 0 &&
+      details.map((el, idx) => {
+        return (
+          <div key={ idx } className="detail-card">
+            <div className="border">
+              <div className="row2">
+                <div className="dual">
+                  {
+                    <Form.Item
+                      name="SN"
+                      label="SN"
+                    >
+                      <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly />
+                    </Form.Item>
+                  }
+
+                  {
+                    <Form.Item
+                      name="Type"
+                      label="Type"
+                    >
+                      <Input className='smallInput' defaultValue={ el.type } value={ el.type } onChange={ e => changeDetail(idx, 'type', e.target.value) } placeholder='Insert type here...' readOnly />
+                    </Form.Item>
+                  }
+                </div>
+
+                <div className="dual">
+                  {
+                    <Form.Item
+                      name="UOM"
+                      label="UOM"
+                    >
+                      <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' readOnly />
+                    </Form.Item>
+                  }
+
+                  {
+                    <Form.Item
+                      name="MSL"
+                      label="MSL"
+                    >
+                      <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' readOnly />
+                    </Form.Item>
+                  }
+                </div>
+
+                <div className="dual">
+                  {
+                    <Form.Item
+                      name="Unit Price"
+                      label="Unit Price"
+                    >
+                      <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly />
+                    </Form.Item>
+                  }
+
+                  {
+                    <Form.Item
+                      name="GRN Qty"
+                      label="GRN Qty"
+                      rules={ [
+                        {
+                          required: true,
+                        },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (value > 0) {
+                              return Promise.resolve();
+                            }
+
+                            return Promise.reject(new Error('QTY must more than 0'));
+                          },
+                        }),
+                      ] }
+                    >
+                      <Input type={ 'number' } className='smallInput' defaultValue={ el.issuedQty } value={ el.issuedQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' />
+                    </Form.Item>
+                  }
+                </div>
+              </div>
+
+              <div className="row2">
+
+                {
+                  <Form.Item
+                    name="Item No"
+                    label="Item No"
+                  >
+                    <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly />
+                  </Form.Item>
+                }
+
+                {
+                  <Form.Item
+                    name="Loc"
+                    label="Loc"
+                  >
+                    <Input
+                      className='smallInput' disabled={ isDisabled }
+                      defaultValue={ el.loc }
+                      value={ el.loc }
+                      readOnly
+                    />
+                  </Form.Item>
+                }
+
+                <div className="dual">
+                  {
+                    <Form.Item
+                      name="Date Code"
+                      label="Date Code"
+                    >
+                      <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' readOnly />
+                    </Form.Item>
+                  }
+
+                  {
+                    <Form.Item
+                      name="QTY/Label"
+                      label="QTY/Label"
+                      rules={ [
+                        {
+                          required: true,
+                        },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (value > 0 && value <= getFieldValue('GRN Qty')) {
+                              return Promise.resolve();
+                            }
+
+                            if (!value || value === 0) {
+                              return Promise.reject(new Error('QTY/Label must more than 0'));
+                            }
+
+                            if (value > getFieldValue('GRN Qty')) {
+                              return Promise.reject(new Error("QTY/Label can't be more than GRN QTY"));
+                            }
+
+                          },
+                        }),
+                      ] }
+                    >
+                      <Input type={ 'number' } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' />
+                    </Form.Item>
+                  }
+                </div>
+              </div>
+
+              <div className="row2">
+                <div className="dual">
+                  {
+                    <Form.Item
+                      name="Part No"
+                      label="Part No"
+                    >
+                      <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly />
+                    </Form.Item>
+                  }
+
+                  {
+                    <Form.Item
+                      name="Project No"
+                      label="Project No"
+                    >
+                      <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly />
+                    </Form.Item>
+                  }
+                </div>
+
+                <div className="dual">
+
+                  {
+                    <Form.Item
+                      name="Order Qty"
+                      label="Order Qty"
+                    >
+                      <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type order qty here...' readOnly />
+                    </Form.Item>
+                  }
+
+                  {
+                    <Form.Item
+                      name="SIV No"
+                      label="SIV No"
+                    >
+                      <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' readOnly />
+                    </Form.Item>
+                  }
+                </div>
+
+                <div className="dual">
+
+                  {
+                    <Form.Item
+                      name="Std Pack"
+                      label="Std Pack"
+                    >
+                      <Input className='smallInput' defaultValue={ el.stdPackQty } value={ el.stdPackQty } onChange={ e => changeDetail(idx, 'stdPackQty', e.target.value) } placeholder='Type std pack here...' readOnly />
+                    </Form.Item>
+                  }
+
+                  {
+                    <Form.Item
+                      name="Due Date"
+                      label="Due date"
+                    >
+                      <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' readOnly />
+                    </Form.Item>
+                  }
+                </div>
+
+
+
+              </div>
+              <div className="row">
+                {
+                  <Form.Item
+                    name="Description"
+                    label="Description"
+                  >
+                    <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' />
+                  </Form.Item>
+                }
+
+                {
+                  <Form.Item
+                    name="Remarks"
+                    label="Remarks"
+                  >
+                    <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' />
+                  </Form.Item>
+                }
+
+              </div>
+            </div>
+
+            <div className="actions">
+              {
+                idx !== 0 &&
+                <TiDelete color='red' size={ 30 } onClick={ () => deleteDetail(idx) } />
+              }
+              {/* <MdAddCircle color='#1990ff' size={ 24 } onClick={ addNewDetail } /> */ }
+            </div>
+
+          </div>
+        );
+      });
   };
 
   return (
@@ -644,7 +911,7 @@ const GrnWithPoForm = (props) => {
                             className='normal' disabled={ isDisabled }
                             defaultValue={ doNo }
                             value={ doNo }
-                            onBlur={ data => setDoNo(data) }
+                            onChange={ e => setDoNo(e.target.value) }
                             placeholder={ "Type DO No here.." }
                           />
                         </Form.Item>
@@ -655,253 +922,11 @@ const GrnWithPoForm = (props) => {
 
               <div className="detail-wrapper">
                 {
-                  details.map((el, idx) => {
-                    console.log('halo', el);
-                    return (
-                      <div className="detail-card">
-                        <div className="border">
-                          <div className="row2">
-                            <div className="dual">
-                              {
-                                <Form.Item
-                                  name="SN"
-                                  label="SN"
-                                >
-                                  <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
-                                  name="Type"
-                                  label="Type"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.type } value={ el.type } onChange={ e => changeDetail(idx, 'type', e.target.value) } placeholder='Insert type here...' readOnly />
-                                </Form.Item>
-                              }
-                            </div>
-
-                            <div className="dual">
-                              {
-                                <Form.Item
-                                  name="UOM"
-                                  label="UOM"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' readOnly />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
-                                  name="MSL"
-                                  label="MSL"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' readOnly />
-                                </Form.Item>
-                              }
-                            </div>
-
-                            <div className="dual">
-                              {
-                                <Form.Item
-                                  name="Unit Price"
-                                  label="Unit Price"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
-                                  name="GRN Qty"
-                                  label="GRN Qty"
-                                  rules={ [
-                                    {
-                                      required: true,
-                                    },
-                                    ({ getFieldValue }) => ({
-                                      validator(_, value) {
-                                        if (value > 0) {
-                                          return Promise.resolve();
-                                        }
-
-                                        return Promise.reject(new Error('QTY must more than 0'));
-                                      },
-                                    }),
-                                  ] }
-                                >
-                                  <Input type={ 'number' } className='smallInput' defaultValue={ el.issuedQty } value={ el.issuedQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' />
-                                </Form.Item>
-                              }
-                            </div>
-                          </div>
-
-                          <div className="row2">
-
-                            {
-                              <Form.Item
-                                name="Item No"
-                                label="Item No"
-                              >
-                                <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly />
-                              </Form.Item>
-                            }
-
-                            {
-                              <Form.Item
-                                name="Loc"
-                                label="Loc"
-                              >
-                                <Input
-                                  className='smallInput' disabled={ isDisabled }
-                                  defaultValue={ el.loc }
-                                  value={ el.loc }
-                                  readOnly
-                                />
-                              </Form.Item>
-                            }
-
-                            <div className="dual">
-                              {
-                                <Form.Item
-                                  name="Date Code"
-                                  label="Date Code"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' readOnly />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
-                                  name="QTY/Label"
-                                  label="QTY/Label"
-                                  rules={ [
-                                    {
-                                      required: true,
-                                    },
-                                    ({ getFieldValue }) => ({
-                                      validator(_, value) {
-                                        if (value > 0 && value <= getFieldValue('GRN Qty')) {
-                                          return Promise.resolve();
-                                        }
-
-                                        if (!value || value === 0) {
-                                          return Promise.reject(new Error('QTY/Label must more than 0'));
-                                        }
-
-                                        if (value > getFieldValue('GRN Qty')) {
-                                          return Promise.reject(new Error("QTY/Label can't be more than GRN QTY"));
-                                        }
-
-                                      },
-                                    }),
-                                  ] }
-                                >
-                                  <Input type={ 'number' } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' />
-                                </Form.Item>
-                              }
-                            </div>
-                          </div>
-
-                          <div className="row2">
-                            <div className="dual">
-                              {
-                                <Form.Item
-                                  name="Part No"
-                                  label="Part No"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
-                                  name="Project No"
-                                  label="Project No"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly />
-                                </Form.Item>
-                              }
-                            </div>
-
-                            <div className="dual">
-
-                              {
-                                <Form.Item
-                                  name="Order Qty"
-                                  label="Order Qty"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type order qty here...' readOnly />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
-                                  name="SIV No"
-                                  label="SIV No"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' readOnly />
-                                </Form.Item>
-                              }
-                            </div>
-
-                            <div className="dual">
-
-                              {
-                                <Form.Item
-                                  name="Std Pack"
-                                  label="Std Pack"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.stdPackQty } value={ el.stdPackQty } onChange={ e => changeDetail(idx, 'stdPackQty', e.target.value) } placeholder='Type std pack here...' readOnly />
-                                </Form.Item>
-                              }
-
-                              {
-                                <Form.Item
-                                  name="Due Date"
-                                  label="Due date"
-                                >
-                                  <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' readOnly />
-                                </Form.Item>
-                              }
-                            </div>
-
-
-
-                          </div>
-                          <div className="row">
-                            {
-                              <Form.Item
-                                name="Description"
-                                label="Description"
-                              >
-                                <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' />
-                              </Form.Item>
-                            }
-
-                            {
-                              <Form.Item
-                                name="Remarks"
-                                label="Remarks"
-                              >
-                                <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' />
-                              </Form.Item>
-                            }
-
-                          </div>
-                        </div>
-
-                        <div className="actions">
-                          {
-                            idx !== 0 &&
-                            <TiDelete color='red' size={ 30 } onClick={ () => deleteDetail(idx) } />
-                          }
-                          {/* <MdAddCircle color='#1990ff' size={ 24 } onClick={ addNewDetail } /> */ }
-                        </div>
-
-                      </div>
-                    );
-                  })
+                  reRender
+                    ?
+                    renderDetails()
+                    :
+                    renderDetails()
                 }
               </div>
 
