@@ -393,8 +393,8 @@ const GrnManualForm = (props) => {
     let temp = [...details];
     temp[idx][field] = value;
     setDetails(temp);
-    console.log('details[idx] :>> ', details[idx]);
-    setDetails(details);
+    //console.log('details[idx] :>> ', details[idx]);
+    //setDetails(details);
   };
 
 

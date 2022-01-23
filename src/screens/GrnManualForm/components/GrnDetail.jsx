@@ -14,14 +14,14 @@ import moment from "moment";
 
 function GrnDetail(props) {
   let { el, idx, uomOpt, changeDetail, addNewDetail, deleteDetail, onSearchPress, details } = props;
-
+  
   return (
     <div key={ idx } className="detail-card">
       <div className="border">
         <div className="row2">
           <div className="dual">
             {
-              <Form.Item name="SN" label="SN">
+              <Form.Item name={`sn[${idx}]`} label="SN">
                 <Input
                   className="smallInput"
                   defaultValue={ idx + 1 }
@@ -33,7 +33,7 @@ function GrnDetail(props) {
             }
 
             {
-              <Form.Item name="Type" label="Type">
+              <Form.Item name={`type[${idx}]`} label="Type">
                 <Select
                   className="smallInput"
                   style={ { width: "70px" } }
@@ -49,7 +49,7 @@ function GrnDetail(props) {
 
           <div className="dual">
             {
-              <Form.Item name="UOM" label="UOM">
+              <Form.Item name={`uom[${idx}]`} label="UOM">
                 <AutoComplete
                   className="smallInput"
                   // defaultValue={ el.uom }
@@ -67,7 +67,7 @@ function GrnDetail(props) {
             }
 
             {
-              <Form.Item name="MSL" label="MSL">
+              <Form.Item name={`msl[${idx}]`} label="MSL">
                 <Input
                   disabled
                   className="smallInput"
@@ -83,7 +83,7 @@ function GrnDetail(props) {
           <div className="dual">
             {
               <Form.Item
-                name="Recd Price"
+                name={`recdPrice[${idx}]`} 
                 label="Recd Price"
                 rules={ [
                   {
@@ -117,7 +117,7 @@ function GrnDetail(props) {
 
             {
               <Form.Item
-                name="Recd Qty"
+                name={`recdQty[${idx}]`} 
                 label="Recd Qty"
                 rules={ [
                   {
@@ -153,7 +153,7 @@ function GrnDetail(props) {
 
         <div className="row2">
           {
-            <Form.Item name="Item No" label="Item No">
+            <Form.Item name={`itemNo[${idx}]`} label="Item No">
               <Input
                 defaultValue={ el.itemNo }
                 value={ el.itemNo }
@@ -164,7 +164,7 @@ function GrnDetail(props) {
           }
 
           {
-            <Form.Item name="Loc" label="Loc">
+            <Form.Item name={`loc[${idx}]`} label="Loc">
               <AutoComplete
                 disabled
                 defaultValue={ el.loc }
@@ -184,7 +184,7 @@ function GrnDetail(props) {
           <div className="dual">
             {
               <Form.Item
-                name="QTY/Label"
+                name={`qtyLabel[${idx}]`} 
                 label="QTY/Label"
                 rules={ [
                   {
@@ -226,7 +226,7 @@ function GrnDetail(props) {
 
             {
               <Form.Item
-                name="Date Code"
+                name={`dateCode[${idx}]`} 
                 label="Date Code"
                 rules={ [
                   {
@@ -304,7 +304,7 @@ function GrnDetail(props) {
 
         <div className="row2">
           {
-            <Form.Item name="Part No" label="Part No">
+            <Form.Item name={`partNo[${idx}]`} label="Part No">
               <Input
                 className="smallInput"
                 defaultValue={ el.partNo }
@@ -317,7 +317,7 @@ function GrnDetail(props) {
 
           <div className="dual">
             {
-              <Form.Item name="Project No" label="Project No">
+              <Form.Item name={`projectNo[${idx}]`} label="Project No">
                 <Input
                   className="smallInput"
                   defaultValue={ el.projectNo }
@@ -331,7 +331,7 @@ function GrnDetail(props) {
             }
 
             {
-              <Form.Item name="PO No" label="PO No">
+              <Form.Item name={`poNo[${idx}]`} label="PO No">
                 <Input
                   className="smallInput"
                   defaultValue={ el.poNo }
@@ -345,7 +345,7 @@ function GrnDetail(props) {
         </div>
         <div className="row">
           {
-            <Form.Item name="Description" label="Description">
+            <Form.Item name={`description[${idx}]`} label="Description">
               <Input
                 className="smallInput"
                 defaultValue={ el.description }
@@ -359,12 +359,12 @@ function GrnDetail(props) {
           }
 
           {
-            <Form.Item name="Remarks" label="Remarks">
+            <Form.Item name={`remarks[${idx}]`} label="Remarks">
               <Input
                 className="smallInput"
                 defaultValue={ el.remarks }
                 value={ el.remarks }
-                onChange={ (e) => changeDetail(idx, "remarks", e.target.value) }
+                onBlur={ (e) => changeDetail(idx, "remarks", e.target.value) }
                 placeholder="Type remarks here..."
               />
             </Form.Item>
