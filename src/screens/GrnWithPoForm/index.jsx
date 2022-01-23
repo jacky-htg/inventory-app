@@ -448,14 +448,14 @@ const GrnWithPoForm = (props) => {
       console.log('Success:', values);
 
       let obj = {
-        subtype: 'N',
+        subType: 'N',
         grnNo,
         poNo,
         doNo,
         supplierCode,
         currencyCode,
         currencyRate,
-        grnDetList: details
+        grnDetails: details
       };
       console.log('obj :>> ', obj);
       const hasil = await Grn.create(obj);
@@ -547,6 +547,7 @@ const GrnWithPoForm = (props) => {
                     <Form.Item
                       name="GRN Qty"
                       label="GRN Qty"
+                      initialValue={el.issuedQty}
                       rules={ [
                         {
                           required: true,
@@ -607,6 +608,7 @@ const GrnWithPoForm = (props) => {
                     <Form.Item
                       name="QTY/Label"
                       label="QTY/Label"
+                      initialValue={el.labelQty}
                       rules={ [
                         {
                           required: true,
