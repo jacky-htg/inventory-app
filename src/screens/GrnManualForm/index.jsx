@@ -398,7 +398,7 @@ const GrnManualForm = (props) => {
   };
 
 
-  const submit = async () => {
+  /*const submit = async () => {
     try {
       if (!isEdit) {
         const values = await form.validateFields();
@@ -445,6 +445,44 @@ const GrnManualForm = (props) => {
       } else {
         Item.create(obj);
       }
+      history.push('/grn-manuals');
+    } catch (errorInfo) {
+      console.log('Failed:', errorInfo);
+    }
+  };*/
+
+  const submit = async () => {
+    try {
+      console.log(details);
+      // const values = await form.validateFields();
+      // console.log('Success:', values);
+      details.map((e, i) => {
+        details[i]["subType"] = "N";
+        details[i]["grnNo"] = grnNo;
+        // details[i]["poNo"] = poNo;
+        details[i]["recdDate"] = e.dueDate;
+        details[i]["uom"] = e.invUom;
+      });
+
+      console.log('details', details);
+
+      let obj = {
+        subType: 'M',
+        grnNo,
+        //poNo,
+        doNo,
+        //supplierCode,
+        currencyCode,
+        currencyRate,
+        grnDetails: details
+      };
+      console.log('obj :>> ', obj);
+      const hasil = await Grn.create(obj);
+      if (hasil.ok !== undefined && !hasil.ok) {
+        const res = await hasil.data;
+        message.error(res.message);
+      }
+
       history.push('/grn-manuals');
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
@@ -592,11 +630,6 @@ const GrnManualForm = (props) => {
                       <Form.Item
                         name="MSR No"
                         label="MSR No"
-                        rules={ [
-                          {
-                            required: true,
-                          },
-                        ] }
                       >
                         <Input
                           className='normal' disabled={ isDisabled }

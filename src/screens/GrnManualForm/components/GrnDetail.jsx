@@ -52,6 +52,7 @@ function GrnDetail(props) {
               <Form.Item name={`uom[${idx}]`} label="UOM">
                 <AutoComplete
                   className="smallInput"
+                  style={{width: '125px'}}
                   // defaultValue={ el.uom }
                   value={ el.uom }
                   options={ uomOpt }
@@ -88,6 +89,7 @@ function GrnDetail(props) {
                 rules={ [
                   {
                     required: true,
+                    message: "Price is required"
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
@@ -122,6 +124,7 @@ function GrnDetail(props) {
                 rules={ [
                   {
                     required: true,
+                    message: "Recd Qty is required"
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
@@ -189,6 +192,7 @@ function GrnDetail(props) {
                 rules={ [
                   {
                     required: true,
+                    message: "QTY/Label is required"
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
@@ -231,6 +235,7 @@ function GrnDetail(props) {
                 rules={ [
                   {
                     required: false,
+                    message: "Date Code is required"
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
