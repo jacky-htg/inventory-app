@@ -457,11 +457,12 @@ const GrnManualForm = (props) => {
       // const values = await form.validateFields();
       // console.log('Success:', values);
       details.map((e, i) => {
-        details[i]["subType"] = "N";
+        details[i]["subType"] = "M";
         details[i]["grnNo"] = grnNo;
-        // details[i]["poNo"] = poNo;
+        details[i]["poPrice"] = e.recdPrice;
         details[i]["recdDate"] = e.dueDate;
-        details[i]["uom"] = e.invUom;
+        details[i]["loc"] = "TE";
+        details[i]["seqNo"] = (i+1);
       });
 
       console.log('details', details);

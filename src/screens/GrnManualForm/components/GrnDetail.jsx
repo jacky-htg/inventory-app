@@ -26,7 +26,7 @@ function GrnDetail(props) {
                   className="smallInput"
                   defaultValue={ idx + 1 }
                   value={ idx + 1 }
-                  onChange={ (e) => changeDetail(idx, "sn", e.target.value) }
+                  onChange={ (e) => changeDetail(idx, "seqNo", e.target.value) }
                   placeholder="Type SN here..."
                 />
               </Form.Item>
@@ -173,7 +173,7 @@ function GrnDetail(props) {
                 defaultValue={ el.loc }
                 value={ el.loc }
                 options={ [] }
-                // onSelect={ (data) => setLoc(data) }
+                onSelect={ (data) => setLoc(data) }
                 placeholder={ "Select loc.." }
                 filterOption={ (inputValue, option) =>
                   option.value
@@ -221,7 +221,7 @@ function GrnDetail(props) {
                   defaultValue={ el.qtyLabel }
                   value={ el.qtyLabel }
                   onChange={ (e) =>
-                    changeDetail(idx, "qtyLabel", parseFloat(e.target.value))
+                    changeDetail(idx, "labelQty", parseFloat(e.target.value))
                   }
                   placeholder="Type Qty/Label here..."
                 />
