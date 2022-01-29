@@ -32,7 +32,7 @@ function Page() {
       url="grn-manuals" 
       data = {Grn} 
       id={['grnNo', 'subType']} 
-      actions={[]} />
+      actions={['view']} />
   );
 }
 
