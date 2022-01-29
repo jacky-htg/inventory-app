@@ -11,16 +11,16 @@ async function list(filterSearch) {
     },
     body: JSON.stringify(filterSearch),
   })
-  .then((res) => {
-    if (!res.ok) {
-      return {ok:false, data: res.json()};
-    } else {
-      return res.json();
-    }
-  })
-  .catch((err) => {
-    console.log("err :>> ", err);
-  });
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
 }
 
 async function create(data) {
@@ -35,16 +35,16 @@ async function create(data) {
     },
     body: JSON.stringify(data),
   })
-  .then((res) => {
-    if (!res.ok) {
-      return {ok:false, data: res.json()};
-    } else {
-      return res.json();
-    }
-  })
-  .catch((err) => {
-    console.log("err :>> ", err);
-  });
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
 }
 
 async function view(id) {
@@ -56,16 +56,17 @@ async function view(id) {
       "X-PLANTNO": env.plantNo,
     },
   })
-  .then((res) => {
-    if (!res.ok) {
-      return {ok:false, data: res.json()};
-    } else {
-      return res.json();
-    }
-  })
-  .catch((err) => {
-    console.log("err :>> ", err);
-  });
+    .then((res) => {
+      console.log("res", res);
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
 }
 
 async function pono() {
@@ -77,16 +78,16 @@ async function pono() {
       "X-PLANTNO": env.plantNo,
     },
   })
-  .then((res) => {
-    if (!res.ok) {
-      return {ok:false, data: res.json()};
-    } else {
-      return res.json();
-    }
-  })
-  .catch((err) => {
-    console.log("err :>> ", err);
-  });
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
 }
 
 async function headerByPono(poNo) {
@@ -98,16 +99,16 @@ async function headerByPono(poNo) {
       "X-PLANTNO": env.plantNo,
     },
   })
-  .then((res) => {
-    if (!res.ok) {
-      return {ok:false, data: res.json()};
-    } else {
-      return res.json();
-    }
-  })
-  .catch((err) => {
-    console.log("err :>> ", err);
-  });
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
 }
 
 async function partsByPono(poNo) {
@@ -119,16 +120,16 @@ async function partsByPono(poNo) {
       "X-PLANTNO": env.plantNo,
     },
   })
-  .then((res) => {
-    if (!res.ok) {
-      return {ok:false, data: res.json()};
-    } else {
-      return res.json();
-    }
-  })
-  .catch((err) => {
-    console.log("err :>> ", err);
-  });
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
 }
 
 async function detailByPartNo(poNo, partNo, poReqSeq) {
@@ -156,16 +157,16 @@ async function getDefaultGRN() {
       "X-PLANTNO": env.plantNo,
     },
   })
-  .then((res) => {
-    if (!res.ok) {
-      return {ok:false, data: res.json()};
-    } else {
-      return res.json();
-    }
-  })
-  .catch((err) => {
-    console.log("err :>> ", err);
-  });
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
 }
 
 async function checkNewItem(body) {

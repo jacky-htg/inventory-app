@@ -3,6 +3,7 @@ import { Form, Input, Button, Select, Checkbox, AutoComplete, message } from 'an
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { MdAddCircle } from 'react-icons/md';
 import { TiDelete } from 'react-icons/ti';
+import Collapsible from "react-collapsible";
 
 import { Grn } from '../../services';
 import { StyledDiv } from './styled';
@@ -43,6 +44,43 @@ const GrnWithPoForm = (props) => {
   const [parts, setParts] = useState([]);
 
   useEffect(() => {
+    if (id) {
+      let data = Grn.view(id);
+      data.then(result => {
+        console.log('result :>> ', result);
+        result.currencyCode && setCurrencyCode(result.currencyCode);
+        result.currencyRate && setCurrencyRate(result.currencyRate);
+        result.grnNo && setGrnNo(result.grnNo);
+        result.poNo && setPoNo(result.poNo);
+        result.supplierCode && setSupplierCode(result.supplierCode);
+        let arr = [];
+        result.grnDetails && result.grnDetails.length > 0 && result.grnDetails.forEach(el => {
+          arr.push(el);
+        });
+        setDetails(arr);
+
+
+        // createdAt: "2022-01-24T13:16:43.702248Z";
+        // createdBy: "tsagita";
+        // currencyCode: "USD";
+        // currencyRate: 1;
+        // grnDetails: [{… }];
+        // grnNo: "GRN2022-00004";
+        // id: 48;
+        // poNo: "100044-2021";
+        // status: "ACTIVE";
+        // subType: "N";
+        // supplierCode: "DSE01";
+        // updatedAt: "2022-01-24T13:16:43.702253Z";
+        // updatedBy: "tsagita";
+        // version: 0
+        setLoadingPage(false);
+      });
+    }
+  }, [id]);
+
+
+  useEffect(() => {
     let data = Grn.pono();
     data.then(result => {
       let temp = [];
@@ -56,7 +94,7 @@ const GrnWithPoForm = (props) => {
   }, []);
 
   useEffect(() => {
-    if (poNo) {
+    if (poNo && !id) {
       let data = Grn.headerByPono(poNo);
       console.log('data :>> ', data);
       data.then(result => {
@@ -75,7 +113,7 @@ const GrnWithPoForm = (props) => {
         console.log('result part :>> ', result);
         setParts(result);
       });
-    } else {
+    } else if (!poNo && !id) {
       setGrnNo('');
       setSupplierCode('');
       setCurrencyCode('');
@@ -194,237 +232,242 @@ const GrnWithPoForm = (props) => {
         return (
           <div key={ idx } className="detail-card">
             <div className="border">
-              <div className="row2">
-                <div className="dual">
-                  {
-                    <Form.Item
-                      name={`SN[${idx}]`}
-                      label="SN"
-                    >
-                      <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly />
-                    </Form.Item>
-                  }
+              <Collapsible trigger={ `Serial Number: ${ idx + 1 }` }>
+                <div className="inputs">
+                  <div className="row2">
+                    <div className="dual">
+                      {
+                        <Form.Item
+                          name={ `SN[${ idx }]` }
+                          label="SN"
+                        >
+                          <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly />
+                        </Form.Item>
+                      }
 
-                  {
-                    <Form.Item
-                      name={`Type[${idx}]`}
-                      label="Type"
-                    >
-                      <Input className='smallInput' defaultValue={ el.type } value={ el.type } onChange={ e => changeDetail(idx, 'type', e.target.value) } placeholder='Insert type here...' readOnly />
-                    </Form.Item>
-                  }
+                      {
+                        <Form.Item
+                          name={ `Type[${ idx }]` }
+                          label="Type"
+                        >
+                          <Input className='smallInput' defaultValue={ el.type } value={ el.type } onChange={ e => changeDetail(idx, 'type', e.target.value) } placeholder='Insert type here...' readOnly />
+                        </Form.Item>
+                      }
+                    </div>
+
+                    <div className="dual">
+                      {
+                        <Form.Item
+                          name={ `UOM[${ idx }]` }
+                          label="UOM"
+                        >
+                          <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' readOnly />
+                        </Form.Item>
+                      }
+
+                      {
+                        <Form.Item
+                          name={ `MSL[${ idx }]` }
+                          label="MSL"
+                        >
+                          <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' readOnly />
+                        </Form.Item>
+                      }
+                    </div>
+
+                    <div className="dual">
+                      {
+                        <Form.Item
+                          name={ `UnitPrice[${ idx }]` }
+                          label="Unit Price"
+                        >
+                          <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly />
+                        </Form.Item>
+                      }
+
+                      {
+                        <Form.Item
+                          name={ `GRNQty[${ idx }]` }
+                          label="GRN Qty"
+                          initialValue={ el.issuedQty }
+                          rules={ [
+                            {
+                              required: true,
+                            },
+                            ({ getFieldValue }) => ({
+                              validator(_, value) {
+                                if (value > 0) {
+                                  return Promise.resolve();
+                                }
+
+                                return Promise.reject(new Error('QTY must more than 0'));
+                              },
+                            }),
+                          ] }
+                        >
+                          <Input type={ 'number' } className='smallInput' defaultValue={ el.issuedQty } value={ el.issuedQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' />
+                        </Form.Item>
+                      }
+                    </div>
+                  </div>
+
+                  <div className="row2">
+
+                    {
+                      <Form.Item
+                        name={ `ItemNo[${ idx }]` }
+                        label="Item No"
+                      >
+                        <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly />
+                      </Form.Item>
+                    }
+
+                    {
+                      <Form.Item
+                        name={ `Loc[${ idx }]` }
+                        label="Loc"
+                      >
+                        <Input
+                          className='smallInput' disabled={ isDisabled }
+                          defaultValue={ el.loc }
+                          value={ el.loc }
+                          readOnly
+                        />
+                      </Form.Item>
+                    }
+
+                    <div className="dual">
+                      {
+                        <Form.Item
+                          name={ `DateCode[${ idx }]` }
+                          label="Date Code"
+                        >
+                          <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' readOnly />
+                        </Form.Item>
+                      }
+
+                      {
+                        <Form.Item
+                          name={ `QTYLabel[${ idx }]` }
+                          label="QTY/Label"
+                          initialValue={ el.labelQty }
+                          rules={ [
+                            {
+                              required: true,
+                            },
+                            ({ getFieldValue }) => ({
+                              validator(_, value) {
+                                if (value > 0 && value <= getFieldValue('GRN Qty')) {
+                                  return Promise.resolve();
+                                }
+
+                                if (!value || value === 0) {
+                                  return Promise.reject(new Error('QTY/Label must more than 0'));
+                                }
+
+                                if (value > getFieldValue('GRN Qty')) {
+                                  return Promise.reject(new Error("QTY/Label can't be more than GRN QTY"));
+                                }
+
+                              },
+                            }),
+                          ] }
+                        >
+                          <Input type={ 'number' } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' />
+                        </Form.Item>
+                      }
+                    </div>
+                  </div>
+
+                  <div className="row2">
+                    <div className="dual">
+                      {
+                        <Form.Item
+                          name={ `PartNo[${ idx }]` }
+                          label="Part No"
+                        >
+                          <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly />
+                        </Form.Item>
+                      }
+
+                      {
+                        <Form.Item
+                          name={ `ProjectNo[${ idx }]` }
+                          label="Project No"
+                        >
+                          <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly />
+                        </Form.Item>
+                      }
+                    </div>
+
+                    <div className="dual">
+
+                      {
+                        <Form.Item
+                          name={ `OrderQty[${ idx }]` }
+                          label="Order Qty"
+                        >
+                          <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type order qty here...' readOnly />
+                        </Form.Item>
+                      }
+
+                      {
+                        <Form.Item
+                          name={ `SIVNo[${ idx }]` }
+                          label="SIV No"
+                        >
+                          <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' readOnly />
+                        </Form.Item>
+                      }
+                    </div>
+
+                    <div className="dual">
+
+                      {
+                        <Form.Item
+                          name={ `StdPack[${ idx }]` }
+                          label="Std Pack"
+                        >
+                          <Input className='smallInput' defaultValue={ el.stdPackQty } value={ el.stdPackQty } onChange={ e => changeDetail(idx, 'stdPackQty', e.target.value) } placeholder='Type std pack here...' readOnly />
+                        </Form.Item>
+                      }
+
+                      {
+                        <Form.Item
+                          name={ `DueDate[${ idx }]` }
+                          label="Due date"
+                        >
+                          <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' readOnly />
+                        </Form.Item>
+                      }
+                    </div>
+
+
+
+                  </div>
+                  <div className="row">
+                    {
+                      <Form.Item
+                        name={ `Description[${ idx }]` }
+                        label="Description"
+                      >
+                        <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly />
+                      </Form.Item>
+                    }
+
+                    {
+                      <Form.Item
+                        name={ `Remarks[${ idx }]` }
+                        label="Remarks"
+                      >
+                        <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' />
+                      </Form.Item>
+                    }
+
+                  </div>
                 </div>
 
-                <div className="dual">
-                  {
-                    <Form.Item
-                      name={`UOM[${idx}]`}
-                      label="UOM"
-                    >
-                      <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' readOnly />
-                    </Form.Item>
-                  }
-
-                  {
-                    <Form.Item
-                      name={`MSL[${idx}]`}
-                      label="MSL"
-                    >
-                      <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' readOnly />
-                    </Form.Item>
-                  }
-                </div>
-
-                <div className="dual">
-                  {
-                    <Form.Item
-                      name={`UnitPrice[${idx}]`}
-                      label="Unit Price"
-                    >
-                      <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly />
-                    </Form.Item>
-                  }
-
-                  {
-                    <Form.Item
-                      name={`GRNQty[${idx}]`}
-                      label="GRN Qty"
-                      initialValue={el.issuedQty}
-                      rules={ [
-                        {
-                          required: true,
-                        },
-                        ({ getFieldValue }) => ({
-                          validator(_, value) {
-                            if (value > 0) {
-                              return Promise.resolve();
-                            }
-
-                            return Promise.reject(new Error('QTY must more than 0'));
-                          },
-                        }),
-                      ] }
-                    >
-                      <Input type={ 'number' } className='smallInput' defaultValue={ el.issuedQty } value={ el.issuedQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' />
-                    </Form.Item>
-                  }
-                </div>
-              </div>
-
-              <div className="row2">
-
-                {
-                  <Form.Item
-                    name={`ItemNo[${idx}]`}
-                    label="Item No"
-                  >
-                    <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly />
-                  </Form.Item>
-                }
-
-                {
-                  <Form.Item
-                    name={`Loc[${idx}]`}
-                    label="Loc"
-                  >
-                    <Input
-                      className='smallInput' disabled={ isDisabled }
-                      defaultValue={ el.loc }
-                      value={ el.loc }
-                      readOnly
-                    />
-                  </Form.Item>
-                }
-
-                <div className="dual">
-                  {
-                    <Form.Item
-                      name={`DateCode[${idx}]`}
-                      label="Date Code"
-                    >
-                      <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' readOnly />
-                    </Form.Item>
-                  }
-
-                  {
-                    <Form.Item
-                      name={`QTYLabel[${idx}]`}
-                      label="QTY/Label"
-                      initialValue={el.labelQty}
-                      rules={ [
-                        {
-                          required: true,
-                        },
-                        ({ getFieldValue }) => ({
-                          validator(_, value) {
-                            if (value > 0 && value <= getFieldValue('GRN Qty')) {
-                              return Promise.resolve();
-                            }
-
-                            if (!value || value === 0) {
-                              return Promise.reject(new Error('QTY/Label must more than 0'));
-                            }
-
-                            if (value > getFieldValue('GRN Qty')) {
-                              return Promise.reject(new Error("QTY/Label can't be more than GRN QTY"));
-                            }
-
-                          },
-                        }),
-                      ] }
-                    >
-                      <Input type={ 'number' } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' />
-                    </Form.Item>
-                  }
-                </div>
-              </div>
-
-              <div className="row2">
-                <div className="dual">
-                  {
-                    <Form.Item
-                      name={`PartNo[${idx}]`}
-                      label="Part No"
-                    >
-                      <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly />
-                    </Form.Item>
-                  }
-
-                  {
-                    <Form.Item
-                      name={`ProjectNo[${idx}]`}
-                      label="Project No"
-                    >
-                      <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly />
-                    </Form.Item>
-                  }
-                </div>
-
-                <div className="dual">
-
-                  {
-                    <Form.Item
-                      name={`OrderQty[${idx}]`}
-                      label="Order Qty"
-                    >
-                      <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type order qty here...' readOnly />
-                    </Form.Item>
-                  }
-
-                  {
-                    <Form.Item
-                      name={`SIVNo[${idx}]`}
-                      label="SIV No"
-                    >
-                      <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' readOnly />
-                    </Form.Item>
-                  }
-                </div>
-
-                <div className="dual">
-
-                  {
-                    <Form.Item
-                      name={`StdPack[${idx}]`}
-                      label="Std Pack"
-                    >
-                      <Input className='smallInput' defaultValue={ el.stdPackQty } value={ el.stdPackQty } onChange={ e => changeDetail(idx, 'stdPackQty', e.target.value) } placeholder='Type std pack here...' readOnly />
-                    </Form.Item>
-                  }
-
-                  {
-                    <Form.Item
-                      name={`DueDate[${idx}]`}
-                      label="Due date"
-                    >
-                      <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' readOnly />
-                    </Form.Item>
-                  }
-                </div>
-
-
-
-              </div>
-              <div className="row">
-                {
-                  <Form.Item
-                    name={`Description[${idx}]`}
-                    label="Description"
-                  >
-                    <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly />
-                  </Form.Item>
-                }
-
-                {
-                  <Form.Item
-                    name={`Remarks[${idx}]`}
-                    label="Remarks"
-                  >
-                    <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' />
-                  </Form.Item>
-                }
-
-              </div>
+              </Collapsible>
             </div>
 
             <div className="actions">
@@ -443,7 +486,14 @@ const GrnWithPoForm = (props) => {
   return (
     <StyledDiv>
       <div className="header">
-        <h2></h2>
+        <div className="left">
+          {
+            id &&
+            <Button onClick={ submit } type="primary" htmlType="submit">
+              Create GRN
+            </Button>
+          }
+        </div>
         <h2>GRN Entry (with PO)</h2>
       </div>
       <div className="formWrapper">
@@ -460,7 +510,12 @@ const GrnWithPoForm = (props) => {
                   {
                     id
                       ?
-                      <></>
+                      <Form.Item
+                        name="GRN No"
+                        label="GRN No"
+                      >
+                        <span>{ grnNo }</span>
+                      </Form.Item>
                       :
                       <Form.Item
                         name="GRN No"
@@ -474,7 +529,14 @@ const GrnWithPoForm = (props) => {
                   {
                     id
                       ?
-                      <></>
+                      <Form.Item
+                        name="Currency Code / Rate"
+                        label="Currency Code / Rate"
+                      >
+                        <div className="currInput">
+                          <span>{ currencyCode } / { currencyRate }</span>
+                        </div>
+                      </Form.Item>
                       :
                       <Form.Item
                         name="Currency Code / Rate"
@@ -493,7 +555,12 @@ const GrnWithPoForm = (props) => {
                   {
                     id
                       ?
-                      <></>
+                      <Form.Item
+                        name="PO No"
+                        label="PO No"
+                      >
+                        <span>{ poNo }</span>
+                      </Form.Item>
                       :
                       <Form.Item
                         name="PO No"
@@ -518,7 +585,12 @@ const GrnWithPoForm = (props) => {
                   {
                     id
                       ?
-                      <></>
+                      <Form.Item
+                        name="Recd Date"
+                        label="Recd Date"
+                      >
+                        <span>{ recdDate ? recdDate : '-' }</span>
+                      </Form.Item>
                       :
                       <Form.Item
                         name="Recd Date"
@@ -539,7 +611,12 @@ const GrnWithPoForm = (props) => {
                   {
                     id
                       ?
-                      <></>
+                      <Form.Item
+                        name="Supplier Code"
+                        label="Supplier Code"
+                      >
+                        <span>{ supplierCode }</span>
+                      </Form.Item>
                       :
                       <Form.Item
                         name="Supplier Code"
@@ -553,7 +630,12 @@ const GrnWithPoForm = (props) => {
                   {
                     id
                       ?
-                      <></>
+                      <Form.Item
+                        name="Buyer"
+                        label="Buyer"
+                      >
+                        <span>{ buyer ? buyer : '/' }</span>
+                      </Form.Item>
                       :
                       <Form.Item
                         name="Buyer"
@@ -574,7 +656,12 @@ const GrnWithPoForm = (props) => {
                   {
                     id
                       ?
-                      <></>
+                      <Form.Item
+                        name="PO Remarks"
+                        label="PO Remarks"
+                      >
+                        <p>{ poRemarks ? poRemarks : '-' }</p>
+                      </Form.Item>
                       :
                       <Form.Item
                         name="PO Remarks"
@@ -590,7 +677,12 @@ const GrnWithPoForm = (props) => {
                     {
                       id
                         ?
-                        <></>
+                        <Form.Item
+                          name="Release Date"
+                          label="Release Date"
+                        >
+                          <span>{ releaseDate ? releaseDate : '-' }</span>
+                        </Form.Item>
                         :
                         <Form.Item
                           name="Release Date"
@@ -608,7 +700,13 @@ const GrnWithPoForm = (props) => {
                     {
                       id
                         ?
-                        <></>
+                        <Form.Item
+                          name="DO No"
+                          label="DO No"
+                          className='red'
+                        >
+                          <span>{ doNo ? doNo : '-' }</span>
+                        </Form.Item>
                         :
                         <Form.Item
                           name="DO No"

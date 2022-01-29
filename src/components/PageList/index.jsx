@@ -19,17 +19,17 @@ function PageList(props) {
   const [columns, setColumns] = useState([]);
   const [fields, setFields] = useState([]);
   const [optionFilters, setOptionFilters] = useState([]);
-  const [lookups, setLookups] = useState([]); 
+  const [lookups, setLookups] = useState([]);
   const [disabledCreate, setDisabledCreate] = useState(false);
-  
+
   useEffect(() => {
     if (props.fields.length > 0) {
       const temp = [];
       const tempLookups = [];
-      props.fields.map( el => {
+      props.fields.map(el => {
         if (el.filter) temp.push(el);
         if (el.lookup) tempLookups.push(el);
-      }); 
+      });
       setOptionFilters(temp);
       setLookups(tempLookups);
       setupFields(props.fields);
@@ -53,8 +53,8 @@ function PageList(props) {
       const temp = [];
       fields.map(e => {
         for (let i = 0; i < props.fields.length; i++) {
-          if (props.fields[i] && props.fields[i].field === e)  {
-            temp.push(<Column title={ props.fields[i].label } dataIndex={e} key={e} />);
+          if (props.fields[i] && props.fields[i].field === e) {
+            temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } />);
             break;
           }
         }
@@ -142,7 +142,7 @@ function PageList(props) {
     setFilters(filters);
 
     if (type === "field") {
-      filters[n].value="";
+      filters[n].value = "";
       const [f] = renderFilter();
       setFilterForm(f);
     }
@@ -195,8 +195,8 @@ function PageList(props) {
         defaultValue={ filters[n] ? filters[n].value : "" }
       />
     );
-    
-    lookups.map( el => {
+
+    lookups.map(el => {
       if (filters[n] && filters[n].field === el.field) {
         valueForm = (
           <Select
@@ -221,7 +221,7 @@ function PageList(props) {
         <Select
           style={ { width: 200, marginRight: '1%' } }
           placeholder="Select Field"
-          allowClear={filters[n] ? true : false}
+          allowClear={ filters[n] ? true : false }
           onChange={ (data) => changeData(n, data, 'field') }
           defaultValue={ filters[n] ? filters[n].field : null }
         >
@@ -263,21 +263,26 @@ function PageList(props) {
       onChange={ clickFilter }
       loading={ loading }
     >
-      {columns}
-      
+      { columns }
+
       <Column
         title="Action"
         key="action"
         render={ (text, record) => {
           const ids = [];
-          props.id.map(el => { 
+          props.id.map(el => {
             ids.push(record[el]);
           });
           if (ids.length === 0) {
             ids.push('edit');
-          } 
-          const id = ids.join('-');
-          
+          }
+
+          let id = ids.join('-');
+
+          if (props.url === 'grn-with-pos') {
+            id = record.id;
+          }
+
           return (
             <Space size="middle">
               { props.actions.includes('view') && <a onClick={ () => history.push(`/${ props.url }/${ id }`) }>View</a> }
@@ -318,14 +323,14 @@ function PageList(props) {
     } else if (fields.length < 8) {
       fields.push(e);
     }
-    
+
     setFields(fields);
-    
+
     const temp = [];
     fields.map(e => {
       for (let i = 0; i < props.fields.length; i++) {
-        if (props.fields[i] && props.fields[i].field === e)  {
-          temp.push(<Column title={ props.fields[i].label } dataIndex={e} key={e} />);
+        if (props.fields[i] && props.fields[i].field === e) {
+          temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } />);
           break;
         }
       }
@@ -363,12 +368,12 @@ function PageList(props) {
   return (
     <StyledDiv>
       { modal() }
-      <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>{props.title}</h2>
+      <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>{ props.title }</h2>
       { props.filter && filter }
       <div style={ { textAlign: 'right' } }>
         <Button onClick={ showModal }>Column Settings</Button>
         <Divider type="vertical" />
-        <Button onClick={ () => history.push(`/${props.url}/create`) } type="primary" style={ { marginBottom: 16 } } disabled={disabledCreate}>
+        <Button onClick={ () => history.push(`/${ props.url }/create`) } type="primary" style={ { marginBottom: 16 } } disabled={ disabledCreate }>
           Add a row
         </Button>
       </div>

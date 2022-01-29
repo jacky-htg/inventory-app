@@ -95,7 +95,7 @@ const StyledDiv = styled.div`
 
     .detail-card {
       position: relative;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
 
       .row2 {
         grid-template-columns: 32% 32% 32%;
@@ -107,15 +107,61 @@ const StyledDiv = styled.div`
       }
 
       .border {
-        padding: 20px;
-        padding-bottom: 10px;
         border-radius: 10px;
         border: 1px solid lightgrey;
         width: 92%;
       }
+      
+      .Collapsible {
+        min-height: 38px;
+      }
+
+      .Collapsible__trigger {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border-radius: 10px;
+        width: 92%;
+        font-weight: 400;
+        text-decoration: none;
+        position: absolute;
+        top: 0px;
+        left:0px;
+        height: 40px;
+        background: lightgrey;
+
+
+        &:after {
+          font-family: 'FontAwesome';
+          content: '\f107';
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          display: block;
+          transition: transform 300ms;
+        }
+
+        &.is-open {
+          border-radius: 10px 10px 0px 0px;
+          &:after {
+            transform: rotateZ(180deg);
+          }
+        }
+
+        &.is-disabled {
+          opacity: 0.5;
+          background-color: grey;
+        }
+      }
+
+      .inputs {
+        margin-top: 30px;
+        padding: 20px;
+        padding-bottom: 10px;
+      }
 
       label {
-        min-width: 80px !important;
+        min-width: 50px !important;
 
       }
 
