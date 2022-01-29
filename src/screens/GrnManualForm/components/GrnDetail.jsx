@@ -15,12 +15,8 @@ import moment from "moment";
 import Collapsible from "react-collapsible";
 
 function GrnDetail(props) {
-<<<<<<< HEAD
-  let { el, idx, uomOpt, changeDetail, addNewDetail, deleteDetail, onSearchPress, details, locOpt } = props;
-  
-=======
   const { Panel } = Collapse;
-  let { el, idx, uomOpt, changeDetail, addNewDetail, deleteDetail, onSearchPress, details } = props;
+  let { el, idx, uomOpt, changeDetail, addNewDetail, deleteDetail, onSearchPress, details, locOpt } = props;
   const [timer, setTimer] = useState(null);
 
   const onSearchPress2 = field => {
@@ -32,173 +28,9 @@ function GrnDetail(props) {
       , 1000));
   };
 
->>>>>>> e510aa0452079d82b68a43f92708c75d19991feb
   return (
     <div className="detail-card">
       <div className="border">
-<<<<<<< HEAD
-        <div className="row2">
-          <div className="dual">
-            {
-              <Form.Item name={`sn[${idx}]`} label="SN">
-                <Input
-                  className="smallInput"
-                  defaultValue={ idx + 1 }
-                  value={ idx + 1 }
-                  onChange={ (e) => changeDetail(idx, "seqNo", e.target.value) }
-                  placeholder="Type SN here..."
-                />
-              </Form.Item>
-            }
-
-            {
-              <Form.Item name={`type[${idx}]`} label="Type">
-                <Select
-                  className="smallInput"
-                  style={ { width: "70px" } }
-                  onChange={ (value) => changeDetail(idx, "itemType", value) }
-                  placeholder="..."
-                >
-                  <Option value={ 0 }>0</Option>
-                  <Option value={ 1 }>1</Option>
-                </Select>
-              </Form.Item>
-            }
-          </div>
-
-          <div className="dual">
-            {
-              <Form.Item name={`uom[${idx}]`} label="UOM">
-                <AutoComplete
-                  className="smallInput"
-                  style={{width: '125px'}}
-                  // defaultValue={ el.uom }
-                  value={ el.uom }
-                  options={ uomOpt }
-                  onSelect={ (data) => changeDetail(idx, "uom", data) }
-                  placeholder={ "Select UOM.." }
-                  filterOption={ (inputValue, option) =>
-                    option.value
-                      .toUpperCase()
-                      .indexOf(inputValue.toUpperCase()) !== -1
-                  }
-                />
-              </Form.Item>
-            }
-
-            {
-              <Form.Item name={`msl[${idx}]`} label="MSL">
-                <Input
-                  disabled
-                  className="smallInput"
-                  defaultValue={ el.msl }
-                  value={ el.msl }
-                  onChange={ (e) => changeDetail(idx, "msl", e.target.value) }
-                  placeholder="Insert MSL here..."
-                />
-              </Form.Item>
-            }
-          </div>
-
-          <div className="dual">
-            {
-              <Form.Item
-                name={`recdPrice[${idx}]`} 
-                label="Recd Price"
-                rules={ [
-                  {
-                    required: true,
-                    message: "Price is required"
-                  },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (value > 0) {
-                        return Promise.resolve();
-                      }
-
-                      return Promise.reject(
-                        new Error("Price must be more than 0")
-                      );
-                    },
-                  }),
-                ] }
-              >
-                <Input
-                  type="number"
-                  className="smallInput"
-                  defaultValue={ el.recdPrice }
-                  value={ el.recdPrice }
-                  onChange={ (e) =>
-                    changeDetail(idx, "recdPrice", parseFloat(e.target.value))
-                  }
-                  placeholder="Type Recd Price here..."
-                />
-              </Form.Item>
-            }
-
-            {
-              <Form.Item
-                name={`recdQty[${idx}]`} 
-                label="Recd Qty"
-                rules={ [
-                  {
-                    required: true,
-                    message: "Recd Qty is required"
-                  },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (value > 0) {
-                        return Promise.resolve();
-                      }
-
-                      return Promise.reject(
-                        new Error("QTY must be more than 0")
-                      );
-                    },
-                  }),
-                ] }
-              >
-                <Input
-                  type={ "number" }
-                  className="smallInput"
-                  defaultValue={ el.recdQty }
-                  value={ el.recdQty }
-                  onChange={ (e) =>
-                    changeDetail(idx, "recdQty", parseFloat(e.target.value))
-                  }
-                  placeholder="Type Recd Qty here..."
-                />
-              </Form.Item>
-            }
-          </div>
-        </div>
-
-        <div className="row2">
-          {
-            <Form.Item name={`itemNo[${idx}]`} label="Item No">
-              <Input
-                defaultValue={ el.itemNo }
-                value={ el.itemNo }
-                onChange={ (e) => onSearchPress(idx, "itemNo", e.target.value) }
-                placeholder="Type item no here..."
-              />
-            </Form.Item>
-          }
-
-          {
-            <Form.Item name={`loc[${idx}]`} label="Loc">
-              <AutoComplete
-                // disabled
-                defaultValue={ el.loc }
-                value={ el.loc }
-                options={ locOpt }
-                onSelect={ (e) => onSearchPress(idx, "loc", e.target.value) }
-                placeholder={ "Select loc.." }
-                filterOption={ (inputValue, option) =>
-                  option.value
-                    .toUpperCase()
-                    .indexOf(inputValue.toUpperCase()) !== -1
-=======
         <Collapsible trigger={ `Serial Number: ${ idx + 1 }` }>
           <div className="inputs">
             <div className="row2">
@@ -214,7 +46,6 @@ function GrnDetail(props) {
                       placeholder="Type SN here..."
                     />
                   </Form.Item>
->>>>>>> e510aa0452079d82b68a43f92708c75d19991feb
                 }
 
                 {
@@ -368,19 +199,34 @@ function GrnDetail(props) {
 
               {
                 <Form.Item name={ `loc[${ idx }]` } label="Loc">
-                  <AutoComplete
+                  <Select
+                    showSearch
+                    allowClear
+                    className='normal smallInput'
+                    defaultValue={ el.loc }
+                    value={ el.loc }
+                    options={ locOpt }
+                    onSelect={ (data) => changeDetail(idx, "loc", data) }
+                    placeholder={ "Choose Loc..." }
+                    filterOption={ (inputValue, option) =>
+                      option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                    }
+                    style={ { width: 'auto' } }
+                  />
+
+                  {/* <AutoComplete
                     disabled
                     defaultValue={ el.loc }
                     value={ el.loc }
                     options={ [] }
-                    onSelect={ (data) => setLoc(data) }
+                    onSelect={ (e) => changeDetail(idx, "loc", e.target.value) }
                     placeholder={ "Select loc.." }
                     filterOption={ (inputValue, option) =>
                       option.value
                         .toUpperCase()
                         .indexOf(inputValue.toUpperCase()) !== -1
                     }
-                  />
+                  /> */}
                 </Form.Item>
               }
 
