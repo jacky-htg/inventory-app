@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message } from 'antd';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Collapse } from 'antd';
+import { CaretRightOutlined } from '@ant-design/icons';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Lov, Location, Item } from '../../services';
 import { MdAddCircle } from 'react-icons/md';
@@ -462,7 +463,7 @@ const GrnManualForm = (props) => {
         details[i]["poPrice"] = e.recdPrice;
         details[i]["recdDate"] = e.dueDate;
         details[i]["loc"] = "TE";
-        details[i]["seqNo"] = (i+1);
+        details[i]["seqNo"] = (i + 1);
       });
 
       console.log('details', details);
@@ -526,7 +527,10 @@ const GrnManualForm = (props) => {
     };
     setTimer(setTimeout(() => {
       console.log('body :>> ', body);
-      // Grn.checkNewItem(body);
+      let data = Grn.checkNewItem(body);
+      data.then(res => {
+        console.log('res checkNewItem :>> ', res);
+      });
     }, 1500));
     // Grn.checkNewItem();
   };

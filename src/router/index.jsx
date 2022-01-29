@@ -76,6 +76,10 @@ const publicRoutes = [
     component: GrnWithPoForm
   },
   {
+    path: '/grn-with-pos/:id',
+    component: GrnWithPoForm
+  },
+  {
     path: '/grn-with-pos',
     component: GrnWithPo
   },
@@ -153,10 +157,10 @@ const Router = props => {
   const [loginDate, setLoginDate] = useState(moment().format("LLL"));
   // const dispatch = useDispatch();
   const [now, setNow] = useState(moment().format("LLL"));
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setNow(moment().format("LLL"))
+      setNow(moment().format("LLL"));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
