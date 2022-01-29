@@ -336,6 +336,7 @@ function PageList(props) {
 
   const setModal = () => {
     const temp = [];
+    temp.push(<h3>Check the columns below (maximum 8 columns).</h3>);
     props.fields.map(e => {
       let isChecked = false;
       if (fields.includes(e.field)) {

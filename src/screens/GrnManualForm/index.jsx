@@ -470,9 +470,7 @@ const GrnManualForm = (props) => {
       let obj = {
         subType: 'M',
         grnNo,
-        //poNo,
         doNo,
-        //supplierCode,
         currencyCode,
         currencyRate,
         grnDetails: details
@@ -731,6 +729,7 @@ const GrnManualForm = (props) => {
                         el={ el }
                         idx={ idx }
                         uomOpt={ uomOpt }
+                        locOpt={ locOpt }
                         changeDetail={ changeDetail }
                         addNewDetail={ addNewDetail }
                         deleteDetail={ deleteDetail }

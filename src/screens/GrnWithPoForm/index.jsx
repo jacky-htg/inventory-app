@@ -25,18 +25,6 @@ const GrnWithPoForm = (props) => {
   const [form] = Form.useForm();
   const [details, setDetails] = useState([]);
   const [tempDetails, setTempDetails] = useState([]);
-  /*const [locData, setLocData] = useState([]);
-  const [locOpt, setLocOpt] = useState([]);
-  const [itemCategoriesData, setItemCategoriesData] = useState([]);
-  const [itemCategoriesOpt, setItemCategoriesOpt] = useState([]);
-  const [subCategoriesData, setSubCategoriesData] = useState([]);
-  const [subCategoriesOpt, setSubCategoriesOpt] = useState([]);
-  const [mslData, setMslData] = useState([]);
-  const [mslOpt, setMslOpt] = useState([]);
-  const [sourcesData, setSourcesData] = useState([]);
-  const [sourcesOpt, setSourcesOpt] = useState([]);
-  const [uomData, setUomData] = useState([]);
-  const [uomOpt, setUomOpt] = useState([]); */
   const [grnNo, setGrnNo] = useState('');
   const [poNo, setPoNo] = useState();
   const [supplierCode, setSupplierCode] = useState('');
@@ -54,158 +42,9 @@ const GrnWithPoForm = (props) => {
 
   const [parts, setParts] = useState([]);
 
-  /*const [balbfQty, setBalbfQty] = useState(0);
-  const [categoryCode, setCategoryCode] = useState('');
-  const [categoryName, setCategoryName] = useState('');
-  const [categorySubCode, setCategorySubCode] = useState('');
-  const [categorySubCodeName, setCategorySubCodeName] = useState('');
-  const [description, setDescription] = useState('');
-  const [dimension, setDimension] = useState('');
-  const [issueNo, setIssueNo] = useState('');
-  const [itemNo, setItemNo] = useState('');
-  const [leadtime, setLeadtime] = useState(0);
-  const [loc, setLoc] = useState('');
-  const [manufacturer, setManufacturer] = useState('');
-  const [mslCode, setMslCode] = useState('');
-  const [mslCodeName, setMslCodeName] = useState('');
-  const [obsoleteCode, setObsoleteCode] = useState('');
-  const [obsoleteItem, setObsoleteItem] = useState('');
-  const [openClose, setOpenClose] = useState('');
-  const [orderQty, setOrderQty] = useState(0);
-  const [partNo, setPartNo] = useState('');
-  const [prodnResv, setProdnResv] = useState(0);
-  const [productGroup, setProductGroup] = useState('');
-  const [qoh, setQoh] = useState(0);
-  const [qryObsItem, setQryObsItem] = useState('');
-  const [refUrl, setRefUrl] = useState('');
-  const [remarks, setRemarks] = useState('');
-  const [reorder, setReorder] = useState(0);
-  const [requestor, setRequestor] = useState('');
-  const [rev, setRev] = useState('');
-  const [rohsStatus, setRohsStatus] = useState(false);
-  const [source, setSource] = useState('');
-  const [sourceName, setSourceName] = useState('');
-  const [status, setStatus] = useState('ACTIVE');
-  const [stdMaterial, setStdMaterial] = useState(0);
-  const [storageShelf, setStorageShelf] = useState('');
-  const [uom, setUom] = useState('');
-  const [uomName, setUomName] = useState('');
-  const [version, setVersion] = useState(0); */
-
-  /*useEffect(() => {
-    if (
-      id &&
-      locData.length > 0 &&
-      itemCategoriesData.length > 0 &&
-      mslData.length > 0 &&
-      sourcesData.length > 0 &&
-      uomData.length > 0
-    ) {
-      const data = Item.view(id);
-      data.then(result => {
-        console.log('result :>> ', result);
-        // if (result.status && result.status !== 200) {
-        //   message.error(result.error);
-        // } else {
-        result.balbfQty && setBalbfQty(result.balbfQty);
-        result.categoryCode && setCategoryCode(result.categoryCode);
-        if (result.categoryCode) {
-          itemCategoriesData.forEach(el => {
-            if (el.categoryCode === result.categoryCode) {
-              setCategoryCode(el.categoryCode);
-              setCategoryName(el.description);
-            }
-          });
-        }
-        result.categorySubCode && setCategorySubCode(result.categorySubCode);
-        // get and set subCategories later
-        result.description && setDescription(result.description);
-        result.categoryCode && setCategoryCode(result.categoryCode);
-        result.dimension && setDimension(result.dimension);
-        // result.eoh && setEoh(result.categoryCode);
-        result.issueNo && setIssueNo(result.issueNo);
-        result.itemNo && setItemNo(result.itemNo);
-        result.leadtime && setLeadtime(result.leadtime);
-        result.loc && setLoc(result.loc);
-        result.manufacturer && setManufacturer(result.manufacturer);
-        result.mslCode && setMslCode(result.mslCode);
-        if (result.mslCode) {
-          mslData.forEach(el => {
-            if (el.subType === result.mslCode) {
-              setMslCode(el.subType);
-              setMslCodeName(el.subtypeDesc);
-            }
-          });
-        }
-        result.orderQty && setOrderQty(result.orderQty);
-        result.mslCode && setMslCode(result.mslCode);
-        result.partNo && setPartNo(result.partNo);
-        result.prodnResv && setProdnResv(result.prodnResv);
-        result.productGroup && setProductGroup(result.productGroup);
-        result.qoh && setQoh(result.qoh);
-        result.refUrl && setRefUrl(result.refUrl);
-        result.remarks && setRemarks(result.remarks);
-        result.reorder && setReorder(result.reorder);
-        result.rev && setRev(result.rev);
-        result.rohsStatus && setRohsStatus(result.rohsStatus);
-        result.source && setSource(result.source);
-        if (result.source) {
-          sourcesData.forEach(el => {
-            if (el.codeValue === result.source) {
-              setSource(el.codeValue);
-              setSourceName(el.codeDesc);
-            }
-          });
-        }
-        result.source && setSource(result.source);
-        result.status && setStatus(result.status);
-        result.stdMaterial && setStdMaterial(result.stdMaterial);
-        result.uom && setUom(result.uom);
-        result.version && setVersion(result.version);
-
-        if (!result.categorySubCode) {
-          setLoadingPage(false);
-        }
-
-
-        // balbfQty: 1;
-        // categoryCode: "105";
-        // categorySubCode: "0";
-        // description: "Test desc";
-        // dimension: "100";
-        // eoh: 1;
-        // issueNo: "123-123";
-        // itemNo: "25-25251";
-        // leadtime: 1;
-        // loc: "TDK";
-        // manufacturer: "3M";
-        // mslCode: "6";
-        // orderQty: 1;
-        // partNo: "MP2-HP10-51S1-TR33";
-        // prodnResv: 0;
-        // productGroup: "test group";
-        // qoh: 0;
-        // refUrl: "www.test.com";
-        // remarks: "Test Remark";
-        // reorder: 10;
-        // rev: "tes";
-        // rohsStatus: true;
-        // source: "B";
-        // status: "ACTIVE";
-        // stdMaterial: 100;
-        // uom: "CTN";
-        // version: 0
-        // }
-      });
-    }
-  }, [id, locData, itemCategoriesData, mslData, sourcesData, uomData]); */
-
   useEffect(() => {
     let data = Grn.pono();
     data.then(result => {
-      // if (result.status && result.status !== 200) {
-      //   message.error(result.error);
-      // }
       let temp = [];
       result.forEach(el => {
         temp.push({
@@ -222,9 +61,6 @@ const GrnWithPoForm = (props) => {
       console.log('data :>> ', data);
       data.then(result => {
         console.log('result :>> ', result);
-        // if (result.status && result.status !== 200) {
-        //   message.error(result.error);
-        // }
         result.grnNo && setGrnNo(result.grnNo);
         result.supplierCode && setSupplierCode(result.supplierCode);
         result.currencyCode && setCurrencyCode(result.currencyCode);
@@ -278,13 +114,12 @@ const GrnWithPoForm = (props) => {
             recdQty: result.orderQty,
             dueDate: result.dueDate,
             description: result.description,
-            issuedQty: 1,
-            labelQty: 1,
+            issuedQty: 0,
+            labelQty: 0,
             itemNo: null,
             itemType: 0
           };
           console.log('temp :>> ', temp);
-          // arr.push(temp);
           setDetails([...arr, temp]);
           setReRender(!reRender);
         });
@@ -302,149 +137,8 @@ const GrnWithPoForm = (props) => {
   }, [details]);
 
 
-  /*useEffect(() => {
-    const data = Lov.getItemCategories();
-    data.then(res => {
-      console.log('getItemCategories :>> ', res);
-      setItemCategoriesData(res);
-      let temp = [];
-      res.forEach(el => {
-        temp.push({
-          value: el.description,
-          // code: el.code
-        });
-      });
-      setItemCategoriesOpt(temp);
-    });
-  }, []); */
-
-  /*useEffect(() => {
-    if (categoryCode) {
-      console.log('categoryCode :>> ', categoryCode);
-      const data = Lov.getSubCategories(categoryCode);
-      data.then(res => {
-        console.log('getSubCategories :>> ', res);
-        setSubCategoriesData(res);
-        let temp = [];
-        res.forEach(el => {
-          temp.push({
-            value: el.subDescription,
-            // code: el.code
-          });
-        });
-        setSubCategoriesOpt(temp);
-      });
-    }
-  }, [categoryCode]);*/
-
-  /*useEffect(() => {
-    if (subCategoriesData.length > 0 && id && categorySubCode) {
-      subCategoriesData.forEach(el => {
-        if (el.categorySubCode === categorySubCode) {
-          setCategorySubCode(el.categorySubCode);
-          setCategorySubCodeName(el.subDescription);
-        }
-      });
-      setLoadingPage(false);
-    }
-  }, [subCategoriesData]);*/
-
-  /*useEffect(() => {
-    const data = Lov.getMsl();
-    data.then(res => {
-      console.log('getMsl :>> ', res);
-      setMslData(res);
-      let temp = [];
-      res.forEach(el => {
-        temp.push({
-          value: el.subtypeDesc,
-          // code: el.code
-        });
-      });
-      setMslOpt(temp);
-    });
-  }, []);*/
-
-  /*useEffect(() => {
-    const data = Lov.getSources();
-    data.then(res => {
-      console.log('getSources :>> ', res);
-      setSourcesData(res);
-      let temp = [];
-      res.forEach(el => {
-        temp.push({
-          value: el.codeDesc,
-          // code: el.code
-        });
-      });
-      setSourcesOpt(temp);
-    });
-  }, []);*/
-
-  /*useEffect(() => {
-    const data = Lov.getUOM();
-    data.then(res => {
-      console.log('getUOM :>> ', res);
-      setUomData(res);
-      let temp = [];
-      res.forEach(el => {
-        temp.push({
-          value: el.codeDesc,
-          // code: el.code
-        });
-      });
-      setUomOpt(temp);
-    });
-  }, []);*/
-
-  /*const onSelectCategoryCode = (data) => {
-    itemCategoriesData.forEach(el => {
-      if (el.description === data) {
-        setCategoryCode(el.categoryCode);
-        setCategoryName(el.description);
-      }
-    });
-  };
-
-  const onSelectSubCategoryCode = (data) => {
-    subCategoriesData.forEach(el => {
-      if (el.subDescription === data) {
-        setCategorySubCode(el.categorySubCode);
-        setCategorySubCodeName(el.subDescription);
-      }
-    });
-  };
-
-  const onSelectSource = (data) => {
-    sourcesData.forEach(el => {
-      if (el.codeDesc === data) {
-        setSource(el.codeValue);
-        setSourceName(el.codeDesc);
-      }
-    });
-  };
-
-  const onSelectMsl = (data) => {
-    mslData.forEach(el => {
-      if (el.subtypeDesc === data) {
-        setMslCode(el.subType);
-        setMslCodeName(el.subtypeDesc);
-      }
-    });
-  };
-
-  const onSelectUOM = (data) => {
-    uomData.forEach(el => {
-      if (el.codeDesc === data) {
-        setUom(el.codeValue);
-        setUomName(el.codeDesc);
-      }
-    });
-  };*/
-
   const submit = async () => {
     try {
-      console.log(details);
       // const values = await form.validateFields();
       // console.log('Success:', values);
       details.map((e, i) => {
@@ -454,9 +148,6 @@ const GrnWithPoForm = (props) => {
         details[i]["recdDate"] = e.dueDate;
         details[i]["uom"] = e.invUom;
       });
-
-      console.log('details', details);
-
 
       let obj = {
         subType: 'N',

@@ -13,7 +13,7 @@ import { TiDelete } from "react-icons/ti";
 import moment from "moment";
 
 function GrnDetail(props) {
-  let { el, idx, uomOpt, changeDetail, addNewDetail, deleteDetail, onSearchPress, details } = props;
+  let { el, idx, uomOpt, changeDetail, addNewDetail, deleteDetail, onSearchPress, details, locOpt } = props;
   
   return (
     <div key={ idx } className="detail-card">
@@ -169,11 +169,11 @@ function GrnDetail(props) {
           {
             <Form.Item name={`loc[${idx}]`} label="Loc">
               <AutoComplete
-                disabled
+                // disabled
                 defaultValue={ el.loc }
                 value={ el.loc }
-                options={ [] }
-                onSelect={ (data) => setLoc(data) }
+                options={ locOpt }
+                onSelect={ (e) => onSearchPress(idx, "loc", e.target.value) }
                 placeholder={ "Select loc.." }
                 filterOption={ (inputValue, option) =>
                   option.value

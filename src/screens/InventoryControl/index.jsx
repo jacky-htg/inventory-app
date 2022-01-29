@@ -15,7 +15,7 @@ function Page() {
   useEffect(() => {
     setupFields();
   }, []); 
-  console.log('cococo');
+  
   return (
     <PageList 
       filter={false}
