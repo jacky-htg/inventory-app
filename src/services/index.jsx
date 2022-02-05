@@ -7,7 +7,7 @@ import Uom from './uom';
 import ItemCategory from './itemCategories';
 import InventoryControl from './inventoryControl';
 import Msr from './msr';
-
+import Siv from './siv';
 
 export {
   Location,
@@ -18,5 +18,6 @@ export {
   Uom,
   ItemCategory,
   InventoryControl,
-  Msr
+  Msr,
+  Siv
 };

@@ -15,3 +15,5 @@ export { default as InventoryControl } from "./InventoryControl";
 export { default as InventoryControlForm } from "./InventoryControlForm";
 export { default as Msr } from "./Msr";
 export { default as MsrForm } from "./MsrForm";
+export { default as SivManual } from "./SivManual";
+export { default as SivManualForm } from "./SivManualForm";

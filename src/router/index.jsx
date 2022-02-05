@@ -29,7 +29,9 @@ import {
   InventoryControl,
   InventoryControlForm,
   Msr,
-  MsrForm
+  MsrForm,
+  SivManual,
+  SivManualForm
 } from '../screens';
 import { Sidebar } from '../components';
 import { Colors, Images } from '../constant';
@@ -138,6 +140,18 @@ const publicRoutes = [
   {
     path: '/msr/:id',
     component: MsrForm
+  },
+  {
+    path: '/siv-manuals',
+    component: SivManual
+  },
+  {
+    path: '/siv-manuals/create',
+    component: SivManualForm
+  },
+  {
+    path: '/siv-manuals/:id',
+    component: SivManualForm
   }
 
 ];
