@@ -216,7 +216,8 @@ function Sidebar() {
       history.location.pathname.includes('/uoms') || 
       history.location.pathname.includes('/item-categories') ||
       history.location.pathname.includes('/inventory-controls') ||
-      history.location.pathname.includes('/msr')
+      history.location.pathname.includes('/msr') || 
+      history.location.pathname.includes('/siv-manuals')
     ) {
       setSelectedMenu(itemMenu);
     }
