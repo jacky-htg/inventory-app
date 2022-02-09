@@ -183,6 +183,49 @@ async function checkNewItem(body) {
     .catch((err) => console.log("err :>> ", err));
 }
 
+async function printLabel(body) {
+  console.log("masuk");
+  return await fetch(`${env.url}/grns/print-label`, {
+    method: "POST",
+    headers: {
+      "X-USERNAME": env.username,
+      "X-COMPANYCODE": env.companyCode,
+      "X-PLANTNO": env.plantNo,
+    },
+    body: body,
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log("err :>> ", err));
+}
+
+async function printPickList(body) {
+  return await fetch(`${env.url}/grns/print-pick-lists`, {
+    method: "POST",
+    headers: {
+      "X-USERNAME": env.username,
+      "X-COMPANYCODE": env.companyCode,
+      "X-PLANTNO": env.plantNo,
+    },
+    body: body,
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log("err :>> ", err));
+}
+
+async function printReportGRN(body) {
+  return await fetch(`${env.url}/grns/print-report-grn`, {
+    method: "POST",
+    headers: {
+      "X-USERNAME": env.username,
+      "X-COMPANYCODE": env.companyCode,
+      "X-PLANTNO": env.plantNo,
+    },
+    body: body,
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log("err :>> ", err));
+}
+
 export default {
   list,
   create,
@@ -193,4 +236,7 @@ export default {
   detailByPartNo,
   getDefaultGRN,
   checkNewItem,
+  printLabel,
+  printPickList,
+  printReportGRN,
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Collapse } from 'antd';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Collapse, Menu } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Lov, Location, Item } from '../../services';
@@ -87,6 +87,10 @@ const GrnManualForm = (props) => {
   const [grnNo, setGrnNo] = useState(null);
   const [msrNo, setMsrNo] = useState(null);
   const [doNo, setDoNo] = useState(null);
+  const [subType, setSubType] = useState(null);
+  const [orderNo, setOrderNo] = useState(null);
+  const [projectNo, setProjectNo] = useState(null);
+
   const [timer, setTimer] = useState(null);
 
 
@@ -97,112 +101,35 @@ const GrnManualForm = (props) => {
   const [entryDate, setEntryDate] = useState('');
 
   useEffect(() => {
-    if (
-      id &&
-      locData.length > 0 &&
-      itemCategoriesData.length > 0 &&
-      mslData.length > 0 &&
-      sourcesData.length > 0 &&
-      uomData.length > 0
-    ) {
-      const data = Item.view(id);
+    if (id) {
+      let data = Grn.view(id);
       data.then(result => {
         console.log('result :>> ', result);
-        // if (result.status && result.status !== 200) {
-        //   message.error(result.error);
-        // } else {
-        result.balbfQty && setBalbfQty(result.balbfQty);
-        result.categoryCode && setCategoryCode(result.categoryCode);
-        if (result.categoryCode) {
-          itemCategoriesData.forEach(el => {
-            if (el.categoryCode === result.categoryCode) {
-              setCategoryCode(el.categoryCode);
-              setCategoryName(el.description);
-            }
-          });
-        }
-        result.categorySubCode && setCategorySubCode(result.categorySubCode);
-        // get and set subCategories later
-        result.description && setDescription(result.description);
-        result.categoryCode && setCategoryCode(result.categoryCode);
-        result.dimension && setDimension(result.dimension);
-        // result.eoh && setEoh(result.categoryCode);
-        result.issueNo && setIssueNo(result.issueNo);
-        result.itemNo && setItemNo(result.itemNo);
-        result.leadtime && setLeadtime(result.leadtime);
-        result.loc && setLoc(result.loc);
-        result.manufacturer && setManufacturer(result.manufacturer);
-        result.mslCode && setMslCode(result.mslCode);
-        if (result.mslCode) {
-          mslData.forEach(el => {
-            if (el.subType === result.mslCode) {
-              setMslCode(el.subType);
-              setMslCodeName(el.subtypeDesc);
-            }
-          });
-        }
-        result.orderQty && setOrderQty(result.orderQty);
-        result.mslCode && setMslCode(result.mslCode);
-        result.partNo && setPartNo(result.partNo);
-        result.prodnResv && setProdnResv(result.prodnResv);
-        result.productGroup && setProductGroup(result.productGroup);
-        result.qoh && setQoh(result.qoh);
-        result.refUrl && setRefUrl(result.refUrl);
-        result.remarks && setRemarks(result.remarks);
-        result.reorder && setReorder(result.reorder);
-        result.rev && setRev(result.rev);
-        result.rohsStatus && setRohsStatus(result.rohsStatus);
-        result.source && setSource(result.source);
-        if (result.source) {
-          sourcesData.forEach(el => {
-            if (el.codeValue === result.source) {
-              setSource(el.codeValue);
-              setSourceName(el.codeDesc);
-            }
-          });
-        }
-        result.source && setSource(result.source);
-        result.status && setStatus(result.status);
-        result.stdMaterial && setStdMaterial(result.stdMaterial);
-        result.uom && setUom(result.uom);
-        result.version && setVersion(result.version);
-
-        if (!result.categorySubCode) {
-          setLoadingPage(false);
-        }
-
-
-        // balbfQty: 1;
-        // categoryCode: "105";
-        // categorySubCode: "0";
-        // description: "Test desc";
-        // dimension: "100";
-        // eoh: 1;
-        // issueNo: "123-123";
-        // itemNo: "25-25251";
-        // leadtime: 1;
-        // loc: "TDK";
-        // manufacturer: "3M";
-        // mslCode: "6";
-        // orderQty: 1;
-        // partNo: "MP2-HP10-51S1-TR33";
-        // prodnResv: 0;
-        // productGroup: "test group";
-        // qoh: 0;
-        // refUrl: "www.test.com";
-        // remarks: "Test Remark";
-        // reorder: 10;
-        // rev: "tes";
-        // rohsStatus: true;
-        // source: "B";
-        // status: "ACTIVE";
-        // stdMaterial: 100;
-        // uom: "CTN";
-        // version: 0
-        // }
+        setLoadingPage(false);
+        result.grnNo && setGrnNo(result.grnNo);
+        result.currencyRate && setCurrencyRate(result.currencyRate);
+        result.currencyCode && setCurrencyCode(result.currencyCode);
+        result.createdAt && setEntryDate(result.createdAt);
+        result.updatedAt && setRecdDate(result.updatedAt);
+        result.entryUser && setEntryUser(result.entryUser);
+        result.subType && setSubType(result.subType);
+        result.orderNo && setOrderNo(result.orderNo);
+        result.projectNo && setProjectNo(result.projectNo);
+        let arr = [];
+        result.grnDetails && result.grnDetails.length > 0 && result.grnDetails.forEach(el => {
+          arr.push(el);
+        });
+        console.log('arr :>> ', arr);
+        setDetails([...arr]);
       });
     }
-  }, [id, locData, itemCategoriesData, mslData, sourcesData, uomData]);
+  }, [id]);
+
+  useEffect(() => {
+    console.log('details :>> ', details);
+  }, [details]);
+
+
 
   useEffect(() => {
     let data = Location.list({});
@@ -223,26 +150,29 @@ const GrnManualForm = (props) => {
   }, []);
 
   useEffect(() => {
-    let data = Grn.getDefaultGRN();
-    data.then(result => {
-      console.log('result :>> ', result);
-      // currencyCode: "USD";
-      // currencyRate: 1;
-      // entryDate: "2022-01-23T00:00:00.000+00:00";
-      // entryUser: "tsagita";
-      // grnNo: "GRM2022-00001";
-      // recdDate: "2022-01-23T00:00:00.000+00:00";
-      // statuz: "Y";
-      // subType: "M"
-      setGrnNo(result.grnNo);
-      setCurrencyCode(result.currencyCode);
-      setCurrencyRate(result.currencyRate);
-      setEntryDate(result.entryDate);
-      setEntryUser(result.entryUser);
-      setRecdDate(result.recdDate);
-      console.log('success');
-    })
-      .catch(err => console.log(err));
+    if (!id) {
+
+      let data = Grn.getDefaultGRN();
+      data.then(result => {
+        console.log('result :>> ', result);
+        // currencyCode: "USD";
+        // currencyRate: 1;
+        // entryDate: "2022-01-23T00:00:00.000+00:00";
+        // entryUser: "tsagita";
+        // grnNo: "GRM2022-00001";
+        // recdDate: "2022-01-23T00:00:00.000+00:00";
+        // statuz: "Y";
+        // subType: "M"
+        setGrnNo(result.grnNo);
+        setCurrencyCode(result.currencyCode);
+        setCurrencyRate(result.currencyRate);
+        setEntryDate(result.entryDate);
+        setEntryUser(result.entryUser);
+        setRecdDate(result.recdDate);
+        console.log('success');
+      })
+        .catch(err => console.log(err));
+    }
   }, []);
 
 
@@ -549,6 +479,44 @@ const GrnManualForm = (props) => {
     return false;
   };
 
+  const printReport = (key) => {
+    console.log('key :>> ', key);
+    let body = {
+
+    };
+    if (key === 'GRN') {
+      body.grnNo = grnNo;
+      body.subType = subType;
+      body.type = subType;
+    } else if (key === 'pickList') {
+      body.grnNo = grnNo;
+      body.orderNo = orderNo;
+      body.projectNo = projectNo;
+    } else if (key === 'label') {
+      body.grnNo = grnNo;
+    }
+    console.log(body);
+    let data = key === 'GRN' ? Grn.printReportGRN(body) : key === 'pickList' ? Grn.printPickList(body) : Grn.printLabel(body);
+    data.then(result => {
+      console.log('result :>> ', result);
+    })
+      .catch(err => console.log('err :>> ', err));
+  };
+
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <span onClick={ () => printReport('GRN') }>Report GRN</span>
+      </Menu.Item>
+      <Menu.Item>
+        <span onClick={ () => printReport('pickList') }>Pick List</span>
+      </Menu.Item>
+      <Menu.Item>
+        <span onClick={ () => printReport('label') }>Label</span>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <StyledDiv>
       <div className="header">
@@ -730,6 +698,7 @@ const GrnManualForm = (props) => {
                   details.map((el, idx) => {
                     return (
                       <GrnDetail
+                        id={ id }
                         el={ el }
                         idx={ idx }
                         uomOpt={ uomOpt }
@@ -758,6 +727,17 @@ const GrnManualForm = (props) => {
                           "Create GRN"
                       }
                     </Button>
+                  </Form.Item>
+                </div>
+              }
+
+              {
+                id &&
+                <div className="submit">
+                  <Form.Item>
+                    <Dropdown overlay={ menu } placement="topRight">
+                      <Button>Print</Button>
+                    </Dropdown>
                   </Form.Item>
                 </div>
               }

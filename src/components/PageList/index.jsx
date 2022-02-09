@@ -279,7 +279,7 @@ function PageList(props) {
 
           let id = ids.join('-');
 
-          if (props.url === 'grn-with-pos') {
+          if (props.url === 'grn-with-pos' || props.url === 'grn-manuals') {
             id = record.id;
           }
 

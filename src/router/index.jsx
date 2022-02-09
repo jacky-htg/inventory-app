@@ -92,6 +92,10 @@ const publicRoutes = [
     component: GrnManualForm
   },
   {
+    path: '/grn-manuals/:id',
+    component: GrnManualForm
+  },
+  {
     path: '/uoms',
     component: Uom,
   },

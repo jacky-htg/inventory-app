@@ -16,8 +16,13 @@ import Collapsible from "react-collapsible";
 
 function GrnDetail(props) {
   const { Panel } = Collapse;
-  let { el, idx, uomOpt, changeDetail, addNewDetail, deleteDetail, onSearchPress, details, locOpt } = props;
+  let { id, el, idx, uomOpt, changeDetail, addNewDetail, deleteDetail, onSearchPress, details, locOpt } = props;
   const [timer, setTimer] = useState(null);
+
+  useEffect(() => {
+    console.log('el :>> ', el);
+  }, [el]);
+
 
   const onSearchPress2 = field => {
     clearTimeout(timer);
@@ -39,6 +44,7 @@ function GrnDetail(props) {
                   <Form.Item name={ `sn[${ idx }]` } label="SN">
                     <Input
                       readOnly
+                      disabled={ id }
                       className="smallInput"
                       defaultValue={ idx + 1 }
                       value={ idx + 1 }
@@ -51,10 +57,12 @@ function GrnDetail(props) {
                 {
                   <Form.Item name={ `type[${ idx }]` } label="Type">
                     <Select
+                      disabled={ id }
                       className="smallInput"
                       style={ { width: "70px" } }
                       onChange={ (value) => changeDetail(idx, "itemType", value) }
                       placeholder="..."
+                      defaultValue={ el.itemType }
                     >
                       <Option value={ 0 }>0</Option>
                       <Option value={ 1 }>1</Option>
@@ -67,6 +75,7 @@ function GrnDetail(props) {
                 {
                   <Form.Item name={ `uom[${ idx }]` } label="UOM">
                     <Select
+                      disabled={ id }
                       showSearch
                       allowClear
                       className='normal smallInput'
@@ -135,6 +144,7 @@ function GrnDetail(props) {
                     ] }
                   >
                     <Input
+                      disabled={ id }
                       type="number"
                       className="smallInput"
                       defaultValue={ el.recdPrice }
@@ -170,6 +180,7 @@ function GrnDetail(props) {
                     ] }
                   >
                     <Input
+                      disabled={ id }
                       type={ "number" }
                       className="smallInput"
                       defaultValue={ el.recdQty }
@@ -187,7 +198,10 @@ function GrnDetail(props) {
             <div className="row2">
               {
                 <Form.Item name={ `itemNo[${ idx }]` } label="Item No">
+                  <Input hidden />
+
                   <Input
+                    disabled={ id }
                     defaultValue={ el.itemNo }
                     value={ el.itemNo }
 
@@ -199,7 +213,10 @@ function GrnDetail(props) {
 
               {
                 <Form.Item name={ `loc[${ idx }]` } label="Loc">
+                  <Input hidden />
+
                   <Select
+                    disabled={ id }
                     showSearch
                     allowClear
                     className='normal smallInput'
@@ -211,7 +228,7 @@ function GrnDetail(props) {
                     filterOption={ (inputValue, option) =>
                       option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                     }
-                    style={ { width: 'auto' } }
+                  // style={ { width: 'auto' } }
                   />
 
                   {/* <AutoComplete
@@ -261,11 +278,13 @@ function GrnDetail(props) {
                       }),
                     ] }
                   >
+                    <Input hidden />
                     <Input
+                      disabled={ id }
                       type="number"
                       className="smallInput"
-                      defaultValue={ el.qtyLabel }
-                      value={ el.qtyLabel }
+                      defaultValue={ el.labelQty }
+                      value={ el.labelQty }
                       onChange={ (e) =>
                         changeDetail(idx, "labelQty", parseFloat(e.target.value))
                       }
@@ -340,6 +359,7 @@ function GrnDetail(props) {
                     ] }
                   >
                     <Input
+                      disabled={ id }
                       className="smallInput"
                       defaultValue={ el.dateCode }
                       value={ el.dateCode }
@@ -357,6 +377,7 @@ function GrnDetail(props) {
               {
                 <Form.Item name={ `partNo[${ idx }]` } label="Part No">
                   <Input
+                    disabled={ id }
                     className="smallInput"
                     defaultValue={ el.partNo }
                     value={ el.partNo }
@@ -371,6 +392,7 @@ function GrnDetail(props) {
                 {
                   <Form.Item name={ `projectNo[${ idx }]` } label="Project No">
                     <Input
+                      disabled={ id }
                       className="smallInput"
                       defaultValue={ el.projectNo }
                       value={ el.projectNo }
@@ -386,6 +408,7 @@ function GrnDetail(props) {
                 {
                   <Form.Item name={ `poNo[${ idx }]` } label="PO No">
                     <Input
+                      disabled={ id }
                       className="smallInput"
                       defaultValue={ el.poNo }
                       value={ el.poNo }
@@ -400,6 +423,7 @@ function GrnDetail(props) {
               {
                 <Form.Item name={ `description[${ idx }]` } label="Description">
                   <Input
+                    disabled={ id }
                     className="smallInput"
                     defaultValue={ el.description }
                     value={ el.description }
@@ -414,6 +438,7 @@ function GrnDetail(props) {
               {
                 <Form.Item name={ `remarks[${ idx }]` } label="Remarks">
                   <Input
+                    disabled={ id }
                     className="smallInput"
                     defaultValue={ el.remarks }
                     value={ el.remarks }
@@ -428,15 +453,17 @@ function GrnDetail(props) {
         </Collapsible>
       </div>
 
-
-      <div className="actions">
-        { details.length > 1 && (
-          <TiDelete color="red" size={ 30 } onClick={ () => deleteDetail(idx) } />
-        ) }
-        { idx === details.length - 1 && (
-          <MdAddCircle color="#1990ff" size={ 24 } onClick={ addNewDetail } />
-        ) }
-      </div>
+      {
+        !id &&
+        <div className="actions">
+          { details.length > 1 && (
+            <TiDelete color="red" size={ 30 } onClick={ () => deleteDetail(idx) } />
+          ) }
+          { idx === details.length - 1 && (
+            <MdAddCircle color="#1990ff" size={ 24 } onClick={ addNewDetail } />
+          ) }
+        </div>
+      }
     </div>
   );
 }
