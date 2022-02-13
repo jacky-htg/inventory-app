@@ -6,7 +6,7 @@ import { Images } from "../../constant";
 const StyledDiv = styled.div`
   .header {
     position: sticky;
-    top: 102px;
+    top: 69px;
     padding-top: 20px;
     margin-bottom: 40px;
     display: flex;
@@ -15,7 +15,7 @@ const StyledDiv = styled.div`
     z-index: 2;
 
     h2 {
-      font-size: 30px;
+      font-size: 18px;
       color: #1990ff;
     }
 

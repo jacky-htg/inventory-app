@@ -34,7 +34,7 @@ function GrnDetail(props) {
   };
 
   return (
-    <div className="detail-card">
+    <div className={ `detail-card ${ id ? 'full' : '' }` }>
       <div className="border">
         <Collapsible trigger={ `Serial Number: ${ idx + 1 }` }>
           <div className="inputs">
@@ -422,7 +422,7 @@ function GrnDetail(props) {
             <div className="row">
               {
                 <Form.Item name={ `description[${ idx }]` } label="Description">
-                  <Input
+                  <Input.TextArea
                     disabled={ id }
                     className="smallInput"
                     defaultValue={ el.description }
@@ -437,7 +437,7 @@ function GrnDetail(props) {
 
               {
                 <Form.Item name={ `remarks[${ idx }]` } label="Remarks">
-                  <Input
+                  <Input.TextArea
                     disabled={ id }
                     className="smallInput"
                     defaultValue={ el.remarks }

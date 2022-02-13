@@ -240,9 +240,13 @@ table {
   z-index: 2;
 }
 
+.userInfo p {
+  margin-bottom: 4px;
+}
+
 .userInfo span {
   font-weight: 700;
-  font-size: 20px;
+  font-size: 16px;
   color: #1990ff; /*darkblue;*/
 }
 
@@ -256,4 +260,8 @@ table {
 
 .page-wrapper .header {
   margin-bottom: 28px !important;
+}
+
+.ant-table-cell {
+  padding: 10px 16px !important;
 }

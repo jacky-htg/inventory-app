@@ -6,7 +6,7 @@ import { Images } from "../../constant";
 const StyledDiv = styled.div`
   .header {
     position: sticky;
-    top: 102px;
+    top: 69px;
     padding-top: 20px;
     margin-bottom: 40px;
     display: flex;
@@ -15,7 +15,7 @@ const StyledDiv = styled.div`
     z-index: 2;
 
     h2 {
-      font-size: 30px;
+      font-size: 18px;
       color: #1990ff;
     }
 
@@ -48,7 +48,7 @@ const StyledDiv = styled.div`
     }
 
     .group {
-      margin-bottom: 60px;
+      margin-bottom: 32px;
     }
 
     .row {
@@ -120,7 +120,7 @@ const StyledDiv = styled.div`
       .border {
         border-radius: 10px;
         border: 1px solid lightgrey;
-        width: 92%;
+        width: 100$;
       }
       
       .Collapsible {
@@ -132,7 +132,7 @@ const StyledDiv = styled.div`
         align-items: center;
         padding: 20px;
         border-radius: 10px;
-        width: 92%;
+        width: 100%;
         font-weight: 400;
         text-decoration: none;
         position: absolute;
@@ -178,6 +178,10 @@ const StyledDiv = styled.div`
 
       .smallInput {
         max-width: 90% !important;
+      }
+
+      .smallInput2 {
+        max-width: 80% !important;
       }
 
       .ant-form-item-control {

@@ -183,45 +183,51 @@ async function checkNewItem(body) {
     .catch((err) => console.log("err :>> ", err));
 }
 
-async function printLabel(body) {
+async function printLabel(params) {
   console.log("masuk");
-  return await fetch(`${env.url}/grns/print-label`, {
-    method: "POST",
+  return await fetch(`${env.url}/grns/print-label?grnNo=${params.grnNo}`, {
+    method: "GET",
     headers: {
       "X-USERNAME": env.username,
       "X-COMPANYCODE": env.companyCode,
       "X-PLANTNO": env.plantNo,
     },
-    body: body,
   })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => console.log("err :>> ", err));
+}
+
+async function printPickList(params) {
+  return await fetch(
+    `${env.url}/grns/print-pick-lists?grnNo=${params.grnNo}?orderNo=${params.orderNo}?projectNo=${params.projectNo}`,
+    {
+      method: "GET",
+      headers: {
+        "X-USERNAME": env.username,
+        "X-COMPANYCODE": env.companyCode,
+        "X-PLANTNO": env.plantNo,
+      },
+    }
+  )
     .then((res) => res.json())
     .catch((err) => console.log("err :>> ", err));
 }
 
-async function printPickList(body) {
-  return await fetch(`${env.url}/grns/print-pick-lists`, {
-    method: "POST",
-    headers: {
-      "X-USERNAME": env.username,
-      "X-COMPANYCODE": env.companyCode,
-      "X-PLANTNO": env.plantNo,
-    },
-    body: body,
-  })
-    .then((res) => res.json())
-    .catch((err) => console.log("err :>> ", err));
-}
-
-async function printReportGRN(body) {
-  return await fetch(`${env.url}/grns/print-report-grn`, {
-    method: "POST",
-    headers: {
-      "X-USERNAME": env.username,
-      "X-COMPANYCODE": env.companyCode,
-      "X-PLANTNO": env.plantNo,
-    },
-    body: body,
-  })
+async function printReportGRN(params) {
+  return await fetch(
+    `${env.url}/grns/print-report-grn?grnNo=${params.grnNo}?subType=${params.subType}?type=${params.type}`,
+    {
+      method: "GET",
+      headers: {
+        "X-USERNAME": env.username,
+        "X-COMPANYCODE": env.companyCode,
+        "X-PLANTNO": env.plantNo,
+      },
+      body: body,
+    }
+  )
     .then((res) => res.json())
     .catch((err) => console.log("err :>> ", err));
 }

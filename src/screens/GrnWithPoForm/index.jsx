@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Dropdown, Menu } from 'antd';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Menu, Dropdown } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { MdAddCircle } from 'react-icons/md';
 import { TiDelete } from 'react-icons/ti';
@@ -764,7 +764,7 @@ const GrnWithPoForm = (props) => {
                         name={ `Description[${ idx }]` }
                         label="Description"
                       >
-                        <Input className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly disabled={ id } />
+                        <Input.TextArea className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly disabled={ id } />
                       </Form.Item>
                     }
 
@@ -773,7 +773,7 @@ const GrnWithPoForm = (props) => {
                         name={ `Remarks[${ idx }]` }
                         label="Remarks"
                       >
-                        <Input className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' disabled={ id } />
+                        <Input.TextArea className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' disabled={ id } />
                       </Form.Item>
                     }
 
@@ -798,25 +798,33 @@ const GrnWithPoForm = (props) => {
 
   const printReport = (key) => {
     console.log('key :>> ', key);
-    let body = {
-
-    };
+    let params = {};
     if (key === 'GRN') {
-      body.grnNo = grnNo;
-      body.subType = subType;
-      body.type = subType;
+      params.grnNo = grnNo;
+      params.subType = subType;
+      params.type = 'GRN';
     } else if (key === 'pickList') {
-      body.grnNo = grnNo;
-      body.orderNo = orderNo;
-      body.projectNo = projectNo;
+      params.grnNo = grnNo;
+      params.orderNo = orderNo;
+      params.projectNo = projectNo;
     } else if (key === 'label') {
-      body.grnNo = grnNo;
+      params.grnNo = grnNo;
     }
-    console.log(body);
-    let data = key === 'GRN' ? Grn.printReportGRN(body) : key === 'pickList' ? Grn.printPickList(body) : Grn.printLabel(body);
-    data.then(result => {
-      console.log('result :>> ', result);
-    })
+    console.log(params);
+    let data = key === 'GRN' ? Grn.printReportGRN(params) : key === 'pickList' ? Grn.printPickList(params) : Grn.printLabel(params);
+    data.then(result => result.blob('application/pdf'))
+      .then(blob => {
+        return URL.createObjectURL(blob);
+      })
+      .then((href) => {
+        console.log('href :>> ', href);
+        const a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = href;
+        a.download = `${ grnNo }-${ key === 'GRN' ? 'report' : key === 'pickList' ? 'picklist' : 'label' }.pdf`;
+        a.click();
+      })
       .catch(err => console.log('err :>> ', err));
   };
 
@@ -840,7 +848,7 @@ const GrnWithPoForm = (props) => {
         <div className="left">
 
         </div>
-        <h2>GRN Entry (with PO)</h2>
+        <h2>{ `GRN ${ !id ? 'Entry ' : '' }(with PO)` }</h2>
       </div>
       <div className="formWrapper">
         {
@@ -868,7 +876,7 @@ const GrnWithPoForm = (props) => {
                         label="GRN No"
                       >
                         <Input hidden />
-                        <Input className='smallInput' InitialValue={ grnNo } defaultValue={ grnNo } value={ grnNo } placeholder='Type Currency code here...' readOnly disabled={ isDisabled } />
+                        <Input className='smallInput' InitialValue={ grnNo } defaultValue={ grnNo } value={ grnNo } placeholder='Type GRN here...' readOnly disabled={ isDisabled } />
                       </Form.Item>
                   }
 
@@ -889,9 +897,9 @@ const GrnWithPoForm = (props) => {
                         label="Currency Code / Rate"
                       >
                         <div className="currInput">
-                          <Input className='smallInput' value={ currencyCode } placeholder='Type Currency code here...' readOnly disabled={ isDisabled } />
+                          <Input className='smallInput2' value={ currencyCode } placeholder='Type Currency code here...' readOnly disabled={ isDisabled } />
                           <span>/</span>
-                          <Input className='smallInput' value={ currencyRate } placeholder='Type rate here...' readOnly disabled={ isDisabled } />
+                          <Input style={ { width: '95%' } } className='smallInput2' value={ currencyRate } placeholder='Type rate here...' readOnly disabled={ isDisabled } />
                         </div>
                       </Form.Item>
                   }

@@ -6,17 +6,16 @@ import { Images } from "../../constant";
 const StyledDiv = styled.div`
   .header {
     position: sticky;
-    top: 102px;
+    top: 69px;
     padding-top: 20px;
     margin-bottom: 40px;
     display: flex;
     justify-content: space-between;
     background: white;
     z-index: 2;
-    /* border-bottom: 1px dashed; */
 
     h2 {
-      font-size: 30px;
+      font-size: 18px;
       color: #1990ff;
     }
 

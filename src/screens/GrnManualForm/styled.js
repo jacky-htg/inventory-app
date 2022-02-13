@@ -6,7 +6,7 @@ import { Images } from "../../constant";
 const StyledDiv = styled.div`
   .header {
     position: sticky;
-    top: 102px;
+    top: 69px;
     padding-top: 20px;
     margin-bottom: 40px;
     display: flex;
@@ -15,7 +15,7 @@ const StyledDiv = styled.div`
     z-index: 2;
 
     h2 {
-      font-size: 30px;
+      font-size: 18px;
       color: #1990ff;
     }
 
@@ -44,7 +44,7 @@ const StyledDiv = styled.div`
     }
 
     .group {
-      margin-bottom: 60px;
+      margin-bottom: 32px;
     }
     .row {
       display: grid;
@@ -92,6 +92,16 @@ const StyledDiv = styled.div`
     /* background: grey; */
     border-top: 1px dashed black;
     padding: 40px 0px;
+
+    .full {
+      .border {
+        width: 100% !important;
+      }
+
+      .Collapsible__trigger {
+        width: 100% !important;
+      }
+    }
 
     .detail-card {
       position: relative;
