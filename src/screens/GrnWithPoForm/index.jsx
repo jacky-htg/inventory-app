@@ -814,6 +814,7 @@ const GrnWithPoForm = (props) => {
     let data = key === 'GRN' ? Grn.printReportGRN(params) : key === 'pickList' ? Grn.printPickList(params) : Grn.printLabel(params);
     data.then(result => result.blob('application/pdf'))
       .then(blob => {
+        console.log('blob :>> ', blob);
         return URL.createObjectURL(blob);
       })
       .then((href) => {
