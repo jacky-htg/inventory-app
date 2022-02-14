@@ -46,8 +46,8 @@ function Sidebar() {
         },
         {
           title: 'Manual SIV Entry',
-          link: '',
-          isActive: false
+          link: '/siv-manuals',
+          isActive: true
         },
         {
           title: 'SIV Combine Entry',
@@ -61,8 +61,8 @@ function Sidebar() {
         },
         {
           title: 'MSR Entry',
-          link: '',
-          isActive: false
+          link: '/msr',
+          isActive: true
         },
         {
           title: 'MRV Entry',
@@ -212,11 +212,11 @@ function Sidebar() {
       history.location.pathname.includes('/items') ||
       history.location.pathname.includes('/stock-locations') ||
       history.location.pathname.includes('/grn-with-pos') ||
-      history.location.pathname.includes('/grn-manuals') || 
-      history.location.pathname.includes('/uoms') || 
+      history.location.pathname.includes('/grn-manuals') ||
+      history.location.pathname.includes('/uoms') ||
       history.location.pathname.includes('/item-categories') ||
       history.location.pathname.includes('/inventory-controls') ||
-      history.location.pathname.includes('/msr') || 
+      history.location.pathname.includes('/msr') ||
       history.location.pathname.includes('/siv-manuals')
     ) {
       setSelectedMenu(itemMenu);
