@@ -69,6 +69,17 @@ const PageForm = (props) => {
         message.error(res.message);
       } else {
         console.log('getSupplierByGrnNo result :>> ', grn);
+        setState({
+          ...state,
+          supplierCode: grn.supplierCode
+        });
+        setDetails(grn.msrDetails);
+        const temp = [];
+        grn.msrDetails.map((el, index) => {
+          el.sn = index+1
+          temp.push(el);
+        });
+        setDetails(temp);
       }
     }
   };
@@ -395,13 +406,13 @@ const PageForm = (props) => {
 
                                 {
                                   <Form.Item
-                                    name="Type"
+                                    name="itemType"
                                     label="Type"
                                   >
-                                    <Input className='smallInput' defaultValue={ el.type } value={ el.type } onChange={ e => changeDetail(idx, 'type', e.target.value) } placeholder='Insert type here...' />
+                                    <Input className='smallInput' defaultValue={ el.itemType } value={ el.itemType } onChange={ e => changeDetail(idx, 'itemType', e.target.value) } placeholder='Insert type here...' />
                                   </Form.Item>
                                 }
-
+  
                                 {
                                   <Form.Item
                                     name="UOM"
@@ -418,7 +429,7 @@ const PageForm = (props) => {
                                       name="returnPrice"
                                       label="Return Price"
                                     >
-                                      <Input className='smallInput' defaultValue={ el.returnPrice } value={ el.returnPrice } onChange={ e => changeDetail(idx, 'returnPrice', e.target.value) } placeholder='Type Return Price here...' />
+                                      <Input className='smallInput' defaultValue={ el.retnPrice } value={ el.retnPrice } onChange={ e => changeDetail(idx, 'retnPrice', e.target.value) } placeholder='Type Return Price here...' />
                                     </Form.Item>
                                   }
 
@@ -428,17 +439,29 @@ const PageForm = (props) => {
                                       name="returnQty"
                                       label="Return Qty"
                                     >
-                                      <Input className='smallInput' defaultValue={ el.returnQty } value={ el.returnQty } onChange={ e => changeDetail(idx, 'returnQty', e.target.value) } placeholder='Type Return Qty here...' />
+                                      <Input className='smallInput' defaultValue={ el.retnQty } value={ el.retnQty } onChange={ e => changeDetail(idx, 'retnQty', e.target.value) } placeholder='Type Return Qty here...' />
                                     </Form.Item>
                                   }
                                 </div>
+                                
                                 <div className="dual">
                                   {
                                     <Form.Item
                                       name="returnType"
                                       label="Return Type"
                                     >
-                                      <Input className='smallInput' defaultValue={ el.returnType } value={ el.returnType } onChange={ e => changeDetail(idx, 'returnType', e.target.value) } placeholder='Type Return Type here...' />
+                                      <Select
+                                      className='normal' disabled={ isDisabled }
+                                      defaultValue={ el.retnType }
+                                      value={ el.retnType }
+                                      placeholder={ "Select return Type.." }
+                                      onSelect={ e => changeDetail(idx, 'retnType', e.target.value) }
+                                      filterOption={ (inputValue, option) =>
+                                        option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                      }
+                                    >
+                                      <Option value="R1">R1</Option>
+                                    </Select>
                                     </Form.Item>
                                   }
 
@@ -447,7 +470,18 @@ const PageForm = (props) => {
                                       name="returnAction"
                                       label="Return Action"
                                     >
-                                      <Input className='smallInput' defaultValue={ el.returnAction } value={ el.returnAction } onChange={ e => changeDetail(idx, 'returnAction', e.target.value) } placeholder='Type Return Action here...' />
+                                      <Select
+                                      className='normal' disabled={ isDisabled }
+                                      defaultValue={ el.retnAction }
+                                      value={ el.retnAction }
+                                      placeholder={ "Select return Action.." }
+                                      onSelect={ e => changeDetail(idx, 'retnAction', e.target.value) }
+                                      filterOption={ (inputValue, option) =>
+                                        option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                      }
+                                    >
+                                      <Option value="A1">A1</Option>
+                                    </Select>
                                     </Form.Item>
                                   }
                                 </div>
