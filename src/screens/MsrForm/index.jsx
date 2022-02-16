@@ -84,7 +84,9 @@ const PageForm = (props) => {
   };
 
   const changeDetail = (index, field, value) => {
+    console.log(index, field, value);
     const temp = details;
+    console.log(temp[index][field]);
     temp[index][field] = value;
     setDetails(temp);
   }; 
@@ -476,7 +478,12 @@ const PageForm = (props) => {
                                           option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                                         }
                                       >
-                                        <Option value="R1">R1</Option>
+                                        <Option value="R1">R1 - FAILED QUALITY CHECK</Option>
+                                        <Option value="R2">R2 - DAMAGES</Option>
+                                        <Option value="R3">R3 - QUANTITY SHORTAGE</Option>
+                                        <Option value="R4">R4 - QUANTITY ACCESS</Option>
+                                        <Option value="R5">R5 - WRONG PARTS DELIVERED</Option>
+                                        <Option value="R6">R6 - OTHER</Option>
                                       </Select>
                                     </Form.Item>
                                   }
@@ -496,7 +503,13 @@ const PageForm = (props) => {
                                           option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                                         }
                                       >
-                                        <Option value="A1">A1</Option>
+                                        <Option value="A1">A1 - REWORK</Option>
+                                        <Option value="A2">A2 - COLLECT AND REPLACE REJECTS</Option>
+                                        <Option value="A3">A3 - COLLECT EXCESSIVE PARTS</Option>
+                                        <Option value="A4">A4 - DELIVER SHORTAGE</Option>
+                                        <Option value="A5">A5 - REJECT/ORDER CANCELLED</Option>
+                                        <Option value="A6">A6 - CORRECTIVE ACTION</Option>
+                                        <Option value="A7">A7 - OTHER</Option>
                                       </Select>
                                     </Form.Item>
                                   }
