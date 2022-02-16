@@ -76,7 +76,7 @@ const PageForm = (props) => {
 
   useEffect(() => {
     if (state.projectNo) {
-      let data = Siv.getSivNo({ 'projectNo': state.projectNo });
+      let data = Siv.getSivNo({ 'projectNo': state.projectNo, subType: 'N' });
       data.then(result => {
         console.log('result sivNo :>> ', result);
         if (result.generatedNo) {
