@@ -132,4 +132,4 @@ async function getSivNo() {
     });
 }
 
-export default { list, create, view, getDefaultValue, getProjectNo };
+export default { list, create, view, getDefaultValue, getProjectNo, getSivNo };
