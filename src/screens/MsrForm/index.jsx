@@ -75,6 +75,16 @@ const PageForm = (props) => {
         const temp = [];
         grn.msrDetails.map((el, index) => {
           el.sn = index + 1;
+          /*if (!el.retnQty) {
+            el.retnQty = 0;
+          }
+          if (!el.retnType) {
+            el.retnType = null;
+          }
+          if (!el.retnAction) {
+            el.retnAction = null;
+          }*/
+          
           temp.push(el);
         });
         console.log('temp detail msr :>> ', temp);
