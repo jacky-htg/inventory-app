@@ -26,9 +26,7 @@ const PageForm = (props) => {
 
   const [form] = Form.useForm();
   const [state, setState] = useState({});
-  const [details, setDetails] = useState([
-    {}
-  ]);
+  const [details, setDetails] = useState([]);
 
   const [loadingPage, setLoadingPage] = useState(id ? true : false);
   const [isDisabled, setIsDisabled] = useState(id ? true : false);
@@ -62,7 +60,7 @@ const PageForm = (props) => {
 
   const searchSupplier = async (data) => {
     console.log('data :>> ', data);
-    if (data.length > 0){
+    if (data.length > 0) {
       const grn = await Msr.getSupplierByGrnNo(data);
       if (grn.ok !== undefined && !grn.ok) {
         const res = await grn.data;
@@ -76,9 +74,10 @@ const PageForm = (props) => {
         setDetails(grn.msrDetails);
         const temp = [];
         grn.msrDetails.map((el, index) => {
-          el.sn = index+1
+          el.sn = index + 1;
           temp.push(el);
         });
+        console.log('temp detail msr :>> ', temp);
         setDetails(temp);
       }
     }
@@ -96,17 +95,22 @@ const PageForm = (props) => {
         // details[i]["recdDate"] = e.dueDate;
         // details[i]["loc"] = "TE";
         details[i]["seqNo"] = (i + 1);
+        details[i]['msrNo'] = state.msrNo;
+        details[i]["retnQty"] = 1;
+        details[i]["retnType"] = "R1";
+        details[i]["retnAction"] = "A1";
       });
 
       console.log('details', details);
 
       let obj = {
-        /*subType: 'M',
-        grnNo,
-        doNo,
-        currencyCode,
-        currencyRate,
-        grnDetails: details*/
+        "currencyCode": state.currencyCode,
+        "currencyRate": state.currencyCode,
+        "docmNo": state.docmNo,
+        "msrDetails": details,
+        "msrNo": state.msrNo,
+        "originator": state.originator,
+        "supplierCode": state.supplierCode
       };
       console.log('obj :>> ', obj);
       const hasil = await Msr.create(obj);
@@ -375,6 +379,7 @@ const PageForm = (props) => {
                         name="supplierCode"
                         label="Supplier Code"
                       >
+                        <Input hidden />
                         <Input
                           placeholder='Enter GRN No first..'
                           className='normal' disabled={ isDisabled }
@@ -400,7 +405,8 @@ const PageForm = (props) => {
                                     name="SN"
                                     label="SN"
                                   >
-                                    <Input className='smallInput' defaultValue={ el.sn } value={ el.sn } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' />
+                                    <Input hidden />
+                                    <Input className='smallInput' defaultValue={ el.sn } value={ el.sn } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly />
                                   </Form.Item>
                                 }
 
@@ -412,7 +418,7 @@ const PageForm = (props) => {
                                     <Input className='smallInput' defaultValue={ el.itemType } value={ el.itemType } onChange={ e => changeDetail(idx, 'itemType', e.target.value) } placeholder='Insert type here...' />
                                   </Form.Item>
                                 }
-  
+
                                 {
                                   <Form.Item
                                     name="UOM"
@@ -443,7 +449,7 @@ const PageForm = (props) => {
                                     </Form.Item>
                                   }
                                 </div>
-                                
+
                                 <div className="dual">
                                   {
                                     <Form.Item
@@ -451,17 +457,17 @@ const PageForm = (props) => {
                                       label="Return Type"
                                     >
                                       <Select
-                                      className='normal' disabled={ isDisabled }
-                                      defaultValue={ el.retnType }
-                                      value={ el.retnType }
-                                      placeholder={ "Select return Type.." }
-                                      onSelect={ e => changeDetail(idx, 'retnType', e.target.value) }
-                                      filterOption={ (inputValue, option) =>
-                                        option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                                      }
-                                    >
-                                      <Option value="R1">R1</Option>
-                                    </Select>
+                                        className='normal' disabled={ isDisabled }
+                                        defaultValue={ el.retnType }
+                                        value={ el.retnType }
+                                        placeholder={ "Select return Type.." }
+                                        onSelect={ e => changeDetail(idx, 'retnType', e.target.value) }
+                                        filterOption={ (inputValue, option) =>
+                                          option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                        }
+                                      >
+                                        <Option value="R1">R1</Option>
+                                      </Select>
                                     </Form.Item>
                                   }
 
@@ -471,17 +477,17 @@ const PageForm = (props) => {
                                       label="Return Action"
                                     >
                                       <Select
-                                      className='normal' disabled={ isDisabled }
-                                      defaultValue={ el.retnAction }
-                                      value={ el.retnAction }
-                                      placeholder={ "Select return Action.." }
-                                      onSelect={ e => changeDetail(idx, 'retnAction', e.target.value) }
-                                      filterOption={ (inputValue, option) =>
-                                        option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                                      }
-                                    >
-                                      <Option value="A1">A1</Option>
-                                    </Select>
+                                        className='normal' disabled={ isDisabled }
+                                        defaultValue={ el.retnAction }
+                                        value={ el.retnAction }
+                                        placeholder={ "Select return Action.." }
+                                        onSelect={ e => changeDetail(idx, 'retnAction', e.target.value) }
+                                        filterOption={ (inputValue, option) =>
+                                          option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                        }
+                                      >
+                                        <Option value="A1">A1</Option>
+                                      </Select>
                                     </Form.Item>
                                   }
                                 </div>
@@ -584,13 +590,13 @@ const PageForm = (props) => {
                           </Collapsible>
                         </div>
 
-                        <div className="actions">
+                        {/* <div className="actions">
                           {
                             idx !== 0 &&
                             <TiDelete color='red' size={ 30 } onClick={ () => deleteDetail(idx) } />
                           }
                           <MdAddCircle color='#1990ff' size={ 24 } onClick={ addNewDetail } />
-                        </div>
+                        </div> */}
 
                       </div>
                     );
