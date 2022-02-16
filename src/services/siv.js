@@ -134,18 +134,20 @@ async function getSivNo(body) {
     });
 }
 
-async function checkNextItem(body) {
+async function populateDetail(body) {
   console.log("body", body);
-  return await fetch(`${env.url}/siv/check-next-item`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-USERNAME": env.username,
-      "X-COMPANYCODE": env.companyCode,
-      "X-PLANTNO": env.plantNo,
-    },
-    body: JSON.stringify(body),
-  })
+  return await fetch(
+    `${env.url}/siv/populate-detail?projectNo=${body.projectNo}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-USERNAME": env.username,
+        "X-COMPANYCODE": env.companyCode,
+        "X-PLANTNO": env.plantNo,
+      },
+    }
+  )
     .then((res) => {
       if (!res.ok) {
         return { ok: false, data: res.json() };
@@ -165,5 +167,5 @@ export default {
   getDefaultValue,
   getProjectNo,
   getSivNo,
-  checkNextItem,
+  populateDetail,
 };

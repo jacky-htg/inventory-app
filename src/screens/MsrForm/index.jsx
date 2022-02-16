@@ -25,7 +25,10 @@ const PageForm = (props) => {
   let query = useQuery();
 
   const [form] = Form.useForm();
-  const [state, setState] = useState({});
+  const [state, setState] = useState({
+    currencyCode: 'USD',
+    currencyRate: 1,
+  });
   const [details, setDetails] = useState([]);
 
   const [loadingPage, setLoadingPage] = useState(id ? true : false);
@@ -84,7 +87,7 @@ const PageForm = (props) => {
           if (!el.retnAction) {
             el.retnAction = null;
           }*/
-          
+
           temp.push(el);
         });
         console.log('temp detail msr :>> ', temp);
@@ -99,9 +102,9 @@ const PageForm = (props) => {
     console.log(temp[index][field]);
     temp[index][field] = value;
     setDetails(temp);
-  }; 
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("details => ", details);
   }, [details]);
 
@@ -124,10 +127,10 @@ const PageForm = (props) => {
       });
 
       console.log('details', details);
-
+      console.log('state :>> ', state);
       let obj = {
         "currencyCode": state.currencyCode,
-        "currencyRate": state.currencyCode,
+        "currencyRate": state.currencyRate,
         "docmNo": state.docmNo,
         "msrDetails": details,
         "msrNo": state.msrNo,
@@ -136,11 +139,11 @@ const PageForm = (props) => {
       };
       console.log('obj :>> ', obj);
       const hasil = await Msr.create(obj);
+      console.log('hasil :>> ', hasil);
       if (hasil.ok !== undefined && !hasil.ok) {
         const res = await hasil.data;
         message.error(res.message);
       }
-
       history.push('/msr');
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
@@ -207,6 +210,7 @@ const PageForm = (props) => {
                           className='normal' disabled={ isDisabled }
                           defaultValue={ state.originator }
                           value={ state.originator }
+                          onChange={ e => setState({ ...state, originator: e.target.value }) }
                           placeholder={ "Type originator here..." }
                         />
                       </Form.Item>
@@ -319,8 +323,8 @@ const PageForm = (props) => {
                       >
                         <Input
                           className='normal' disabled={ isDisabled }
-                          defaultValue="USD"
-                          value="USD"
+                          defaultValue={ state.currencyCode }
+                          value={ state.currencyCode }
                           readOnly
                         />
                       </Form.Item>
@@ -357,8 +361,8 @@ const PageForm = (props) => {
                       >
                         <Input
                           className='normal' disabled={ isDisabled }
-                          defaultValue="1"
-                          value="1"
+                          defaultValue={ state.currencyRate }
+                          value={ state.currencyRate }
                           readOnly
                         />
                       </Form.Item>
@@ -467,7 +471,7 @@ const PageForm = (props) => {
                                       name="returnQty"
                                       label="Return Qty"
                                     >
-                                      <Input className='smallInput' defaultValue={ el.retnQty } value={ el.retnQty } onChange={ e => changeDetail(idx, 'retnQty', e.target.value) } placeholder='Type Return Qty here...' />
+                                      <Input type='number' className='smallInput' defaultValue={ el.retnQty } value={ el.retnQty } onChange={ e => changeDetail(idx, 'retnQty', e.target.value) } placeholder='Type Return Qty here...' />
                                     </Form.Item>
                                   }
                                 </div>

@@ -84,7 +84,7 @@ const PageForm = (props) => {
         }
       });
 
-      let data2 = Siv.checkNextItem({ 'projectNo': state.projectNo });
+      let data2 = Siv.populateDetail({ 'projectNo': state.projectNo });
       data2.then(result => {
         console.log('result items :>> ', result);
       });

@@ -36,6 +36,7 @@ async function create(data) {
     body: JSON.stringify(data),
   })
     .then((res) => {
+      console.log("res", res);
       if (!res.ok) {
         return { ok: false, data: res.json() };
       } else {
