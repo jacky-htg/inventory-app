@@ -118,9 +118,9 @@ const PageForm = (props) => {
         // details[i]["loc"] = "TE";
         details[i]["seqNo"] = (i + 1);
         details[i]['msrNo'] = state.msrNo;
-        details[i]["retnQty"] = 1;
+        /*details[i]["retnQty"] = 1;
         details[i]["retnType"] = "R1";
-        details[i]["retnAction"] = "A1";
+        details[i]["retnAction"] = "A1";*/
       });
 
       console.log('details', details);
