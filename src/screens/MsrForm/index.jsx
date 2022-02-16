@@ -83,6 +83,16 @@ const PageForm = (props) => {
     }
   };
 
+  const changeDetail = (index, field, value) => {
+    const temp = details;
+    temp[index][field] = value;
+    setDetails(temp);
+  }; 
+
+  useEffect(()=>{
+    console.log("details => ", details);
+  }, [details]);
+
   const submit = async () => {
     try {
       console.log(details);
@@ -461,7 +471,7 @@ const PageForm = (props) => {
                                         defaultValue={ el.retnType }
                                         value={ el.retnType }
                                         placeholder={ "Select return Type.." }
-                                        onSelect={ e => changeDetail(idx, 'retnType', e.target.value) }
+                                        onSelect={ e => changeDetail(idx, 'retnType', e) }
                                         filterOption={ (inputValue, option) =>
                                           option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                                         }
@@ -481,7 +491,7 @@ const PageForm = (props) => {
                                         defaultValue={ el.retnAction }
                                         value={ el.retnAction }
                                         placeholder={ "Select return Action.." }
-                                        onSelect={ e => changeDetail(idx, 'retnAction', e.target.value) }
+                                        onSelect={ e => changeDetail(idx, 'retnAction', e) }
                                         filterOption={ (inputValue, option) =>
                                           option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                                         }
