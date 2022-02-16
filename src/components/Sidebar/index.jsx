@@ -41,13 +41,13 @@ function Sidebar() {
         },
         {
           title: 'SIV Entry',
-          link: '',
-          isActive: false
+          link: '/siv',
+          isActive: true
         },
         {
           title: 'Manual SIV Entry',
-          link: '/siv-manuals',
-          isActive: true
+          link: '',
+          isActive: false
         },
         {
           title: 'SIV Combine Entry',
@@ -217,7 +217,8 @@ function Sidebar() {
       history.location.pathname.includes('/item-categories') ||
       history.location.pathname.includes('/inventory-controls') ||
       history.location.pathname.includes('/msr') ||
-      history.location.pathname.includes('/siv-manuals')
+      history.location.pathname.includes('/siv-manuals') ||
+      history.location.pathname.includes('/siv')
     ) {
       setSelectedMenu(itemMenu);
     }

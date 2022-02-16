@@ -31,7 +31,9 @@ import {
   Msr,
   MsrForm,
   SivManual,
-  SivManualForm
+  SivManualForm,
+  Siv,
+  SivForm
 } from '../screens';
 import { Sidebar } from '../components';
 import { Colors, Images } from '../constant';
@@ -156,6 +158,18 @@ const publicRoutes = [
   {
     path: '/siv-manuals/:id',
     component: SivManualForm
+  },
+  {
+    path: '/siv',
+    component: Siv
+  },
+  {
+    path: '/siv/create',
+    component: SivForm
+  },
+  {
+    path: '/siv/:id',
+    component: SivForm
   }
 
 ];

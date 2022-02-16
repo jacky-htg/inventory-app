@@ -5,6 +5,7 @@ import { Location, Msr } from '../../services';
 import { MdAddCircle } from 'react-icons/md';
 import { TiDelete } from 'react-icons/ti';
 
+import env from '../../env';
 import { StyledDiv } from './styled';
 import { Images } from '../../constant';
 import moment from 'moment';
@@ -32,6 +33,19 @@ const PageForm = (props) => {
   const [isDisabled, setIsDisabled] = useState(id ? true : false);
 
   const [locOpt, setLocOpt] = useState([]);
+
+  useEffect(() => {
+    let data = Msr.getMsrNo();
+    data.then(result => {
+      console.log('result :>> ', result);
+      setState({
+        ...state,
+        msrNo: result.generatedNo,
+        entryUser: env.username,
+        docmNo: result.docmNo
+      });
+    });
+  }, []);
 
 
   useEffect(() => {
@@ -119,10 +133,12 @@ const PageForm = (props) => {
                         name="msrNo"
                         label="MSR No"
                       >
+                        <Input hidden />
                         <Input
                           className='normal' disabled={ isDisabled }
                           defaultValue={ state.msrNo }
                           value={ state.msrNo }
+                          readOnly
                         />
                       </Form.Item>
                   }
@@ -140,7 +156,7 @@ const PageForm = (props) => {
                           className='normal' disabled={ isDisabled }
                           defaultValue={ state.originator }
                           value={ state.originator }
-                          placeholder={ "Type currency code here..." }
+                          placeholder={ "Type originator here..." }
                         />
                       </Form.Item>
                   }
@@ -154,6 +170,7 @@ const PageForm = (props) => {
                         name="entryUser"
                         label="Entry User"
                       >
+                        <Input hidden />
                         <Input
                           className='normal' disabled={ isDisabled }
                           defaultValue={ state.entryUser }
@@ -175,6 +192,7 @@ const PageForm = (props) => {
                         label="MRV No"
                       >
                         <Input
+                          placeholder='Type MRV No...'
                           className='normal' disabled={ isDisabled }
                           defaultValue={ state.mrvNo }
                           value={ state.mrvNo }
@@ -229,10 +247,12 @@ const PageForm = (props) => {
                         name="docmNo"
                         label="Docm No"
                       >
+                        <Input hidden />
                         <Input
                           className='normal' disabled={ isDisabled }
                           defaultValue={ state.docmNo }
                           value={ state.docmNo }
+                          readOnly
                         />
                       </Form.Item>
                   }
@@ -267,6 +287,7 @@ const PageForm = (props) => {
                         label="Batch ID"
                       >
                         <Input
+                          placeholder='Type Batch ID...'
                           className='normal' disabled={ isDisabled }
                           defaultValue={ state.batchId }
                           value={ state.batchId }

@@ -26,8 +26,8 @@ function Page() {
     <PageList
       filter={ true }
       fields={ fields }
-      title="SIV Manual Entry"
-      url="siv-manuals"
+      title="SIV Entry"
+      url="siv"
       data={ Siv }
       id={ ['id'] }
       actions={ ['view'] } />

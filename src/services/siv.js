@@ -11,16 +11,16 @@ async function list(filterSearch) {
     },
     body: JSON.stringify(filterSearch),
   })
-  .then((res) => {
-    if (!res.ok) {
-      return {ok:false, data: res.json()};
-    } else {
-      return res.json();
-    }
-  })
-  .catch((err) => {
-    console.log("err :>> ", err);
-  });
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
 }
 
 async function create(data) {
@@ -35,16 +35,16 @@ async function create(data) {
     },
     body: JSON.stringify(data),
   })
-  .then((res) => {
-    if (!res.ok) {
-      return {ok:false, data: res.json()};
-    } else {
-      return res.json();
-    }
-  })
-  .catch((err) => {
-    console.log("err :>> ", err);
-  });
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
 }
 
 async function view(id) {
@@ -56,16 +56,80 @@ async function view(id) {
       "X-PLANTNO": env.plantNo,
     },
   })
-  .then((res) => {
-    if (!res.ok) {
-      return {ok:false, data: res.json()};
-    } else {
-      return res.json();
-    }
-  })
-  .catch((err) => {
-    console.log("err :>> ", err);
-  });
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
 }
 
-export default { list, create, view };
+async function getDefaultValue(params) {
+  return await fetch(`${env.url}/siv/default-value?subType=${params.subType}`, {
+    method: "GET",
+    headers: {
+      "X-USERNAME": env.username,
+      "X-COMPANYCODE": env.companyCode,
+      "X-PLANTNO": env.plantNo,
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
+}
+
+async function getProjectNo() {
+  return await fetch(`${env.url}/siv/project-no`, {
+    method: "GET",
+    headers: {
+      "X-USERNAME": env.username,
+      "X-COMPANYCODE": env.companyCode,
+      "X-PLANTNO": env.plantNo,
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
+}
+
+async function getSivNo() {
+  return await fetch(`${env.url}/siv/siv-no`, {
+    method: "POST",
+    headers: {
+      "X-USERNAME": env.username,
+      "X-COMPANYCODE": env.companyCode,
+      "X-PLANTNO": env.plantNo,
+    },
+    body: body,
+  })
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
+}
+
+export default { list, create, view, getDefaultValue, getProjectNo };

@@ -77,9 +77,11 @@ function PageList(props) {
   const getData = (filter) => {
     let data = props.data.list(filter);
     data.then(result => {
+      console.log('result siv:>> ', result.data);
       // if (result.status && result.status !== 200) {
       //   message.error(result.error);
       // }
+      // return result.data;
       const myData = result.rows;
       result.rows.forEach((element, index) => {
         myData[index]["key"] = index;
