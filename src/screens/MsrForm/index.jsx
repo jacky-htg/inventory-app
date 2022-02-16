@@ -60,8 +60,17 @@ const PageForm = (props) => {
     });
   }, []);
 
-  const searchSupplier = (data) => {
+  const searchSupplier = async (data) => {
     console.log('data :>> ', data);
+    if (data.length > 0){
+      const grn = await Msr.getSupplierByGrnNo(data);
+      if (grn.ok !== undefined && !grn.ok) {
+        const res = await grn.data;
+        message.error(res.message);
+      } else {
+        console.log('getSupplierByGrnNo result :>> ', grn);
+      }
+    }
   };
 
   const submit = async () => {
