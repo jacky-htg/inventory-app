@@ -13,6 +13,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import Collapsible from "react-collapsible";
 
 const PageForm = (props) => {
+  const { Search } = Input;
   const history = useHistory();
   const { id } = useParams();
   function useQuery() {
@@ -58,6 +59,10 @@ const PageForm = (props) => {
       setLocOpt(temp);
     });
   }, []);
+
+  const searchSupplier = (data) => {
+    console.log('data :>> ', data);
+  };
 
   const submit = async () => {
     try {
@@ -315,6 +320,32 @@ const PageForm = (props) => {
                 </div>
 
                 <div className="row2">
+
+                  {
+                    !state.grnNo && id
+                      ?
+                      <></>
+                      :
+                      <Form.Item
+                        name="grnNo"
+                        label="GRN No"
+                      >
+                        <Search
+                          placeholder="Type GRN No..."
+                          allowClear
+                          enterButton="Check"
+                          defaultValue={ state.grnNo }
+                          value={ state.grnNo }
+                          onSearch={ searchSupplier }
+                        />
+                        {/* <Input
+                          className='normal' disabled={ isDisabled }
+                          defaultValue={ state.grnNo }
+                          value={ state.grnNo }
+                        /> */}
+                      </Form.Item>
+                  }
+
                   {
                     !state.supplierCode && id
                       ?
@@ -325,9 +356,11 @@ const PageForm = (props) => {
                         label="Supplier Code"
                       >
                         <Input
+                          placeholder='Enter GRN No first..'
                           className='normal' disabled={ isDisabled }
                           defaultValue={ state.supplierCode }
                           value={ state.supplierCode }
+                          readOnly
                         />
                       </Form.Item>
                   }

@@ -218,6 +218,7 @@ const GrnWithPoForm = (props) => {
         result.grnDetails && result.grnDetails.length > 0 && result.grnDetails.forEach(el => {
           arr.push(el);
         });
+        console.log('arr :>> ', arr);
         setDetails(arr);
 
 
@@ -322,8 +323,8 @@ const GrnWithPoForm = (props) => {
             description: result.description,
             issuedQty: 1,
             labelQty: 1,
-            itemNo: null,
-            itemType: 0
+            itemNo: result.itemNo,
+            itemType: result.itemType
           };
           console.log('temp :>> ', temp);
           // arr.push(temp);
@@ -563,7 +564,7 @@ const GrnWithPoForm = (props) => {
                           name={ `Type[${ idx }]` }
                           label="Type"
                         >
-                          <Input className='smallInput' defaultValue={ el.type } value={ el.type } onChange={ e => changeDetail(idx, 'type', e.target.value) } placeholder='Insert type here...' readOnly disabled={ id } />
+                          <Input className='smallInput' defaultValue={ el.itemType } value={ el.itemType } onChange={ e => changeDetail(idx, 'itemType', e.target.value) } placeholder='Insert type here...' readOnly disabled={ id } />
                         </Form.Item>
                       }
                     </div>

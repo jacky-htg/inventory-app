@@ -89,4 +89,24 @@ async function getMsrNo() {
     });
 }
 
-export default { list, create, view, getMsrNo };
+async function getSupplierByGrnNo(grnNo) {
+  return await fetch(`${env.url}/msr/suppliers?grnNo=${grnNo}`, {
+    method: "GET",
+    headers: {
+      "X-USERNAME": env.username,
+      "X-COMPANYCODE": env.companyCode,
+      "X-PLANTNO": env.plantNo,
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
+}
+export default { list, create, view, getMsrNo, getSupplierByGrnNo };

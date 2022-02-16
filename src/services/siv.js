@@ -110,15 +110,17 @@ async function getProjectNo() {
     });
 }
 
-async function getSivNo() {
+async function getSivNo(body) {
+  console.log("body", body);
   return await fetch(`${env.url}/siv/siv-no`, {
     method: "POST",
     headers: {
+      "Content-Type": "application/json",
       "X-USERNAME": env.username,
       "X-COMPANYCODE": env.companyCode,
       "X-PLANTNO": env.plantNo,
     },
-    body: body,
+    body: JSON.stringify(body),
   })
     .then((res) => {
       if (!res.ok) {
@@ -132,4 +134,36 @@ async function getSivNo() {
     });
 }
 
-export default { list, create, view, getDefaultValue, getProjectNo, getSivNo };
+async function checkNextItem(body) {
+  console.log("body", body);
+  return await fetch(`${env.url}/siv/check-next-item`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-USERNAME": env.username,
+      "X-COMPANYCODE": env.companyCode,
+      "X-PLANTNO": env.plantNo,
+    },
+    body: JSON.stringify(body),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        return { ok: false, data: res.json() };
+      } else {
+        return res.json();
+      }
+    })
+    .catch((err) => {
+      console.log("err :>> ", err);
+    });
+}
+
+export default {
+  list,
+  create,
+  view,
+  getDefaultValue,
+  getProjectNo,
+  getSivNo,
+  checkNextItem,
+};

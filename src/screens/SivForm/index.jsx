@@ -23,15 +23,16 @@ const PageForm = (props) => {
   let query = useQuery();
 
   const [form] = Form.useForm();
-  const [state, setState] = useState({});
-  const [details, setDetails] = useState([
-    {}
-  ]);
+  const [state, setState] = useState({
+    projectNo: null,
+  });
+  const [details, setDetails] = useState([]);
 
   const [loadingPage, setLoadingPage] = useState(id ? true : false);
   const [isDisabled, setIsDisabled] = useState(id ? true : false);
 
   const [locOpt, setLocOpt] = useState([]);
+  const [projectNoOption, setProjectNoOption] = useState([]);
 
 
   useEffect(() => {
@@ -64,9 +65,33 @@ const PageForm = (props) => {
   useEffect(() => {
     let data = Siv.getProjectNo();
     data.then(result => {
-      console.log('result :>> ', result);
+      let temp = [];
+      result.forEach(el => {
+        console.log('el :>> ', el);
+        temp.push({ value: el.projectNo });
+      });
+      setProjectNoOption(temp);
     });
   }, []);
+
+  useEffect(() => {
+    if (state.projectNo) {
+      let data = Siv.getSivNo({ 'projectNo': state.projectNo });
+      data.then(result => {
+        console.log('result sivNo :>> ', result);
+        if (result.generatedNo) {
+          setState({ ...state, sivNo: result.generatedNo, docmNo: result.docmNo });
+        }
+      });
+
+      let data2 = Siv.checkNextItem({ 'projectNo': state.projectNo });
+      data2.then(result => {
+        console.log('result items :>> ', result);
+      });
+    }
+  }, [state.projectNo]);
+
+
 
   useEffect(() => {
     if (state) {
@@ -141,7 +166,7 @@ const PageForm = (props) => {
               <div className="group">
                 <div className="row2">
                   {
-                    !state.sivNo && id
+                    !state.projectNo && id
                       ?
                       <></>
                       :
@@ -149,11 +174,25 @@ const PageForm = (props) => {
                         name="projectNo"
                         label="Project No"
                       >
-                        <Input
+                        {/* <Input
                           className='normal' disabled={ isDisabled }
                           defaultValue={ state.projectNo }
                           value={ state.projectNo }
                           readOnly
+                        /> */}
+                        <Input hidden />
+                        <Select
+                          showSearch
+                          allowClear
+                          className='normal' disabled={ isDisabled }
+                          defaultValue={ state.projectNo }
+                          value={ state.projectNo }
+                          options={ projectNoOption }
+                          onSelect={ data => setState({ ...state, projectNo: data }) }
+                          placeholder={ "Type Project No here..." }
+                          filterOption={ (inputValue, option) =>
+                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                          }
                         />
                       </Form.Item>
                   }
@@ -213,6 +252,7 @@ const PageForm = (props) => {
                         name="sivNo"
                         label="SIV No"
                       >
+                        <Input hidden />
                         <Input
                           className='normal' disabled={ isDisabled }
                           defaultValue={ state.sivNo }
@@ -505,14 +545,14 @@ const PageForm = (props) => {
 
 
               <div className="submit">
-                <Button onClick={ () => history.push(`/siv-manuals`) } type="default" htmlType="submit">
-                  Back To SIV Manual
+                <Button onClick={ () => history.push(`/siv`) } type="default" htmlType="submit">
+                  Back To SIV List
                 </Button>
                 { !id && <Divider type='vertical' /> }
                 {
                   !id &&
                   <Button onClick={ submit } type="primary" htmlType="submit">
-                    Create SIV Manual
+                    Create SIV Entry
                   </Button>
                 }
               </div>
