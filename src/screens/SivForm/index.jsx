@@ -125,13 +125,13 @@ const PageForm = (props) => {
         grnDetails: details*/
       };
       console.log('obj :>> ', obj);
-      const hasil = await Msr.create(obj);
+      const hasil = await Siv.create(obj);
       if (hasil.ok !== undefined && !hasil.ok) {
         const res = await hasil.data;
         message.error(res.message);
       }
 
-      history.push('/msr');
+      history.push('/siv');
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
