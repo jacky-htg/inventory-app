@@ -37,6 +37,33 @@ const PageForm = (props) => {
   const [locOpt, setLocOpt] = useState([]);
 
   useEffect(() => {
+    if (id) {
+      let data = Msr.view(id);
+      data.then(result => {
+        console.log('result :>> ', result);
+        setLoadingPage(false);
+        setState(result);
+
+        /*result.grnNo && setGrnNo(result.grnNo);
+        result.currencyRate && setCurrencyRate(result.currencyRate);
+        result.currencyCode && setCurrencyCode(result.currencyCode);
+        result.createdAt && setEntryDate(result.createdAt);
+        result.updatedAt && setRecdDate(result.updatedAt);
+        result.entryUser && setEntryUser(result.entryUser);
+        result.subType && setSubType(result.subType);
+        result.orderNo && setOrderNo(result.orderNo);
+        result.projectNo && setProjectNo(result.projectNo); */
+        let arr = [];
+        result.msrDetails && result.msrDetails.length > 0 && result.msrDetails.forEach(el => {
+          arr.push(el);
+        });
+        console.log('arr :>> ', arr);
+        setDetails([...arr]);
+      });
+    }
+  }, [id]);
+
+  useEffect(() => {
     let data = Msr.getMsrNo();
     data.then(result => {
       console.log('result :>> ', result);
