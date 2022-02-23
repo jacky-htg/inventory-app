@@ -49,6 +49,12 @@ const StyledDiv = styled.div`
 
     .group {
       margin-bottom: 32px;
+      position: sticky;
+      top: 154px;
+      border-bottom: 1px dashed black;
+      padding-bottom: 10px;
+      background: white;
+      z-index: 10;
     }
 
     .row {
@@ -101,8 +107,7 @@ const StyledDiv = styled.div`
 
   .detail-wrapper {
     /* background: grey; */
-    border-top: 1px dashed black;
-    padding: 40px 0px;
+    padding: 20px 0px;
 
     .detail-card {
       position: relative;

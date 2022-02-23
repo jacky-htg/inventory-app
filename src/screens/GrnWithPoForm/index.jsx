@@ -555,7 +555,12 @@ const GrnWithPoForm = (props) => {
                           name={ `SN[${ idx }]` }
                           label="SN"
                         >
-                          <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly disabled={ id } />
+                          {
+                            id ?
+                              <span>{ idx + 1 }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly disabled={ id } />
+                          }
                         </Form.Item>
                       }
 
@@ -564,7 +569,12 @@ const GrnWithPoForm = (props) => {
                           name={ `Type[${ idx }]` }
                           label="Type"
                         >
-                          <Input className='smallInput' defaultValue={ el.itemType } value={ el.itemType } onChange={ e => changeDetail(idx, 'itemType', e.target.value) } placeholder='Insert type here...' readOnly disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.itemType !== undefined ? el.itemType : '-' }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ el.itemType } value={ el.itemType } onChange={ e => changeDetail(idx, 'itemType', e.target.value) } placeholder='Insert type here...' readOnly disabled={ id } />
+                          }
                         </Form.Item>
                       }
                     </div>
@@ -575,7 +585,12 @@ const GrnWithPoForm = (props) => {
                           name={ `UOM[${ idx }]` }
                           label="UOM"
                         >
-                          <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' readOnly disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.uom ? el.uom : '-' }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' readOnly disabled={ id } />
+                          }
                         </Form.Item>
                       }
 
@@ -584,7 +599,12 @@ const GrnWithPoForm = (props) => {
                           name={ `MSL[${ idx }]` }
                           label="MSL"
                         >
-                          <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' readOnly disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.msl ? el.msl : '-' }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' readOnly disabled={ id } />
+                          }
                         </Form.Item>
                       }
                     </div>
@@ -595,7 +615,12 @@ const GrnWithPoForm = (props) => {
                           name={ `UnitPrice[${ idx }]` }
                           label="Unit Price"
                         >
-                          <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.recdPrice ? el.recdPrice : '-' }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly disabled={ id } />
+                          }
                         </Form.Item>
                       }
 
@@ -619,7 +644,12 @@ const GrnWithPoForm = (props) => {
                             }),
                           ] }
                         >
-                          <Input type={ 'number' } className='smallInput' defaultValue={ el.issuedQty } value={ el.issuedQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.issuedQty ? el.issuedQty : '-' }</span>
+                              :
+                              <Input type={ 'number' } className='smallInput' defaultValue={ el.issuedQty } value={ el.issuedQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' disabled={ id } />
+                          }
                         </Form.Item>
                       }
                     </div>
@@ -632,7 +662,12 @@ const GrnWithPoForm = (props) => {
                         name={ `ItemNo[${ idx }]` }
                         label="Item No"
                       >
-                        <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly disabled={ id } />
+                        {
+                          id ?
+                            <span>{ el.itemNo ? el.itemNo : '-' }</span>
+                            :
+                            <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly disabled={ id } />
+                        }
                       </Form.Item>
                     }
 
@@ -641,12 +676,17 @@ const GrnWithPoForm = (props) => {
                         name={ `Loc[${ idx }]` }
                         label="Loc"
                       >
-                        <Input
-                          className='smallInput' disabled={ isDisabled }
-                          defaultValue={ el.loc }
-                          value={ el.loc }
-                          readOnly
-                        />
+                        {
+                          id ?
+                            <span>{ el.loc ? el.loc : '-' }</span>
+                            :
+                            <Input
+                              className='smallInput' disabled={ isDisabled }
+                              defaultValue={ el.loc }
+                              value={ el.loc }
+                              readOnly
+                            />
+                        }
                       </Form.Item>
                     }
 
@@ -656,7 +696,12 @@ const GrnWithPoForm = (props) => {
                           name={ `DateCode[${ idx }]` }
                           label="Date Code"
                         >
-                          <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' readOnly disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.dateCode ? el.dateCode : '-' }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' readOnly disabled={ id } />
+                          }
                         </Form.Item>
                       }
 
@@ -687,7 +732,12 @@ const GrnWithPoForm = (props) => {
                             }),
                           ] }
                         >
-                          <Input type={ 'number' } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.labelQty ? el.labelQty : '-' }</span>
+                              :
+                              <Input type={ 'number' } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' disabled={ id } />
+                          }
                         </Form.Item>
                       }
                     </div>
@@ -700,7 +750,12 @@ const GrnWithPoForm = (props) => {
                           name={ `PartNo[${ idx }]` }
                           label="Part No"
                         >
-                          <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.partNo ? el.partNo : '-' }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly disabled={ id } />
+                          }
                         </Form.Item>
                       }
 
@@ -709,7 +764,12 @@ const GrnWithPoForm = (props) => {
                           name={ `ProjectNo[${ idx }]` }
                           label="Project No"
                         >
-                          <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.projectNo ? el.projectNo : '-' }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly disabled={ id } />
+                          }
                         </Form.Item>
                       }
                     </div>
@@ -721,7 +781,12 @@ const GrnWithPoForm = (props) => {
                           name={ `OrderQty[${ idx }]` }
                           label="Order Qty"
                         >
-                          <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type order qty here...' readOnly disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.recdQty ? el.recdQty : '-' }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type order qty here...' disabled={ id } />
+                          }
                         </Form.Item>
                       }
 
@@ -730,7 +795,12 @@ const GrnWithPoForm = (props) => {
                           name={ `SIVNo[${ idx }]` }
                           label="SIV No"
                         >
-                          <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' readOnly disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.poNo ? el.poNo : '-' }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' readOnly disabled={ id } />
+                          }
                         </Form.Item>
                       }
                     </div>
@@ -742,7 +812,12 @@ const GrnWithPoForm = (props) => {
                           name={ `StdPack[${ idx }]` }
                           label="Std Pack"
                         >
-                          <Input className='smallInput' defaultValue={ el.stdPackQty } value={ el.stdPackQty } onChange={ e => changeDetail(idx, 'stdPackQty', e.target.value) } placeholder='Type std pack here...' readOnly disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.stdPackQty ? el.stdPackQty : '-' }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ el.stdPackQty } value={ el.stdPackQty } onChange={ e => changeDetail(idx, 'stdPackQty', e.target.value) } placeholder='Type std pack here...' readOnly disabled={ id } />
+                          }
                         </Form.Item>
                       }
 
@@ -751,13 +826,15 @@ const GrnWithPoForm = (props) => {
                           name={ `DueDate[${ idx }]` }
                           label="Due date"
                         >
-                          <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' readOnly disabled={ id } />
+                          {
+                            id ?
+                              <span>{ el.dueDate ? el.dueDate : '-' }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' readOnly disabled={ id } />
+                          }
                         </Form.Item>
                       }
                     </div>
-
-
-
                   </div>
                   <div className="row">
                     {
@@ -765,7 +842,12 @@ const GrnWithPoForm = (props) => {
                         name={ `Description[${ idx }]` }
                         label="Description"
                       >
-                        <Input.TextArea className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly disabled={ id } />
+                        {
+                          id ?
+                            <p>{ el.description ? el.description : '-' }</p>
+                            :
+                            <Input.TextArea className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly disabled={ id } />
+                        }
                       </Form.Item>
                     }
 
@@ -774,7 +856,12 @@ const GrnWithPoForm = (props) => {
                         name={ `Remarks[${ idx }]` }
                         label="Remarks"
                       >
-                        <Input.TextArea className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' disabled={ id } />
+                        {
+                          id ?
+                            <p>{ el.remarks ? el.remarks : '-' }</p>
+                            :
+                            <Input.TextArea className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' disabled={ id } />
+                        }
                       </Form.Item>
                     }
 
@@ -799,20 +886,20 @@ const GrnWithPoForm = (props) => {
 
   const printReport = (key) => {
     console.log('key :>> ', key);
-    let params = {};
+    let body = {};
     if (key === 'GRN') {
-      params.grnNo = grnNo;
-      params.subType = subType;
-      params.type = 'GRN';
+      body.grnNo = grnNo;
+      body.subType = subType;
     } else if (key === 'pickList') {
-      params.grnNo = grnNo;
-      params.orderNo = orderNo;
-      params.projectNo = projectNo;
+      body.grnNo = grnNo;
     } else if (key === 'label') {
-      params.grnNo = grnNo;
+      body.grnNo = grnNo;
     }
-    console.log(params);
-    let data = key === 'GRN' ? Grn.printReportGRN(params) : key === 'pickList' ? Grn.printPickList(params) : Grn.printLabel(params);
+    console.log(body);
+    let data = key === 'GRN' ? Grn.printReportGRN(body) : key === 'pickList' ? Grn.printPickList(body) : Grn.printLabel(body);
+    // data.then(res => {
+    //   console.log('res :>> ', res);
+    // });
     data.then(result => result.blob('application/pdf'))
       .then(blob => {
         console.log('blob :>> ', blob);

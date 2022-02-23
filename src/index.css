@@ -265,3 +265,7 @@ table {
 .ant-table-cell {
   padding: 10px 16px !important;
 }
+
+p {
+  margin-bottom: 0px !important;
+}
