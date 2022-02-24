@@ -4,6 +4,7 @@ import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { MdAddCircle } from 'react-icons/md';
 import { TiDelete } from 'react-icons/ti';
 import Collapsible from "react-collapsible";
+import moment from 'moment';
 
 import { Grn } from '../../services';
 import { StyledDiv } from './styled';
@@ -318,11 +319,12 @@ const GrnWithPoForm = (props) => {
             recdPrice: result.poPrice,
             stdPackQty: result.stdPackQty,
             remarks: result.remarks,
-            recdQty: result.orderQty,
+            orderQty: result.orderQty,
             dueDate: result.dueDate,
             description: result.description,
-            issuedQty: 1,
-            labelQty: 1,
+            recdQty: 0,
+            issuedQty: 0,
+            labelQty: 0,
             itemNo: result.itemNo,
             itemType: result.itemType
           };
@@ -344,147 +346,6 @@ const GrnWithPoForm = (props) => {
     }
   }, [details]);
 
-
-  /*useEffect(() => {
-    const data = Lov.getItemCategories();
-    data.then(res => {
-      console.log('getItemCategories :>> ', res);
-      setItemCategoriesData(res);
-      let temp = [];
-      res.forEach(el => {
-        temp.push({
-          value: el.description,
-          // code: el.code
-        });
-      });
-      setItemCategoriesOpt(temp);
-    });
-  }, []); */
-
-  /*useEffect(() => {
-    if (categoryCode) {
-      console.log('categoryCode :>> ', categoryCode);
-      const data = Lov.getSubCategories(categoryCode);
-      data.then(res => {
-        console.log('getSubCategories :>> ', res);
-        setSubCategoriesData(res);
-        let temp = [];
-        res.forEach(el => {
-          temp.push({
-            value: el.subDescription,
-            // code: el.code
-          });
-        });
-        setSubCategoriesOpt(temp);
-      });
-    }
-  }, [categoryCode]);*/
-
-  /*useEffect(() => {
-    if (subCategoriesData.length > 0 && id && categorySubCode) {
-      subCategoriesData.forEach(el => {
-        if (el.categorySubCode === categorySubCode) {
-          setCategorySubCode(el.categorySubCode);
-          setCategorySubCodeName(el.subDescription);
-        }
-      });
-      setLoadingPage(false);
-    }
-  }, [subCategoriesData]);*/
-
-  /*useEffect(() => {
-    const data = Lov.getMsl();
-    data.then(res => {
-      console.log('getMsl :>> ', res);
-      setMslData(res);
-      let temp = [];
-      res.forEach(el => {
-        temp.push({
-          value: el.subtypeDesc,
-          // code: el.code
-        });
-      });
-      setMslOpt(temp);
-    });
-  }, []);*/
-
-  /*useEffect(() => {
-    const data = Lov.getSources();
-    data.then(res => {
-      console.log('getSources :>> ', res);
-      setSourcesData(res);
-      let temp = [];
-      res.forEach(el => {
-        temp.push({
-          value: el.codeDesc,
-          // code: el.code
-        });
-      });
-      setSourcesOpt(temp);
-    });
-  }, []);*/
-
-  /*useEffect(() => {
-    const data = Lov.getUOM();
-    data.then(res => {
-      console.log('getUOM :>> ', res);
-      setUomData(res);
-      let temp = [];
-      res.forEach(el => {
-        temp.push({
-          value: el.codeDesc,
-          // code: el.code
-        });
-      });
-      setUomOpt(temp);
-    });
-  }, []);*/
-
-  /*const onSelectCategoryCode = (data) => {
-    itemCategoriesData.forEach(el => {
-      if (el.description === data) {
-        setCategoryCode(el.categoryCode);
-        setCategoryName(el.description);
-      }
-    });
-  };
-
-  const onSelectSubCategoryCode = (data) => {
-    subCategoriesData.forEach(el => {
-      if (el.subDescription === data) {
-        setCategorySubCode(el.categorySubCode);
-        setCategorySubCodeName(el.subDescription);
-      }
-    });
-  };
-
-  const onSelectSource = (data) => {
-    sourcesData.forEach(el => {
-      if (el.codeDesc === data) {
-        setSource(el.codeValue);
-        setSourceName(el.codeDesc);
-      }
-    });
-  };
-
-  const onSelectMsl = (data) => {
-    mslData.forEach(el => {
-      if (el.subtypeDesc === data) {
-        setMslCode(el.subType);
-        setMslCodeName(el.subtypeDesc);
-      }
-    });
-  };
-
-  const onSelectUOM = (data) => {
-    uomData.forEach(el => {
-      if (el.codeDesc === data) {
-        setUom(el.codeValue);
-        setUomName(el.codeDesc);
-      }
-    });
-  };*/
-
   const submit = async () => {
     try {
       console.log(details);
@@ -494,8 +355,15 @@ const GrnWithPoForm = (props) => {
         details[i]["subType"] = "N";
         details[i]["grnNo"] = grnNo;
         details[i]["poNo"] = poNo;
-        details[i]["recdDate"] = e.dueDate;
+        details[i]["recdDate"] = moment().format();
         details[i]["uom"] = e.invUom;
+
+        details[i]["recdQty"] = parseInt(e.recdQty);
+        details[i]["issuedQty"] = parseInt(e.issuedQty);
+        details[i]["labelQty"] = parseInt(e.labelQty);
+        details[i]["orderQty"] = parseInt(e.orderQty);
+
+
       });
 
       console.log('details', details);
@@ -511,14 +379,16 @@ const GrnWithPoForm = (props) => {
         currencyRate,
         grnDetails: details
       };
-      console.log('obj :>> ', obj);
+      console.log('obj :>> ', JSON.stringify(obj));
       const hasil = await Grn.create(obj);
+      console.log('hasil :>> ', hasil);
       if (hasil.ok !== undefined && !hasil.ok) {
         const res = await hasil.data;
-        message.error(res.message);
+        message.error(res.message ? res.message : 'Internal Server Error');
+      } else {
+        history.push('/grn-with-pos');
       }
 
-      history.push('/grn-with-pos');
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
@@ -537,6 +407,9 @@ const GrnWithPoForm = (props) => {
 
   const changeDetail = (idx, field, value) => {
     details[idx][field] = value;
+    if (field === 'recdQty') {
+      details[idx]['issuedQty'] = value;
+    }
     setDetails(details);
   };
 
@@ -628,7 +501,7 @@ const GrnWithPoForm = (props) => {
                         <Form.Item
                           name={ `GRNQty[${ idx }]` }
                           label="GRN Qty"
-                          initialValue={ el.issuedQty }
+                          initialValue={ el.recdQty }
                           rules={ [
                             {
                               required: true,
@@ -646,9 +519,9 @@ const GrnWithPoForm = (props) => {
                         >
                           {
                             id ?
-                              <span>{ el.issuedQty ? el.issuedQty : '-' }</span>
+                              <span>{ el.recdQty ? el.recdQty : '-' }</span>
                               :
-                              <Input type={ 'number' } className='smallInput' defaultValue={ el.issuedQty } value={ el.issuedQty } onChange={ e => changeDetail(idx, 'grnQty', e.target.value) } placeholder='Type GRN Qty here...' disabled={ id } />
+                              <Input type={ 'number' } min={ 0 } className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type GRN Qty here...' disabled={ id } />
                           }
                         </Form.Item>
                       }
@@ -736,7 +609,7 @@ const GrnWithPoForm = (props) => {
                             id ?
                               <span>{ el.labelQty ? el.labelQty : '-' }</span>
                               :
-                              <Input type={ 'number' } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' disabled={ id } />
+                              <Input type={ 'number' } min={ 0 } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' disabled={ id } />
                           }
                         </Form.Item>
                       }
@@ -783,9 +656,9 @@ const GrnWithPoForm = (props) => {
                         >
                           {
                             id ?
-                              <span>{ el.recdQty ? el.recdQty : '-' }</span>
+                              <span>{ el.orderQty ? el.orderQty : '-' }</span>
                               :
-                              <Input className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type order qty here...' disabled={ id } />
+                              <Input className='smallInput' defaultValue={ el.orderQty } value={ el.orderQty } onChange={ e => changeDetail(idx, 'orderQty', e.target.value) } placeholder='Type order qty here...' disabled={ id } readOnly />
                           }
                         </Form.Item>
                       }

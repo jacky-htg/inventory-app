@@ -468,7 +468,7 @@ const PageForm = (props) => {
                                     name="itemType"
                                     label="Type"
                                   >
-                                    <Input className='smallInput' defaultValue={ el.itemType } value={ el.itemType } onChange={ e => changeDetail(idx, 'itemType', e.target.value) } placeholder='Insert type here...' />
+                                    <Input className='smallInput' defaultValue={ el.itemType } value={ el.itemType } onChange={ e => changeDetail(idx, 'itemType', e.target.value) } placeholder='Insert type here...' readOnly />
                                   </Form.Item>
                                 }
 
@@ -477,7 +477,7 @@ const PageForm = (props) => {
                                     name="UOM"
                                     label="UOM"
                                   >
-                                    <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' />
+                                    <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' readOnly />
                                   </Form.Item>
                                 }
                               </div>
@@ -488,7 +488,7 @@ const PageForm = (props) => {
                                       name="returnPrice"
                                       label="Return Price"
                                     >
-                                      <Input className='smallInput' defaultValue={ el.retnPrice } value={ el.retnPrice } onChange={ e => changeDetail(idx, 'retnPrice', e.target.value) } placeholder='Type Return Price here...' />
+                                      <Input className='smallInput' defaultValue={ el.retnPrice } value={ el.retnPrice } onChange={ e => changeDetail(idx, 'retnPrice', e.target.value) } placeholder='Type Return Price here...' readOnly />
                                     </Form.Item>
                                   }
 
@@ -564,7 +564,7 @@ const PageForm = (props) => {
                                     name="Item No"
                                     label="Item No"
                                   >
-                                    <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' />
+                                    <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly />
                                   </Form.Item>
                                 }
 
@@ -573,7 +573,7 @@ const PageForm = (props) => {
                                     name="batchNo"
                                     label="Batch No"
                                   >
-                                    <Input defaultValue={ el.batchNo } value={ el.batchNo } onChange={ e => changeDetail(idx, 'batchNo', e.target.value) } placeholder='Type batch no here...' />
+                                    <Input defaultValue={ el.batchNo } value={ el.batchNo } onChange={ e => changeDetail(idx, 'batchNo', e.target.value) } placeholder='Type batch no here...' readOnly />
                                   </Form.Item>
                                 }
 
@@ -583,7 +583,8 @@ const PageForm = (props) => {
                                     label="Loc"
                                   >
                                     <Select
-                                      className='normal' disabled={ isDisabled }
+                                      className='normal' disabled={ id ? isDisabled : true }
+                                      readOnly
                                       defaultValue={ el.loc }
                                       value={ el.loc }
                                       placeholder={ "Select loc.." }
@@ -603,7 +604,7 @@ const PageForm = (props) => {
                                     name="Part No"
                                     label="Part No"
                                   >
-                                    <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' />
+                                    <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly />
                                   </Form.Item>
                                 }
 
@@ -613,7 +614,7 @@ const PageForm = (props) => {
                                       name="Project No"
                                       label="Project No"
                                     >
-                                      <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' />
+                                      <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly />
                                     </Form.Item>
                                   }
 
@@ -622,7 +623,7 @@ const PageForm = (props) => {
                                       name="grnNo"
                                       label="GRN No"
                                     >
-                                      <Input className='smallInput' defaultValue={ el.grnNo } value={ el.grnNo } onChange={ e => changeDetail(idx, 'grnNo', e.target.value) } placeholder='Insert GRN No here...' />
+                                      <Input className='smallInput' defaultValue={ el.grnNo } value={ el.grnNo } onChange={ e => changeDetail(idx, 'grnNo', e.target.value) } placeholder='Insert GRN No here...' readOnly />
                                     </Form.Item>
                                   }
                                 </div>
@@ -633,7 +634,7 @@ const PageForm = (props) => {
                                       name="mrvNo"
                                       label="MRV No"
                                     >
-                                      <Input className='smallInput' defaultValue={ el.mrvNo } value={ el.mrvNo } onChange={ e => changeDetail(idx, 'mrvNo', e.target.value) } placeholder='Insert MRV No here...' />
+                                      <Input className='smallInput' defaultValue={ el.mrvNo } value={ el.mrvNo } onChange={ e => changeDetail(idx, 'mrvNo', e.target.value) } placeholder='Insert MRV No here...' readOnly />
                                     </Form.Item>
                                   }
                                 </div>

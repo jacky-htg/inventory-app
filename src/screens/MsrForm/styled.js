@@ -109,7 +109,7 @@ const StyledDiv = styled.div`
       .border {
         border-radius: 10px;
         border: 1px solid lightgrey;
-        width: 92%;
+        width: 100%;
       }
       
       .Collapsible {
@@ -121,7 +121,7 @@ const StyledDiv = styled.div`
         align-items: center;
         padding: 20px;
         border-radius: 10px;
-        width: 92%;
+        width: 100%;
         font-weight: 400;
         text-decoration: none;
         position: absolute;
