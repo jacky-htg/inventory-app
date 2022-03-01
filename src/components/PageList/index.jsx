@@ -75,6 +75,7 @@ function PageList(props) {
   };
 
   const getData = (filter) => {
+    console.log('getData');
     let data = props.data.list(filter);
     data.then(result => {
       console.log('result siv:>> ', result.data);
@@ -124,7 +125,7 @@ function PageList(props) {
   const handleDelete = loc => {
     let data = props.data.remove(loc);
     data.then(result => {
-      if (result.status && result.status !== 204) {
+      if (result && result.status && result.status !== 204) {
         message.error(result.error);
       }
       setLoading(true);

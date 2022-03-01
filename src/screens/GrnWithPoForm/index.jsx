@@ -384,7 +384,7 @@ const GrnWithPoForm = (props) => {
       console.log('hasil :>> ', hasil);
       if (hasil.ok !== undefined && !hasil.ok) {
         const res = await hasil.data;
-        message.error(res.message ? res.message : 'Internal Server Error');
+        message.error(res.message ? res.message : env.internalError);
       } else {
         history.push('/grn-with-pos');
       }

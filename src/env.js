@@ -4,6 +4,7 @@ const staging = {
   companyCode: "050",
   companyName: "KESI",
   plantNo: 0,
+  internalError: "Internal Server Error"
 };
 
 export default staging;
