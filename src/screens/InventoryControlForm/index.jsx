@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Form, InputNumber, Button, message } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { InventoryControl } from '../../services';
 
+import { InventoryControl } from '../../services';
 import { StyledDiv } from './styled';
 import { Images } from '../../constant';
+import { formFailedSubmit } from '../../helpers';
 
 const FormPage = (props) => {
   const history = useHistory();
@@ -21,7 +22,7 @@ const FormPage = (props) => {
   const [loadingPage, setLoadingPage] = useState(id ? true : false);
   const [isEdit, setIsEdit] = useState(query.get("edit") ? query.get('edit') === 'true' : false);
   const [isDisabled, setIsDisabled] = useState(id && !isEdit ? true : false);
-  
+
   const [state, setState] = useState({
     stockDepn: "",
     provAge: ""
@@ -32,7 +33,7 @@ const FormPage = (props) => {
     state[field] = value;
     setState(state);
   };
-  
+
   useEffect(() => {
     if (
       id
@@ -88,7 +89,7 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks">
+            <Form onFinish={ submit } onFinishFailed={ formFailedSubmit } form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
                   {
@@ -99,23 +100,23 @@ const FormPage = (props) => {
                       <Form.Item
                         name="stockDepn"
                         label="Stock Depreciation (%)"
-                        initialValue={state.stockDepn}
+                        initialValue={ state.stockDepn }
                         rules={ [
                           {
                             required: true,
-                            message: 'stock depreciation is required'
+                            message: 'Stock Deprecation Can Not be Blank !'
                           },
                         ] }
                       >
-                        <InputNumber 
-                          className='normal' 
-                          min={0} 
-                          max={99990}
-                          disabled={ isDisabled } 
-                          defaultValue={ state.stockDepn } 
-                          value={ state.stockDepn } 
-                          onBlur={ e => changeData(e.target.value, 'stockDepn') } 
-                          />
+                        <InputNumber
+                          className='normal'
+                          min={ 0 }
+                          max={ 99990 }
+                          disabled={ isDisabled }
+                          defaultValue={ state.stockDepn }
+                          value={ state.stockDepn }
+                          onBlur={ e => changeData(e.target.value, 'stockDepn') }
+                        />
                       </Form.Item>
                   }
 
@@ -129,23 +130,23 @@ const FormPage = (props) => {
                       <Form.Item
                         name="provAge"
                         label="Stock Provision Age (Yrs)"
-                        initialValue={state.provAge}
+                        initialValue={ state.provAge }
                         rules={ [
                           {
                             required: true,
-                            message: 'stock provision age is required'
+                            message: 'Stock Provision Age Can Not be Blank !'
                           },
                         ] }
                       >
-                        <InputNumber 
-                          className='normal' 
-                          min={0} 
-                          max={99990}
-                          disabled={ isDisabled } 
-                          defaultValue={ state.provAge } 
-                          value={ state.provAge } 
-                          onBlur={ e => changeData(e.target.value, 'provAge') } 
-                          />
+                        <InputNumber
+                          className='normal'
+                          min={ 0 }
+                          max={ 99990 }
+                          disabled={ isDisabled }
+                          defaultValue={ state.provAge }
+                          value={ state.provAge }
+                          onBlur={ e => changeData(e.target.value, 'provAge') }
+                        />
                       </Form.Item>
                   }
                 </div>
@@ -159,7 +160,7 @@ const FormPage = (props) => {
 
                   {
                     (!id || isEdit) &&
-                    <Button onClick={ submit } type="primary" style={{marginLeft: '1%'}} htmlType="submit">
+                    <Button type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
                       {
                         isEdit
                           ?

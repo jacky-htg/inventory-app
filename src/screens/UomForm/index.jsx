@@ -5,6 +5,7 @@ import { Uom } from '../../services';
 import env from '../../env';
 import { StyledDiv } from './styled';
 import { Images } from '../../constant';
+import { formFailedSubmit } from '../../helpers';
 
 const FormPage = (props) => {
   const history = useHistory();
@@ -108,18 +109,6 @@ const FormPage = (props) => {
     }
   }, [errorFields, fromRef, toRef]);
 
-  const failed = ({ values, errorFields, outOfDate }) => {
-    if (errorFields.length > 0) {
-      let errorMsg = '';
-      errorFields.forEach(error => {
-        error.errors.forEach(el => {
-          errorMsg += el + '; ';
-        });
-      });
-      message.error(errorMsg);
-    }
-  };
-
   return (
     <StyledDiv>
       <div className="header">
@@ -134,7 +123,7 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form onFinish={ submit } onFinishFailed={ failed } form={ form } name="control-hooks">
+            <Form onFinish={ submit } onFinishFailed={ formFailedSubmit } form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
                   <Form.Item

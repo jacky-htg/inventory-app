@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Divider } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { Country, Location } from '../../services';
 
+import { Country, Location } from '../../services';
 import { StyledDiv } from './styled';
 import env from '../../env';
 import { Images } from '../../constant';
+import { formFailedSubmit } from '../../helpers';
+
 
 const StockLocationForm = (props) => {
   const history = useHistory();
@@ -45,7 +47,7 @@ const StockLocationForm = (props) => {
   const [companyCode, setCompanyCode] = useState(env.companyCode);
   const [plantNumber, setPlantNumber] = useState(env.plantNo);
 
-  const [errorFields, setErrorFields] = useState([]); 
+  const [errorFields, setErrorFields] = useState([]);
 
   const locRef = useRef();
   const countryRef = useRef();
@@ -184,7 +186,7 @@ const StockLocationForm = (props) => {
 
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     console.log('errrr', errorFields);
     if (errorFields.includes("Loc")) {
       locRef.current.focus();
@@ -207,160 +209,161 @@ const StockLocationForm = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks">
+            <Form onFinish={ submit } onFinishFailed={ formFailedSubmit } form={ form } name="control-hooks">
               <div className="group">
                 <Form.Item
                   name="Loc"
                   label="Loc"
-                  initialValue={loc}
+                  initialValue={ loc }
                   rules={ [
                     {
                       required: true,
+                      message: 'Loc Can Not be Blank !'
                     },
-                            ({ getFieldValue }) => ({
-                              validator(_, value) {
-                                if (/^\s+$/.test(value)) {
-                                  return Promise.reject(new Error('LOC can not empty'));
-                                }
-                                return Promise.resolve();
-                              },
-                            }),
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (/^\s+$/.test(value)) {
+                          return Promise.reject(new Error('Loc Can Not be Blank !'));
+                        }
+                        return Promise.resolve();
+                      },
+                    }),
                   ] }
                 >
-                  <Input ref={locRef} maxLength={5} style={{ textTransform: 'uppercase' }} readOnly={isEdit?true:false} disabled={ isDisabled } defaultValue={ loc } value={ loc } onChange={ e => setLoc(e.target.value.toUpperCase()) } placeholder={ id?'':'Type loc here...' } />
+                  <Input ref={ locRef } maxLength={ 5 } style={ { textTransform: 'uppercase' } } readOnly={ isEdit ? true : false } disabled={ isDisabled } defaultValue={ loc } value={ loc } onChange={ e => setLoc(e.target.value.toUpperCase()) } placeholder={ id ? '' : 'Type loc here...' } />
                 </Form.Item>
 
                 <Form.Item
                   name="Description"
                   label="Description"
                 >
-                  <Input maxLength={60} style={{ textTransform: 'uppercase' }} disabled={ isDisabled } defaultValue={ description } value={ description } onChange={ e => setDescription(e.target.value.toUpperCase()) } placeholder={ id && !isEdit?'':'Type descripction here...' } />
+                  <Input maxLength={ 60 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ description } value={ description } onChange={ e => setDescription(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type descripction here...' } />
                 </Form.Item>
-                
+
 
                 <Form.Item
                   name="Address 1"
                   label="Address 1"
                 >
-                  <Input maxLength={30} style={{ textTransform: 'uppercase' }} disabled={ isDisabled } defaultValue={ address1 } value={ address1 } onChange={ e => setAddress1(e.target.value.toUpperCase()) } placeholder={ id && !isEdit?'':'Type address here...' } />
+                  <Input maxLength={ 30 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ address1 } value={ address1 } onChange={ e => setAddress1(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type address here...' } />
                 </Form.Item>
 
                 <Form.Item
                   name="Address 2"
                   label="Address 2"
                 >
-                  <Input maxLength={30} style={{ textTransform: 'uppercase' }} disabled={ isDisabled } defaultValue={ address2 } value={ address2 } onChange={ e => setAddress2(e.target.value.toUpperCase()) } />
+                  <Input maxLength={ 30 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ address2 } value={ address2 } onChange={ e => setAddress2(e.target.value.toUpperCase()) } />
                 </Form.Item>
 
                 <Form.Item
                   name="Address 3"
                   label="Address 3"
                 >
-                  <Input maxLength={30} style={{ textTransform: 'uppercase' }} disabled={ isDisabled } defaultValue={ address3 } value={ address3 } onChange={ e => setAddress3(e.target.value.toUpperCase()) } />
+                  <Input maxLength={ 30 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ address3 } value={ address3 } onChange={ e => setAddress3(e.target.value.toUpperCase()) } />
                 </Form.Item>
 
                 <Form.Item
                   name="Address 4"
                   label="Address 4"
                 >
-                  <Input maxLength={30} style={{ textTransform: 'uppercase' }} disabled={ isDisabled } defaultValue={ address4 } value={ address4 } onChange={ e => setAddress4(e.target.value.toUpperCase()) } />
+                  <Input maxLength={ 30 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ address4 } value={ address4 } onChange={ e => setAddress4(e.target.value.toUpperCase()) } />
                 </Form.Item>
 
                 <Form.Item
                   name="Postal Code"
                   label="Postal Code"
                 >
-                  <Input maxLength={15} style={{ textTransform: 'uppercase' }} disabled={ isDisabled } defaultValue={ postalCode } value={ postalCode } onChange={ e => setPostalCode(e.target.value.toUpperCase()) } placeholder={ id && !isEdit?'':'Type postal code here...' } />
+                  <Input maxLength={ 15 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ postalCode } value={ postalCode } onChange={ e => setPostalCode(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type postal code here...' } />
                 </Form.Item>
 
                 <Form.Item
                   name="Country Name"
                   label="Country Name"
-                  initialValue={countryName}
+                  initialValue={ countryName }
                   rules={ [
                     {
                       required: true,
-                      message: 'country name is required'
+                      message: 'Country Name Can Not be Blank !'
                     },
                   ] }
                 >
                   <Select
-                      ref={countryRef} 
-                      showSearch
-                      allowClear
-                      className='normal' disabled={ isDisabled }
-                      defaultValue={ countryName }
-                      value={ countryName }
-                      placeholder="Please select"
-                      onChange={ (value) => onSelectCountry(value) }
-                      filterOption={ (input, option) =>
-                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }
-                    >
-                      { countriesOpt }
-                    </Select>
+                    ref={ countryRef }
+                    showSearch
+                    allowClear
+                    className='normal' disabled={ isDisabled }
+                    defaultValue={ countryName }
+                    value={ countryName }
+                    placeholder="Please select"
+                    onChange={ (value) => onSelectCountry(value) }
+                    filterOption={ (input, option) =>
+                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    { countriesOpt }
+                  </Select>
                 </Form.Item>
 
                 <Form.Item
                   name="Region Code"
                   label="Region Code"
                 >
-                  <Input maxLength={30} disabled={ isDisabled } defaultValue={ regionCode } value={ regionCode } onChange={ e => setRegionCode(e.target.value.toUpperCase()) } placeholder={ id && !isEdit?'':'Type region code here...' } />
+                  <Input maxLength={ 30 } disabled={ isDisabled } defaultValue={ regionCode } value={ regionCode } onChange={ e => setRegionCode(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type region code here...' } />
                 </Form.Item>
 
                 <Form.Item
                   name="State Code"
                   label="State Code"
                 >
-                  <Input maxLength={30} style={{ textTransform: 'uppercase' }} disabled={ isDisabled } defaultValue={ stateCode } value={ stateCode } onChange={ e => setStateCode(e.target.value.toUpperCase()) } placeholder={ id && !isEdit?'':'Type state code here...' } />
+                  <Input maxLength={ 30 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ stateCode } value={ stateCode } onChange={ e => setStateCode(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type state code here...' } />
                 </Form.Item>
-            
+
                 <Form.Item
                   name="City Code"
                   label="City Code"
                 >
-                  <Input maxLength={30} disabled={ isDisabled } defaultValue={ cityCode } value={ cityCode } onChange={ e => setCityCode(e.target.value) } placeholder={ id && !isEdit?'':'Type city code here...' } />
+                  <Input maxLength={ 30 } disabled={ isDisabled } defaultValue={ cityCode } value={ cityCode } onChange={ e => setCityCode(e.target.value) } placeholder={ id && !isEdit ? '' : 'Type city code here...' } />
                 </Form.Item>
-            
+
                 <Form.Item
                   name="Telephone No"
                   label="Telephone No"
                 >
-                  <Input maxLength={15} style={{ textTransform: 'uppercase' }} disabled={ isDisabled } defaultValue={ telNum } value={ telNum } onChange={ e => setTelNum(e.target.value.toUpperCase()) } placeholder={ id && !isEdit?'':'Type telephone number here...' } />
+                  <Input maxLength={ 15 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ telNum } value={ telNum } onChange={ e => setTelNum(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type telephone number here...' } />
                 </Form.Item>
-            
+
                 <Form.Item
                   name="Fax No"
                   label="Fax No"
                 >
-                  <Input maxLength={15} style={{ textTransform: 'uppercase' }} disabled={ isDisabled } defaultValue={ faxNum } value={ faxNum } onChange={ e => setFaxNum(e.target.value.toUpperCase()) } placeholder={ id && !isEdit?'':'Type fax number here...' } />
+                  <Input maxLength={ 15 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ faxNum } value={ faxNum } onChange={ e => setFaxNum(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type fax number here...' } />
                 </Form.Item>
-            
+
                 <Form.Item
                   name="Person In Charge"
                   label="Person In Charge"
                 >
-                  <Input maxLength={45} style={{ textTransform: 'uppercase' }} disabled={ isDisabled } defaultValue={ pic } value={ pic } onChange={ e => setPic(e.target.value.toUpperCase()) } placeholder={ id && !isEdit?'':'Type Person In Charge here...' } />
+                  <Input maxLength={ 45 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ pic } value={ pic } onChange={ e => setPic(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type Person In Charge here...' } />
                 </Form.Item>
-            
+
                 <Form.Item
                   name="Remarks"
                   label="Remarks"
                 >
-                  <Input maxLength={30} style={{ textTransform: 'uppercase' }} disabled={ isDisabled } defaultValue={ remarks } value={ remarks } onChange={ e => setRemarks(e.target.value.toUpperCase()) } placeholder={ id && !isEdit?'':'Type remarks here...' } />
+                  <Input maxLength={ 30 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ remarks } value={ remarks } onChange={ e => setRemarks(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type remarks here...' } />
                 </Form.Item>
 
               </div>
-              
+
               <div className="submit">
                 <Form.Item>
                   <Button onClick={ () => history.push(`/stock-locations`) } type="default" htmlType="submit">
                     Back To Stock Locations
                   </Button>
                   { (!id || isEdit) && <Divider type='vertical' /> }
-              {
-                (!id || isEdit) && 
-                    <Button onClick={ submit } type="primary" htmlType="submit">
+                  {
+                    (!id || isEdit) &&
+                    <Button type="primary" htmlType="submit">
                       {
                         isEdit
                           ?
@@ -369,12 +372,12 @@ const StockLocationForm = (props) => {
                           "Create Stock Locations"
                       }
                     </Button>
-                 
-               
-              }
-               </Form.Item>
-               </div>
-              
+
+
+                  }
+                </Form.Item>
+              </div>
+
             </Form>
         }
       </div>

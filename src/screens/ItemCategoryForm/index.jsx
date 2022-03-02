@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Form, Input, InputNumber, Button, Select, message } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
+
 import { ItemCategory, Lov } from '../../services';
 import env from '../../env';
 import { StyledDiv } from './styled';
 import { Images } from '../../constant';
+import { formFailedSubmit } from '../../helpers';
 
 const FormPage = (props) => {
   const { Option } = Select;
@@ -59,14 +61,14 @@ const FormPage = (props) => {
   }, []);
 
   const changeData = (value, field) => {
-    const arrInt = [ 'designQtya', 'designQtyb', 'designQtyc', 'designQtyd', 'mifA', 'mifB', 'mifC', 'mifD'];
+    const arrInt = ['designQtya', 'designQtyb', 'designQtyc', 'designQtyd', 'mifA', 'mifB', 'mifC', 'mifD'];
     if (arrInt.includes(field)) {
       value = parseInt(value);
     }
     state[field] = value;
     setState(state);
   };
-  
+
   useEffect(() => {
     if (
       id
@@ -118,7 +120,7 @@ const FormPage = (props) => {
     }
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     console.log('errrr', errorFields);
     if (errorFields.includes("categoryCode")) {
       categoryCodeRef.current.focus();
@@ -143,17 +145,17 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks">
+            <Form onFinish={ submit } onFinishFailed={ formFailedSubmit } form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
                   <Form.Item
                     name="categoryCode"
                     label="Category Code"
-                    initialValue={state.categoryCode}
+                    initialValue={ state.categoryCode }
                     rules={ [
                       {
                         required: true,
-                        message: "category code is required"
+                        message: "Category Code Can Not be Blank !"
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
@@ -165,7 +167,7 @@ const FormPage = (props) => {
                       }),
                     ] }
                   >
-                    <Input ref={categoryCodeRef} maxLength={10} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.categoryCode } value={ state.categoryCode } onBlur={ e => changeData(e.target.value.toUpperCase(), 'categoryCode') } />
+                    <Input ref={ categoryCodeRef } maxLength={ 10 } style={ { textTransform: 'uppercase' } } className='normal' disabled={ isDisabled } defaultValue={ state.categoryCode } value={ state.categoryCode } onBlur={ e => changeData(e.target.value.toUpperCase(), 'categoryCode') } />
                   </Form.Item>
 
                 </div>
@@ -174,18 +176,18 @@ const FormPage = (props) => {
                     name="description"
                     label="Description"
                   >
-                    <Input maxLength={60} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.description } value={ state.description } onBlur={ e => changeData(e.target.value.toUpperCase(), 'description') } />
+                    <Input maxLength={ 60 } style={ { textTransform: 'uppercase' } } className='normal' disabled={ isDisabled } defaultValue={ state.description } value={ state.description } onBlur={ e => changeData(e.target.value.toUpperCase(), 'description') } />
                   </Form.Item>
                 </div>
                 <div className="row">
                   <Form.Item
                     name="categorySubCode"
                     label="Category Sub Code"
-                    initialValue={state.categorySubCode}
+                    initialValue={ state.categorySubCode }
                     rules={ [
                       {
                         required: true,
-                        message:"category sub code is required"
+                        message: "Category Sub Code Can Not be Blank !"
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
@@ -197,7 +199,7 @@ const FormPage = (props) => {
                       }),
                     ] }
                   >
-                    <Input ref={categorySubCodeRef} maxLength={10} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.categorySubCode } value={ state.categorySubCode } onBlur={ e => changeData(e.target.value.toUpperCase(), 'categorySubCode') } />
+                    <Input ref={ categorySubCodeRef } maxLength={ 10 } style={ { textTransform: 'uppercase' } } className='normal' disabled={ isDisabled } defaultValue={ state.categorySubCode } value={ state.categorySubCode } onBlur={ e => changeData(e.target.value.toUpperCase(), 'categorySubCode') } />
                   </Form.Item>
 
                 </div>
@@ -206,30 +208,30 @@ const FormPage = (props) => {
                     name="subDescription"
                     label="Sub Description"
                   >
-                    <Input maxLength={60} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.subDescription } value={ state.subDescription } onBlur={ e => changeData(e.target.value.toUpperCase(), 'subDescription') } />
+                    <Input maxLength={ 60 } style={ { textTransform: 'uppercase' } } className='normal' disabled={ isDisabled } defaultValue={ state.subDescription } value={ state.subDescription } onBlur={ e => changeData(e.target.value.toUpperCase(), 'subDescription') } />
                   </Form.Item>
                 </div>
                 <div className="row">
                   <Form.Item
                     name="categoryGroup"
                     label="Category Group"
-                    initialValue={state.categoryGroup}
+                    initialValue={ state.categoryGroup }
                     rules={ [
                       {
                         required: true,
-                        message: 'category group is required'
+                        message: 'Category Group Can Not be Blank !'
                       },
                     ] }
                   >
-                    <Select 
-                      ref={categoryGroupRef} 
-                      className='normal' 
-                      disabled={ isDisabled } 
-                      defaultValue={ state.categoryGroup } 
-                      value={ state.categoryGroup } 
-                      onChange={ e => changeData(e, 'categoryGroup') } 
-                      >
-                        {categoryGroups}
+                    <Select
+                      ref={ categoryGroupRef }
+                      className='normal'
+                      disabled={ isDisabled }
+                      defaultValue={ state.categoryGroup }
+                      value={ state.categoryGroup }
+                      onChange={ e => changeData(e, 'categoryGroup') }
+                    >
+                      { categoryGroups }
                     </Select>
                   </Form.Item>
 
@@ -237,15 +239,15 @@ const FormPage = (props) => {
                     name="mrpStatus"
                     label="MRP Status"
                   >
-                    <Select 
-                      className='normal' 
-                      disabled={ isDisabled } 
-                      defaultValue={ state.mrpStatus } 
-                      value={ state.mrpStatus } 
-                      onChange={ e => changeData(e, 'mrpStatus') } 
+                    <Select
+                      className='normal'
+                      disabled={ isDisabled }
+                      defaultValue={ state.mrpStatus }
+                      value={ state.mrpStatus }
+                      onChange={ e => changeData(e, 'mrpStatus') }
                     >
-                        <Option key='Y' value='Y' >YES</Option>
-                        <Option key='N' value='N' >NO</Option>
+                      <Option key='Y' value='Y' >YES</Option>
+                      <Option key='N' value='N' >NO</Option>
                     </Select>
                   </Form.Item>
                 </div>
@@ -255,17 +257,17 @@ const FormPage = (props) => {
                     name="designQtya"
                     label="Design Qty A"
                   >
-                    <InputNumber 
-                      min={0} 
-                      max={999999991} 
+                    <InputNumber
+                      min={ 0 }
+                      max={ 999999991 }
                       step="0.0001"
                       stringMode
-                      maxLength={18} 
-                      style={{ width: "50%"}}
-                      className='normal right' 
-                      defaultValue={ state.designQtya } 
-                      value={ state.designQtya } 
-                      onBlur={ e => changeData(e.target.value, 'designQtya') } 
+                      maxLength={ 18 }
+                      style={ { width: "50%" } }
+                      className='normal right'
+                      defaultValue={ state.designQtya }
+                      value={ state.designQtya }
+                      onBlur={ e => changeData(e.target.value, 'designQtya') }
                     />
                   </Form.Item>
 
@@ -273,15 +275,15 @@ const FormPage = (props) => {
                     name="mifA"
                     label="MIF A"
                   >
-                    <InputNumber 
-                      min={0} 
-                      max={99990} 
-                      maxLength={6} 
-                      style={{ width: "50%"}}
-                      className='normal right' 
-                      defaultValue={ state.mifA } 
-                      value={ state.mifA } 
-                      onBlur={ e => changeData(e.target.value, 'mifA') } 
+                    <InputNumber
+                      min={ 0 }
+                      max={ 99990 }
+                      maxLength={ 6 }
+                      style={ { width: "50%" } }
+                      className='normal right'
+                      defaultValue={ state.mifA }
+                      value={ state.mifA }
+                      onBlur={ e => changeData(e.target.value, 'mifA') }
                     />
                   </Form.Item>
                 </div>
@@ -291,17 +293,17 @@ const FormPage = (props) => {
                     name="designQtyb"
                     label="Design Qty B"
                   >
-                    <InputNumber 
-                      min={0} 
-                      max={999999991} 
+                    <InputNumber
+                      min={ 0 }
+                      max={ 999999991 }
                       step="0.0001"
                       stringMode
-                      maxLength={18} 
-                      style={{ width: "50%"}}
-                      className='normal right' 
-                      defaultValue={ state.designQtyb } 
-                      value={ state.designQtyb } 
-                      onBlur={ e => changeData(e.target.value, 'designQtyb') } 
+                      maxLength={ 18 }
+                      style={ { width: "50%" } }
+                      className='normal right'
+                      defaultValue={ state.designQtyb }
+                      value={ state.designQtyb }
+                      onBlur={ e => changeData(e.target.value, 'designQtyb') }
                     />
                   </Form.Item>
 
@@ -309,15 +311,15 @@ const FormPage = (props) => {
                     name="mifB"
                     label="MIF B"
                   >
-                    <InputNumber 
-                      min={0} 
-                      max={99990} 
-                      maxLength={6} 
-                      style={{ width: "50%"}}
-                      className='normal right' 
-                      defaultValue={ state.mifB } 
-                      value={ state.mifB } 
-                      onBlur={ e => changeData(e.target.value, 'mifB') } 
+                    <InputNumber
+                      min={ 0 }
+                      max={ 99990 }
+                      maxLength={ 6 }
+                      style={ { width: "50%" } }
+                      className='normal right'
+                      defaultValue={ state.mifB }
+                      value={ state.mifB }
+                      onBlur={ e => changeData(e.target.value, 'mifB') }
                     />
                   </Form.Item>
                 </div>
@@ -327,17 +329,17 @@ const FormPage = (props) => {
                     name="designQtyc"
                     label="Design Qty C"
                   >
-                    <InputNumber 
-                      min={0} 
-                      max={999999991} 
+                    <InputNumber
+                      min={ 0 }
+                      max={ 999999991 }
                       step="0.0001"
                       stringMode
-                      maxLength={18} 
-                      style={{ width: "50%"}}
-                      className='normal right' 
-                      defaultValue={ state.designQtyc } 
-                      value={ state.designQtyc } 
-                      onBlur={ e => changeData(e.target.value, 'designQtyc') } 
+                      maxLength={ 18 }
+                      style={ { width: "50%" } }
+                      className='normal right'
+                      defaultValue={ state.designQtyc }
+                      value={ state.designQtyc }
+                      onBlur={ e => changeData(e.target.value, 'designQtyc') }
                     />
                   </Form.Item>
 
@@ -345,15 +347,15 @@ const FormPage = (props) => {
                     name="mifC"
                     label="MIF C"
                   >
-                    <InputNumber 
-                      min={0} 
-                      max={99990} 
-                      maxLength={6} 
-                      style={{ width: "50%"}}
-                      className='normal right' 
-                      defaultValue={ state.mifC } 
-                      value={ state.mifC } 
-                      onBlur={ e => changeData(e.target.value, 'mifC') } 
+                    <InputNumber
+                      min={ 0 }
+                      max={ 99990 }
+                      maxLength={ 6 }
+                      style={ { width: "50%" } }
+                      className='normal right'
+                      defaultValue={ state.mifC }
+                      value={ state.mifC }
+                      onBlur={ e => changeData(e.target.value, 'mifC') }
                     />
                   </Form.Item>
                 </div>
@@ -363,17 +365,17 @@ const FormPage = (props) => {
                     name="designQtyd"
                     label="Design Qty D"
                   >
-                    <InputNumber 
-                      min={0} 
-                      max={999999991} 
+                    <InputNumber
+                      min={ 0 }
+                      max={ 999999991 }
                       step="0.0001"
                       stringMode
-                      maxLength={18} 
-                      style={{ width: "50%"}}
-                      className='normal right' 
-                      defaultValue={ state.designQtyd } 
-                      value={ state.designQtyd } 
-                      onBlur={ e => changeData(e.target.value, 'designQtyd') } 
+                      maxLength={ 18 }
+                      style={ { width: "50%" } }
+                      className='normal right'
+                      defaultValue={ state.designQtyd }
+                      value={ state.designQtyd }
+                      onBlur={ e => changeData(e.target.value, 'designQtyd') }
                     />
                   </Form.Item>
 
@@ -381,15 +383,15 @@ const FormPage = (props) => {
                     name="mifD"
                     label="MIF D"
                   >
-                    <InputNumber 
-                      min={0} 
-                      max={99990} 
-                      maxLength={6} 
-                      style={{ width: "50%"}}
-                      className='normal right' 
-                      defaultValue={ state.mifD } 
-                      value={ state.mifD } 
-                      onBlur={ e => changeData(e.target.value, 'mifD') } 
+                    <InputNumber
+                      min={ 0 }
+                      max={ 99990 }
+                      maxLength={ 6 }
+                      style={ { width: "50%" } }
+                      className='normal right'
+                      defaultValue={ state.mifD }
+                      value={ state.mifD }
+                      onBlur={ e => changeData(e.target.value, 'mifD') }
                     />
                   </Form.Item>
                 </div>
@@ -403,7 +405,7 @@ const FormPage = (props) => {
 
                   {
                     (!id || isEdit) &&
-                    <Button onClick={ submit } type="primary" style={{marginLeft: '1%'}} htmlType="submit">
+                    <Button type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
                       {
                         isEdit
                           ?

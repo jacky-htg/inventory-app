@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
+import { Form, Input, InputNumber, Button, Select, Checkbox, AutoComplete, message } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Lov, Location, Item } from '../../services';
 
@@ -7,7 +7,7 @@ import { StyledDiv } from './styled';
 import env from '../../env';
 import { Images } from '../../constant';
 import { parse } from 'postcss';
-import { useRef } from 'react';
+import { formFailedSubmit } from '../../helpers';
 
 const FormPage = (props) => {
   const history = useHistory();
@@ -74,8 +74,8 @@ const FormPage = (props) => {
   const [uom, setUom] = useState('');
   const [uomName, setUomName] = useState();
   const [version, setVersion] = useState(0);
-  
-  const [errorFields, setErrorFields] = useState([]); 
+
+  const [errorFields, setErrorFields] = useState([]);
 
   useEffect(() => {
     if (
@@ -192,7 +192,7 @@ const FormPage = (props) => {
       result.rows.forEach(el => {
         temp.push(<Option key={ el.loc } value={ el.loc } >{ el.loc }</Option>);
       });
-      
+
       /*result.rows.forEach(el => {
         temp.push({
           value: el.loc
@@ -448,11 +448,11 @@ const FormPage = (props) => {
 
   const itemNoRef = useRef();
   const locationRef = useRef();
-  const catCodeRef = useRef();  
+  const catCodeRef = useRef();
   const sourceRef = useRef();
   const catSubCodeRef = useRef();
 
-  useEffect(()=> {
+  useEffect(() => {
     console.log('errrr', errorFields);
     if (errorFields.includes("Item No")) {
       itemNoRef.current.focus();
@@ -464,7 +464,7 @@ const FormPage = (props) => {
       sourceRef.current.focus();
     } else if (errorFields.includes("catSubCode")) {
       catSubCodeRef.current.focus();
-    } 
+    }
   }, [errorFields, itemNoRef, locationRef, catCodeRef, sourceRef, catSubCodeRef]);
 
   return (
@@ -481,7 +481,7 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks" scrollToFirstError>
+            <Form onFinish={ submit } onFinishFailed={ formFailedSubmit } form={ form } name="control-hooks" scrollToFirstError>
               <div className="group">
                 <div className="row">
                   {
@@ -492,14 +492,27 @@ const FormPage = (props) => {
                       <Form.Item
                         name="Item No"
                         label="Item No"
-                        initialValue={itemNo}
+                        initialValue={ itemNo }
+                        normalize={ value => (value || '').toUpperCase() }
                         rules={ [
                           {
                             required: true,
+                            message: 'Item No Can Not be Blank !'
                           },
                         ] }
                       >
-                        <Input autoFocus={true} ref={itemNoRef} className='normal' disabled={ isDisabled } defaultValue={ itemNo } value={ itemNo } onChange={ e => setItemNo(e.target.value) } placeholder='Type item no here...' />
+                        <Input
+                          autoFocus={ true }
+                          maxLength={ 15 }
+                          ref={ itemNoRef }
+                          normalize={ value => (value || '').toUpperCase() }
+                          className='normal'
+                          disabled={ isDisabled }
+                          defaultValue={ itemNo }
+                          value={ itemNo }
+                          onChange={ e => setItemNo(e.target.value.toUpperCase()) }
+                          placeholder='Type item no here...'
+                        />
                       </Form.Item>
                   }
 
@@ -529,20 +542,21 @@ const FormPage = (props) => {
                       <Form.Item
                         name="Location"
                         label="Location"
-                        initialValue={loc}
+                        initialValue={ loc }
                         rules={ [
                           {
                             required: true,
+                            message: 'Location Can Not be Blank !'
                           },
                         ] }
                       >
                         <Select
                           showSearch
                           allowClear
-                          ref={locationRef}
+                          ref={ locationRef }
                           className='normal' disabled={ isDisabled }
-                          defaultValue={loc}
-                          value={loc}
+                          defaultValue={ loc }
+                          value={ loc }
                           placeholder="Please select"
                           onChange={ (value) => setLoc(value) }
                           filterOption={ (input, option) =>
@@ -562,18 +576,18 @@ const FormPage = (props) => {
                       <Form.Item
                         name="catCode"
                         label="Category Code"
-                        initialValue={categoryName}
+                        initialValue={ categoryName }
                         rules={ [
                           {
                             required: true,
-                            message: 'category is required'
+                            message: 'Category Code Can Not be Blank !'
                           },
                         ] }
                       >
                         <Select
                           showSearch
                           allowClear
-                          ref={catCodeRef}
+                          ref={ catCodeRef }
                           className='normal' disabled={ isDisabled }
                           defaultValue={ categoryName }
                           value={ categoryName }
@@ -597,20 +611,21 @@ const FormPage = (props) => {
                       <Form.Item
                         name="source"
                         label="Source"
-                        initialValue={sourceName}
+                        initialValue={ sourceName }
                         rules={ [
                           {
                             required: true,
+                            message: 'Source Can Not be Blank !'
                           },
                         ] }
                       >
                         <Select
                           showSearch
                           allowClear
-                          ref={sourceRef}
+                          ref={ sourceRef }
                           className='normal' disabled={ isDisabled }
-                          defaultValue={sourceName}
-                          value={sourceName}
+                          defaultValue={ sourceName }
+                          value={ sourceName }
                           placeholder="Please select"
                           onChange={ (value) => onSelectSource(value) }
                           filterOption={ (input, option) =>
@@ -630,16 +645,16 @@ const FormPage = (props) => {
                       <Form.Item
                         name="catSubCode"
                         label="Category Sub Code"
-                        initialValue={categorySubCodeName}
+                        initialValue={ categorySubCodeName }
                         rules={ [
                           {
                             required: true,
-                            message: 'sub category is required'
+                            message: 'Category Sub Code Can Not be Blank !'
                           },
                         ] }
                       >
                         <AutoComplete
-                          ref={catSubCodeRef}
+                          ref={ catSubCodeRef }
                           disabled={ isDisabled || !categoryCode }
                           defaultValue={ categorySubCodeName }
                           value={ categorySubCodeName }
@@ -664,7 +679,16 @@ const FormPage = (props) => {
                         label="Part No"
 
                       >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ partNo } value={ partNo } onChange={ e => setPartNo(e.target.value) } placeholder='Type part no here...' />
+                        <Input
+                          className='normal'
+                          maxLength={ 60 }
+                          normalize={ value => (value || '').toUpperCase() }
+                          disabled={ isDisabled }
+                          defaultValue={ partNo }
+                          value={ partNo }
+                          onChange={ e => setPartNo(e.target.value.toUpperCase()) }
+                          placeholder='Type part no here...'
+                        />
                       </Form.Item>
                   }
 
@@ -697,8 +721,8 @@ const FormPage = (props) => {
                           showSearch
                           allowClear
                           className='normal' disabled={ isDisabled }
-                          defaultValue={mslCodeName}
-                          value={mslCodeName}
+                          defaultValue={ mslCodeName }
+                          value={ mslCodeName }
                           placeholder="Please select"
                           onChange={ (value) => onSelectMsl(value) }
                           filterOption={ (input, option) =>
@@ -746,7 +770,16 @@ const FormPage = (props) => {
                         label="Reference Url"
 
                       >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ refUrl } value={ refUrl } onChange={ e => setRefUrl(e.target.value) } placeholder='Type refUrl here...' />
+                        <Input
+                          className='normal'
+                          maxLength={ 200 }
+                          normalize={ value => (value || '').toUpperCase() }
+                          disabled={ isDisabled }
+                          defaultValue={ refUrl }
+                          value={ refUrl }
+                          onChange={ e => setRefUrl(e.target.value.toUpperCase()) }
+                          placeholder='Type refUrl here...'
+                        />
                       </Form.Item>
                   }
 
@@ -778,7 +811,16 @@ const FormPage = (props) => {
                       name="desc"
                       label="Description"
                     >
-                      <Input className='normal' disabled={ isDisabled } defaultValue={ description } value={ description } onChange={ e => setDescription(e.target.value) } placeholder='Type description here...' />
+                      <Input
+                        className='normal'
+                        maxLength={ 100 }
+                        normalize={ value => (value || '').toUpperCase() }
+                        disabled={ isDisabled }
+                        defaultValue={ description }
+                        value={ description }
+                        onChange={ e => setDescription(e.target.value.toUpperCase) }
+                        placeholder='Type description here...'
+                      />
                     </Form.Item>
                 }
 
@@ -794,7 +836,16 @@ const FormPage = (props) => {
                       name="manufacturer"
                       label="Manufacturer"
                     >
-                      <Input className='normal' disabled={ isDisabled } defaultValue={ manufacturer } value={ manufacturer } onChange={ e => setManufacturer(e.target.value) } placeholder='Type manufacturer here...' />
+                      <Input
+                        className='normal'
+                        maxLength={ 30 }
+                        normalize={ value => (value || '').toUpperCase() }
+                        disabled={ isDisabled }
+                        defaultValue={ manufacturer }
+                        value={ manufacturer }
+                        onChange={ e => setManufacturer(e.target.value.toUpperCase) }
+                        placeholder='Type manufacturer here...'
+                      />
                     </Form.Item>
                 }
 
@@ -812,8 +863,8 @@ const FormPage = (props) => {
                           showSearch
                           allowClear
                           className='normal' disabled={ isDisabled }
-                          defaultValue={uomName}
-                          value={uomName}
+                          defaultValue={ uomName }
+                          value={ uomName }
                           placeholder="Please select"
                           onChange={ (value) => onSelectUOM(value) }
                           filterOption={ (input, option) =>
@@ -855,7 +906,16 @@ const FormPage = (props) => {
                         label="Product Group"
 
                       >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ productGroup } value={ productGroup } onChange={ e => setProductGroup(e.target.value) } placeholder='Type product group here...' />
+                        <Input
+                          className='normal'
+                          maxLength={ 10 }
+                          normalize={ value => (value || '').toUpperCase() }
+                          disabled={ isDisabled }
+                          defaultValue={ productGroup }
+                          value={ productGroup }
+                          onChange={ e => setProductGroup(e.target.value.toUpperCase()) }
+                          placeholder='Type product group here...'
+                        />
                       </Form.Item>
                   }
 
@@ -898,7 +958,16 @@ const FormPage = (props) => {
                         name="issueNo"
                         label="Issue No"
                       >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ issueNo } value={ issueNo } onChange={ e => setIssueNo(e.target.value) } placeholder='Type issue no here...' />
+                        <Input
+                          className='normal'
+                          maxLength={ 30 }
+                          normalize={ value => (value || '').toUpperCase() }
+                          disabled={ isDisabled }
+                          defaultValue={ issueNo }
+                          value={ issueNo }
+                          onChange={ e => setIssueNo(e.target.value.toUpperCase()) }
+                          placeholder='Type issue no here...'
+                        />
                       </Form.Item>
                   }
 
@@ -925,7 +994,16 @@ const FormPage = (props) => {
                         name="revisionNum"
                         label="Revision No"
                       >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ rev } value={ rev } onChange={ e => setRev(e.target.value) } placeholder='Type revision no here...' />
+                        <Input
+                          className='normal'
+                          maxLength={ 3 }
+                          normalize={ value => (value || '').toUpperCase() }
+                          disabled={ isDisabled }
+                          defaultValue={ rev }
+                          value={ rev }
+                          onChange={ e => setRev(e.target.value.toUpperCase()) }
+                          placeholder='Type revision no here...'
+                        />
                       </Form.Item>
                   }
                 </div>
@@ -941,7 +1019,16 @@ const FormPage = (props) => {
                       name="boardSize"
                       label="Board Size"
                     >
-                      <Input className='normal' disabled={ isDisabled } defaultValue={ dimension } value={ dimension } onChange={ e => setDimension(e.target.value) } placeholder='Type board size here...' />
+                      <Input
+                        className='normal'
+                        maxLength={ 60 }
+                        normalize={ value => (value || '').toUpperCase() }
+                        disabled={ isDisabled }
+                        defaultValue={ dimension }
+                        value={ dimension }
+                        onChange={ e => setDimension(e.target.value.toUpperCase()) }
+                        placeholder='Type board size here...'
+                      />
                     </Form.Item>
                 }
 
@@ -954,7 +1041,16 @@ const FormPage = (props) => {
                       name="remark"
                       label="Remark"
                     >
-                      <Input className='normal' disabled={ isDisabled } defaultValue={ remarks } value={ remarks } onChange={ e => setRemarks(e.target.value) } placeholder='Type remark here...' />
+                      <Input
+                        className='normal'
+                        maxLength={ 2000 }
+                        normalize={ value => (value || '').toUpperCase() }
+                        disabled={ isDisabled }
+                        defaultValue={ remarks }
+                        value={ remarks }
+                        onChange={ e => setRemarks(e.target.value.toUpperCase()) }
+                        placeholder='Type remark here...'
+                      />
                     </Form.Item>
                 }
 
@@ -968,7 +1064,17 @@ const FormPage = (props) => {
                         name="stdMaterialPrice"
                         label="Std Material Price"
                       >
-                        <Input type='number' min={ 0 } disabled={ true } defaultValue={ stdMaterial } value={ stdMaterial } onChange={ e => setStdMaterial(e.target.value) } placeholder='Type Std Material Price here...' />
+                        <InputNumber
+                          min={ 0 }
+                          max={ 9999999991 }
+                          step="0.0001"
+                          stringMode
+                          maxLength={ 18 }
+                          disabled={ true }
+                          defaultValue={ stdMaterial }
+                          value={ stdMaterial }
+                          onChange={ e => setStdMaterial(e.target.value) }
+                          placeholder='Type Std Material Price here...' />
                       </Form.Item>
                   }
 
@@ -981,7 +1087,16 @@ const FormPage = (props) => {
                         name="storageLoc"
                         label="Storage Location"
                       >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ storageShelf } value={ storageShelf } onChange={ e => setStorageShelf(e.target.value) } placeholder='Type storage location here...' />
+                        <Input
+                          className='normal'
+                          maxLength={ 15 }
+                          normalize={ value => (value || '').toUpperCase() }
+                          disabled={ isDisabled }
+                          defaultValue={ storageShelf }
+                          value={ storageShelf }
+                          onChange={ e => setStorageShelf(e.target.value.toUpperCase()) }
+                          placeholder='Type storage location here...'
+                        />
                       </Form.Item>
                   }
                 </div>
@@ -999,7 +1114,19 @@ const FormPage = (props) => {
                         label="Bal BF Qty"
 
                       >
-                        <Input type='number' min={ 0 } className='normal' disabled={ isDisabled } defaultValue={ balbfQty } value={ balbfQty } onChange={ e => setBalbfQty(e.target.value) } placeholder='Type bal bf qty here...' />
+                        <InputNumber
+                          min={ 0 }
+                          max={ 9999999991 }
+                          step="0.0001"
+                          stringMode
+                          maxLength={ 18 }
+                          className='normal'
+                          disabled={ isDisabled }
+                          defaultValue={ balbfQty }
+                          value={ balbfQty }
+                          onChange={ e => setBalbfQty(e.target.value) }
+                          placeholder='Type bal bf qty here...'
+                        />
                       </Form.Item>
                   }
 
@@ -1028,7 +1155,19 @@ const FormPage = (props) => {
                         label="Reorder Qty"
 
                       >
-                        <Input type='number' min={ 0 } className='normal' disabled={ isDisabled } defaultValue={ reorder } value={ reorder } onChange={ e => setReorder(e.target.value) } placeholder='Type reorder qty here...' />
+                        <InputNumber
+                          min={ 0 }
+                          max={ 9999999991 }
+                          step="0.0001"
+                          stringMode
+                          maxLength={ 18 }
+                          className='normal'
+                          disabled={ isDisabled }
+                          defaultValue={ reorder }
+                          value={ reorder }
+                          onChange={ e => setReorder(e.target.value) }
+                          placeholder='Type reorder qty here...'
+                        />
                       </Form.Item>
                   }
 
@@ -1056,7 +1195,18 @@ const FormPage = (props) => {
                         label="Lead Time"
 
                       >
-                        <Input type='number' min={ 0 } className='normal' disabled={ isDisabled } defaultValue={ leadtime } value={ leadtime } onChange={ e => setLeadtime(e.target.value) } placeholder='Type lead time here...' />
+                        <InputNumber
+                          min={ 0 }
+                          max={ 9999 }
+                          stringMode
+                          maxLength={ 4 }
+                          className='normal'
+                          disabled={ isDisabled }
+                          defaultValue={ leadtime }
+                          value={ leadtime }
+                          onChange={ e => setLeadtime(e.target.value) }
+                          placeholder='Type lead time here...'
+                        />
                       </Form.Item>
                   }
 
@@ -1083,7 +1233,16 @@ const FormPage = (props) => {
                         name="Requestor"
                         label="Requestor"
                       >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ requestor } value={ requestor } onChange={ e => setRequestor(e.target.value) } placeholder='Type requestor here...' />
+                        <Input
+                          className='normal'
+                          maxLength={ 30 }
+                          normalize={ value => (value || '').toUpperCase() }
+                          disabled={ isDisabled }
+                          defaultValue={ requestor }
+                          value={ requestor }
+                          onChange={ e => setRequestor(e.target.value.toUpperCase()) }
+                          placeholder='Type requestor here...'
+                        />
                       </Form.Item>
                   }
 
@@ -1133,7 +1292,7 @@ const FormPage = (props) => {
                 (!id || isEdit) &&
                 <div className="submit">
                   <Form.Item>
-                    <Button onClick={ submit } type="primary" htmlType="submit">
+                    <Button type="primary" htmlType="submit">
                       {
                         isEdit
                           ?

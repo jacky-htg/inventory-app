@@ -6,7 +6,7 @@ import { Images } from "../../constant";
 const StyledDiv = styled.div`
   .header {
     position: sticky;
-    top: 69px;
+    top: 64px;
     padding-top: 20px;
     margin-bottom: 40px;
     display: flex;
