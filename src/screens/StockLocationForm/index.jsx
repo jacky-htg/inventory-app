@@ -209,7 +209,7 @@ const StockLocationForm = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form onFinish={ submit } onFinishFailed={ formFailedSubmit } form={ form } name="control-hooks">
+            <Form form={ form } name="control-hooks">
               <div className="group">
                 <Form.Item
                   name="Loc"
@@ -363,7 +363,7 @@ const StockLocationForm = (props) => {
                   { (!id || isEdit) && <Divider type='vertical' /> }
                   {
                     (!id || isEdit) &&
-                    <Button type="primary" htmlType="submit">
+                    <Button onClick={ submit } type="primary" htmlType="submit">
                       {
                         isEdit
                           ?
