@@ -33,10 +33,10 @@ const FormPage = (props) => {
     subDescription: "",
     categoryGroup: "",
     mrpStatus: null,
-    designQtya: 0,
-    designQtyb: 0,
-    designQtyc: 0,
-    designQtyd: 0,
+    designQtya: 0.0000,
+    designQtyb: 0.0000,
+    designQtyc: 0.0000,
+    designQtyd: 0.0000,
     mifA: 0,
     mifB: 0,
     mifC: 0,
@@ -63,7 +63,7 @@ const FormPage = (props) => {
   const changeData = (value, field) => {
     const arrInt = ['designQtya', 'designQtyb', 'designQtyc', 'designQtyd', 'mifA', 'mifB', 'mifC', 'mifD'];
     if (arrInt.includes(field)) {
-      value = parseInt(value);
+      value = parseFloat(value);
     }
     state[field] = value;
     setState(state);
@@ -282,7 +282,7 @@ const FormPage = (props) => {
                       className='normal right'
                       defaultValue={ state.designQtya }
                       value={ state.designQtya }
-                      onBlur={ e => changeData(e.target.value, 'designQtya') }
+                      onBlur={ e => changeData(parseFloat(e.target.value), 'designQtya') }
                     />
                   </Form.Item>
 
