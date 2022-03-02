@@ -132,9 +132,9 @@ const FormPage = (props) => {
   }, [errorFields, categoryCodeRef, categorySubCodeRef, categoryGroupRef]);
 
   Number.prototype.countDecimals = function () {
-    if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
-    return this.toString().split(".")[1].length || 0; 
-  }
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    return this.toString().split(".")[1].length || 0;
+  };
 
   return (
     <StyledDiv>
@@ -150,7 +150,7 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form onFinish={ submit } onFinishFailed={ formFailedSubmit } form={ form } name="control-hooks">
+            <Form form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
                   <Form.Item
@@ -264,7 +264,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(value).countDecimals() > 4) {
+                          if (Number(state.designQtya).countDecimals() > 4) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
                           }
                           return Promise.resolve();
@@ -310,7 +310,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(value).countDecimals() > 4) {
+                          if (Number(state.designQtyb).countDecimals() > 4) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
                           }
                           return Promise.resolve();
@@ -356,7 +356,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(value).countDecimals() > 4) {
+                          if (Number(state.designQtyc).countDecimals() > 4) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
                           }
                           return Promise.resolve();
@@ -402,7 +402,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(value).countDecimals() > 4) {
+                          if (Number(state.designQtyd).countDecimals() > 4) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
                           }
                           return Promise.resolve();
@@ -450,7 +450,7 @@ const FormPage = (props) => {
 
                   {
                     (!id || isEdit) &&
-                    <Button type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
+                    <Button onClick={ submit } type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
                       {
                         isEdit
                           ?

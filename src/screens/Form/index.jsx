@@ -481,7 +481,7 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form onFinish={ submit } onFinishFailed={ formFailedSubmit } form={ form } name="control-hooks" scrollToFirstError>
+            <Form form={ form } name="control-hooks" scrollToFirstError>
               <div className="group">
                 <div className="row">
                   {
@@ -1153,11 +1153,10 @@ const FormPage = (props) => {
                       <Form.Item
                         name="reorderQty"
                         label="Reorder Qty"
-
                       >
                         <InputNumber
                           min={ 0 }
-                          max={ 9999999991 }
+                          max={ 9999999990 }
                           step="0.0001"
                           stringMode
                           maxLength={ 18 }
@@ -1292,7 +1291,7 @@ const FormPage = (props) => {
                 (!id || isEdit) &&
                 <div className="submit">
                   <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button onClick={ submit } type="primary" htmlType="submit">
                       {
                         isEdit
                           ?

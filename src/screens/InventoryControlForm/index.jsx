@@ -89,7 +89,7 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form onFinish={ submit } onFinishFailed={ formFailedSubmit } form={ form } name="control-hooks">
+            <Form form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
                   {
@@ -160,7 +160,7 @@ const FormPage = (props) => {
 
                   {
                     (!id || isEdit) &&
-                    <Button type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
+                    <Button onClick={ submit } type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
                       {
                         isEdit
                           ?
