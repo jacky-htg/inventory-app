@@ -269,3 +269,11 @@ table {
 p {
   margin-bottom: 0px !important;
 }
+
+span {
+  margin-bottom: 0px !important;
+}
+
+.ant-message .anticon {
+  top: 0px !important;
+}
