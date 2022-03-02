@@ -11,7 +11,7 @@ function Page() {
       {label: 'From UOM Description', field: 'fromDescription', default: true, filter: true}, 
       {label: 'To', field: 'uomTo', default: true, filter: true}, 
       {label: 'To UOM Description', field: 'toDescription', default: true, filter: true}, 
-      {label: 'Convertion Factor', field: 'uomFactor', default: true, filter: true}
+      {label: 'Convertion Factor', field: 'uomFactor', default: true, filter: true, align:'right'}
     ]);
   };
 
