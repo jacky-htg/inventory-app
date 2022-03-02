@@ -131,6 +131,11 @@ const FormPage = (props) => {
     }
   }, [errorFields, categoryCodeRef, categorySubCodeRef, categoryGroupRef]);
 
+  Number.prototype.countDecimals = function () {
+    if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    return this.toString().split(".")[1].length || 0; 
+  }
+
   return (
     <StyledDiv>
       <div className="header">
@@ -256,10 +261,20 @@ const FormPage = (props) => {
                   <Form.Item
                     name="designQtya"
                     label="Design Qty A"
+                    rules={ [
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(value).countDecimals() > 4) {
+                            return Promise.reject(new Error('decimal length must be less than 4 digits '));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
                     <InputNumber
                       min={ 0 }
-                      max={ 999999991 }
+                      max={ 999999990 }
                       step="0.0001"
                       stringMode
                       maxLength={ 18 }
@@ -292,10 +307,20 @@ const FormPage = (props) => {
                   <Form.Item
                     name="designQtyb"
                     label="Design Qty B"
+                    rules={ [
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(value).countDecimals() > 4) {
+                            return Promise.reject(new Error('decimal length must be less than 4 digits '));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
                     <InputNumber
                       min={ 0 }
-                      max={ 999999991 }
+                      max={ 999999990 }
                       step="0.0001"
                       stringMode
                       maxLength={ 18 }
@@ -328,10 +353,20 @@ const FormPage = (props) => {
                   <Form.Item
                     name="designQtyc"
                     label="Design Qty C"
+                    rules={ [
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(value).countDecimals() > 4) {
+                            return Promise.reject(new Error('decimal length must be less than 4 digits '));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
                     <InputNumber
                       min={ 0 }
-                      max={ 999999991 }
+                      max={ 999999990 }
                       step="0.0001"
                       stringMode
                       maxLength={ 18 }
@@ -364,10 +399,20 @@ const FormPage = (props) => {
                   <Form.Item
                     name="designQtyd"
                     label="Design Qty D"
+                    rules={ [
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(value).countDecimals() > 4) {
+                            return Promise.reject(new Error('decimal length must be less than 4 digits '));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
                     <InputNumber
                       min={ 0 }
-                      max={ 999999991 }
+                      max={ 999999990 }
                       step="0.0001"
                       stringMode
                       maxLength={ 18 }
