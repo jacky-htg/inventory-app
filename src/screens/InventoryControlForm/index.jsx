@@ -56,10 +56,9 @@ const FormPage = (props) => {
 
   const submit = async () => {
     try {
-      if (!isEdit) {
-        const values = await form.validateFields();
-      }
+      const values = await form.validateFields();
       let obj = state;
+      console.log('obj :>> ', obj);
       if (isEdit) {
         obj.version = parseInt(obj.version);
         const hasil = await InventoryControl.edit(obj);
@@ -93,6 +92,7 @@ const FormPage = (props) => {
   useEffect(() => {
     console.log('errrr', errorFields);
     if (errorFields.includes("stockDepn")) {
+      console.log('stockDepnRef :>> ', stockDepnRef);
       stockDepnRef.current.focus();
     } else if (errorFields.includes("provAge")) {
       provAgeRef.current.focus();
@@ -132,8 +132,11 @@ const FormPage = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(value).countDecimals() > 2) {
+                          if (Number(state.stockDepn).countDecimals() > 2) {
                             return Promise.reject(new Error('decimal length must be less than 2 digits '));
+                          }
+                          if (state.stockDepn <= 0.00) {
+                            return Promise.reject(new Error('Stock Deprecation must be higher than 0.00'));
                           }
                           return Promise.resolve();
                         },
@@ -141,6 +144,7 @@ const FormPage = (props) => {
                     ] }
                   >
                     <InputNumber
+                      ref={ stockDepnRef }
                       className='normal right'
                       min={ 0 }
                       max={ 99990 }
@@ -167,8 +171,11 @@ const FormPage = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(value).countDecimals() > 2) {
+                          if (Number(state.provAge).countDecimals() > 2) {
                             return Promise.reject(new Error('decimal length must be less than 2 digits '));
+                          }
+                          if (state.provAge <= 0.00) {
+                            return Promise.reject(new Error('Stock Provision Age must be higher than 0.00'));
                           }
                           return Promise.resolve();
                         },
@@ -176,6 +183,7 @@ const FormPage = (props) => {
                     ] }
                   >
                     <InputNumber
+                      ref={ provAgeRef }
                       className='normal right'
                       min={ 0 }
                       max={ 99990 }
