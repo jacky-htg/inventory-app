@@ -205,7 +205,7 @@ const FormPage = (props) => {
                       {
                         isEdit
                           ?
-                          "Edit Inventory Control"
+                          "Update Inventory Control"
                           :
                           "Create Inventory Control"
                       }
