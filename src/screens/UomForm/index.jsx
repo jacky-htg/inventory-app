@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Form, Input, InputNumber, Button } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Uom } from '../../services';
-
+import env from '../../env';
 import { StyledDiv } from './styled';
 import { Images } from '../../constant';
 
@@ -30,6 +30,11 @@ const FormPage = (props) => {
     uomFactor: 0,
     version: 0
   });
+
+  const [errorFields, setErrorFields] = useState([]);
+
+  const fromRef = useRef();
+  const toRef = useRef();
 
   const changeData = (value, field) => {
     console.log(field, value, state);
@@ -67,20 +72,37 @@ const FormPage = (props) => {
         const hasil = await Uom.edit(id, obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message);
+          message.error(res.message ? res.message : env.internalError);
+        } else {
+          history.push('/uoms');
         }
       } else {
         const hasil = await Uom.create(obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message);
+          message.error(res.message ? res.message : env.internalError);
+        } else {
+          history.push('/uoms');
         }
-      }
-      history.push('/uoms');
+      } 
     } catch (errorInfo) {
-      console.log('Failed:', errorInfo);
+      const temp = [];
+      errorInfo.errorFields.map(e => {
+        temp.push(e.name[0]);
+      });
+      setErrorFields(temp);
+      console.log('Failed:', errorInfo, errorFields);
     }
   };
+
+  useEffect(()=> {
+    console.log('errrr', errorFields);
+    if (errorFields.includes("uomFrom")) {
+      fromRef.current.focus();
+    } else if (errorFields.includes("uomTo")) {
+      toRef.current.focus();
+    }
+  }, [errorFields, fromRef, toRef]);
 
   return (
     <StyledDiv>
@@ -99,93 +121,81 @@ const FormPage = (props) => {
             <Form form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
-                  {
-                    !state.uomFrom && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="uomFrom"
-                        label="UOM From"
-                        initialValue={state.uomFrom}
-                        rules={ [
-                          {
-                            required: true,
-                            message: 'UOM From is required'
-                          },
-                        ] }
-                      >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ state.uomFrom } value={ state.uomFrom } onBlur={ e => changeData(e.target.value, 'uomFrom') } placeholder='Type uom from here...' />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="uomFrom"
+                    label="From"
+                    initialValue={state.uomFrom}
+                    rules={ [
+                      {
+                        required: true,
+                        message: 'From is required'
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (/^\s+$/.test(value)) {
+                            return Promise.reject(new Error('From can not empty'));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
+                  >
+                    <Input ref={fromRef} maxLength={3} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.uomFrom } value={ state.uomFrom } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomFrom') } />
+                  </Form.Item>
 
                 </div>
                 <div className="row">
-                  {
-                    !state.fromDescription && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="fromDescription"
-                        label="From Description"
-                      >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ state.fromDescription } value={ state.fromDescription } onBlur={ e => changeData(e.target.value, 'fromDescription') } placeholder='Type from description here...' />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="fromDescription"
+                    label="From UOM Description"
+                  >
+                    <Input maxLength={30} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.fromDescription } value={ state.fromDescription } onBlur={ e => changeData(e.target.value.toUpperCase(), 'fromDescription') } />
+                  </Form.Item>
                 </div>
                 <div className="row">
-                  {
-                    !state.uomTo && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="uomTo"
-                        label="UOM To"
-                        initialValue={state.uomTo}
-                        rules={ [
-                          {
-                            required: true,
-                            message: 'UOM To is required'
-                          },
-                        ] }
-                      >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ state.uomTo } value={ state.uomTo } onBlur={ e => changeData(e.target.value, 'uomTo') } placeholder='Type uom to here...' />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="uomTo"
+                    label="To"
+                    initialValue={state.uomTo}
+                    rules={ [
+                      {
+                        required: true,
+                        message: 'To is required'
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (/^\s+$/.test(value)) {
+                            return Promise.reject(new Error('To can not empty'));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
+                  >
+                    <Input ref={toRef} maxLength={3} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.uomTo } value={ state.uomTo } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomTo') } />
+                  </Form.Item>
 
                 </div>
                 <div className="row">
-                  {
-                    !state.toDescription && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="toDescription"
-                        label="To Description"
-                      >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ state.toDescription } value={ state.toDescription } onBlur={ e => changeData(e.target.value, 'toDescription') } placeholder='Type to description here...' />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="toDescription"
+                    label="To UOM Description"
+                  >
+                    <Input maxLength={30} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.toDescription } value={ state.toDescription } onBlur={ e => changeData(e.target.value.toUpperCase(), 'toDescription') } />
+                  </Form.Item>
                 </div>
                 <div className="row">
-                  {
-                    !state.uomFactor && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="uomfactor"
-                        label="UOM factor"
-                      >
-                        <InputNumber 
-                          min={0} 
-                          max={999990} 
-                          className='normal' disabled={ isDisabled } defaultValue={ state.uomFactor } value={ state.uomFactor } onBlur={ e => changeData(e.target.value, 'uomFactor') } placeholder='Type uom factor here...' />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="uomfactor"
+                    label="UOM factor"
+                  >
+                    <InputNumber
+                      min={0} 
+                      max={999991} 
+                      step="0.00001"
+                      stringMode
+                      className='normal number' disabled={ isDisabled } defaultValue={ state.uomFactor } value={ state.uomFactor } onBlur={ e => changeData(e.target.value, 'uomFactor') }  />
+                  </Form.Item>
                 </div>
               </div>
 

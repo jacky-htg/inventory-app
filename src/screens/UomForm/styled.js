@@ -52,6 +52,13 @@ const StyledDiv = styled.div`
       grid-gap: 40px;
     }
 
+    .number{
+      text-align: right; 
+      margin:0, 
+      -webkit-appearance: none;    
+      -moz-appearance: textfield;
+    }
+
     .normal[disabled] {
         color: rgba(0, 0, 0, 0.85);
         background-color: transparent;

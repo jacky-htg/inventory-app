@@ -27,7 +27,7 @@ function Page() {
       // }
       let temp = [];
       for (const country of result) {
-        temp.push(<Option key={ country.countryCode } value={ country.countryCode } >{ country.description }</Option>);
+        temp.push(<Option key={ country.countryCode } value={ country.countryCode } >{ country.countryCode}: { country.description }</Option>);
       }
       setCountries(temp);
     });
