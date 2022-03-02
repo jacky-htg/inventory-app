@@ -185,11 +185,13 @@ function PageList(props) {
   };
 
   const removeFilter = (n) => {
+    console.log('nnn', n, filters);
     if (n > -1 && n < filters.length) {
       filters.splice(n, 1);
     }
     setFilters(filters);
-
+    console.log('nano', n, filters);
+    
     const [temp, counter] = renderFilter();
     if (n < filter.length) {
       temp.push(fieldFilter(counter, true));
@@ -235,6 +237,7 @@ function PageList(props) {
           allowClear={ filters[n] ? true : false }
           onChange={ (data) => changeData(n, data, 'field') }
           defaultValue={ filters[n] ? filters[n].field : null }
+          value={ filters[n] ? filters[n].field : null }
         >
           { optionFilters.map((o, i) => (<Option key={ i } value={ o.field } >{ o.label }</Option>)) }
         </Select>
