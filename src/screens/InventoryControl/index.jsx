@@ -7,8 +7,8 @@ function Page() {
 
   const setupFields = () => {
     setFields([
-      {label: 'Stock Depreciation %', field: 'stockDepn', default: true}, 
-      {label: 'Stock Provision Age (Yrs)', field: 'provAge', default: true}
+      {label: 'Stock Depreciation %', field: 'stockDepn', default: true, align:'right'}, 
+      {label: 'Stock Provision Age (Yrs)', field: 'provAge', default: true, align:'right'}
     ]);
   };
 
@@ -25,7 +25,7 @@ function Page() {
       data = {InventoryControl} 
       id={[]} 
       addButtonLimit={1}
-      actions={['edit', 'delete']} />
+      actions={['edit']} />
   );
 }
 

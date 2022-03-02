@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Form, InputNumber, Button, message } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-
+import env from '../../env';
 import { InventoryControl } from '../../services';
 import { StyledDiv } from './styled';
 import { Images } from '../../constant';
@@ -27,6 +27,11 @@ const FormPage = (props) => {
     stockDepn: "",
     provAge: ""
   });
+
+  const [errorFields, setErrorFields] = useState([]);
+
+  const stockDepnRef = useRef();
+  const provAgeRef = useRef();
 
   const changeData = (value, field) => {
     value = parseFloat(value);
@@ -60,19 +65,43 @@ const FormPage = (props) => {
         const hasil = await InventoryControl.edit(obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message);
+          message.error(res.message ? res.message : env.internalError);
+        } else {
+          history.push('/inventory-controls');
         }
       } else {
         const hasil = await InventoryControl.create(obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message);
+          message.error(res.message ? res.message : env.internalError);
+        } else {
+          history.push('/inventory-controls');
         }
       }
-      history.push('/inventory-controls');
     } catch (errorInfo) {
-      console.log('Failed:', errorInfo);
+      const temp = [];
+      if (errorInfo && errorInfo.errorFields) {
+        errorInfo.errorFields.map(e => {
+          temp.push(e.name[0]);
+        });
+      }
+      setErrorFields(temp);
+      console.log('Failed:', errorInfo, errorFields);
     }
+  };
+
+  useEffect(() => {
+    console.log('errrr', errorFields);
+    if (errorFields.includes("stockDepn")) {
+      stockDepnRef.current.focus();
+    } else if (errorFields.includes("provAge")) {
+      provAgeRef.current.focus();
+    }
+  }, [errorFields, stockDepnRef, provAgeRef]);
+
+  Number.prototype.countDecimals = function () {
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    return this.toString().split(".")[1].length || 0;
   };
 
   return (
@@ -92,63 +121,71 @@ const FormPage = (props) => {
             <Form form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
-                  {
-                    !state.stockDepn && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="stockDepn"
-                        label="Stock Depreciation (%)"
-                        initialValue={ state.stockDepn }
-                        rules={ [
-                          {
-                            required: true,
-                            message: 'Stock Deprecation Can Not be Blank !'
-                          },
-                        ] }
-                      >
-                        <InputNumber
-                          className='normal'
-                          min={ 0 }
-                          max={ 99990 }
-                          disabled={ isDisabled }
-                          defaultValue={ state.stockDepn }
-                          value={ state.stockDepn }
-                          onBlur={ e => changeData(e.target.value, 'stockDepn') }
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="stockDepn"
+                    label="Stock Depreciation (%)"
+                    initialValue={ state.stockDepn }
+                    rules={ [
+                      {
+                        required: true,
+                        message: 'Stock Deprecation Can Not be Blank !'
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(value).countDecimals() > 2) {
+                            return Promise.reject(new Error('decimal length must be less than 2 digits '));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
+                  >
+                    <InputNumber
+                      className='normal right'
+                      min={ 0 }
+                      max={ 99990 }
+                      maxLength={ 5 }
+                      style={ { width: "50%" } }
+                      disabled={ isDisabled }
+                      defaultValue={ state.stockDepn }
+                      value={ state.stockDepn }
+                      onBlur={ e => changeData(e.target.value, 'stockDepn') }
+                    />
+                  </Form.Item>
 
                 </div>
                 <div className="row">
-                  {
-                    !state.provAge && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="provAge"
-                        label="Stock Provision Age (Yrs)"
-                        initialValue={ state.provAge }
-                        rules={ [
-                          {
-                            required: true,
-                            message: 'Stock Provision Age Can Not be Blank !'
-                          },
-                        ] }
-                      >
-                        <InputNumber
-                          className='normal'
-                          min={ 0 }
-                          max={ 99990 }
-                          disabled={ isDisabled }
-                          defaultValue={ state.provAge }
-                          value={ state.provAge }
-                          onBlur={ e => changeData(e.target.value, 'provAge') }
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="provAge"
+                    label="Stock Provision Age (Yrs)"
+                    initialValue={ state.provAge }
+                    rules={ [
+                      {
+                        required: true,
+                        message: 'Stock Provision Age Can Not be Blank !'
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(value).countDecimals() > 2) {
+                            return Promise.reject(new Error('decimal length must be less than 2 digits '));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
+                  >
+                    <InputNumber
+                      className='normal right'
+                      min={ 0 }
+                      max={ 99990 }
+                      maxLength={ 5 }
+                      style={ { width: "50%" } }
+                      disabled={ isDisabled }
+                      defaultValue={ state.provAge }
+                      value={ state.provAge }
+                      onBlur={ e => changeData(e.target.value, 'provAge') }
+                    />
+                  </Form.Item>
                 </div>
               </div>
 
