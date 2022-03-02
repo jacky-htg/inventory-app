@@ -135,9 +135,6 @@ const FormPage = (props) => {
                           if (Number(state.stockDepn).countDecimals() > 2) {
                             return Promise.reject(new Error('decimal length must be less than 2 digits '));
                           }
-                          if (state.stockDepn <= 0.00) {
-                            return Promise.reject(new Error('Stock Deprecation must be higher than 0.00'));
-                          }
                           return Promise.resolve();
                         },
                       }),
@@ -173,9 +170,6 @@ const FormPage = (props) => {
                         validator(_, value) {
                           if (Number(state.provAge).countDecimals() > 2) {
                             return Promise.reject(new Error('decimal length must be less than 2 digits '));
-                          }
-                          if (state.provAge <= 0.00) {
-                            return Promise.reject(new Error('Stock Provision Age must be higher than 0.00'));
                           }
                           return Promise.resolve();
                         },
