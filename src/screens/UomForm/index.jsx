@@ -120,6 +120,11 @@ const FormPage = (props) => {
     }
   };
 
+  Number.prototype.countDecimals = function () {
+    if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    return this.toString().split(".")[1].length || 0; 
+  }
+
   return (
     <StyledDiv>
       <div className="header">
@@ -203,7 +208,21 @@ const FormPage = (props) => {
                 <div className="row">
                   <Form.Item
                     name="uomfactor"
-                    label="UOM factor"
+                    label="Convertion Factor"
+                    rules={ [
+                      {
+                        required: true,
+                        message: 'Convertion Factor is required'
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(value).countDecimals() > 4) {
+                            return Promise.reject(new Error('decimal length must be less than 4 digits '));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
                     <InputNumber
                       min={ 0 }
