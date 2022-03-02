@@ -134,14 +134,18 @@ function PageList(props) {
   };
 
   const changeData = (n, data, type) => {
-    if (!filters[n]) {
+    if (!filters[n] || !data) {
       filters[n] = {
         field: "",
         operator: "LIKE",
         value: ""
       };
     }
-    filters[n][type] = data;
+
+    if (data) {
+      filters[n][type] = data;
+    }
+
     setFilters(filters);
 
     if (type === "field") {

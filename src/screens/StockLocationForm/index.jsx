@@ -215,6 +215,14 @@ const StockLocationForm = (props) => {
                     {
                       required: true,
                     },
+                            ({ getFieldValue }) => ({
+                              validator(_, value) {
+                                if (/^\s+$/.test(value)) {
+                                  return Promise.reject(new Error('LOC can not empty'));
+                                }
+                                return Promise.resolve();
+                              },
+                            }),
                   ] }
                 >
                   <Input ref={locRef} maxLength={5} style={{ textTransform: 'uppercase' }} readOnly={isEdit?true:false} disabled={ isDisabled } defaultValue={ loc } value={ loc } onChange={ e => setLoc(e.target.value.toUpperCase()) } placeholder={ id?'':'Type loc here...' } />
