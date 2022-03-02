@@ -21,14 +21,14 @@ function Page() {
       {label: 'Sub Description', field: 'subDescription', default: true}, 
       {label: 'Group', field: 'categoryGroup', default: true, filter: true, lookup: categoryGroups},
       {label: 'MRP Status', field: 'mrpStatus', default: true, filter: true, lookup: mrpStatuses},
-      {label: 'Design Qty A', field: 'designQtya'},
-      {label: 'Design Qty B', field: 'designQtyb'},
-      {label: 'Design Qty C', field: 'designQtyc'},
-      {label: 'Design Qty D', field: 'designQtyd'},
-      {label: 'Mif A', field: 'mifA'},
-      {label: 'Mif B', field: 'mifB'},
-      {label: 'Mif C', field: 'mifC'},
-      {label: 'Mif D', field: 'mifD'},
+      {label: 'Design Qty A', field: 'designQtya', align:'right'},
+      {label: 'Design Qty B', field: 'designQtyb', align:'right'},
+      {label: 'Design Qty C', field: 'designQtyc', align:'right'},
+      {label: 'Design Qty D', field: 'designQtyd', align:'right'},
+      {label: 'Mif A', field: 'mifA', align:'right'},
+      {label: 'Mif B', field: 'mifB', align:'right'},
+      {label: 'Mif C', field: 'mifC', align:'right'},
+      {label: 'Mif D', field: 'mifD', align:'right'},
     ]);
   };
 

@@ -54,7 +54,11 @@ function PageList(props) {
       fields.map(e => {
         for (let i = 0; i < props.fields.length; i++) {
           if (props.fields[i] && props.fields[i].field === e) {
-            temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } />);
+            let alignValue = 'left';
+            if (props.fields[i].align) {
+              alignValue = props.fields[i].align;
+            }
+            temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } align={alignValue}/>);
             break;
           }
         }
@@ -337,7 +341,11 @@ function PageList(props) {
     fields.map(e => {
       for (let i = 0; i < props.fields.length; i++) {
         if (props.fields[i] && props.fields[i].field === e) {
-          temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } />);
+          let alignValue = 'left';
+          if (props.fields[i].align) {
+            alignValue = props.fields[i].align;
+          }
+          temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } align={alignValue} />);
           break;
         }
       }
