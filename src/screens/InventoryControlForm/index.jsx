@@ -145,6 +145,7 @@ const FormPage = (props) => {
                       min={ 0 }
                       max={ 99990 }
                       maxLength={ 5 }
+                      step="0.01"
                       style={ { width: "50%" } }
                       disabled={ isDisabled }
                       defaultValue={ state.stockDepn }
@@ -179,6 +180,7 @@ const FormPage = (props) => {
                       min={ 0 }
                       max={ 99990 }
                       maxLength={ 5 }
+                      step="0.01"
                       style={ { width: "50%" } }
                       disabled={ isDisabled }
                       defaultValue={ state.provAge }

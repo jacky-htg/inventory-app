@@ -51,6 +51,11 @@ const StyledDiv = styled.div`
       grid-template-columns: 48% 48.8%;
       grid-gap: 40px;
     }
+    
+    .right input{
+      text-align: right;
+      padding-right: 30px;
+    }
 
     .normal[disabled] {
         color: rgba(0, 0, 0, 0.85);
