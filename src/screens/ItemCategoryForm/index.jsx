@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Form, Input, InputNumber, Button, Select, message } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { ItemCategory, Lov } from '../../services';
-
+import env from '../../env';
 import { StyledDiv } from './styled';
 import { Images } from '../../constant';
 
@@ -40,6 +40,12 @@ const FormPage = (props) => {
     mifC: 0,
     mifD: 0
   });
+
+  const [errorFields, setErrorFields] = useState([]);
+
+  const categoryCodeRef = useRef();
+  const categorySubCodeRef = useRef();
+  const categoryGroupRef = useRef();
 
   useEffect(() => {
     let data = Lov.getCategoryGroups();
@@ -87,20 +93,41 @@ const FormPage = (props) => {
         const hasil = await ItemCategory.edit(id, obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message);
+          message.error(res.message ? res.message : env.internalError);
+        } else {
+          history.push('/item-categories');
         }
       } else {
         const hasil = await ItemCategory.create(obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message);
+          message.error(res.message ? res.message : env.internalError);
+        } else {
+          history.push('/item-categories');
         }
       }
-      history.push('/item-categories');
     } catch (errorInfo) {
-      console.error('Failed:', errorInfo);
+      const temp = [];
+      if (errorInfo && errorInfo.errorFields) {
+        errorInfo.errorFields.map(e => {
+          temp.push(e.name[0]);
+        });
+      }
+      setErrorFields(temp);
+      console.log('Failed:', errorInfo, errorFields);
     }
   };
+
+  useEffect(()=> {
+    console.log('errrr', errorFields);
+    if (errorFields.includes("categoryCode")) {
+      categoryCodeRef.current.focus();
+    } else if (errorFields.includes("categorySubCode")) {
+      categorySubCodeRef.current.focus();
+    } else if (errorFields.includes("categoryGroup")) {
+      categoryGroupRef.current.focus();
+    }
+  }, [errorFields, categoryCodeRef, categorySubCodeRef, categoryGroupRef]);
 
   return (
     <StyledDiv>
@@ -119,295 +146,252 @@ const FormPage = (props) => {
             <Form form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
-                  {
-                    !state.categoryCode && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="categoryCode"
-                        label="Category Code"
-                        initialValue={state.categoryCode}
-                        rules={ [
-                          {
-                            required: true,
-                            message: "category code is required"
-                          },
-                        ] }
-                      >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ state.categoryCode } value={ state.categoryCode } onBlur={ e => changeData(e.target.value, 'categoryCode') } placeholder='Type category code here...' />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="categoryCode"
+                    label="Category Code"
+                    initialValue={state.categoryCode}
+                    rules={ [
+                      {
+                        required: true,
+                        message: "category code is required"
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (/^\s+$/.test(value)) {
+                            return Promise.reject(new Error('Category Code can not empty'));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
+                  >
+                    <Input ref={categoryCodeRef} maxLength={10} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.categoryCode } value={ state.categoryCode } onBlur={ e => changeData(e.target.value.toUpperCase(), 'categoryCode') } />
+                  </Form.Item>
 
                 </div>
                 <div className="row">
-                  {
-                    !state.description && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="description"
-                        label="Description"
-                      >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ state.description } value={ state.description } onBlur={ e => changeData(e.target.value, 'description') } placeholder='Type description here...' />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="description"
+                    label="Description"
+                  >
+                    <Input maxLength={60} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.description } value={ state.description } onBlur={ e => changeData(e.target.value.toUpperCase(), 'description') } />
+                  </Form.Item>
                 </div>
                 <div className="row">
-                  {
-                    !state.categorySubCode && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="categorySubCode"
-                        label="Category Sub Code"
-                        initialValue={state.categorySubCode}
-                        rules={ [
-                          {
-                            required: true,
-                            message:"category sub code is required"
-                          },
-                        ] }
-                      >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ state.categorySubCode } value={ state.categorySubCode } onBlur={ e => changeData(e.target.value, 'categorySubCode') } placeholder='Type category sub code here...' />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="categorySubCode"
+                    label="Category Sub Code"
+                    initialValue={state.categorySubCode}
+                    rules={ [
+                      {
+                        required: true,
+                        message:"category sub code is required"
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (/^\s+$/.test(value)) {
+                            return Promise.reject(new Error('Category Sub Code can not empty'));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
+                  >
+                    <Input ref={categorySubCodeRef} maxLength={10} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.categorySubCode } value={ state.categorySubCode } onBlur={ e => changeData(e.target.value.toUpperCase(), 'categorySubCode') } />
+                  </Form.Item>
 
                 </div>
                 <div className="row">
-                  {
-                    !state.subDescription && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="subDescription"
-                        label="Sub Description"
-                      >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ state.subDescription } value={ state.subDescription } onBlur={ e => changeData(e.target.value, 'subDescription') } placeholder='Type sub description here...' />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="subDescription"
+                    label="Sub Description"
+                  >
+                    <Input maxLength={60} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.subDescription } value={ state.subDescription } onBlur={ e => changeData(e.target.value.toUpperCase(), 'subDescription') } />
+                  </Form.Item>
                 </div>
                 <div className="row">
-                  {
-                    !state.categoryGroup && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="categoryGroup"
-                        label="Category Group"
-                        initialValue={state.categoryGroup}
-                        rules={ [
-                          {
-                            required: true,
-                            message: 'category group is required'
-                          },
-                        ] }
+                  <Form.Item
+                    name="categoryGroup"
+                    label="Category Group"
+                    initialValue={state.categoryGroup}
+                    rules={ [
+                      {
+                        required: true,
+                        message: 'category group is required'
+                      },
+                    ] }
+                  >
+                    <Select 
+                      ref={categoryGroupRef} 
+                      className='normal' 
+                      disabled={ isDisabled } 
+                      defaultValue={ state.categoryGroup } 
+                      value={ state.categoryGroup } 
+                      onChange={ e => changeData(e, 'categoryGroup') } 
                       >
-                        <Select 
-                          className='normal' 
-                          disabled={ isDisabled } 
-                          defaultValue={ state.categoryGroup } 
-                          value={ state.categoryGroup } 
-                          onChange={ e => changeData(e, 'categoryGroup') } 
-                          placeholder='Type category group here...' >
-                            {categoryGroups}
-                        </Select>
-                      </Form.Item>
-                  }
+                        {categoryGroups}
+                    </Select>
+                  </Form.Item>
 
-                  {
-                    !state.mrpStatus && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="mrpStatus"
-                        label="MRP Status"
-                      >
-                        <Select 
-                          className='normal' 
-                          disabled={ isDisabled } 
-                          defaultValue={ state.mrpStatus } 
-                          value={ state.mrpStatus } 
-                          onChange={ e => changeData(e, 'mrpStatus') } 
-                        >
-                            <Option key='Y' value='Y' >YES</Option>
-                            <Option key='N' value='N' >NO</Option>
-                        </Select>
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="mrpStatus"
+                    label="MRP Status"
+                  >
+                    <Select 
+                      className='normal' 
+                      disabled={ isDisabled } 
+                      defaultValue={ state.mrpStatus } 
+                      value={ state.mrpStatus } 
+                      onChange={ e => changeData(e, 'mrpStatus') } 
+                    >
+                        <Option key='Y' value='Y' >YES</Option>
+                        <Option key='N' value='N' >NO</Option>
+                    </Select>
+                  </Form.Item>
                 </div>
 
                 <div className="row">
-                  {
-                    !state.designQtya && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="designQtya"
-                        label="Design Qty A"
-                      >
-                        <InputNumber 
-                          min={0} 
-                          max={99990} 
-                          className='normal' 
-                          defaultValue={ state.designQtya } 
-                          value={ state.designQtya } 
-                          onBlur={ e => changeData(e.target.value, 'designQtya') } 
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="designQtya"
+                    label="Design Qty A"
+                  >
+                    <InputNumber 
+                      min={0} 
+                      max={999999991} 
+                      step="0.0001"
+                      stringMode
+                      maxLength={18} 
+                      style={{ width: "50%"}}
+                      className='normal right' 
+                      defaultValue={ state.designQtya } 
+                      value={ state.designQtya } 
+                      onBlur={ e => changeData(e.target.value, 'designQtya') } 
+                    />
+                  </Form.Item>
 
-                  {
-                    !state.mifA && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="mifA"
-                        label="MIF A"
-                      >
-                        <InputNumber 
-                          min={0} 
-                          max={99990} 
-                          className='normal' 
-                          defaultValue={ state.mifA } 
-                          value={ state.mifA } 
-                          onBlur={ e => changeData(e.target.value, 'mifA') } 
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="mifA"
+                    label="MIF A"
+                  >
+                    <InputNumber 
+                      min={0} 
+                      max={99990} 
+                      maxLength={6} 
+                      style={{ width: "50%"}}
+                      className='normal right' 
+                      defaultValue={ state.mifA } 
+                      value={ state.mifA } 
+                      onBlur={ e => changeData(e.target.value, 'mifA') } 
+                    />
+                  </Form.Item>
                 </div>
 
                 <div className="row">
-                  {
-                    !state.designQtyb && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="designQtyb"
-                        label="Design Qty B"
-                      >
-                        <InputNumber 
-                          min={0} 
-                          max={99990} 
-                          className='normal' 
-                          defaultValue={ state.designQtyb } 
-                          value={ state.designQtyb } 
-                          onBlur={ e => changeData(e.target.value, 'designQtyb') } 
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="designQtyb"
+                    label="Design Qty B"
+                  >
+                    <InputNumber 
+                      min={0} 
+                      max={999999991} 
+                      step="0.0001"
+                      stringMode
+                      maxLength={18} 
+                      style={{ width: "50%"}}
+                      className='normal right' 
+                      defaultValue={ state.designQtyb } 
+                      value={ state.designQtyb } 
+                      onBlur={ e => changeData(e.target.value, 'designQtyb') } 
+                    />
+                  </Form.Item>
 
-                  {
-                    !state.mifB && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="mifB"
-                        label="MIF B"
-                      >
-                        <InputNumber 
-                          min={0} 
-                          max={99990} 
-                          className='normal' 
-                          defaultValue={ state.mifB } 
-                          value={ state.mifB } 
-                          onBlur={ e => changeData(e.target.value, 'mifB') } 
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="mifB"
+                    label="MIF B"
+                  >
+                    <InputNumber 
+                      min={0} 
+                      max={99990} 
+                      maxLength={6} 
+                      style={{ width: "50%"}}
+                      className='normal right' 
+                      defaultValue={ state.mifB } 
+                      value={ state.mifB } 
+                      onBlur={ e => changeData(e.target.value, 'mifB') } 
+                    />
+                  </Form.Item>
                 </div>
 
                 <div className="row">
-                  {
-                    !state.designQtyc && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="designQtyc"
-                        label="Design Qty C"
-                      >
-                        <InputNumber 
-                          min={0} 
-                          max={99990} 
-                          className='normal' 
-                          defaultValue={ state.designQtyc } 
-                          value={ state.designQtyc } 
-                          onBlur={ e => changeData(e.target.value, 'designQtyc') } 
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="designQtyc"
+                    label="Design Qty C"
+                  >
+                    <InputNumber 
+                      min={0} 
+                      max={999999991} 
+                      step="0.0001"
+                      stringMode
+                      maxLength={18} 
+                      style={{ width: "50%"}}
+                      className='normal right' 
+                      defaultValue={ state.designQtyc } 
+                      value={ state.designQtyc } 
+                      onBlur={ e => changeData(e.target.value, 'designQtyc') } 
+                    />
+                  </Form.Item>
 
-                  {
-                    !state.mifC && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="mifC"
-                        label="MIF C"
-                      >
-                        <InputNumber 
-                          min={0} 
-                          max={99990} 
-                          className='normal' 
-                          defaultValue={ state.mifC } 
-                          value={ state.mifC } 
-                          onBlur={ e => changeData(e.target.value, 'mifC') } 
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="mifC"
+                    label="MIF C"
+                  >
+                    <InputNumber 
+                      min={0} 
+                      max={99990} 
+                      maxLength={6} 
+                      style={{ width: "50%"}}
+                      className='normal right' 
+                      defaultValue={ state.mifC } 
+                      value={ state.mifC } 
+                      onBlur={ e => changeData(e.target.value, 'mifC') } 
+                    />
+                  </Form.Item>
                 </div>
 
                 <div className="row">
-                  {
-                    !state.designQtyd && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="designQtyd"
-                        label="Design Qty D"
-                      >
-                        <InputNumber 
-                          min={0} 
-                          max={99990} 
-                          className='normal' 
-                          defaultValue={ state.designQtyd } 
-                          value={ state.designQtyd } 
-                          onBlur={ e => changeData(e.target.value, 'designQtyd') } 
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="designQtyd"
+                    label="Design Qty D"
+                  >
+                    <InputNumber 
+                      min={0} 
+                      max={999999991} 
+                      step="0.0001"
+                      stringMode
+                      maxLength={18} 
+                      style={{ width: "50%"}}
+                      className='normal right' 
+                      defaultValue={ state.designQtyd } 
+                      value={ state.designQtyd } 
+                      onBlur={ e => changeData(e.target.value, 'designQtyd') } 
+                    />
+                  </Form.Item>
 
-                  {
-                    !state.mifD && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="mifD"
-                        label="MIF D"
-                      >
-                        <InputNumber 
-                          min={0} 
-                          max={99990} 
-                          className='normal' 
-                          defaultValue={ state.mifD } 
-                          value={ state.mifD } 
-                          onBlur={ e => changeData(e.target.value, 'mifD') } 
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="mifD"
+                    label="MIF D"
+                  >
+                    <InputNumber 
+                      min={0} 
+                      max={99990} 
+                      maxLength={6} 
+                      style={{ width: "50%"}}
+                      className='normal right' 
+                      defaultValue={ state.mifD } 
+                      value={ state.mifD } 
+                      onBlur={ e => changeData(e.target.value, 'mifD') } 
+                    />
+                  </Form.Item>
                 </div>
               </div>
 
@@ -423,7 +407,7 @@ const FormPage = (props) => {
                       {
                         isEdit
                           ?
-                          "Edit Item Category"
+                          "Update Item Category"
                           :
                           "Create Item Category"
                       }

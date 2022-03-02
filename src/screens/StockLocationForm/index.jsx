@@ -173,9 +173,11 @@ const StockLocationForm = (props) => {
 
     } catch (errorInfo) {
       const temp = [];
-      errorInfo.errorFields.map(e => {
-        temp.push(e.name[0]);
-      });
+      if (errorInfo && errorInfo.errorFields) {
+        errorInfo.errorFields.map(e => {
+          temp.push(e.name[0]);
+        });
+      }
       setErrorFields(temp);
       console.log('Failed:', errorInfo, errorFields);
     }

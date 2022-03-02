@@ -52,6 +52,11 @@ const StyledDiv = styled.div`
       grid-gap: 40px;
     }
 
+    .right input{
+      text-align: right;
+      padding-right: 30px;
+    }
+    
     .normal[disabled] {
         color: rgba(0, 0, 0, 0.85);
         background-color: transparent;

@@ -52,11 +52,9 @@ const StyledDiv = styled.div`
       grid-gap: 40px;
     }
 
-    .number{
-      text-align: right; 
-      margin:0, 
-      -webkit-appearance: none;    
-      -moz-appearance: textfield;
+    .right input{
+      text-align: right;
+      padding-right: 30px;
     }
 
     .normal[disabled] {

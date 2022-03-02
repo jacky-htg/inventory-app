@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Form, Input, InputNumber, Button } from 'antd';
+import { Form, Input, InputNumber, Button, message } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Uom } from '../../services';
 import env from '../../env';
@@ -67,6 +67,7 @@ const FormPage = (props) => {
         const values = await form.validateFields();
       }
       let obj = state;
+      console.log('eeeeeeeeeeeeeeeee', obj);
       if (isEdit) {
         obj.version = parseInt(obj.version);
         const hasil = await Uom.edit(id, obj);
@@ -80,6 +81,7 @@ const FormPage = (props) => {
         const hasil = await Uom.create(obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
+          console.log('eeeeeeeeeeeeeeeee create', res);
           message.error(res.message ? res.message : env.internalError);
         } else {
           history.push('/uoms');
@@ -87,9 +89,11 @@ const FormPage = (props) => {
       } 
     } catch (errorInfo) {
       const temp = [];
-      errorInfo.errorFields.map(e => {
-        temp.push(e.name[0]);
-      });
+      if (errorInfo && errorInfo.errorFields) {
+        errorInfo.errorFields.map(e => {
+          temp.push(e.name[0]);
+        });
+      }
       setErrorFields(temp);
       console.log('Failed:', errorInfo, errorFields);
     }
@@ -192,9 +196,11 @@ const FormPage = (props) => {
                     <InputNumber
                       min={0} 
                       max={999991} 
-                      step="0.00001"
+                      step="0.0001"
                       stringMode
-                      className='normal number' disabled={ isDisabled } defaultValue={ state.uomFactor } value={ state.uomFactor } onBlur={ e => changeData(e.target.value, 'uomFactor') }  />
+                      maxLength={14} 
+                      style={{ width: "50%"}}
+                      className='normal right' disabled={ isDisabled } defaultValue={ state.uomFactor } value={ state.uomFactor } onBlur={ e => changeData(e.target.value, 'uomFactor') }  />
                   </Form.Item>
                 </div>
               </div>
@@ -211,7 +217,7 @@ const FormPage = (props) => {
                       {
                         isEdit
                           ?
-                          "Edit UOM"
+                          "Update UOM"
                           :
                           "Create UOM"
                       }
