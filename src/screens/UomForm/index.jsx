@@ -44,7 +44,7 @@ const FormPage = (props) => {
     state[field] = value;
     setState(state);
   };
-  
+
   useEffect(() => {
     if (
       id
@@ -86,7 +86,7 @@ const FormPage = (props) => {
         } else {
           history.push('/uoms');
         }
-      } 
+      }
     } catch (errorInfo) {
       const temp = [];
       if (errorInfo && errorInfo.errorFields) {
@@ -99,7 +99,7 @@ const FormPage = (props) => {
     }
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     console.log('errrr', errorFields);
     if (errorFields.includes("uomFrom")) {
       fromRef.current.focus();
@@ -107,6 +107,18 @@ const FormPage = (props) => {
       toRef.current.focus();
     }
   }, [errorFields, fromRef, toRef]);
+
+  const failed = ({ values, errorFields, outOfDate }) => {
+    if (errorFields.length > 0) {
+      let errorMsg = '';
+      errorFields.forEach(error => {
+        error.errors.forEach(el => {
+          errorMsg += el + '; ';
+        });
+      });
+      message.error(errorMsg);
+    }
+  };
 
   return (
     <StyledDiv>
@@ -122,13 +134,13 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks">
+            <Form onFinish={ submit } onFinishFailed={ failed } form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
                   <Form.Item
                     name="uomFrom"
                     label="From"
-                    initialValue={state.uomFrom}
+                    initialValue={ state.uomFrom }
                     rules={ [
                       {
                         required: true,
@@ -144,7 +156,7 @@ const FormPage = (props) => {
                       }),
                     ] }
                   >
-                    <Input ref={fromRef} maxLength={3} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.uomFrom } value={ state.uomFrom } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomFrom') } />
+                    <Input ref={ fromRef } maxLength={ 3 } style={ { textTransform: 'uppercase' } } className='normal' disabled={ isDisabled } defaultValue={ state.uomFrom } value={ state.uomFrom } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomFrom') } />
                   </Form.Item>
 
                 </div>
@@ -153,14 +165,14 @@ const FormPage = (props) => {
                     name="fromDescription"
                     label="From UOM Description"
                   >
-                    <Input maxLength={30} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.fromDescription } value={ state.fromDescription } onBlur={ e => changeData(e.target.value.toUpperCase(), 'fromDescription') } />
+                    <Input maxLength={ 30 } style={ { textTransform: 'uppercase' } } className='normal' disabled={ isDisabled } defaultValue={ state.fromDescription } value={ state.fromDescription } onBlur={ e => changeData(e.target.value.toUpperCase(), 'fromDescription') } />
                   </Form.Item>
                 </div>
                 <div className="row">
                   <Form.Item
                     name="uomTo"
                     label="To"
-                    initialValue={state.uomTo}
+                    initialValue={ state.uomTo }
                     rules={ [
                       {
                         required: true,
@@ -176,7 +188,7 @@ const FormPage = (props) => {
                       }),
                     ] }
                   >
-                    <Input ref={toRef} maxLength={3} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.uomTo } value={ state.uomTo } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomTo') } />
+                    <Input ref={ toRef } maxLength={ 3 } style={ { textTransform: 'uppercase' } } className='normal' disabled={ isDisabled } defaultValue={ state.uomTo } value={ state.uomTo } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomTo') } />
                   </Form.Item>
 
                 </div>
@@ -185,7 +197,7 @@ const FormPage = (props) => {
                     name="toDescription"
                     label="To UOM Description"
                   >
-                    <Input maxLength={30} style={{ textTransform: 'uppercase' }} className='normal' disabled={ isDisabled } defaultValue={ state.toDescription } value={ state.toDescription } onBlur={ e => changeData(e.target.value.toUpperCase(), 'toDescription') } />
+                    <Input maxLength={ 30 } style={ { textTransform: 'uppercase' } } className='normal' disabled={ isDisabled } defaultValue={ state.toDescription } value={ state.toDescription } onBlur={ e => changeData(e.target.value.toUpperCase(), 'toDescription') } />
                   </Form.Item>
                 </div>
                 <div className="row">
@@ -194,13 +206,13 @@ const FormPage = (props) => {
                     label="UOM factor"
                   >
                     <InputNumber
-                      min={0} 
-                      max={999991} 
+                      min={ 0 }
+                      max={ 999991 }
                       step="0.0001"
                       stringMode
-                      maxLength={14} 
-                      style={{ width: "50%"}}
-                      className='normal right' disabled={ isDisabled } defaultValue={ state.uomFactor } value={ state.uomFactor } onBlur={ e => changeData(e.target.value, 'uomFactor') }  />
+                      maxLength={ 14 }
+                      style={ { width: "50%" } }
+                      className='normal right' disabled={ isDisabled } defaultValue={ state.uomFactor } value={ state.uomFactor } onBlur={ e => changeData(e.target.value, 'uomFactor') } />
                   </Form.Item>
                 </div>
               </div>
@@ -213,7 +225,7 @@ const FormPage = (props) => {
 
                   {
                     (!id || isEdit) &&
-                    <Button onClick={ submit } type="primary" style={{marginLeft: '1%'}} htmlType="submit">
+                    <Button type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
                       {
                         isEdit
                           ?
