@@ -20,7 +20,7 @@ const StyledDiv = styled.div`
     }
 
     .right {
-      text-align: right;
+      text-align: right !important;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -55,6 +55,10 @@ const StyledDiv = styled.div`
     .right input{
       text-align: right;
       padding-right: 30px;
+    }
+
+    .right {
+      text-align: right !important;
     }
     
     .normal[disabled] {

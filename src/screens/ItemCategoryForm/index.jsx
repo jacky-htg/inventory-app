@@ -97,6 +97,7 @@ const FormPage = (props) => {
           const res = await hasil.data;
           message.error(res.message ? res.message : env.internalError);
         } else {
+          message.success('Record successfully updated');
           history.push('/item-categories');
         }
       } else {
@@ -105,6 +106,7 @@ const FormPage = (props) => {
           const res = await hasil.data;
           message.error(res.message ? res.message : env.internalError);
         } else {
+          message.success('Record successfully added');
           history.push('/item-categories');
         }
       }
@@ -150,7 +152,7 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks">
+            <Form onFinish={ submit } onFinishFailed={ data => formFailedSubmit(data, setErrorFields) } form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
                   <Form.Item
@@ -160,7 +162,7 @@ const FormPage = (props) => {
                     rules={ [
                       {
                         required: true,
-                        message: "Category Code Can Not be Blank !"
+                        message: "Category Code cannot be blank!"
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
@@ -172,7 +174,7 @@ const FormPage = (props) => {
                       }),
                     ] }
                   >
-                    <Input ref={ categoryCodeRef } maxLength={ 10 } style={ { textTransform: 'uppercase' } } className='normal' readOnly={isEdit?true:false} disabled={ isDisabled } defaultValue={ state.categoryCode } value={ state.categoryCode } onBlur={ e => changeData(e.target.value.toUpperCase(), 'categoryCode') } />
+                    <Input ref={ categoryCodeRef } maxLength={ 10 } style={ { textTransform: 'uppercase' } } className='normal' readOnly={ isEdit ? true : false } disabled={ isDisabled } defaultValue={ state.categoryCode } value={ state.categoryCode } onBlur={ e => changeData(e.target.value.toUpperCase(), 'categoryCode') } />
                   </Form.Item>
 
                 </div>
@@ -192,7 +194,7 @@ const FormPage = (props) => {
                     rules={ [
                       {
                         required: true,
-                        message: "Category Sub Code Can Not be Blank !"
+                        message: "Category Sub Code cannot be blank!"
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
@@ -224,7 +226,7 @@ const FormPage = (props) => {
                     rules={ [
                       {
                         required: true,
-                        message: 'Group Can Not be Blank !'
+                        message: 'Group cannot be blank!'
                       },
                     ] }
                   >
@@ -506,7 +508,7 @@ const FormPage = (props) => {
 
                   {
                     (!id || isEdit) &&
-                    <Button onClick={ submit } type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
+                    <Button type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
                       {
                         isEdit
                           ?

@@ -1,12 +1,14 @@
-import { message } from "antd";
-
-const formFailedSubmit = ({ values, errorFields, outOfDate }) => {
+const formFailedSubmit = (
+  { values, errorFields, outOfDate },
+  setErrorFields
+) => {
   if (errorFields.length > 0) {
-    errorFields.forEach((error) => {
-      error.errors.forEach((el, id) => {
-        message.error(el);
-      });
+    const temp = [];
+    errorFields.forEach((el) => {
+      temp.push(el.name[0]);
     });
+    console.log("temp", temp);
+    setErrorFields(temp);
   }
 };
 

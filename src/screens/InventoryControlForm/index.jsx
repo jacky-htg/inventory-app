@@ -66,6 +66,7 @@ const FormPage = (props) => {
           const res = await hasil.data;
           message.error(res.message ? res.message : env.internalError);
         } else {
+          message.success('Record successfully updated');
           history.push('/inventory-controls');
         }
       } else {
@@ -74,6 +75,7 @@ const FormPage = (props) => {
           const res = await hasil.data;
           message.error(res.message ? res.message : env.internalError);
         } else {
+          message.success('Record successfully added');
           history.push('/inventory-controls');
         }
       }
@@ -118,7 +120,7 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks">
+            <Form onFinish={ submit } onFinishFailed={ data => formFailedSubmit(data, setErrorFields) } form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
                   <Form.Item
@@ -128,7 +130,7 @@ const FormPage = (props) => {
                     rules={ [
                       {
                         required: true,
-                        message: 'Stock Deprecation Can Not be Blank !'
+                        message: 'Stock Deprecation cannot be blank!'
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
@@ -167,7 +169,7 @@ const FormPage = (props) => {
                     rules={ [
                       {
                         required: true,
-                        message: 'Stock Provision Age Can Not be Blank !'
+                        message: 'Stock Provision Age cannot be blank!'
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
@@ -207,7 +209,7 @@ const FormPage = (props) => {
 
                   {
                     (!id || isEdit) &&
-                    <Button onClick={ submit } type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
+                    <Button type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
                       {
                         isEdit
                           ?

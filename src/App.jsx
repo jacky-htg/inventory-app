@@ -13,8 +13,9 @@ const App = () => {
 
   useEffect(() => {
     message.config({
-      duration: 30,
+      duration: 20,
       rtl: false,
+      maxCount: 1
     });
 
     $('body').on('keydown', 'input, select', function (e) {

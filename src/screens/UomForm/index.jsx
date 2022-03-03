@@ -78,6 +78,7 @@ const FormPage = (props) => {
           const res = await hasil.data;
           message.error(res.message ? res.message : env.internalError);
         } else {
+          message.success('Record successfully added');
           history.push('/uoms');
         }
       } else {
@@ -87,6 +88,7 @@ const FormPage = (props) => {
           console.log('eeeeeeeeeeeeeeeee create', res);
           message.error(res.message ? res.message : env.internalError);
         } else {
+          message.success('Record successfully updated');
           history.push('/uoms');
         }
       }
@@ -143,7 +145,7 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form onFinish={ submit } onFinishFailed={ showError } form={ form } name="control-hooks">
+            <Form onFinish={ submit } onFinishFailed={ data => formFailedSubmit(data, setErrorFields) } form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
                   <Form.Item
@@ -213,7 +215,7 @@ const FormPage = (props) => {
                   <Form.Item
                     name="uomFactor"
                     label="Convertion Factor"
-                    initialValue={state.uomFactor}
+                    initialValue={ state.uomFactor }
                     rules={ [
                       {
                         required: true,

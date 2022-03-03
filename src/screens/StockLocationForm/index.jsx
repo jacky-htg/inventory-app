@@ -161,6 +161,7 @@ const StockLocationForm = (props) => {
           const res = await hasil.data;
           message.error(res.message ? res.message : env.internalError);
         } else {
+          message.success('Record successfully updated');
           history.push('/stock-locations');
         }
       } else {
@@ -169,6 +170,7 @@ const StockLocationForm = (props) => {
           const res = await hasil.data;
           message.error(res.message ? res.message : env.internalError);
         } else {
+          message.success('Record successfully added');
           history.push('/stock-locations');
         }
       }
@@ -209,7 +211,7 @@ const StockLocationForm = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks">
+            <Form onFinish={ submit } onFinishFailed={ data => formFailedSubmit(data, setErrorFields) } form={ form } name="control-hooks">
               <div className="group">
                 <Form.Item
                   name="Loc"
@@ -218,12 +220,12 @@ const StockLocationForm = (props) => {
                   rules={ [
                     {
                       required: true,
-                      message: 'Loc Can Not be Blank !'
+                      message: 'Loc cannot be blank!'
                     },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (/^\s+$/.test(value)) {
-                          return Promise.reject(new Error('Loc Can Not be Blank !'));
+                          return Promise.reject(new Error('Loc cannot be blank!'));
                         }
                         return Promise.resolve();
                       },
@@ -283,7 +285,7 @@ const StockLocationForm = (props) => {
                   rules={ [
                     {
                       required: true,
-                      message: 'Country Name Can Not be Blank !'
+                      message: 'Country Name cannot be blank!'
                     },
                   ] }
                 >
@@ -363,7 +365,7 @@ const StockLocationForm = (props) => {
                   { (!id || isEdit) && <Divider type='vertical' /> }
                   {
                     (!id || isEdit) &&
-                    <Button onClick={ submit } type="primary" htmlType="submit">
+                    <Button type="primary" htmlType="submit">
                       {
                         isEdit
                           ?

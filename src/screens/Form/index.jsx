@@ -37,7 +37,7 @@ const FormPage = (props) => {
   const [isEdit, setIsEdit] = useState(query.get("edit") ? query.get('edit') === 'true' : false);
   const [isDisabled, setIsDisabled] = useState(id && !isEdit ? true : false);
 
-  const [balbfQty, setBalbfQty] = useState(0);
+  const [balbfQty, setBalbfQty] = useState(parseFloat(0.0000));
   const [categoryCode, setCategoryCode] = useState('');
   const [categoryName, setCategoryName] = useState();
   const [categorySubCode, setCategorySubCode] = useState('');
@@ -62,7 +62,7 @@ const FormPage = (props) => {
   const [qryObsItem, setQryObsItem] = useState('');
   const [refUrl, setRefUrl] = useState('');
   const [remarks, setRemarks] = useState('');
-  const [reorder, setReorder] = useState(0);
+  const [reorder, setReorder] = useState(0.0000);
   const [requestor, setRequestor] = useState('');
   const [rev, setRev] = useState('');
   const [rohsStatus, setRohsStatus] = useState(false);
@@ -89,7 +89,7 @@ const FormPage = (props) => {
       const data = Item.view(id);
       data.then(result => {
         console.log('result :>> ', result);
-        result.balbfQty && setBalbfQty(result.balbfQty);
+        result.balbfQty && setBalbfQty(parseFloat(result.balbfQty));
         result.categoryCode && setCategoryCode(result.categoryCode);
         if (result.categoryCode) {
           itemCategoriesData.forEach(el => {
@@ -107,7 +107,7 @@ const FormPage = (props) => {
         // result.eoh && setEoh(result.categoryCode);
         result.issueNo && setIssueNo(result.issueNo);
         result.itemNo && setItemNo(result.itemNo);
-        result.leadtime && setLeadtime(result.leadtime);
+        result.leadtime && setLeadtime(parseInt(result.leadtime));
         result.loc && setLoc(result.loc);
         result.manufacturer && setManufacturer(result.manufacturer);
         result.mslCode && setMslCode(result.mslCode);
@@ -127,7 +127,7 @@ const FormPage = (props) => {
         result.qoh && setQoh(result.qoh);
         result.refUrl && setRefUrl(result.refUrl);
         result.remarks && setRemarks(result.remarks);
-        result.reorder && setReorder(result.reorder);
+        result.reorder && setReorder(parseFloat(result.reorder));
         result.rev && setRev(result.rev);
         result.rohsStatus && setRohsStatus(result.rohsStatus);
         result.source && setSource(result.source);
@@ -302,12 +302,19 @@ const FormPage = (props) => {
   }, []);
 
   const onSelectCategoryCode = (data) => {
-    itemCategoriesData.forEach(el => {
-      if (el.description === data) {
-        setCategoryCode(el.categoryCode);
-        setCategoryName(el.description);
-      }
-    });
+    if (!data) {
+      setCategoryCode('');
+      setCategoryName('');
+      setCategorySubCode('');
+      setCategorySubCodeName('');
+    } else {
+      itemCategoriesData.forEach(el => {
+        if (el.description === data) {
+          setCategoryCode(el.categoryCode);
+          setCategoryName(el.description);
+        }
+      });
+    }
   };
 
   const onSelectSubCategoryCode = (data) => {
@@ -346,6 +353,15 @@ const FormPage = (props) => {
     });
   };
 
+  useEffect(() => {
+    console.log('balbfQty :>> ', balbfQty);
+  }, [balbfQty]);
+
+  useEffect(() => {
+    console.log('reorder :>> ', reorder);
+  }, [reorder]);
+
+
   const submit = async () => {
     try {
       if (!isEdit) {
@@ -353,7 +369,7 @@ const FormPage = (props) => {
         console.log('Success:', values);
       }
       let obj = {
-        balbfQty: parseInt(balbfQty),
+        balbfQty: parseFloat(balbfQty),
         categoryCode,
         categorySubCode,
         description,
@@ -375,7 +391,7 @@ const FormPage = (props) => {
         qryObsItem,
         refUrl,
         remarks,
-        reorder: parseInt(reorder),
+        reorder: parseFloat(reorder),
         // requestor,
         rev,
         rohsStatus,
@@ -435,6 +451,7 @@ const FormPage = (props) => {
           message.error(res.message);
         }
       }
+      message.success(`Record successfully ${ isEdit ? 'updated' : 'added' }`);
       history.push('/items');
     } catch (errorInfo) {
       const temp = [];
@@ -445,6 +462,11 @@ const FormPage = (props) => {
       console.log('Failed:', errorInfo, errorFields);
     }
   };
+
+  useEffect(() => {
+    console.log('description :>> ', description);
+  }, [description]);
+
 
   const itemNoRef = useRef();
   const locationRef = useRef();
@@ -481,7 +503,7 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks" scrollToFirstError>
+            <Form onFinish={ submit } onFinishFailed={ data => formFailedSubmit(data, setErrorFields) } form={ form } name="control-hooks" scrollToFirstError>
               <div className="group">
                 <div className="row">
                   <Form.Item
@@ -492,7 +514,7 @@ const FormPage = (props) => {
                     rules={ [
                       {
                         required: true,
-                        message: 'Item No Can Not be Blank !'
+                        message: 'Item No cannot be blank!'
                       },
                     ] }
                   >
@@ -534,7 +556,7 @@ const FormPage = (props) => {
                     rules={ [
                       {
                         required: true,
-                        message: 'Location Can Not be Blank !'
+                        message: 'Location cannot be blank!'
                       },
                     ] }
                   >
@@ -546,9 +568,10 @@ const FormPage = (props) => {
                       defaultValue={ loc }
                       value={ loc }
                       onChange={ (value) => setLoc(value) }
-                      filterOption={ (input, option) =>
-                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }
+                      style={ { textTransform: 'uppercase' } }
+                    // filterOption={ (input, option) =>
+                    //   option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    // }
                     >
                       { locOpt }
                     </Select>
@@ -561,7 +584,7 @@ const FormPage = (props) => {
                     rules={ [
                       {
                         required: true,
-                        message: 'Category Code Can Not be Blank !'
+                        message: 'Category Code cannot be blank!'
                       },
                     ] }
                   >
@@ -589,7 +612,7 @@ const FormPage = (props) => {
                     rules={ [
                       {
                         required: true,
-                        message: 'Source Can Not be Blank !'
+                        message: 'Source cannot be blank!'
                       },
                     ] }
                   >
@@ -616,10 +639,11 @@ const FormPage = (props) => {
                     rules={ [
                       {
                         required: true,
-                        message: 'Category Sub Code Can Not be Blank !'
+                        message: 'Category Sub Code cannot be blank!'
                       },
                     ] }
                   >
+                    <Input hidden />
                     <AutoComplete
                       ref={ catSubCodeRef }
                       disabled={ isDisabled || !categoryCode }
@@ -709,7 +733,8 @@ const FormPage = (props) => {
                     <Input
                       className='normal'
                       maxLength={ 200 }
-                      normalize={ value => (value || '').toUpperCase() }
+                      // normalize={ value => (value || '').toUpperCase() }
+                      style={ { textTransform: 'uppercase' } }
                       disabled={ isDisabled }
                       defaultValue={ refUrl }
                       value={ refUrl }
@@ -738,7 +763,7 @@ const FormPage = (props) => {
                   <Input
                     className='normal'
                     maxLength={ 100 }
-                    normalize={ value => (value || '').toUpperCase() }
+                    style={ { textTransform: 'uppercase' } }
                     disabled={ isDisabled }
                     defaultValue={ description }
                     value={ description }
@@ -921,6 +946,7 @@ const FormPage = (props) => {
                     label="Std Material Price"
                   >
                     <InputNumber
+                      className='right'
                       min={ 0 }
                       max={ 9999999991 }
                       step="0.0001"
@@ -956,19 +982,31 @@ const FormPage = (props) => {
                   <Form.Item
                     name="balBFQty"
                     label="Bal BF Qty"
-
+                    initialValue={ balbfQty }
+                    rules={ [
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(balbfQty).countDecimals() > 4) {
+                            return Promise.reject(new Error('Decimal length must be less than 4 digits '));
+                          } else if (Number(balbfQty) < 0) {
+                            return Promise.reject(new Error('Cannot be negative'));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
+                    <Input hidden />
                     <InputNumber
                       min={ 0 }
                       max={ 9999999991 }
                       step="0.0001"
-                      stringMode
                       maxLength={ 18 }
                       className='normal right'
                       disabled={ isDisabled }
                       defaultValue={ balbfQty }
                       value={ balbfQty }
-                      onChange={ e => setBalbfQty(e.target.value) }
+                      onChange={ e => { console.log('e :>> ', e); setBalbfQty(parseFloat(e)); } }
 
                     />
                   </Form.Item>
@@ -985,19 +1023,31 @@ const FormPage = (props) => {
                   <Form.Item
                     name="reorderQty"
                     label="Reorder Qty"
+                    initialValue={ reorder }
+                    rules={ [
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(reorder).countDecimals() > 4) {
+                            return Promise.reject(new Error('Decimal length must be less than 4 digits '));
+                          } else if (Number(reorder) < 0) {
+                            return Promise.reject(new Error('Cannot be negative'));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
+                    <Input hidden />
                     <InputNumber
                       min={ 0 }
                       max={ 9999999990 }
                       step="0.0001"
-                      stringMode
                       maxLength={ 18 }
                       className='normal right'
                       disabled={ isDisabled }
                       defaultValue={ reorder }
                       value={ reorder }
-                      onChange={ e => setReorder(e.target.value) }
-
+                      onChange={ e => setReorder(parseFloat(e)) }
                     />
                   </Form.Item>
 
@@ -1012,7 +1062,16 @@ const FormPage = (props) => {
                   <Form.Item
                     name="leadTime"
                     label="Lead Time"
-
+                    rules={ [
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(leadtime) < 0) {
+                            return Promise.reject(new Error('Cannot be negative'));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
                     <InputNumber
                       min={ 0 }
@@ -1023,7 +1082,7 @@ const FormPage = (props) => {
                       disabled={ isDisabled }
                       defaultValue={ leadtime }
                       value={ leadtime }
-                      onChange={ e => setLeadtime(e.target.value) }
+                      onChange={ e => setLeadtime(e) }
 
                     />
                   </Form.Item>
@@ -1092,7 +1151,7 @@ const FormPage = (props) => {
                 (!id || isEdit) &&
                 <div className="submit">
                   <Form.Item>
-                    <Button onClick={ submit } type="primary" htmlType="submit">
+                    <Button type="primary" htmlType="submit">
                       {
                         isEdit
                           ?

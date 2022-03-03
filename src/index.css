@@ -286,3 +286,10 @@ input:read-only {
   cursor: not-allowed;
   opacity: 1;
 }
+
+.alignRight {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
