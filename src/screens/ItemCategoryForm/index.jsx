@@ -172,7 +172,7 @@ const FormPage = (props) => {
                       }),
                     ] }
                   >
-                    <Input ref={ categoryCodeRef } maxLength={ 10 } style={ { textTransform: 'uppercase' } } className='normal' disabled={ isDisabled } defaultValue={ state.categoryCode } value={ state.categoryCode } onBlur={ e => changeData(e.target.value.toUpperCase(), 'categoryCode') } />
+                    <Input ref={ categoryCodeRef } maxLength={ 10 } style={ { textTransform: 'uppercase' } } className='normal' readOnly={isEdit?true:false} disabled={ isDisabled } defaultValue={ state.categoryCode } value={ state.categoryCode } onBlur={ e => changeData(e.target.value.toUpperCase(), 'categoryCode') } />
                   </Form.Item>
 
                 </div>
@@ -219,12 +219,12 @@ const FormPage = (props) => {
                 <div className="row">
                   <Form.Item
                     name="categoryGroup"
-                    label="Category Group"
+                    label="Group"
                     initialValue={ state.categoryGroup }
                     rules={ [
                       {
                         required: true,
-                        message: 'Category Group Can Not be Blank !'
+                        message: 'Group Can Not be Blank !'
                       },
                     ] }
                   >
@@ -266,6 +266,8 @@ const FormPage = (props) => {
                         validator(_, value) {
                           if (Number(state.designQtya).countDecimals() > 4) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
+                          } else if (Number(state.designQtya) <= 0) {
+                            return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
                         },
@@ -290,6 +292,16 @@ const FormPage = (props) => {
                   <Form.Item
                     name="mifA"
                     label="MIF A"
+                    rules={ [
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(state.mifA) <= 0) {
+                            return Promise.reject(new Error('cannot be negative'));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
                     <InputNumber
                       disabled={ isDisabled }
@@ -314,6 +326,8 @@ const FormPage = (props) => {
                         validator(_, value) {
                           if (Number(state.designQtyb).countDecimals() > 4) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
+                          } else if (Number(state.designQtyb) <= 0) {
+                            return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
                         },
@@ -338,6 +352,16 @@ const FormPage = (props) => {
                   <Form.Item
                     name="mifB"
                     label="MIF B"
+                    rules={ [
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(state.mifB) <= 0) {
+                            return Promise.reject(new Error('cannot be negative'));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
                     <InputNumber
                       disabled={ isDisabled }
@@ -362,6 +386,8 @@ const FormPage = (props) => {
                         validator(_, value) {
                           if (Number(state.designQtyc).countDecimals() > 4) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
+                          } else if (Number(state.designQtyc) <= 0) {
+                            return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
                         },
@@ -386,6 +412,16 @@ const FormPage = (props) => {
                   <Form.Item
                     name="mifC"
                     label="MIF C"
+                    rules={ [
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(state.mifC) <= 0) {
+                            return Promise.reject(new Error('cannot be negative'));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
                     <InputNumber
                       disabled={ isDisabled }
@@ -410,6 +446,8 @@ const FormPage = (props) => {
                         validator(_, value) {
                           if (Number(state.designQtyd).countDecimals() > 4) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
+                          } else if (Number(state.designQtyd) <= 0) {
+                            return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
                         },
@@ -434,6 +472,16 @@ const FormPage = (props) => {
                   <Form.Item
                     name="mifD"
                     label="MIF D"
+                    rules={ [
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (Number(state.mifD) <= 0) {
+                            return Promise.reject(new Error('cannot be negative'));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
                     <InputNumber
                       disabled={ isDisabled }

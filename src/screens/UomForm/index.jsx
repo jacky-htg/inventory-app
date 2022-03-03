@@ -150,7 +150,7 @@ const FormPage = (props) => {
                       }),
                     ] }
                   >
-                    <Input ref={ fromRef } maxLength={ 3 } style={ { textTransform: 'uppercase' } } className='normal' disabled={ isDisabled } defaultValue={ state.uomFrom } value={ state.uomFrom } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomFrom') } />
+                    <Input ref={ fromRef } maxLength={ 3 } style={ { textTransform: 'uppercase' } } className='normal' readOnly={isEdit?true:false} disabled={ isDisabled } defaultValue={ state.uomFrom } value={ state.uomFrom } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomFrom') } />
                   </Form.Item>
 
                 </div>
@@ -182,7 +182,7 @@ const FormPage = (props) => {
                       }),
                     ] }
                   >
-                    <Input ref={ toRef } maxLength={ 3 } style={ { textTransform: 'uppercase' } } className='normal' disabled={ isDisabled } defaultValue={ state.uomTo } value={ state.uomTo } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomTo') } />
+                    <Input ref={ toRef } maxLength={ 3 } style={ { textTransform: 'uppercase' } } className='normal' readOnly={isEdit?true:false} disabled={ isDisabled } defaultValue={ state.uomTo } value={ state.uomTo } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomTo') } />
                   </Form.Item>
 
                 </div>
@@ -205,8 +205,10 @@ const FormPage = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(value).countDecimals() > 4) {
+                          if (Number(value).countDecimals() > 6) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
+                          } else if (Number(value) <= 0) {
+                            return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
                         },
@@ -216,7 +218,7 @@ const FormPage = (props) => {
                     <InputNumber
                       min={ 0 }
                       max={ 999991 }
-                      step="0.0001"
+                      step="0.000001"
                       stringMode
                       maxLength={ 14 }
                       style={ { width: "50%" } }

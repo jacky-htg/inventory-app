@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Space, Select, Form, Input, message, Popconfirm, Modal, Divider, Checkbox } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { StyledDiv } from './styled';
+import env from '../../env';
 
 function PageList(props) {
   const { Option } = Select;
@@ -129,9 +130,11 @@ function PageList(props) {
   const handleDelete = loc => {
     let data = props.data.remove(loc);
     data.then(result => {
-      if (result && result.status && result.status !== 204) {
-        console.log('result :>> ', result);
-        message.error(result.error);
+      if (result && !result.ok) {
+        result.data.then(res => {
+          message.error(res.message ? res.message : env.internalError);
+        });
+
       }
       setLoading(true);
       getData(filterSearch);
@@ -366,7 +369,11 @@ function PageList(props) {
       if (fields.includes(e.field)) {
         isChecked = true;
       }
-      temp.push(<p><Checkbox checked={ isChecked } onClick={ () => changeField(e.field) } /> { e.label }</p>);
+      let disabled = false;
+      if (e.fixed) {
+        disabled = true;
+      }
+      temp.push(<p><Checkbox disabled={ disabled } checked={ isChecked } onClick={ () => changeField(e.field) } /> { e.label }</p>);
     });
 
     setContentModal(temp);

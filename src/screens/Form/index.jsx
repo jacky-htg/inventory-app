@@ -190,7 +190,7 @@ const FormPage = (props) => {
 
       let temp = [];
       result.rows.forEach(el => {
-        temp.push(<Option key={ el.loc } value={ el.loc } >{ el.loc }</Option>);
+        temp.push(<Option key={ el.loc } value={ el.loc } >{ el.loc }: { el.description }</Option>);
       });
 
       /*result.rows.forEach(el => {
@@ -761,8 +761,7 @@ const FormPage = (props) => {
                     disabled={ isDisabled }
                     defaultValue={ manufacturer }
                     value={ manufacturer }
-                    onChange={ e => setManufacturer(e.target.value.toUpperCase) }
-
+                    onChange={ e => setManufacturer(e.target.value.toUpperCase()) }
                   />
                 </Form.Item>
 
