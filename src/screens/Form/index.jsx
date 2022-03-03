@@ -510,7 +510,7 @@ const FormPage = (props) => {
                     name="Item No"
                     label="Item No"
                     initialValue={ itemNo }
-                    normalize={ value => (value || '').toUpperCase() }
+                    style={ { textTransform: 'uppercase' } }
                     rules={ [
                       {
                         required: true,
@@ -522,7 +522,7 @@ const FormPage = (props) => {
                       autoFocus={ true }
                       maxLength={ 15 }
                       ref={ itemNoRef }
-                      normalize={ value => (value || '').toUpperCase() }
+                      style={ { textTransform: 'uppercase' } }
                       className='normal'
                       disabled={ isDisabled }
                       defaultValue={ itemNo }
@@ -667,7 +667,7 @@ const FormPage = (props) => {
                     <Input
                       className='normal'
                       maxLength={ 60 }
-                      normalize={ value => (value || '').toUpperCase() }
+                      style={ { textTransform: 'uppercase' } }
                       disabled={ isDisabled }
                       defaultValue={ partNo }
                       value={ partNo }
@@ -733,7 +733,7 @@ const FormPage = (props) => {
                     <Input
                       className='normal'
                       maxLength={ 200 }
-                      // normalize={ value => (value || '').toUpperCase() }
+                      // style={ { textTransform: 'uppercase' } }
                       style={ { textTransform: 'uppercase' } }
                       disabled={ isDisabled }
                       defaultValue={ refUrl }
@@ -782,7 +782,7 @@ const FormPage = (props) => {
                   <Input
                     className='normal'
                     maxLength={ 30 }
-                    normalize={ value => (value || '').toUpperCase() }
+                    style={ { textTransform: 'uppercase' } }
                     disabled={ isDisabled }
                     defaultValue={ manufacturer }
                     value={ manufacturer }
@@ -833,7 +833,7 @@ const FormPage = (props) => {
                     <Input
                       className='normal'
                       maxLength={ 10 }
-                      normalize={ value => (value || '').toUpperCase() }
+                      style={ { textTransform: 'uppercase' } }
                       disabled={ isDisabled }
                       defaultValue={ productGroup }
                       value={ productGroup }
@@ -872,7 +872,7 @@ const FormPage = (props) => {
                     <Input
                       className='normal'
                       maxLength={ 30 }
-                      normalize={ value => (value || '').toUpperCase() }
+                      style={ { textTransform: 'uppercase' } }
                       disabled={ isDisabled }
                       defaultValue={ issueNo }
                       value={ issueNo }
@@ -896,7 +896,7 @@ const FormPage = (props) => {
                     <Input
                       className='normal'
                       maxLength={ 3 }
-                      normalize={ value => (value || '').toUpperCase() }
+                      style={ { textTransform: 'uppercase' } }
                       disabled={ isDisabled }
                       defaultValue={ rev }
                       value={ rev }
@@ -915,7 +915,7 @@ const FormPage = (props) => {
                   <Input
                     className='normal'
                     maxLength={ 60 }
-                    normalize={ value => (value || '').toUpperCase() }
+                    style={ { textTransform: 'uppercase' } }
                     disabled={ isDisabled }
                     defaultValue={ dimension }
                     value={ dimension }
@@ -931,7 +931,7 @@ const FormPage = (props) => {
                   <Input
                     className='normal'
                     maxLength={ 2000 }
-                    normalize={ value => (value || '').toUpperCase() }
+                    style={ { textTransform: 'uppercase' } }
                     disabled={ isDisabled }
                     defaultValue={ remarks }
                     value={ remarks }
@@ -966,7 +966,7 @@ const FormPage = (props) => {
                     <Input
                       className='normal'
                       maxLength={ 15 }
-                      normalize={ value => (value || '').toUpperCase() }
+                      style={ { textTransform: 'uppercase' } }
                       disabled={ isDisabled }
                       defaultValue={ storageShelf }
                       value={ storageShelf }
@@ -1102,7 +1102,7 @@ const FormPage = (props) => {
                     <Input
                       className='normal'
                       maxLength={ 30 }
-                      normalize={ value => (value || '').toUpperCase() }
+                      style={ { textTransform: 'uppercase' } }
                       disabled={ isDisabled }
                       defaultValue={ requestor }
                       value={ requestor }
