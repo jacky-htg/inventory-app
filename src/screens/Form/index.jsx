@@ -688,7 +688,7 @@ const FormPage = (props) => {
                   >
                     <Select
                       className='normal' disabled={ isDisabled }
-                      
+
                       defaultValue={ openClose }
                       value={ openClose }
                       onChange={ value => setOpenClose(value) }
@@ -714,21 +714,21 @@ const FormPage = (props) => {
                       defaultValue={ refUrl }
                       value={ refUrl }
                       onChange={ e => setRefUrl(e.target.value.toUpperCase()) }
-                      
+
                     />
                   </Form.Item>
 
                   <Form.Item
-                        name="closedDate"
-                        label="Closed Date"
-                      // rules={ [
-                      //   {
-                      //     required: true,
-                      //   },
-                      // ] }
-                      >
-                        <Input disabled />
-                      </Form.Item>
+                    name="closedDate"
+                    label="Closed Date"
+                  // rules={ [
+                  //   {
+                  //     required: true,
+                  //   },
+                  // ] }
+                  >
+                    <Input disabled />
+                  </Form.Item>
                 </div>
 
                 <Form.Item
@@ -743,7 +743,7 @@ const FormPage = (props) => {
                     defaultValue={ description }
                     value={ description }
                     onChange={ e => setDescription(e.target.value.toUpperCase()) }
-                    
+
                   />
                 </Form.Item>
 
@@ -762,30 +762,30 @@ const FormPage = (props) => {
                     defaultValue={ manufacturer }
                     value={ manufacturer }
                     onChange={ e => setManufacturer(e.target.value.toUpperCase) }
-                    
+
                   />
                 </Form.Item>
 
                 <div className="row">
                   <Form.Item
-                        name="uom"
-                        label="UOM"
-                      >
-                        <Select
-                          showSearch
-                          allowClear
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ uomName }
-                          value={ uomName }
-                          
-                          onChange={ (value) => onSelectUOM(value) }
-                          filterOption={ (input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                          }
-                        >
-                          { uomOpt }
-                        </Select>
-                      </Form.Item>
+                    name="uom"
+                    label="UOM"
+                  >
+                    <Select
+                      showSearch
+                      allowClear
+                      className='normal' disabled={ isDisabled }
+                      defaultValue={ uomName }
+                      value={ uomName }
+
+                      onChange={ (value) => onSelectUOM(value) }
+                      filterOption={ (input, option) =>
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      { uomOpt }
+                    </Select>
+                  </Form.Item>
 
                   <Form.Item
                     name="replace"
@@ -814,7 +814,7 @@ const FormPage = (props) => {
                       defaultValue={ productGroup }
                       value={ productGroup }
                       onChange={ e => setProductGroup(e.target.value.toUpperCase()) }
-                      
+
                     />
                   </Form.Item>
 
@@ -853,212 +853,212 @@ const FormPage = (props) => {
                       defaultValue={ issueNo }
                       value={ issueNo }
                       onChange={ e => setIssueNo(e.target.value.toUpperCase()) }
-                      
+
                     />
                   </Form.Item>
 
                   <Form.Item
-                        name="obsoletedDate"
-                        label="Obsoleted Date"
-                      >
-                        <Input disabled />
-                      </Form.Item>
+                    name="obsoletedDate"
+                    label="Obsoleted Date"
+                  >
+                    <Input disabled />
+                  </Form.Item>
                 </div>
                 <div className="row">
                   <Form.Item
-                        name="revisionNum"
-                        label="Revision No"
-                      >
-                        <Input
-                          className='normal'
-                          maxLength={ 3 }
-                          normalize={ value => (value || '').toUpperCase() }
-                          disabled={ isDisabled }
-                          defaultValue={ rev }
-                          value={ rev }
-                          onChange={ e => setRev(e.target.value.toUpperCase()) }
-                          
-                        />
-                      </Form.Item>
+                    name="revisionNum"
+                    label="Revision No"
+                  >
+                    <Input
+                      className='normal'
+                      maxLength={ 3 }
+                      normalize={ value => (value || '').toUpperCase() }
+                      disabled={ isDisabled }
+                      defaultValue={ rev }
+                      value={ rev }
+                      onChange={ e => setRev(e.target.value.toUpperCase()) }
+
+                    />
+                  </Form.Item>
                 </div>
               </div>
 
               <div className="group">
                 <Form.Item
-                      name="boardSize"
-                      label="Board Size"
-                    >
-                      <Input
-                        className='normal'
-                        maxLength={ 60 }
-                        normalize={ value => (value || '').toUpperCase() }
-                        disabled={ isDisabled }
-                        defaultValue={ dimension }
-                        value={ dimension }
-                        onChange={ e => setDimension(e.target.value.toUpperCase()) }
-                        
-                      />
-                    </Form.Item>
+                  name="boardSize"
+                  label="Board Size"
+                >
+                  <Input
+                    className='normal'
+                    maxLength={ 60 }
+                    normalize={ value => (value || '').toUpperCase() }
+                    disabled={ isDisabled }
+                    defaultValue={ dimension }
+                    value={ dimension }
+                    onChange={ e => setDimension(e.target.value.toUpperCase()) }
+
+                  />
+                </Form.Item>
 
                 <Form.Item
-                      name="remark"
-                      label="Remark"
-                    >
-                      <Input
-                        className='normal'
-                        maxLength={ 2000 }
-                        normalize={ value => (value || '').toUpperCase() }
-                        disabled={ isDisabled }
-                        defaultValue={ remarks }
-                        value={ remarks }
-                        onChange={ e => setRemarks(e.target.value.toUpperCase()) }
-                        
-                      />
-                    </Form.Item>
+                  name="remark"
+                  label="Remark"
+                >
+                  <Input
+                    className='normal'
+                    maxLength={ 2000 }
+                    normalize={ value => (value || '').toUpperCase() }
+                    disabled={ isDisabled }
+                    defaultValue={ remarks }
+                    value={ remarks }
+                    onChange={ e => setRemarks(e.target.value.toUpperCase()) }
+
+                  />
+                </Form.Item>
 
                 <div className="row">
                   <Form.Item
-                        name="stdMaterialPrice"
-                        label="Std Material Price"
-                      >
-                        <InputNumber
-                          min={ 0 }
-                          max={ 9999999991 }
-                          step="0.0001"
-                          stringMode
-                          maxLength={ 18 }
-                          disabled={ true }
-                          defaultValue={ stdMaterial }
-                          value={ stdMaterial }
-                          onChange={ e => setStdMaterial(e.target.value) }
-                           />
-                      </Form.Item>
+                    name="stdMaterialPrice"
+                    label="Std Material Price"
+                  >
+                    <InputNumber
+                      min={ 0 }
+                      max={ 9999999991 }
+                      step="0.0001"
+                      stringMode
+                      maxLength={ 18 }
+                      disabled={ true }
+                      defaultValue={ stdMaterial }
+                      value={ stdMaterial }
+                      onChange={ e => setStdMaterial(e.target.value) }
+                    />
+                  </Form.Item>
 
                   <Form.Item
-                        name="storageLoc"
-                        label="Storage Location"
-                      >
-                        <Input
-                          className='normal'
-                          maxLength={ 15 }
-                          normalize={ value => (value || '').toUpperCase() }
-                          disabled={ isDisabled }
-                          defaultValue={ storageShelf }
-                          value={ storageShelf }
-                          onChange={ e => setStorageShelf(e.target.value.toUpperCase()) }
-                          
-                        />
-                      </Form.Item>
+                    name="storageLoc"
+                    label="Storage Location"
+                  >
+                    <Input
+                      className='normal'
+                      maxLength={ 15 }
+                      normalize={ value => (value || '').toUpperCase() }
+                      disabled={ isDisabled }
+                      defaultValue={ storageShelf }
+                      value={ storageShelf }
+                      onChange={ e => setStorageShelf(e.target.value.toUpperCase()) }
+
+                    />
+                  </Form.Item>
                 </div>
               </div>
 
               <div className="group">
                 <div className="row">
                   <Form.Item
-                        name="balBFQty"
-                        label="Bal BF Qty"
+                    name="balBFQty"
+                    label="Bal BF Qty"
 
-                      >
-                        <InputNumber
-                          min={ 0 }
-                          max={ 9999999991 }
-                          step="0.0001"
-                          stringMode
-                          maxLength={ 18 }
-                          className='normal right'
-                          disabled={ isDisabled }
-                          defaultValue={ balbfQty }
-                          value={ balbfQty }
-                          onChange={ e => setBalbfQty(e.target.value) }
-                          
-                        />
-                      </Form.Item>
+                  >
+                    <InputNumber
+                      min={ 0 }
+                      max={ 9999999991 }
+                      step="0.0001"
+                      stringMode
+                      maxLength={ 18 }
+                      className='normal right'
+                      disabled={ isDisabled }
+                      defaultValue={ balbfQty }
+                      value={ balbfQty }
+                      onChange={ e => setBalbfQty(e.target.value) }
+
+                    />
+                  </Form.Item>
 
                   <Form.Item
-                        name="QtyOnHand"
-                        label="QTY On Hand +"
-                      >
-                        <Input disabled={ true } className='right'/>
-                      </Form.Item>
+                    name="QtyOnHand"
+                    label="QTY On Hand +"
+                  >
+                    <Input disabled={ true } className='right' />
+                  </Form.Item>
 
                 </div>
                 <div className="row">
                   <Form.Item
-                        name="reorderQty"
-                        label="Reorder Qty"
-                      >
-                        <InputNumber
-                          min={ 0 }
-                          max={ 9999999990 }
-                          step="0.0001"
-                          stringMode
-                          maxLength={ 18 }
-                          className='normal right'
-                          disabled={ isDisabled }
-                          defaultValue={ reorder }
-                          value={ reorder }
-                          onChange={ e => setReorder(e.target.value) }
-                          
-                        />
-                      </Form.Item>
+                    name="reorderQty"
+                    label="Reorder Qty"
+                  >
+                    <InputNumber
+                      min={ 0 }
+                      max={ 9999999990 }
+                      step="0.0001"
+                      stringMode
+                      maxLength={ 18 }
+                      className='normal right'
+                      disabled={ isDisabled }
+                      defaultValue={ reorder }
+                      value={ reorder }
+                      onChange={ e => setReorder(e.target.value) }
+
+                    />
+                  </Form.Item>
 
                   <Form.Item
-                        name="reservedQty"
-                        label="Reserved QTY -"
-                      >
-                        <Input disabled={ true } className='right'/>
-                      </Form.Item>
+                    name="reservedQty"
+                    label="Reserved QTY -"
+                  >
+                    <Input disabled={ true } className='right' />
+                  </Form.Item>
                 </div>
                 <div className="row">
                   <Form.Item
-                        name="leadTime"
-                        label="Lead Time"
+                    name="leadTime"
+                    label="Lead Time"
 
-                      >
-                        <InputNumber
-                          min={ 0 }
-                          max={ 9999 }
-                          stringMode
-                          maxLength={ 4 }
-                          className='normal right'
-                          disabled={ isDisabled }
-                          defaultValue={ leadtime }
-                          value={ leadtime }
-                          onChange={ e => setLeadtime(e.target.value) }
-                          
-                        />
-                      </Form.Item>
+                  >
+                    <InputNumber
+                      min={ 0 }
+                      max={ 9999 }
+                      stringMode
+                      maxLength={ 4 }
+                      className='normal right'
+                      disabled={ isDisabled }
+                      defaultValue={ leadtime }
+                      value={ leadtime }
+                      onChange={ e => setLeadtime(e.target.value) }
+
+                    />
+                  </Form.Item>
 
                   <Form.Item
-                        name="orderQty"
-                        label="Order QTY +"
-                      >
-                        <Input className='right' type='number' min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) } placeholder='Type order qty here...' />
-                      </Form.Item>
+                    name="orderQty"
+                    label="Order QTY +"
+                  >
+                    <Input className='right' type='number' min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) } placeholder='Type order qty here...' />
+                  </Form.Item>
                 </div>
                 <div className="row">
                   <Form.Item
-                        name="Requestor"
-                        label="Requestor"
-                      >
-                        <Input
-                          className='normal'
-                          maxLength={ 30 }
-                          normalize={ value => (value || '').toUpperCase() }
-                          disabled={ isDisabled }
-                          defaultValue={ requestor }
-                          value={ requestor }
-                          onChange={ e => setRequestor(e.target.value.toUpperCase()) }
-                          
-                        />
-                      </Form.Item>
+                    name="Requestor"
+                    label="Requestor"
+                  >
+                    <Input
+                      className='normal'
+                      maxLength={ 30 }
+                      normalize={ value => (value || '').toUpperCase() }
+                      disabled={ isDisabled }
+                      defaultValue={ requestor }
+                      value={ requestor }
+                      onChange={ e => setRequestor(e.target.value.toUpperCase()) }
+
+                    />
+                  </Form.Item>
 
                   <Form.Item
-                        name="EOH ="
-                        label="EOH ="
-                      >
-                        <Input disabled={ true } className='right' />
-                      </Form.Item>
+                    name="EOH ="
+                    label="EOH ="
+                  >
+                    <Input disabled={ true } className='right' />
+                  </Form.Item>
                 </div>
                 {
                   id &&

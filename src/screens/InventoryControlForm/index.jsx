@@ -135,6 +135,9 @@ const FormPage = (props) => {
                           if (Number(state.stockDepn).countDecimals() > 2) {
                             return Promise.reject(new Error('decimal length must be less than 2 digits '));
                           }
+                          if (state.stockDepn < 0) {
+                            return Promise.reject(new Error('Must be higher than 0'));
+                          }
                           return Promise.resolve();
                         },
                       }),
@@ -170,6 +173,9 @@ const FormPage = (props) => {
                         validator(_, value) {
                           if (Number(state.provAge).countDecimals() > 2) {
                             return Promise.reject(new Error('decimal length must be less than 2 digits '));
+                          }
+                          if (state.provAge < 0) {
+                            return Promise.reject(new Error('Must be higher than 0'));
                           }
                           return Promise.resolve();
                         },

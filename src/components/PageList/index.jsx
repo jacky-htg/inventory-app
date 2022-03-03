@@ -58,7 +58,7 @@ function PageList(props) {
             if (props.fields[i].align) {
               alignValue = props.fields[i].align;
             }
-            temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } align={alignValue}/>);
+            temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } align={ alignValue } />);
             break;
           }
         }
@@ -130,6 +130,7 @@ function PageList(props) {
     let data = props.data.remove(loc);
     data.then(result => {
       if (result && result.status && result.status !== 204) {
+        console.log('result :>> ', result);
         message.error(result.error);
       }
       setLoading(true);
@@ -191,7 +192,7 @@ function PageList(props) {
     }
     setFilters(filters);
     console.log('nano', n, filters);
-    
+
     const [temp, counter] = renderFilter();
     if (n < filter.length) {
       temp.push(fieldFilter(counter, true));
@@ -348,7 +349,7 @@ function PageList(props) {
           if (props.fields[i].align) {
             alignValue = props.fields[i].align;
           }
-          temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } align={alignValue} />);
+          temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } align={ alignValue } />);
           break;
         }
       }
