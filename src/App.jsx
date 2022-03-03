@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { message } from 'antd';
 import 'antd/dist/antd.css';
-import $ from 'jquery';
 // import { PersistGate } from 'redux-persist/integration/react';
 
 // import { GlobalStyles } from './constant';

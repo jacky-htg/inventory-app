@@ -36,6 +36,7 @@ const FormPage = (props) => {
 
   const fromRef = useRef();
   const toRef = useRef();
+  const factorRef = useRef();
 
   const changeData = (value, field) => {
     console.log(field, value, state);
@@ -52,6 +53,7 @@ const FormPage = (props) => {
     ) {
       const data = Uom.view(id);
       data.then(result => {
+        console.log('result :>> ', result);
         setState(result);
 
         if (result.uomFrom) {
@@ -100,14 +102,27 @@ const FormPage = (props) => {
     }
   };
 
+  const showError = ({ values, errorFields, outOfDate }) => {
+    if (errorFields.length > 0) {
+      const temp = [];
+      errorFields.forEach(el => {
+        temp.push(el.name[0]);
+      });
+      console.log('temp :>> ', temp);
+      setErrorFields(temp);
+    }
+  };
+
   useEffect(() => {
     console.log('errrr', errorFields);
     if (errorFields.includes("uomFrom")) {
       fromRef.current.focus();
     } else if (errorFields.includes("uomTo")) {
       toRef.current.focus();
+    } else if (errorFields.includes("uomFactor")) {
+      factorRef.current.focus();
     }
-  }, [errorFields, fromRef, toRef]);
+  }, [errorFields, fromRef, toRef, factorRef]);
 
   Number.prototype.countDecimals = function () {
     if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
@@ -128,7 +143,7 @@ const FormPage = (props) => {
               <img src={ Images.loading } alt="" />
             </div>
             :
-            <Form form={ form } name="control-hooks">
+            <Form onFinish={ submit } onFinishFailed={ showError } form={ form } name="control-hooks">
               <div className="group">
                 <div className="row">
                   <Form.Item
@@ -138,7 +153,7 @@ const FormPage = (props) => {
                     rules={ [
                       {
                         required: true,
-                        message: 'From is required'
+                        message: 'From cannot be blank!'
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
@@ -150,7 +165,7 @@ const FormPage = (props) => {
                       }),
                     ] }
                   >
-                    <Input ref={ fromRef } maxLength={ 3 } style={ { textTransform: 'uppercase' } } className='normal' readOnly={isEdit?true:false} disabled={ isDisabled } defaultValue={ state.uomFrom } value={ state.uomFrom } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomFrom') } />
+                    <Input ref={ fromRef } maxLength={ 3 } style={ { textTransform: 'uppercase' } } className='normal' readOnly={ isEdit ? true : false } disabled={ isDisabled } defaultValue={ state.uomFrom } value={ state.uomFrom } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomFrom') } />
                   </Form.Item>
 
                 </div>
@@ -170,19 +185,19 @@ const FormPage = (props) => {
                     rules={ [
                       {
                         required: true,
-                        message: 'To is required'
+                        message: 'To cannot be blank!'
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
                           if (/^\s+$/.test(value)) {
-                            return Promise.reject(new Error('To can not empty'));
+                            return Promise.reject(new Error('To cannot be blank!'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <Input ref={ toRef } maxLength={ 3 } style={ { textTransform: 'uppercase' } } className='normal' readOnly={isEdit?true:false} disabled={ isDisabled } defaultValue={ state.uomTo } value={ state.uomTo } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomTo') } />
+                    <Input ref={ toRef } maxLength={ 3 } style={ { textTransform: 'uppercase' } } className='normal' readOnly={ isEdit ? true : false } disabled={ isDisabled } defaultValue={ state.uomTo } value={ state.uomTo } onBlur={ e => changeData(e.target.value.toUpperCase(), 'uomTo') } />
                   </Form.Item>
 
                 </div>
@@ -196,19 +211,19 @@ const FormPage = (props) => {
                 </div>
                 <div className="row">
                   <Form.Item
-                    name="uomfactor"
+                    name="uomFactor"
                     label="Convertion Factor"
                     rules={ [
                       {
                         required: true,
-                        message: 'Convertion Factor is required'
+                        message: 'Convertion Factor cannot be blank!'
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(value).countDecimals() > 6) {
-                            return Promise.reject(new Error('decimal length must be less than 4 digits '));
-                          } else if (Number(value) <= 0) {
-                            return Promise.reject(new Error('cannot be negative'));
+                          if (Number(state.uomFactor).countDecimals() > 6) {
+                            return Promise.reject(new Error('Decimal length must be less than 4 digits '));
+                          } else if (Number(state.uomFactor) <= 0) {
+                            return Promise.reject(new Error('Cannot be negative'));
                           }
                           return Promise.resolve();
                         },
@@ -216,6 +231,7 @@ const FormPage = (props) => {
                     ] }
                   >
                     <InputNumber
+                      ref={ factorRef }
                       min={ 0 }
                       max={ 999991 }
                       step="0.000001"
@@ -235,7 +251,7 @@ const FormPage = (props) => {
 
                   {
                     (!id || isEdit) &&
-                    <Button onClick={ submit } type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
+                    <Button type="primary" style={ { marginLeft: '1%' } } htmlType="submit">
                       {
                         isEdit
                           ?
