@@ -987,9 +987,9 @@ const FormPage = (props) => {
                       ({ getFieldValue }) => ({
                         validator(_, value) {
                           if (Number(balbfQty).countDecimals() > 4) {
-                            return Promise.reject(new Error('Decimal length must be less than 4 digits '));
+                            return Promise.reject(new Error('Bal BF Qty decimal length must be less than 4 digits '));
                           } else if (Number(balbfQty) < 0) {
-                            return Promise.reject(new Error('Cannot be negative'));
+                            return Promise.reject(new Error('Bal BF Qty cannot be negative'));
                           }
                           return Promise.resolve();
                         },

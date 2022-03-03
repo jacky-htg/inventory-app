@@ -59,7 +59,7 @@ function PageList(props) {
             if (props.fields[i].align) {
               alignValue = props.fields[i].align;
             }
-            temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } align={ alignValue } />);
+            temp.push(<Column ellipsis title={ props.fields[i].label } dataIndex={ e } key={ e } align={ alignValue } />);
             break;
           }
         }
