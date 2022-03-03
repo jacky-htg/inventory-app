@@ -190,7 +190,7 @@ const FormPage = (props) => {
 
       let temp = [];
       result.rows.forEach(el => {
-        temp.push(<Option key={ el.loc } value={ el.loc } >{ el.loc }</Option>);
+        temp.push(<Option key={ el.loc } value={ el.loc } >{ el.loc }: {el.description}</Option>);
       });
 
       /*result.rows.forEach(el => {
