@@ -484,37 +484,30 @@ const FormPage = (props) => {
             <Form form={ form } name="control-hooks" scrollToFirstError>
               <div className="group">
                 <div className="row">
-                  {
-                    !itemNo && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="Item No"
-                        label="Item No"
-                        initialValue={ itemNo }
-                        normalize={ value => (value || '').toUpperCase() }
-                        rules={ [
-                          {
-                            required: true,
-                            message: 'Item No Can Not be Blank !'
-                          },
-                        ] }
-                      >
-                        <Input
-                          autoFocus={ true }
-                          maxLength={ 15 }
-                          ref={ itemNoRef }
-                          normalize={ value => (value || '').toUpperCase() }
-                          className='normal'
-                          disabled={ isDisabled }
-                          defaultValue={ itemNo }
-                          value={ itemNo }
-                          onChange={ e => setItemNo(e.target.value.toUpperCase()) }
-                          placeholder='Type item no here...'
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Item No"
+                    label="Item No"
+                    initialValue={ itemNo }
+                    normalize={ value => (value || '').toUpperCase() }
+                    rules={ [
+                      {
+                        required: true,
+                        message: 'Item No Can Not be Blank !'
+                      },
+                    ] }
+                  >
+                    <Input
+                      autoFocus={ true }
+                      maxLength={ 15 }
+                      ref={ itemNoRef }
+                      normalize={ value => (value || '').toUpperCase() }
+                      className='normal'
+                      disabled={ isDisabled }
+                      defaultValue={ itemNo }
+                      value={ itemNo }
+                      onChange={ e => setItemNo(e.target.value.toUpperCase()) }
+                    />
+                  </Form.Item>
 
                   {
                     id && !isEdit
@@ -534,261 +527,198 @@ const FormPage = (props) => {
                   }
                 </div>
                 <div className="row">
-                  {
-                    !loc && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="Location"
-                        label="Location"
-                        initialValue={ loc }
-                        rules={ [
-                          {
-                            required: true,
-                            message: 'Location Can Not be Blank !'
-                          },
-                        ] }
-                      >
-                        <Select
-                          showSearch
-                          allowClear
-                          ref={ locationRef }
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ loc }
-                          value={ loc }
-                          placeholder="Please select"
-                          onChange={ (value) => setLoc(value) }
-                          filterOption={ (input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                          }
-                        >
-                          { locOpt }
-                        </Select>
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Location"
+                    label="Location"
+                    initialValue={ loc }
+                    rules={ [
+                      {
+                        required: true,
+                        message: 'Location Can Not be Blank !'
+                      },
+                    ] }
+                  >
+                    <Select
+                      showSearch
+                      allowClear
+                      ref={ locationRef }
+                      className='normal' disabled={ isDisabled }
+                      defaultValue={ loc }
+                      value={ loc }
+                      onChange={ (value) => setLoc(value) }
+                      filterOption={ (input, option) =>
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      { locOpt }
+                    </Select>
+                  </Form.Item>
 
-                  {
-                    !categoryName && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="catCode"
-                        label="Category Code"
-                        initialValue={ categoryName }
-                        rules={ [
-                          {
-                            required: true,
-                            message: 'Category Code Can Not be Blank !'
-                          },
-                        ] }
-                      >
-                        <Select
-                          showSearch
-                          allowClear
-                          ref={ catCodeRef }
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ categoryName }
-                          value={ categoryName }
-                          placeholder="Please select"
-                          onChange={ (value) => onSelectCategoryCode(value) }
-                          filterOption={ (input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                          }
-                        >
-                          { itemCategoriesOpt }
-                        </Select>
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="catCode"
+                    label="Category Code"
+                    initialValue={ categoryName }
+                    rules={ [
+                      {
+                        required: true,
+                        message: 'Category Code Can Not be Blank !'
+                      },
+                    ] }
+                  >
+                    <Select
+                      showSearch
+                      allowClear
+                      ref={ catCodeRef }
+                      className='normal' disabled={ isDisabled }
+                      defaultValue={ categoryName }
+                      value={ categoryName }
+                      onChange={ (value) => onSelectCategoryCode(value) }
+                      filterOption={ (input, option) =>
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      { itemCategoriesOpt }
+                    </Select>
+                  </Form.Item>
                 </div>
                 <div className="row">
-                  {
-                    !sourceName && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="source"
-                        label="Source"
-                        initialValue={ sourceName }
-                        rules={ [
-                          {
-                            required: true,
-                            message: 'Source Can Not be Blank !'
-                          },
-                        ] }
-                      >
-                        <Select
-                          showSearch
-                          allowClear
-                          ref={ sourceRef }
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ sourceName }
-                          value={ sourceName }
-                          placeholder="Please select"
-                          onChange={ (value) => onSelectSource(value) }
-                          filterOption={ (input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                          }
-                        >
-                          { sourcesOpt }
-                        </Select>
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="source"
+                    label="Source"
+                    initialValue={ sourceName }
+                    rules={ [
+                      {
+                        required: true,
+                        message: 'Source Can Not be Blank !'
+                      },
+                    ] }
+                  >
+                    <Select
+                      showSearch
+                      allowClear
+                      ref={ sourceRef }
+                      className='normal' disabled={ isDisabled }
+                      defaultValue={ sourceName }
+                      value={ sourceName }
+                      onChange={ (value) => onSelectSource(value) }
+                      filterOption={ (input, option) =>
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      { sourcesOpt }
+                    </Select>
+                  </Form.Item>
 
-                  {
-                    !categorySubCodeName && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="catSubCode"
-                        label="Category Sub Code"
-                        initialValue={ categorySubCodeName }
-                        rules={ [
-                          {
-                            required: true,
-                            message: 'Category Sub Code Can Not be Blank !'
-                          },
-                        ] }
-                      >
-                        <AutoComplete
-                          ref={ catSubCodeRef }
-                          disabled={ isDisabled || !categoryCode }
-                          defaultValue={ categorySubCodeName }
-                          value={ categorySubCodeName }
-                          options={ subCategoriesOpt }
-                          onSelect={ onSelectSubCategoryCode }
-                          placeholder={ "Type sub category here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="catSubCode"
+                    label="Category Sub Code"
+                    initialValue={ categorySubCodeName }
+                    rules={ [
+                      {
+                        required: true,
+                        message: 'Category Sub Code Can Not be Blank !'
+                      },
+                    ] }
+                  >
+                    <AutoComplete
+                      ref={ catSubCodeRef }
+                      disabled={ isDisabled || !categoryCode }
+                      defaultValue={ categorySubCodeName }
+                      value={ categorySubCodeName }
+                      options={ subCategoriesOpt }
+                      onSelect={ onSelectSubCategoryCode }
+                      placeholder={ "Type sub category here..." }
+                      filterOption={ (inputValue, option) =>
+                        option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                      }
+                    />
+                  </Form.Item>
                 </div>
                 <div className="row">
-                  {
-                    !partNo && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="partNum"
-                        label="Part No"
+                  <Form.Item
+                    name="partNum"
+                    label="Part No"
 
-                      >
-                        <Input
-                          className='normal'
-                          maxLength={ 60 }
-                          normalize={ value => (value || '').toUpperCase() }
-                          disabled={ isDisabled }
-                          defaultValue={ partNo }
-                          value={ partNo }
-                          onChange={ e => setPartNo(e.target.value.toUpperCase()) }
-                          placeholder='Type part no here...'
-                        />
-                      </Form.Item>
-                  }
+                  >
+                    <Input
+                      className='normal'
+                      maxLength={ 60 }
+                      normalize={ value => (value || '').toUpperCase() }
+                      disabled={ isDisabled }
+                      defaultValue={ partNo }
+                      value={ partNo }
+                      onChange={ e => setPartNo(e.target.value.toUpperCase()) }
+                      placeholder='Type part no here...'
+                    />
+                  </Form.Item>
 
-                  {
-                    id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="alternate"
-                        label="Alternate"
-                      >
-                        <Input disabled />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="alternate"
+                    label="Alternate"
+                  >
+                    <Input disabled />
+                  </Form.Item>
                 </div>
 
                 <div className="row">
-                  {
-                    !mslCodeName && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="moistureLevel"
-                        label="Moisture Sensitivity Level"
+                  <Form.Item
+                    name="moistureLevel"
+                    label="Moisture Sensitivity Level"
 
-                      >
-                        <Select
-                          showSearch
-                          allowClear
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ mslCodeName }
-                          value={ mslCodeName }
-                          placeholder="Please select"
-                          onChange={ (value) => onSelectMsl(value) }
-                          filterOption={ (input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                          }
-                        >
-                          { mslOpt }
-                        </Select>
-                      </Form.Item>
-                  }
+                  >
+                    <Select
+                      showSearch
+                      allowClear
+                      className='normal' disabled={ isDisabled }
+                      defaultValue={ mslCodeName }
+                      value={ mslCodeName }
+                      onChange={ (value) => onSelectMsl(value) }
+                      filterOption={ (input, option) =>
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      { mslOpt }
+                    </Select>
+                  </Form.Item>
 
-                  {
-                    !openClose && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="closure"
-                        label="Closure"
+                  <Form.Item
+                    name="closure"
+                    label="Closure"
 
-                      >
-                        <Select
-                          className='normal' disabled={ isDisabled }
-                          placeholder="Select an option"
-                          defaultValue={ openClose }
-                          value={ openClose }
-                          onChange={ value => setOpenClose(value) }
-                          allowClear
-                        >
-                          <Option value="CLOSED">Closed</Option>
-                        </Select>
-                      </Form.Item>
-                  }
+                  >
+                    <Select
+                      className='normal' disabled={ isDisabled }
+                      
+                      defaultValue={ openClose }
+                      value={ openClose }
+                      onChange={ value => setOpenClose(value) }
+                      allowClear
+                    >
+                      <Option value="CLOSED">Closed</Option>
+                    </Select>
+                  </Form.Item>
 
                 </div>
 
                 <div className="row">
-                  {
-                    !refUrl && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="refUrl"
-                        label="Reference Url"
+                  <Form.Item
+                    name="refUrl"
+                    label="Reference Url"
 
-                      >
-                        <Input
-                          className='normal'
-                          maxLength={ 200 }
-                          normalize={ value => (value || '').toUpperCase() }
-                          disabled={ isDisabled }
-                          defaultValue={ refUrl }
-                          value={ refUrl }
-                          onChange={ e => setRefUrl(e.target.value.toUpperCase()) }
-                          placeholder='Type refUrl here...'
-                        />
-                      </Form.Item>
-                  }
+                  >
+                    <Input
+                      className='normal'
+                      maxLength={ 200 }
+                      normalize={ value => (value || '').toUpperCase() }
+                      disabled={ isDisabled }
+                      defaultValue={ refUrl }
+                      value={ refUrl }
+                      onChange={ e => setRefUrl(e.target.value.toUpperCase()) }
+                      
+                    />
+                  </Form.Item>
 
-                  {
-                    id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="closedDate"
                         label="Closed Date"
                       // rules={ [
@@ -799,63 +729,45 @@ const FormPage = (props) => {
                       >
                         <Input disabled />
                       </Form.Item>
-                  }
                 </div>
 
-                {
-                  !description && id && !isEdit
-                    ?
-                    <></>
-                    :
-                    <Form.Item
-                      name="desc"
-                      label="Description"
-                    >
-                      <Input
-                        className='normal'
-                        maxLength={ 100 }
-                        normalize={ value => (value || '').toUpperCase() }
-                        disabled={ isDisabled }
-                        defaultValue={ description }
-                        value={ description }
-                        onChange={ e => setDescription(e.target.value.toUpperCase()) }
-                        placeholder='Type description here...'
-                      />
-                    </Form.Item>
-                }
+                <Form.Item
+                  name="desc"
+                  label="Description"
+                >
+                  <Input
+                    className='normal'
+                    maxLength={ 100 }
+                    normalize={ value => (value || '').toUpperCase() }
+                    disabled={ isDisabled }
+                    defaultValue={ description }
+                    value={ description }
+                    onChange={ e => setDescription(e.target.value.toUpperCase()) }
+                    
+                  />
+                </Form.Item>
 
               </div>
 
               <div className="group">
-                {
-                  !manufacturer && id && !isEdit
-                    ?
-                    <></>
-                    :
-                    <Form.Item
-                      name="manufacturer"
-                      label="Manufacturer"
-                    >
-                      <Input
-                        className='normal'
-                        maxLength={ 30 }
-                        normalize={ value => (value || '').toUpperCase() }
-                        disabled={ isDisabled }
-                        defaultValue={ manufacturer }
-                        value={ manufacturer }
-                        onChange={ e => setManufacturer(e.target.value.toUpperCase) }
-                        placeholder='Type manufacturer here...'
-                      />
-                    </Form.Item>
-                }
+                <Form.Item
+                  name="manufacturer"
+                  label="Manufacturer"
+                >
+                  <Input
+                    className='normal'
+                    maxLength={ 30 }
+                    normalize={ value => (value || '').toUpperCase() }
+                    disabled={ isDisabled }
+                    defaultValue={ manufacturer }
+                    value={ manufacturer }
+                    onChange={ e => setManufacturer(e.target.value.toUpperCase) }
+                    
+                  />
+                </Form.Item>
 
                 <div className="row">
-                  {
-                    !uomName && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="uom"
                         label="UOM"
                       >
@@ -865,7 +777,7 @@ const FormPage = (props) => {
                           className='normal' disabled={ isDisabled }
                           defaultValue={ uomName }
                           value={ uomName }
-                          placeholder="Please select"
+                          
                           onChange={ (value) => onSelectUOM(value) }
                           filterOption={ (input, option) =>
                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -874,123 +786,86 @@ const FormPage = (props) => {
                           { uomOpt }
                         </Select>
                       </Form.Item>
-                  }
 
-                  {
-                    id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="replace"
-                        label="Replace"
-                      // rules={ [
-                      //   {
-                      //     required: true,
-                      //   },
-                      // ] }
-                      >
-                        <Input className='normal' disabled={ isDisabled } />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="replace"
+                    label="Replace"
+                  // rules={ [
+                  //   {
+                  //     required: true,
+                  //   },
+                  // ] }
+                  >
+                    <Input className='normal' disabled={ isDisabled } />
+                  </Form.Item>
                 </div>
 
                 <div className="row">
-                  {
-                    !productGroup && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="productGroup"
-                        label="Product Group"
+                  <Form.Item
+                    name="productGroup"
+                    label="Product Group"
 
-                      >
-                        <Input
-                          className='normal'
-                          maxLength={ 10 }
-                          normalize={ value => (value || '').toUpperCase() }
-                          disabled={ isDisabled }
-                          defaultValue={ productGroup }
-                          value={ productGroup }
-                          onChange={ e => setProductGroup(e.target.value.toUpperCase()) }
-                          placeholder='Type product group here...'
-                        />
-                      </Form.Item>
-                  }
+                  >
+                    <Input
+                      className='normal'
+                      maxLength={ 10 }
+                      normalize={ value => (value || '').toUpperCase() }
+                      disabled={ isDisabled }
+                      defaultValue={ productGroup }
+                      value={ productGroup }
+                      onChange={ e => setProductGroup(e.target.value.toUpperCase()) }
+                      
+                    />
+                  </Form.Item>
 
-                  {
-                    !obsoleteCode && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="Obsolescent"
-                        label="Obsolescent"
-                      // rules={ [
-                      //   {
-                      //     required: true,
-                      //   },
-                      // ] }
-                      >
-                        <Select
-                          className='normal' disabled={ isDisabled }
-                          placeholder="Select an option"
-                          defaultValue={ obsoleteCode }
-                          value={ obsoleteCode }
-                          onChange={ value => setObsoleteCode(value) }
-                          allowClear
-                        >
-                          <Option value="OBSOLETE">Obsolete</Option>
-                        </Select>
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Obsolescent"
+                    label="Obsolescent"
+                  // rules={ [
+                  //   {
+                  //     required: true,
+                  //   },
+                  // ] }
+                  >
+                    <Select
+                      className='normal' disabled={ isDisabled }
+                      defaultValue={ obsoleteCode }
+                      value={ obsoleteCode }
+                      onChange={ value => setObsoleteCode(value) }
+                      allowClear
+                    >
+                      <Option value="OBSOLETE">Obsolete</Option>
+                    </Select>
+                  </Form.Item>
 
                 </div>
 
                 <div className="row">
-                  {
-                    !issueNo && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="issueNo"
-                        label="Issue No"
-                      >
-                        <Input
-                          className='normal'
-                          maxLength={ 30 }
-                          normalize={ value => (value || '').toUpperCase() }
-                          disabled={ isDisabled }
-                          defaultValue={ issueNo }
-                          value={ issueNo }
-                          onChange={ e => setIssueNo(e.target.value.toUpperCase()) }
-                          placeholder='Type issue no here...'
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="issueNo"
+                    label="Issue No"
+                  >
+                    <Input
+                      className='normal'
+                      maxLength={ 30 }
+                      normalize={ value => (value || '').toUpperCase() }
+                      disabled={ isDisabled }
+                      defaultValue={ issueNo }
+                      value={ issueNo }
+                      onChange={ e => setIssueNo(e.target.value.toUpperCase()) }
+                      
+                    />
+                  </Form.Item>
 
-                  {
-                    id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="obsoletedDate"
                         label="Obsoleted Date"
                       >
                         <Input disabled />
                       </Form.Item>
-                  }
                 </div>
                 <div className="row">
-                  {
-                    !rev && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="revisionNum"
                         label="Revision No"
                       >
@@ -1002,20 +877,14 @@ const FormPage = (props) => {
                           defaultValue={ rev }
                           value={ rev }
                           onChange={ e => setRev(e.target.value.toUpperCase()) }
-                          placeholder='Type revision no here...'
+                          
                         />
                       </Form.Item>
-                  }
                 </div>
               </div>
 
               <div className="group">
-                {
-                  !dimension && id && !isEdit
-                    ?
-                    <></>
-                    :
-                    <Form.Item
+                <Form.Item
                       name="boardSize"
                       label="Board Size"
                     >
@@ -1027,17 +896,11 @@ const FormPage = (props) => {
                         defaultValue={ dimension }
                         value={ dimension }
                         onChange={ e => setDimension(e.target.value.toUpperCase()) }
-                        placeholder='Type board size here...'
+                        
                       />
                     </Form.Item>
-                }
 
-                {
-                  !remarks && id && !isEdit
-                    ?
-                    <></>
-                    :
-                    <Form.Item
+                <Form.Item
                       name="remark"
                       label="Remark"
                     >
@@ -1049,18 +912,12 @@ const FormPage = (props) => {
                         defaultValue={ remarks }
                         value={ remarks }
                         onChange={ e => setRemarks(e.target.value.toUpperCase()) }
-                        placeholder='Type remark here...'
+                        
                       />
                     </Form.Item>
-                }
 
                 <div className="row">
-                  {
-                    !stdMaterial && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="stdMaterialPrice"
                         label="Std Material Price"
                       >
@@ -1074,16 +931,10 @@ const FormPage = (props) => {
                           defaultValue={ stdMaterial }
                           value={ stdMaterial }
                           onChange={ e => setStdMaterial(e.target.value) }
-                          placeholder='Type Std Material Price here...' />
+                           />
                       </Form.Item>
-                  }
 
-                  {
-                    !storageShelf && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="storageLoc"
                         label="Storage Location"
                       >
@@ -1095,21 +946,15 @@ const FormPage = (props) => {
                           defaultValue={ storageShelf }
                           value={ storageShelf }
                           onChange={ e => setStorageShelf(e.target.value.toUpperCase()) }
-                          placeholder='Type storage location here...'
+                          
                         />
                       </Form.Item>
-                  }
                 </div>
               </div>
 
               <div className="group">
                 <div className="row">
-                  {
-                    !balbfQty && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="balBFQty"
                         label="Bal BF Qty"
 
@@ -1120,37 +965,25 @@ const FormPage = (props) => {
                           step="0.0001"
                           stringMode
                           maxLength={ 18 }
-                          className='normal'
+                          className='normal right'
                           disabled={ isDisabled }
                           defaultValue={ balbfQty }
                           value={ balbfQty }
                           onChange={ e => setBalbfQty(e.target.value) }
-                          placeholder='Type bal bf qty here...'
+                          
                         />
                       </Form.Item>
-                  }
 
-                  {
-                    id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="QtyOnHand"
                         label="QTY On Hand +"
                       >
-                        <Input disabled={ true } />
+                        <Input disabled={ true } className='right'/>
                       </Form.Item>
-                  }
 
                 </div>
                 <div className="row">
-                  {
-                    !reorder && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="reorderQty"
                         label="Reorder Qty"
                       >
@@ -1160,36 +993,24 @@ const FormPage = (props) => {
                           step="0.0001"
                           stringMode
                           maxLength={ 18 }
-                          className='normal'
+                          className='normal right'
                           disabled={ isDisabled }
                           defaultValue={ reorder }
                           value={ reorder }
                           onChange={ e => setReorder(e.target.value) }
-                          placeholder='Type reorder qty here...'
+                          
                         />
                       </Form.Item>
-                  }
 
-                  {
-                    id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="reservedQty"
                         label="Reserved QTY -"
                       >
-                        <Input disabled={ true } />
+                        <Input disabled={ true } className='right'/>
                       </Form.Item>
-                  }
                 </div>
                 <div className="row">
-                  {
-                    !leadtime && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="leadTime"
                         label="Lead Time"
 
@@ -1199,36 +1020,24 @@ const FormPage = (props) => {
                           max={ 9999 }
                           stringMode
                           maxLength={ 4 }
-                          className='normal'
+                          className='normal right'
                           disabled={ isDisabled }
                           defaultValue={ leadtime }
                           value={ leadtime }
                           onChange={ e => setLeadtime(e.target.value) }
-                          placeholder='Type lead time here...'
+                          
                         />
                       </Form.Item>
-                  }
 
-                  {
-                    !orderQty && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="orderQty"
                         label="Order QTY +"
                       >
-                        <Input type='number' min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) } placeholder='Type order qty here...' />
+                        <Input className='right' type='number' min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) } placeholder='Type order qty here...' />
                       </Form.Item>
-                  }
                 </div>
                 <div className="row">
-                  {
-                    !requestor && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="Requestor"
                         label="Requestor"
                       >
@@ -1240,23 +1049,16 @@ const FormPage = (props) => {
                           defaultValue={ requestor }
                           value={ requestor }
                           onChange={ e => setRequestor(e.target.value.toUpperCase()) }
-                          placeholder='Type requestor here...'
+                          
                         />
                       </Form.Item>
-                  }
 
-                  {
-                    id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
+                  <Form.Item
                         name="EOH ="
                         label="EOH ="
                       >
-                        <Input disabled={ true } />
+                        <Input disabled={ true } className='right' />
                       </Form.Item>
-                  }
                 </div>
                 {
                   id &&
@@ -1295,7 +1097,7 @@ const FormPage = (props) => {
                       {
                         isEdit
                           ?
-                          "Edit Item"
+                          "Update Item"
                           :
                           "Create Item"
                       }

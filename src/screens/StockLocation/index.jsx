@@ -15,6 +15,7 @@ function Page() {
       {label: 'Description', field: 'description', default: true, filter: true}, 
       {label: 'Address', field: 'address1', default: true, filter: true}, 
       {label: 'Country Code', field: 'countryCode', default: true, filter: true, lookup: countries}, 
+      {label: 'Country Name', field: 'countryName', default: true}, 
       {label: 'Person In Charge', field: 'personInCharge', default: true, filter: true}
     ]);
   };

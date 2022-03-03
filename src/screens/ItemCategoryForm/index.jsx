@@ -273,6 +273,7 @@ const FormPage = (props) => {
                     ] }
                   >
                     <InputNumber
+                      disabled={ isDisabled }
                       min={ 0 }
                       max={ 999999990 }
                       step="0.0001"
@@ -291,6 +292,7 @@ const FormPage = (props) => {
                     label="MIF A"
                   >
                     <InputNumber
+                      disabled={ isDisabled }
                       min={ 0 }
                       max={ 99990 }
                       maxLength={ 6 }
@@ -319,6 +321,7 @@ const FormPage = (props) => {
                     ] }
                   >
                     <InputNumber
+                      disabled={ isDisabled }
                       min={ 0 }
                       max={ 999999990 }
                       step="0.0001"
@@ -337,6 +340,7 @@ const FormPage = (props) => {
                     label="MIF B"
                   >
                     <InputNumber
+                      disabled={ isDisabled }
                       min={ 0 }
                       max={ 99990 }
                       maxLength={ 6 }
@@ -365,6 +369,7 @@ const FormPage = (props) => {
                     ] }
                   >
                     <InputNumber
+                      disabled={ isDisabled }
                       min={ 0 }
                       max={ 999999990 }
                       step="0.0001"
@@ -383,6 +388,7 @@ const FormPage = (props) => {
                     label="MIF C"
                   >
                     <InputNumber
+                      disabled={ isDisabled }
                       min={ 0 }
                       max={ 99990 }
                       maxLength={ 6 }
@@ -411,6 +417,7 @@ const FormPage = (props) => {
                     ] }
                   >
                     <InputNumber
+                      disabled={ isDisabled }
                       min={ 0 }
                       max={ 999999990 }
                       step="0.0001"
@@ -429,6 +436,7 @@ const FormPage = (props) => {
                     label="MIF D"
                   >
                     <InputNumber
+                      disabled={ isDisabled }
                       min={ 0 }
                       max={ 99990 }
                       maxLength={ 6 }
