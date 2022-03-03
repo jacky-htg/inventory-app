@@ -369,7 +369,11 @@ function PageList(props) {
       if (fields.includes(e.field)) {
         isChecked = true;
       }
-      temp.push(<p><Checkbox checked={ isChecked } onClick={ () => changeField(e.field) } /> { e.label }</p>);
+      let disabled = false;
+      if (e.fixed) {
+        disabled = true;
+      }
+      temp.push(<p><Checkbox disabled={disabled} checked={ isChecked } onClick={ () => changeField(e.field) } /> { e.label }</p>);
     });
 
     setContentModal(temp);

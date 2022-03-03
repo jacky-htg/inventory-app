@@ -761,7 +761,7 @@ const FormPage = (props) => {
                     disabled={ isDisabled }
                     defaultValue={ manufacturer }
                     value={ manufacturer }
-                    onChange={ e => setManufacturer(e.target.value.toUpperCase) }
+                    onChange={ e => setManufacturer(e.target.value.toUpperCase()) }
                     
                   />
                 </Form.Item>

@@ -7,7 +7,7 @@ function Page() {
 
   const setupFields = () => {
     setFields([
-      {label: 'Item No', field: 'itemNo', default: true, filter: true}, 
+      {label: 'Item No', field: 'itemNo', default: true, fixed:true, filter: true}, 
       {label: 'Part No', field: 'partNo', default: true, filter: true}, 
       {label: 'Description', field: 'description', default: true, filter: true}, 
       {label: 'QOH', field: 'qoh', default: true, filter: true}, 
