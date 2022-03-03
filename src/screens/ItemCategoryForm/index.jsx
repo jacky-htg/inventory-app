@@ -266,7 +266,7 @@ const FormPage = (props) => {
                         validator(_, value) {
                           if (Number(state.designQtya).countDecimals() > 4) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
-                          } else if (Number(state.designQtya) <= 0) {
+                          } else if (Number(state.designQtya) < 0) {
                             return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
@@ -295,7 +295,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(state.mifA) <= 0) {
+                          if (Number(state.mifA) < 0) {
                             return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
@@ -326,7 +326,7 @@ const FormPage = (props) => {
                         validator(_, value) {
                           if (Number(state.designQtyb).countDecimals() > 4) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
-                          } else if (Number(state.designQtyb) <= 0) {
+                          } else if (Number(state.designQtyb) < 0) {
                             return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
@@ -355,7 +355,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(state.mifB) <= 0) {
+                          if (Number(state.mifB) < 0) {
                             return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
@@ -386,7 +386,7 @@ const FormPage = (props) => {
                         validator(_, value) {
                           if (Number(state.designQtyc).countDecimals() > 4) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
-                          } else if (Number(state.designQtyc) <= 0) {
+                          } else if (Number(state.designQtyc) < 0) {
                             return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
@@ -415,7 +415,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(state.mifC) <= 0) {
+                          if (Number(state.mifC) < 0) {
                             return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
@@ -446,7 +446,7 @@ const FormPage = (props) => {
                         validator(_, value) {
                           if (Number(state.designQtyd).countDecimals() > 4) {
                             return Promise.reject(new Error('decimal length must be less than 4 digits '));
-                          } else if (Number(state.designQtyd) <= 0) {
+                          } else if (Number(state.designQtyd) < 0) {
                             return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
@@ -475,7 +475,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(state.mifD) <= 0) {
+                          if (Number(state.mifD) < 0) {
                             return Promise.reject(new Error('cannot be negative'));
                           }
                           return Promise.resolve();
