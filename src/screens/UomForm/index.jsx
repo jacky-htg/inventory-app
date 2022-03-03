@@ -213,6 +213,7 @@ const FormPage = (props) => {
                   <Form.Item
                     name="uomFactor"
                     label="Convertion Factor"
+                    initialValue={state.uomFactor}
                     rules={ [
                       {
                         required: true,
