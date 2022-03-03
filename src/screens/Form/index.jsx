@@ -818,7 +818,7 @@ const FormPage = (props) => {
                         disabled={ isDisabled }
                         defaultValue={ description }
                         value={ description }
-                        onChange={ e => setDescription(e.target.value.toUpperCase) }
+                        onChange={ e => setDescription(e.target.value.toUpperCase()) }
                         placeholder='Type description here...'
                       />
                     </Form.Item>
