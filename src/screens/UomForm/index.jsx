@@ -198,7 +198,6 @@ const FormPage = (props) => {
                   <Form.Item
                     name="uomfactor"
                     label="Convertion Factor"
-                    initialValue={}
                     rules={ [
                       {
                         required: true,
