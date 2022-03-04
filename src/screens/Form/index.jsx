@@ -145,6 +145,13 @@ const FormPage = (props) => {
         result.status && setStatus(result.status);
         result.stdMaterial && setStdMaterial(result.stdMaterial);
         result.uom && setUom(result.uom);
+        if (result.uom) {
+          uomData.forEach( el => {
+            if (el.codeValue === result.uom) {
+              setUomName(el.codeDesc);
+            }
+          });
+        }
         result.version && setVersion(result.version);
         result.obsoleteItem && setObsoleteCode(result.obsoleteItem);
         result.storageShelf && setStorageShelf(result.storageShelf);
