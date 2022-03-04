@@ -38,6 +38,8 @@ const FormPage = (props) => {
   const [isDisabled, setIsDisabled] = useState(id && !isEdit ? true : false);
 
   const [balbfQty, setBalbfQty] = useState(parseFloat(0.0000));
+  const [qtyOnHand, setQtyOnHand] = useState(parseFloat(0.0000));
+  const [qtyReserved, setQtyReserved] = useState(parseFloat(0.0000));
   const [categoryCode, setCategoryCode] = useState('');
   const [categoryName, setCategoryName] = useState();
   const [categorySubCode, setCategorySubCode] = useState('');
@@ -54,7 +56,7 @@ const FormPage = (props) => {
   const [obsoleteCode, setObsoleteCode] = useState();
   const [obsoleteItem, setObsoleteItem] = useState('');
   const [openClose, setOpenClose] = useState();
-  const [orderQty, setOrderQty] = useState(0);
+  const [orderQty, setOrderQty] = useState(parseFloat(0.0000));
   const [partNo, setPartNo] = useState('');
   const [prodnResv, setProdnResv] = useState(0);
   const [productGroup, setProductGroup] = useState('');
@@ -344,6 +346,7 @@ const FormPage = (props) => {
         uom,
         // version: parseInt(version),
       };
+      
       if (isEdit) {
         obj.version = parseInt(version);
         const hasil = await Item.edit(id, obj);
@@ -772,7 +775,7 @@ const FormPage = (props) => {
                       className='normal' disabled={ isDisabled }
                       defaultValue={ obsoleteCode }
                       value={ obsoleteCode }
-                      onChange={ value => setObsoleteCode(value) }
+                      onChange={ value => {setObsoleteCode(value); setObsoleteItem(value);} }
                       allowClear
                     >
                       <Option value="OBSOLETE">Obsolete</Option>
@@ -920,6 +923,7 @@ const FormPage = (props) => {
                       step="0.0001"
                       maxLength={ 18 }
                       className='normal right'
+                      readOnly
                       disabled={ isDisabled }
                       defaultValue={ balbfQty }
                       value={ balbfQty }
@@ -931,8 +935,16 @@ const FormPage = (props) => {
                   <Form.Item
                     name="QtyOnHand"
                     label="QTY On Hand +"
+                    initialValue={qtyOnHand}
                   >
-                    <Input disabled={ true } className='right' />
+                    <InputNumber
+                      step="0.0001"
+                      className='normal right'
+                      readOnly
+                      disabled={ true }
+                      defaultValue={ qtyOnHand }
+                      value={ qtyOnHand }
+                    />
                   </Form.Item>
 
                 </div>
@@ -972,7 +984,14 @@ const FormPage = (props) => {
                     name="reservedQty"
                     label="Reserved QTY -"
                   >
-                    <Input disabled={ true } className='right' />
+                    <InputNumber
+                      step="0.0001"
+                      className='normal right'
+                      readOnly
+                      disabled={ true }
+                      defaultValue={ qtyReserved }
+                      value={ qtyReserved }
+                    />
                   </Form.Item>
                 </div>
                 <div className="row">
@@ -1008,7 +1027,7 @@ const FormPage = (props) => {
                     name="orderQty"
                     label="Order QTY +"
                   >
-                    <Input className='right' type='number' min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) } placeholder='Type order qty here...' />
+                    <InputNumber className='right' step="0.0001" min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) } placeholder='Type order qty here...' />
                   </Form.Item>
                 </div>
                 <div className="row">
