@@ -146,6 +146,8 @@ const FormPage = (props) => {
         result.stdMaterial && setStdMaterial(result.stdMaterial);
         result.uom && setUom(result.uom);
         result.version && setVersion(result.version);
+        result.obsoleteItem && setObsoleteCode(result.obsoleteItem);
+        result.storageShelf && setStorageShelf(result.storageShelf);
 
         if (!result.categorySubCode) {
           setLoadingPage(false);
