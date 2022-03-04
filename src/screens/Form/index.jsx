@@ -148,36 +148,6 @@ const FormPage = (props) => {
         if (!result.categorySubCode) {
           setLoadingPage(false);
         }
-
-
-        // balbfQty: 1;
-        // categoryCode: "105";
-        // categorySubCode: "0";
-        // description: "Test desc";
-        // dimension: "100";
-        // eoh: 1;
-        // issueNo: "123-123";
-        // itemNo: "25-25251";
-        // leadtime: 1;
-        // loc: "TDK";
-        // manufacturer: "3M";
-        // mslCode: "6";
-        // orderQty: 1;
-        // partNo: "MP2-HP10-51S1-TR33";
-        // prodnResv: 0;
-        // productGroup: "test group";
-        // qoh: 0;
-        // refUrl: "www.test.com";
-        // remarks: "Test Remark";
-        // reorder: 10;
-        // rev: "tes";
-        // rohsStatus: true;
-        // source: "B";
-        // status: "ACTIVE";
-        // stdMaterial: 100;
-        // uom: "CTN";
-        // version: 0
-        // }
       });
     }
   }, [id, locData, itemCategoriesData, mslData, sourcesData, uomData]);
@@ -192,12 +162,6 @@ const FormPage = (props) => {
       result.rows.forEach(el => {
         temp.push(<Option key={ el.loc } value={ el.loc } >{ el.loc }: { el.description }</Option>);
       });
-
-      /*result.rows.forEach(el => {
-        temp.push({
-          value: el.loc
-        });
-      });*/
       setLocOpt(temp);
     });
   }, []);
@@ -209,10 +173,6 @@ const FormPage = (props) => {
       setItemCategoriesData(res);
       let temp = [];
       res.forEach(el => {
-        /*temp.push({
-          value: el.description,
-          // code: el.code
-        });*/
         temp.push(<Option key={ el.description } value={ el.description } >{ el.description }</Option>);
       });
       setItemCategoriesOpt(temp);
@@ -228,10 +188,7 @@ const FormPage = (props) => {
         setSubCategoriesData(res);
         let temp = [];
         res.forEach(el => {
-          temp.push({
-            value: el.subDescription,
-            // code: el.code
-          });
+          temp.push(<Option key={ el.subDescription } value={ el.subDescription } >{ el.subDescription }</Option>);
         });
         setSubCategoriesOpt(temp);
       });
@@ -257,10 +214,6 @@ const FormPage = (props) => {
       setMslData(res);
       let temp = [];
       res.forEach(el => {
-        /*temp.push({
-          value: el.subtypeDesc,
-          // code: el.code
-        });*/
         temp.push(<Option key={ el.subtypeDesc } value={ el.subtypeDesc } >{ el.subtypeDesc }</Option>);
       });
       setMslOpt(temp);
@@ -274,10 +227,6 @@ const FormPage = (props) => {
       setSourcesData(res);
       let temp = [];
       res.forEach(el => {
-        /*temp.push({
-          value: el.codeDesc,
-          // code: el.code
-        });*/
         temp.push(<Option key={ el.codeDesc } value={ el.codeDesc } >{ el.codeDesc }</Option>);
       });
       setSourcesOpt(temp);
@@ -291,10 +240,6 @@ const FormPage = (props) => {
       setUomData(res);
       let temp = [];
       res.forEach(el => {
-        /*temp.push({
-          value: el.codeDesc,
-          // code: el.code
-        });*/
         temp.push(<Option key={ el.codeDesc } value={ el.codeDesc } >{ el.codeDesc }</Option>);
       });
       setUomOpt(temp);
@@ -305,8 +250,6 @@ const FormPage = (props) => {
     if (!data) {
       setCategoryCode('');
       setCategoryName('');
-      setCategorySubCode('');
-      setCategorySubCodeName('');
     } else {
       itemCategoriesData.forEach(el => {
         if (el.description === data) {
@@ -315,15 +258,23 @@ const FormPage = (props) => {
         }
       });
     }
+    form.setFieldsValue({
+      catSubCode: null
+    });
   };
 
   const onSelectSubCategoryCode = (data) => {
-    subCategoriesData.forEach(el => {
-      if (el.subDescription === data) {
-        setCategorySubCode(el.categorySubCode);
-        setCategorySubCodeName(el.subDescription);
-      }
-    });
+    if (!data) {
+      setCategorySubCode('');
+      setCategorySubCodeName('');
+    } else {
+      subCategoriesData.forEach(el => {
+        if (el.subDescription === data) {
+          setCategorySubCode(el.categorySubCode);
+          setCategorySubCodeName(el.subDescription);
+        }
+      });
+    }
   };
 
   const onSelectSource = (data) => {
@@ -352,15 +303,6 @@ const FormPage = (props) => {
       }
     });
   };
-
-  useEffect(() => {
-    console.log('balbfQty :>> ', balbfQty);
-  }, [balbfQty]);
-
-  useEffect(() => {
-    console.log('reorder :>> ', reorder);
-  }, [reorder]);
-
 
   const submit = async () => {
     try {
@@ -402,57 +344,26 @@ const FormPage = (props) => {
         uom,
         // version: parseInt(version),
       };
-      // let obj = {
-      //   balbfQty: 0,
-      //   categoryCode: "string",
-      //   categorySubCode: "string",
-      //   description: "string",
-      //   dimension: "string",
-      //   issueNo: "string",
-      //   itemNo: "string",
-      //   leadtime: 0,
-      //   loc: "string",
-      //   manufacturer: "string",
-      //   mslCode: "string",
-      //   obsoleteCode: "OBSOLETE",
-      //   obsoleteItem: "string",
-      //   openClose: "CLOSED",
-      //   orderQty: 0,
-      //   partNo: "string",
-      //   prodnResv: 0,
-      //   productGroup: "string",
-      //   qoh: 0,
-      //   qryObsItem: "string",
-      //   refUrl: "string",
-      //   remarks: "string",
-      //   reorder: 0,
-      //   requestor: "string",
-      //   rev: "string",
-      //   rohsStatus: true,
-      //   source: "string",
-      //   status: "ACTIVE",
-      //   stdMaterial: 0,
-      //   storageShelf: "string",
-      //   uom: "string",
-      //   version: 0
-      // };
-      console.log('obj :>> ', obj);
       if (isEdit) {
         obj.version = parseInt(version);
         const hasil = await Item.edit(id, obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message);
+          message.error(res.message ? res.message : env.internalError);
+        } else {
+          message.success(`Record successfully ${ isEdit ? 'updated' : 'added' }`);
+          history.push('/items');
         }
       } else {
         const hasil = await Item.create(obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message);
+          message.error(res.message ? res.message : env.internalError);
+        } else {
+          message.success(`Record successfully ${ isEdit ? 'updated' : 'added' }`);
+          history.push('/items');
         }
       }
-      message.success(`Record successfully ${ isEdit ? 'updated' : 'added' }`);
-      history.push('/items');
     } catch (errorInfo) {
       const temp = [];
       errorInfo.errorFields.map(e => {
@@ -489,6 +400,11 @@ const FormPage = (props) => {
     }
   }, [errorFields, itemNoRef, locationRef, catCodeRef, sourceRef, catSubCodeRef]);
 
+  Number.prototype.countDecimals = function () {
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    return this.toString().split(".")[1].length || 0;
+  };
+
   return (
     <StyledDiv>
       <div className="header">
@@ -510,7 +426,6 @@ const FormPage = (props) => {
                     name="Item No"
                     label="Item No"
                     initialValue={ itemNo }
-                    style={ { textTransform: 'uppercase' } }
                     rules={ [
                       {
                         required: true,
@@ -643,19 +558,21 @@ const FormPage = (props) => {
                       },
                     ] }
                   >
-                    <Input hidden />
-                    <AutoComplete
-                      ref={ catSubCodeRef }
+                    <Select
+                      showSearch
+                      allowClear
                       disabled={ isDisabled || !categoryCode }
+                      ref={ catSubCodeRef }
+                      className='normal'
                       defaultValue={ categorySubCodeName }
                       value={ categorySubCodeName }
-                      options={ subCategoriesOpt }
-                      onSelect={ onSelectSubCategoryCode }
-                      placeholder={ "Type sub category here..." }
-                      filterOption={ (inputValue, option) =>
-                        option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                      onChange={ (value) => onSelectSubCategoryCode(value) }
+                      filterOption={ (input, option) =>
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                       }
-                    />
+                    >
+                      { subCategoriesOpt }
+                    </Select>
                   </Form.Item>
                 </div>
                 <div className="row">

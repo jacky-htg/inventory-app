@@ -134,8 +134,8 @@ function PageList(props) {
         result.data.then(res => {
           message.error(res.message ? res.message : env.internalError);
         });
-
       }
+      message.success('Record successfully deleted');
       setLoading(true);
       getData(filterSearch);
     });
