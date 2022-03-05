@@ -119,14 +119,19 @@ function PageList(props) {
         temp.push(e);
       }
     });
-    setFilterSearch({
-      "filters": temp,
-      "sorts": [
+
+    let sorts = [];
+    if (sorter && sorter.field) {
+      sorts =  [
         {
             "field": sorter.field,
             "sort": sorter.order === "descend" ? "DESC" : "ASC"
         }
-      ],
+      ]
+    }
+    setFilterSearch({
+      "filters": temp,
+      "sorts":sorts,
       "limit": p.pageSize,
       "page": (p.current - 1)
     });
