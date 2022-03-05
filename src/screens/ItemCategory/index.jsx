@@ -15,12 +15,12 @@ function Page() {
 
   const setupFields = () => {
     setFields([
-      {label: 'Category Code', field: 'categoryCode', default: true, filter: true}, 
+      {label: 'Category Code', field: 'categoryCode', default: true, filter: true, sorter:true}, 
       {label: 'Description', field: 'description', default: true}, 
-      {label: 'Category Sub Code', field: 'categorySubCode', default: true, filter: true}, 
+      {label: 'Category Sub Code', field: 'categorySubCode', default: true, filter: true, sorter:true}, 
       {label: 'Sub Description', field: 'subDescription', default: true}, 
-      {label: 'Group', field: 'categoryGroup', default: true, filter: true, lookup: categoryGroups},
-      {label: 'MRP Status', field: 'mrpStatus', filter: true, lookup: mrpStatuses},
+      {label: 'Group', field: 'categoryGroup', default: true, filter: true, lookup: categoryGroups, sorter:true},
+      {label: 'MRP Status', field: 'mrpStatus', filter: true, lookup: mrpStatuses, sorter:true},
       {label: 'MRP Status Description', field: 'mrpStatusDesc', default: true},
       {label: 'Design Qty A', field: 'designQtya', align:'right'},
       {label: 'Design Qty B', field: 'designQtyb', align:'right'},

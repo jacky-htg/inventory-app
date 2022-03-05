@@ -59,7 +59,7 @@ function PageList(props) {
             if (props.fields[i].align) {
               alignValue = props.fields[i].align;
             }
-            temp.push(<Column ellipsis title={ props.fields[i].label } dataIndex={ e } key={ e } align={ alignValue } />);
+            temp.push(<Column ellipsis title={ props.fields[i].label } dataIndex={ e } key={ e } align={ alignValue } sorter={props.fields[i].sorter} />);
             break;
           }
         }
@@ -105,23 +105,28 @@ function PageList(props) {
     });
   };
 
-  const clickFilter = p => {
+  const clickFilter = (p, filter, sorter) => {
     if (!p) {
       p = {
         "limit": 10,
         "page": 0
       };
     }
-
+    
     const temp = [];
     filters.map(e => {
       if (e && e.field) {
         temp.push(e);
       }
     });
-
     setFilterSearch({
       "filters": temp,
+      "sorts": [
+        {
+            "field": sorter.field,
+            "sort": sorter.order === "descend" ? "DESC" : "ASC"
+        }
+      ],
       "limit": p.pageSize,
       "page": (p.current - 1)
     });
@@ -189,13 +194,11 @@ function PageList(props) {
   };
 
   const removeFilter = (n) => {
-    console.log('nnn', n, filters);
     if (n > -1 && n < filters.length) {
       filters.splice(n, 1);
     }
     setFilters(filters);
-    console.log('nano', n, filters);
-
+    
     const [temp, counter] = renderFilter();
     if (n < filter.length) {
       temp.push(fieldFilter(counter, true));
@@ -269,7 +272,6 @@ function PageList(props) {
         <Button onClick={ clickFilter } size='large'>Filter</Button>
         <Divider type="vertical" />
         <Button onClick={ addFilter } size='large'>Add Filter</Button>
-        {/* <Button className='reset' onClick={ resetFilter } size='large'>Reset</Button> */ }
       </Form.Item>
     </Form>
   );
@@ -352,7 +354,7 @@ function PageList(props) {
           if (props.fields[i].align) {
             alignValue = props.fields[i].align;
           }
-          temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } align={ alignValue } />);
+          temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } align={ alignValue }  sorter={props.fields[i].sorter} />);
           break;
         }
       }

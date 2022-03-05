@@ -7,11 +7,11 @@ function Page() {
 
   const setupFields = () => {
     setFields([
-      { label: 'PO No', field: 'poNo', default: true, filter: true },
-      { label: 'DO No', field: 'doNo', default: true, filter: true },
-      { label: 'GRN No', field: 'grnNo', default: true, filter: true },
-      { label: 'PRJ', field: 'prj', default: true, filter: true },
-      { label: 'MSR', field: 'msr', default: true, filter: true },
+      { label: 'PO No', field: 'poNo', default: true, filter: true, sorter:true },
+      { label: 'DO No', field: 'doNo', default: true, filter: true, sorter:true },
+      { label: 'GRN No', field: 'grnNo', default: true, filter: true, sorter:true },
+      { label: 'PRJ', field: 'prj', default: true, filter: true, sorter:true },
+      { label: 'MSR', field: 'msr', default: true, filter: true, sorter:true },
       { label: 'Supplier Code', field: 'supplierCode' },
       { label: 'Currency Code', field: 'currencyCode' },
       { label: 'CurrencyRate', field: 'currencyRate' },

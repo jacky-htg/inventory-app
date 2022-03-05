@@ -11,12 +11,12 @@ function Page() {
 
   const setupFields = () => {
     setFields([
-      {label: 'Loc', field: 'loc', default: true, filter: true}, 
-      {label: 'Description', field: 'description', default: true, filter: true}, 
+      {label: 'Loc', field: 'loc', default: true, filter: true, sorter:true}, 
+      {label: 'Description', field: 'description', default: true, filter: true, sorter:true}, 
       {label: 'Address', field: 'address1', default: true, filter: true}, 
-      {label: 'Country Code', field: 'countryCode', default: true, filter: true, lookup: countries}, 
+      {label: 'Country Code', field: 'countryCode', default: true, filter: true, lookup: countries, sorter:true}, 
       {label: 'Country Name', field: 'countryName', default: true}, 
-      {label: 'Person In Charge', field: 'personInCharge', default: true, filter: true}
+      {label: 'Person In Charge', field: 'personInCharge', default: true, filter: true, sorter:true}
     ]);
   };
 

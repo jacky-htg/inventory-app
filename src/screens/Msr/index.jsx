@@ -7,9 +7,9 @@ function Page() {
 
   const setupFields = () => {
     setFields([
-      { label: 'Documen No', field: 'docmNo', default: true, filter: true },
-      { label: 'Currency Code', field: 'currencyCode', default: true, filter: true },
-      { label: 'Currency Rate', field: 'currencyRate', default: true, filter: true },
+      { label: 'Documen No', field: 'docmNo', default: true, filter: true, sorter:true },
+      { label: 'Currency Code', field: 'currencyCode', default: true, filter: true, sorter:true },
+      { label: 'Currency Rate', field: 'currencyRate', default: true, filter: true, sorter:true },
     ]);
   };
 

@@ -7,11 +7,11 @@ function Page() {
 
   const setupFields = () => {
     setFields([
-      {label: 'From', field: 'uomFrom', default: true, filter: true}, 
-      {label: 'From UOM Description', field: 'fromDescription', default: true, filter: true}, 
-      {label: 'To', field: 'uomTo', default: true, filter: true}, 
-      {label: 'To UOM Description', field: 'toDescription', default: true, filter: true}, 
-      {label: 'Convertion Factor', field: 'uomFactor', default: true, filter: true, align:'right'}
+      {label: 'From', field: 'uomFrom', default: true, filter: true, sorter:true}, 
+      {label: 'From UOM Description', field: 'fromDescription', default: true, filter: true, sorter:true}, 
+      {label: 'To', field: 'uomTo', default: true, filter: true, sorter:true}, 
+      {label: 'To UOM Description', field: 'toDescription', default: true, filter: true, sorter:true}, 
+      {label: 'Convertion Factor', field: 'uomFactor', default: true, filter: true, align:'right', sorter:true}
     ]);
   };
 
