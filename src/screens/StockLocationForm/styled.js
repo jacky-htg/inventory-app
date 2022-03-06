@@ -5,8 +5,8 @@ import { Images } from "../../constant";
 
 const StyledDiv = styled.div`
   .header {
-    position: sticky;
-    top: 69px;
+    /* position: sticky;
+    top: 69px; */
     padding-top: 20px;
     margin-bottom: 40px;
     display: flex;
@@ -35,6 +35,8 @@ const StyledDiv = styled.div`
     display: flex;
     justify-content: center;
     width: 100%;
+    height: calc(100vh - 220px);
+    overflow-y: scroll;
 
     .loading {
       height: 100%;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Form, Input, InputNumber, Button, Select, Checkbox, AutoComplete, message } from 'antd';
+import { Form, Input, InputNumber, Button, Select, Checkbox, AutoComplete, message, notification } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Lov, Location, Item } from '../../services';
 
@@ -74,6 +74,7 @@ const FormPage = (props) => {
   const [stdMaterial, setStdMaterial] = useState(0);
   const [storageShelf, setStorageShelf] = useState('');
   const [uom, setUom] = useState('');
+  const [replace, setReplace] = useState('');
   const [uomName, setUomName] = useState();
   const [version, setVersion] = useState(0);
 
@@ -146,7 +147,7 @@ const FormPage = (props) => {
         result.stdMaterial && setStdMaterial(result.stdMaterial);
         result.uom && setUom(result.uom);
         if (result.uom) {
-          uomData.forEach( el => {
+          uomData.forEach(el => {
             if (el.codeValue === result.uom) {
               setUomName(el.codeDesc);
             }
@@ -355,24 +356,52 @@ const FormPage = (props) => {
         uom,
         // version: parseInt(version),
       };
-      
+
       if (isEdit) {
         obj.version = parseInt(version);
         const hasil = await Item.edit(id, obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message ? res.message : env.internalError);
+          // message.error(res.message ? res.message : env.internalError);
+          notification.error({
+            message: res.message ? res.message : env.internalError,
+          });
         } else {
-          message.success(`Record successfully ${ isEdit ? 'updated' : 'added' }`);
+          if (hasil.message) {
+            notification.info({
+              message: `Record successfully ${ isEdit ? 'updated' : 'added' }`,
+              description: hasil.message
+            });
+          } else {
+            // message.success(`Record successfully ${ isEdit ? 'updated' : 'added' }`);
+            notification.success({
+              message: `Record successfully ${ isEdit ? 'updated' : 'added' }`,
+            });
+          }
           history.push('/items');
         }
       } else {
         const hasil = await Item.create(obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message ? res.message : env.internalError);
+          // message.error(res.message ? res.message : env.internalError);
+          notification.error({
+            message: res.message ? res.message : env.internalError,
+          });
         } else {
-          message.success(`Record successfully ${ isEdit ? 'updated' : 'added' }`);
+          console.log('hasil :>> ', hasil);
+          // console.log('res :>> ', res);
+          if (hasil.message) {
+            notification.info({
+              message: `Record successfully ${ isEdit ? 'updated' : 'added' }`,
+              description: hasil.message
+            });
+          } else {
+            // message.success(`Record successfully ${ isEdit ? 'updated' : 'added' }`);
+            notification.success({
+              message: `Record successfully ${ isEdit ? 'updated' : 'added' }`,
+            });
+          }
           history.push('/items');
         }
       }
@@ -749,7 +778,15 @@ const FormPage = (props) => {
                   //   },
                   // ] }
                   >
-                    <Input className='normal' disabled={ isDisabled } />
+                    <Input
+                      className='normal'
+                      maxLength={ 15 }
+                      style={ { textTransform: 'uppercase' } }
+                      disabled={ isDisabled }
+                      defaultValue={ obsoleteItem }
+                      value={ obsoleteItem }
+                      onChange={ e => setObsoleteItem(e.target.value.toUpperCase()) }
+                    />
                   </Form.Item>
                 </div>
 
@@ -784,7 +821,7 @@ const FormPage = (props) => {
                       className='normal' disabled={ isDisabled }
                       defaultValue={ obsoleteCode }
                       value={ obsoleteCode }
-                      onChange={ value => {setObsoleteCode(value); setObsoleteItem(value);} }
+                      onChange={ value => { setObsoleteCode(value); setObsoleteItem(value); } }
                       allowClear
                     >
                       <Option value="OBSOLETE">Obsolete</Option>
@@ -944,7 +981,7 @@ const FormPage = (props) => {
                   <Form.Item
                     name="QtyOnHand"
                     label="QTY On Hand +"
-                    initialValue={qtyOnHand}
+                    initialValue={ qtyOnHand }
                   >
                     <InputNumber
                       step="0.0001"

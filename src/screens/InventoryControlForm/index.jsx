@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Form, InputNumber, Button, message } from 'antd';
+import { Form, InputNumber, Button, message, notification } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import env from '../../env';
 import { InventoryControl } from '../../services';
@@ -64,18 +64,30 @@ const FormPage = (props) => {
         const hasil = await InventoryControl.edit(obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message ? res.message : env.internalError);
+          notification.error({
+            message: res.message ? res.message : env.internalError,
+          });
+          // message.error(res.message ? res.message : env.internalError);
         } else {
-          message.success('Record successfully updated');
+          notification.success({
+            message: 'Record successfully updated',
+          });
+          // message.success('Record successfully updated');
           history.push('/inventory-controls');
         }
       } else {
         const hasil = await InventoryControl.create(obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message ? res.message : env.internalError);
+          notification.error({
+            message: res.message ? res.message : env.internalError,
+          });
+          // message.error(res.message ? res.message : env.internalError);
         } else {
-          message.success('Record successfully added');
+          notification.success({
+            message: 'Record successfully added',
+          });
+          // message.success('Record successfully added');
           history.push('/inventory-controls');
         }
       }

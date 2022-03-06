@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Divider } from 'antd';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Divider, notification } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 
 import { Country, Location } from '../../services';
@@ -159,18 +159,30 @@ const StockLocationForm = (props) => {
         const hasil = await Location.edit(id, obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message ? res.message : env.internalError);
+          notification.error({
+            message: res.message ? res.message : env.internalError,
+          });
+          // message.error(res.message ? res.message : env.internalError);
         } else {
-          message.success('Record successfully updated');
+          notification.success({
+            message: `Record successfully ${ isEdit ? 'updated' : 'added' }`,
+          });
+          // message.success('Record successfully updated');
           history.push('/stock-locations');
         }
       } else {
         const hasil = await Location.create(obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message ? res.message : env.internalError);
+          notification.error({
+            message: res.message ? res.message : env.internalError,
+          });
+          // message.error(res.message ? res.message : env.internalError);
         } else {
-          message.success('Record successfully added');
+          notification.success({
+            message: `Record successfully ${ isEdit ? 'updated' : 'added' }`,
+          });
+          // message.success('Record successfully added');
           history.push('/stock-locations');
         }
       }

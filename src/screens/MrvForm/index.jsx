@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, message, Divider } from 'antd';
+import { Form, Input, Button, Select, Checkbox, message, Divider, notification } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Location, Mrv } from '../../services';
 import { MdAddCircle } from 'react-icons/md';
@@ -84,7 +84,10 @@ const PageForm = (props) => {
       const siv = await Mrv.populateBySivNo(data.target.value);
       if (siv.ok !== undefined && !siv.ok) {
         const res = await siv.data;
-        message.error(res.message ? res.message : env.internalError);
+        notification.error({
+          message: res.message ? res.message : env.internalError,
+        });
+        // message.error(res.message ? res.message : env.internalError);
       } else {
         console.log('getSupplierByGrnNo result :>> ', grn);
         setDetails(siv.mrvDetails);
@@ -129,10 +132,16 @@ const PageForm = (props) => {
       console.log('hasil :>> ', hasil);
       if (hasil.ok !== undefined && !hasil.ok) {
         const res = await hasil.data;
-        message.error(res.message ? res.message : env.internalError);
+        notification.error({
+          message: res.message ? res.message : env.internalError,
+        });
+        // message.error(res.message ? res.message : env.internalError);
       } else {
+        notification.success({
+          message: 'Record successfully added',
+        });
+        // message.success("Record successfully added");
         history.push('/msr');
-        message.success("Record successfully added");
       }
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
@@ -171,7 +180,7 @@ const PageForm = (props) => {
                     name="mrvNo"
                     label="MRV No"
                   >
-                    <Input hidden/>
+                    <Input hidden />
                     <Input
                       className='normal' disabled={ isDisabled }
                       defaultValue={ state.mrvNo }
@@ -196,7 +205,7 @@ const PageForm = (props) => {
                     name="entryUser"
                     label="Entry User"
                   >
-                    <Input hidden/>
+                    <Input hidden />
                     <Input
                       className='normal' disabled={ isDisabled }
                       defaultValue={ state.entryUser }
@@ -215,7 +224,7 @@ const PageForm = (props) => {
                       className='normal' disabled={ isDisabled }
                       defaultValue={ state.sivNo }
                       value={ state.sivNo }
-                      onBlur={populateBySiv}
+                      onBlur={ populateBySiv }
                     />
                   </Form.Item>
 
@@ -298,13 +307,13 @@ const PageForm = (props) => {
                                       name="recdQty"
                                       label="Recd Qty"
                                     >
-                                      <Input type='number' className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) }  />
+                                      <Input type='number' className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } />
                                     </Form.Item>
                                   }
                                 </div>
 
                                 <div className="dual">
-                                  
+
                                 </div>
                               </div>
 

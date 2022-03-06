@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
-import { message } from 'antd';
+import { notification } from 'antd';
 import 'antd/dist/antd.css';
 // import { PersistGate } from 'redux-persist/integration/react';
 
@@ -12,10 +12,16 @@ import Router from './router';
 const App = () => {
 
   useEffect(() => {
-    message.config({
+    // message.config({
+    //   duration: 20,
+    //   rtl: false,
+    //   maxCount: 1
+    // });
+
+    notification.config({
+      placement: 'topRight',
       duration: 20,
       rtl: false,
-      maxCount: 1
     });
 
     $('body').on('keydown', 'input, select', function (e) {

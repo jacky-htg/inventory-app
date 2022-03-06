@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, message, Divider } from 'antd';
+import { Form, Input, Button, Select, Checkbox, message, Divider, notification } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Location, Msr, Siv } from '../../services';
 import { MdAddCircle } from 'react-icons/md';
@@ -128,10 +128,17 @@ const PageForm = (props) => {
       const hasil = await Siv.create(obj);
       if (hasil.ok !== undefined && !hasil.ok) {
         const res = await hasil.data;
-        message.error(res.message);
+        // message.error(res.message);
+        notification.error({
+          message: res.message ? res.message : env.internalError,
+        });
+      } else {
+        notification.success({
+          message: 'Record successfully added',
+        });
+        history.push('/siv');
       }
 
-      history.push('/siv');
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }

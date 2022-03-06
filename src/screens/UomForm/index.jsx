@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Form, Input, InputNumber, Button, message } from 'antd';
+import { Form, Input, InputNumber, Button, message, notification } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Uom } from '../../services';
 import env from '../../env';
@@ -76,9 +76,15 @@ const FormPage = (props) => {
         const hasil = await Uom.edit(id, obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          message.error(res.message ? res.message : env.internalError);
+          notification.error({
+            message: res.message ? res.message : env.internalError,
+          });
+          // message.error(res.message ? res.message : env.internalError);
         } else {
-          message.success('Record successfully added');
+          notification.success({
+            message: `Record successfully ${ isEdit ? 'updated' : 'added' }`,
+          });
+          // message.success('Record successfully added');
           history.push('/uoms');
         }
       } else {
@@ -86,9 +92,15 @@ const FormPage = (props) => {
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
           console.log('eeeeeeeeeeeeeeeee create', res);
-          message.error(res.message ? res.message : env.internalError);
+          notification.error({
+            message: res.message ? res.message : env.internalError,
+          });
+          // message.error(res.message ? res.message : env.internalError);
         } else {
-          message.success('Record successfully updated');
+          notification.success({
+            message: `Record successfully ${ isEdit ? 'updated' : 'added' }`,
+          });
+          // message.success('Record successfully updated');
           history.push('/uoms');
         }
       }

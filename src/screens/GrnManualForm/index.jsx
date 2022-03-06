@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Collapse, Menu, Dropdown } from 'antd';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Collapse, Menu, Dropdown, notification } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Lov, Location, Item } from '../../services';
@@ -410,10 +410,16 @@ const GrnManualForm = (props) => {
       const hasil = await Grn.create(obj);
       if (hasil.ok !== undefined && !hasil.ok) {
         const res = await hasil.data;
-        message.error(res.message);
+        // message.error(res.message);
+        notification.error({
+          message: res.message ? res.message : env.internalError,
+        });
+      } else {
+        notification.success({
+          message: 'Record successfully added',
+        });
+        history.push('/grn-manuals');
       }
-
-      history.push('/grn-manuals');
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }

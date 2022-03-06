@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, message, Divider } from 'antd';
+import { Form, Input, Button, Select, Checkbox, message, Divider, notification } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Location, Msr } from '../../services';
 import { MdAddCircle } from 'react-icons/md';
@@ -94,7 +94,10 @@ const PageForm = (props) => {
       const grn = await Msr.getSupplierByGrnNo(data);
       if (grn.ok !== undefined && !grn.ok) {
         const res = await grn.data;
-        message.error(res.message);
+        notification.error({
+          message: res.message ? res.message : env.internalError,
+        });
+        // message.error(res.message);
       } else {
         console.log('getSupplierByGrnNo result :>> ', grn);
         setState({
@@ -169,7 +172,10 @@ const PageForm = (props) => {
       console.log('hasil :>> ', hasil);
       if (hasil.ok !== undefined && !hasil.ok) {
         const res = await hasil.data;
-        message.error(res.message);
+        // message.error(res.message);
+        notification.error({
+          message: res.message ? res.message : env.internalError,
+        });
       }
       history.push('/msr');
     } catch (errorInfo) {

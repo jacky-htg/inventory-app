@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Select, Form, Input, message, Popconfirm, Modal, Divider, Checkbox } from 'antd';
+import { Table, Button, Space, Select, Form, Input, message, Popconfirm, Modal, Divider, Checkbox, notification } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { StyledDiv } from './styled';
 import env from '../../env';
@@ -59,7 +59,7 @@ function PageList(props) {
             if (props.fields[i].align) {
               alignValue = props.fields[i].align;
             }
-            temp.push(<Column ellipsis title={ props.fields[i].label } dataIndex={ e } key={ e } align={ alignValue } sorter={props.fields[i].sorter} />);
+            temp.push(<Column ellipsis title={ props.fields[i].label } dataIndex={ e } key={ e } align={ alignValue } sorter={ props.fields[i].sorter } />);
             break;
           }
         }
@@ -112,7 +112,7 @@ function PageList(props) {
         "page": 0
       };
     }
-    
+
     const temp = [];
     filters.map(e => {
       if (e && e.field) {
@@ -122,16 +122,16 @@ function PageList(props) {
 
     let sorts = [];
     if (sorter && sorter.field) {
-      sorts =  [
+      sorts = [
         {
-            "field": sorter.field,
-            "sort": sorter.order === "descend" ? "DESC" : "ASC"
+          "field": sorter.field,
+          "sort": sorter.order === "descend" ? "DESC" : "ASC"
         }
-      ]
+      ];
     }
     setFilterSearch({
       "filters": temp,
-      "sorts":sorts,
+      "sorts": sorts,
       "limit": p.pageSize,
       "page": (p.current - 1)
     });
@@ -142,10 +142,16 @@ function PageList(props) {
     data.then(result => {
       if (result && !result.ok) {
         result.data.then(res => {
-          message.error(res.message ? res.message : env.internalError);
+          // message.error(res.message ? res.message : env.internalError);
+          notification.error({
+            message: res.message ? res.message : env.internalError,
+          });
         });
       }
-      message.success('Record successfully deleted');
+      // message.success('Record successfully deleted');
+      notification.success({
+        message: 'Record successfully deleted',
+      });
       setLoading(true);
       getData(filterSearch);
     });
@@ -203,7 +209,7 @@ function PageList(props) {
       filters.splice(n, 1);
     }
     setFilters(filters);
-    
+
     const [temp, counter] = renderFilter();
     if (n < filter.length) {
       temp.push(fieldFilter(counter, true));
@@ -359,7 +365,7 @@ function PageList(props) {
           if (props.fields[i].align) {
             alignValue = props.fields[i].align;
           }
-          temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } align={ alignValue }  sorter={props.fields[i].sorter} />);
+          temp.push(<Column title={ props.fields[i].label } dataIndex={ e } key={ e } align={ alignValue } sorter={ props.fields[i].sorter } />);
           break;
         }
       }

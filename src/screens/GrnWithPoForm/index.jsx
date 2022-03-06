@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Menu, Dropdown } from 'antd';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Menu, Dropdown, notification } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { MdAddCircle } from 'react-icons/md';
 import { TiDelete } from 'react-icons/ti';
@@ -384,8 +384,14 @@ const GrnWithPoForm = (props) => {
       console.log('hasil :>> ', hasil);
       if (hasil.ok !== undefined && !hasil.ok) {
         const res = await hasil.data;
-        message.error(res.message ? res.message : env.internalError);
+        notification.error({
+          message: res.message ? res.message : env.internalError,
+        });
+        // message.error(res.message ? res.message : env.internalError);
       } else {
+        notification.success({
+          message: 'Record successfully added',
+        });
         history.push('/grn-with-pos');
       }
 
