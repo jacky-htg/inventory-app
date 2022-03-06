@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Msr } from '../../services';
+import { Mrv } from '../../services';
 import PageList from '../../components/PageList';
 
 function Page() {
@@ -7,9 +7,7 @@ function Page() {
 
   const setupFields = () => {
     setFields([
-      { label: 'Documen No', field: 'docmNo', default: true, filter: true, sorter:true },
-      { label: 'Currency Code', field: 'currencyCode', default: true, filter: true, sorter:true },
-      { label: 'Currency Rate', field: 'currencyRate', default: true, filter: true, sorter:true },
+      { label: 'MRV No', field: 'mrvNo', default: true, filter: true, sorter:true }
     ]);
   };
 
@@ -21,9 +19,9 @@ function Page() {
     <PageList
       filter={ true }
       fields={ fields }
-      title="MSR Entry"
-      url="msr"
-      data={ Msr }
+      title="MRV Entry"
+      url="mrv"
+      data={ Mrv }
       id={ ['id'] }
       actions={ ['view'] } />
   );

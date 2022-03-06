@@ -33,7 +33,9 @@ import {
   SivManual,
   SivManualForm,
   Siv,
-  SivForm
+  SivForm,
+  Mrv,
+  MrvForm
 } from '../screens';
 import { Sidebar } from '../components';
 import { Colors, Images } from '../constant';
@@ -170,7 +172,21 @@ const publicRoutes = [
   {
     path: '/siv/:id',
     component: SivForm
-  }
+  },
+  {
+    path: '/mrv',
+    component: Mrv
+  },
+  {
+    path: '/mrv/create',
+    component: MrvForm
+  },
+  {
+    path: '/mrv/:id',
+    component: MrvForm
+  },
+  
+  
 
 ];
 
