@@ -218,7 +218,8 @@ function Sidebar() {
       history.location.pathname.includes('/inventory-controls') ||
       history.location.pathname.includes('/msr') ||
       history.location.pathname.includes('/siv-manuals') ||
-      history.location.pathname.includes('/siv')
+      history.location.pathname.includes('/siv') ||
+      history.location.pathname.includes('/mrv')
     ) {
       setSelectedMenu(itemMenu);
     }
