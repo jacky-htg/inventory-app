@@ -494,7 +494,7 @@ const FormPage = (props) => {
                         name="rohs"
                         label='RoHS Status'
                       >
-                        <Input className='normal' disabled={ isDisabled } defaultValue={ rohsStatus ? 'True' : 'False' } />
+                        <Input className='normal' disabled={ isDisabled } defaultValue={ rohsStatus ? 'Yes' : 'No' } />
                       </Form.Item>
                       :
                       <Form.Item
