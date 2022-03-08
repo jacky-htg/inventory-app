@@ -144,9 +144,9 @@ function GrnDetail(props) {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(value).countDecimals() > 4) {
+                          if (Number(el.recdPrice).countDecimals() > 4) {
                             return Promise.reject(new Error('Recd Price decimal length must be less than 4 digits '));
-                          } else if (Number(value) < 0) {
+                          } else if (Number(el.recdPrice) < 0) {
                             return Promise.reject(new Error('Recd Price cannot be negative'));
                           }
                           return Promise.resolve();
@@ -187,9 +187,9 @@ function GrnDetail(props) {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(value).countDecimals() > 4) {
+                          if (Number(el.recdQty).countDecimals() > 4) {
                             return Promise.reject(new Error('Recd Qty decimal length must be less than 4 digits '));
-                          } else if (Number(value) < 0) {
+                          } else if (Number(el.recdQty) < 0) {
                             return Promise.reject(new Error('Recd Qty cannot be negative'));
                           }
                           return Promise.resolve();
@@ -293,11 +293,11 @@ function GrnDetail(props) {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(value).countDecimals() > 4) {
+                          if (Number(el.labelQty).countDecimals() > 4) {
                             return Promise.reject(new Error('QTY/Label decimal length must be less than 4 digits '));
-                          } else if (Number(value) < 0) {
+                          } else if (Number(el.labelQty) < 0) {
                             return Promise.reject(new Error('QTY/Label cannot be negative'));
-                          } else if (value > getFieldValue("GRN Qty")) {
+                          } else if (el.labelQty > getFieldValue("GRN Qty")) {
                             return Promise.reject(
                               new Error("QTY/Label can't be more than Recd QTY")
                             );

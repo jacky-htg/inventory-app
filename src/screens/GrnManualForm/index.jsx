@@ -28,7 +28,11 @@ const GrnManualForm = (props) => {
 
   const [form] = Form.useForm();
   const [details, setDetails] = useState([
-    {}
+    {
+      labelQty: 0.0000,
+      recdPrice: 0.0000,
+      recdQty: 0.0000
+    }
   ]);
   const [locData, setLocData] = useState([]);
   const [locOpt, setLocOpt] = useState([]);
@@ -426,7 +430,13 @@ const GrnManualForm = (props) => {
   };
 
   const addNewDetail = () => {
-    let arr = [...details, {}];
+    let arr = [...details,
+    {
+      labelQty: 0.0000,
+      recdPrice: 0.0000,
+      recdQty: 0.0000
+    }
+    ];
     setDetails(arr);
   };
 
