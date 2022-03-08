@@ -5,8 +5,8 @@ import { Images } from "../../constant";
 
 const StyledDiv = styled.div`
   .header {
-    position: sticky;
-    top: 69px;
+    /* position: sticky;
+    top: 69px; */
     padding-top: 20px;
     margin-bottom: 40px;
     display: flex;
@@ -36,6 +36,9 @@ const StyledDiv = styled.div`
   }
 
   .formWrapper {
+    height: calc(100vh - 220px);
+    overflow-y: scroll;
+
     .loading {
       height: 100%;
       display: flex;
@@ -49,8 +52,8 @@ const StyledDiv = styled.div`
 
     .group {
       margin-bottom: 32px;
-      position: sticky;
-      top: 154px;
+      /* position: sticky;
+      top: 154px; */
       border-bottom: 1px dashed black;
       padding-bottom: 10px;
       background: white;
@@ -108,6 +111,7 @@ const StyledDiv = styled.div`
   .detail-wrapper {
     /* background: grey; */
     padding: 20px 0px;
+    min-height: 240px;
 
     .detail-card {
       position: relative;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   Form,
   Input,
+  InputNumber,
   Button,
   Select,
   Checkbox,
@@ -31,6 +32,11 @@ function GrnDetail(props) {
       console.log('value :>> ', value);
     }
       , 1000));
+  };
+
+  Number.prototype.countDecimals = function () {
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    return this.toString().split(".")[1].length || 0;
   };
 
   return (
@@ -138,13 +144,12 @@ function GrnDetail(props) {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (value > 0) {
-                            return Promise.resolve();
+                          if (Number(value).countDecimals() > 4) {
+                            return Promise.reject(new Error('Recd Price decimal length must be less than 4 digits '));
+                          } else if (Number(value) < 0) {
+                            return Promise.reject(new Error('Recd Price cannot be negative'));
                           }
-
-                          return Promise.reject(
-                            new Error("Price must be more than 0")
-                          );
+                          return Promise.resolve();
                         },
                       }),
                     ] }
@@ -153,12 +158,15 @@ function GrnDetail(props) {
                       id ?
                         <span>{ el.recdPrice ? el.recdPrice : '-' }</span>
                         :
-                        <Input
+                        <InputNumber
                           disabled={ id }
-                          type="number"
                           className="smallInput"
-                          defaultValue={ el.recdPrice }
-                          value={ el.recdPrice }
+                          min={ 0 }
+                          max={ 999991 }
+                          step="0.0001"
+                          stringMode
+                          defaultValue={ el.recdPrice || 0.0000 }
+                          value={ el.recdPrice || 0.0000 }
                           onChange={ (e) =>
                             changeDetail(idx, "recdPrice", parseFloat(e.target.value))
                           }
@@ -179,13 +187,12 @@ function GrnDetail(props) {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (value > 0) {
-                            return Promise.resolve();
+                          if (Number(value).countDecimals() > 4) {
+                            return Promise.reject(new Error('Recd Qty decimal length must be less than 4 digits '));
+                          } else if (Number(value) < 0) {
+                            return Promise.reject(new Error('Recd Qty cannot be negative'));
                           }
-
-                          return Promise.reject(
-                            new Error("QTY must be more than 0")
-                          );
+                          return Promise.resolve();
                         },
                       }),
                     ] }
@@ -194,12 +201,15 @@ function GrnDetail(props) {
                       id ?
                         <span>{ el.recdQty ? el.recdQty : '-' }</span>
                         :
-                        <Input
+                        <InputNumber
                           disabled={ id }
-                          type={ "number" }
                           className="smallInput"
-                          defaultValue={ el.recdQty }
-                          value={ el.recdQty }
+                          min={ 0 }
+                          max={ 999991 }
+                          step="0.0001"
+                          stringMode
+                          defaultValue={ el.recdQty || 0.0000 }
+                          value={ el.recdQty || 0.0000 }
                           onChange={ (e) =>
                             changeDetail(idx, "recdQty", parseFloat(e.target.value))
                           }
@@ -283,21 +293,16 @@ function GrnDetail(props) {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (value > 0 && value <= getFieldValue("Recd Qty")) {
-                            return Promise.resolve();
-                          }
-
-                          if (!value || value === 0) {
-                            return Promise.reject(
-                              new Error("QTY/Label must more than 0")
-                            );
-                          }
-
-                          if (value > getFieldValue("GRN Qty")) {
+                          if (Number(value).countDecimals() > 4) {
+                            return Promise.reject(new Error('QTY/Label decimal length must be less than 4 digits '));
+                          } else if (Number(value) < 0) {
+                            return Promise.reject(new Error('QTY/Label cannot be negative'));
+                          } else if (value > getFieldValue("GRN Qty")) {
                             return Promise.reject(
                               new Error("QTY/Label can't be more than Recd QTY")
                             );
                           }
+                          return Promise.resolve();
                         },
                       }),
                     ] }
@@ -307,12 +312,15 @@ function GrnDetail(props) {
                       id ?
                         <span>{ el.labelQty ? el.labelQty : '-' }</span>
                         :
-                        <Input
+                        <InputNumber
                           disabled={ id }
-                          type="number"
                           className="smallInput"
-                          defaultValue={ el.labelQty }
-                          value={ el.labelQty }
+                          min={ 0 }
+                          max={ 999991 }
+                          step="0.0001"
+                          stringMode
+                          defaultValue={ el.labelQty || 0.0000 }
+                          value={ el.labelQty || 0.0000 }
                           onChange={ (e) =>
                             changeDetail(idx, "labelQty", parseFloat(e.target.value))
                           }

@@ -656,8 +656,8 @@ const GrnManualForm = (props) => {
                         <Input hidden />
                         <Input
                           className='normal' disabled={ isDisabled }
-                          value={ currencyCode }
-                          defaultValue={ currencyCode }
+                          value={ entryUser }
+                          defaultValue={ entryUser }
                           readOnly
                         />
                       </Form.Item>

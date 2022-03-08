@@ -11,9 +11,9 @@ import { StyledDiv } from './styled';
 import env from '../../env';
 import { Images } from '../../constant';
 import { parse } from 'postcss';
-import TextArea from 'antd/lib/input/TextArea';
 
 const GrnWithPoForm = (props) => {
+  const { TextArea } = Input;
   const history = useHistory();
   const { id } = useParams();
   function useQuery() {
@@ -215,6 +215,7 @@ const GrnWithPoForm = (props) => {
         result.poNo && setPoNo(result.poNo);
         result.supplierCode && setSupplierCode(result.supplierCode);
         result.subType && setSubType(result.subType);
+        result.recdDate && setRecdDate(result.recdDate);
         let arr = [];
         result.grnDetails && result.grnDetails.length > 0 && result.grnDetails.forEach(el => {
           arr.push(el);
@@ -259,31 +260,8 @@ const GrnWithPoForm = (props) => {
     });
   }, []);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (poNo && !id) {
-      let data = Grn.headerByPono(poNo);
-      console.log('data :>> ', data);
-      data.then(result => {
-        console.log('result :>> ', result);
-        // if (result.status && result.status !== 200) {
-        //   message.error(result.error);
-        // }
-        result.grnNo && setGrnNo(result.grnNo);
-        result.supplierCode && setSupplierCode(result.supplierCode);
-        result.currencyCode && setCurrencyCode(result.currencyCode);
-        result.currencyRate && setCurrencyRate(result.currencyRate);
-        result.recdDate && setRecdDate(result.recdDate);
-        result.poRemarks && setPoRemarks(result.poRemarks);
-        result.orderNo && setOrderNo(result.orderNo);
-        result.buyer && setBuyer(result.buyer);
-      });
-
-      let detailPart = Grn.partsByPono(poNo);
-      detailPart.then(result => {
-        console.log('result part :>> ', result);
-        setParts(result);
-      });
-    } else if (!poNo && !id) {
       setGrnNo('');
       setSupplierCode('');
       setCurrencyCode('');
@@ -291,6 +269,59 @@ const GrnWithPoForm = (props) => {
       setRecdDate('');
       setPoRemarks('');
       setBuyer('');
+      setDetails([]);
+      setParts([]);
+      try {
+        const hasil = await Grn.headerByPono(poNo);
+        console.log('hasil :>> ', hasil);
+        if (hasil.ok !== undefined && !hasil.ok) {
+          const res = await hasil.data;
+          setParts([]);
+          setDetails([]);
+          notification.error({
+            message: res.message ? res.message : env.internalError,
+          });
+          // message.error(res.message ? res.message : env.internalError);
+        } else {
+          hasil.grnNo && setGrnNo(hasil.grnNo);
+          hasil.supplierCode && setSupplierCode(hasil.supplierCode);
+          hasil.currencyCode && setCurrencyCode(hasil.currencyCode);
+          hasil.currencyRate && setCurrencyRate(hasil.currencyRate);
+          hasil.recdDate && setRecdDate(hasil.recdDate);
+          hasil.poRemarks && setPoRemarks(hasil.poRemarks);
+          hasil.orderNo && setOrderNo(hasil.orderNo);
+          hasil.buyer && setBuyer(hasil.buyer);
+
+          try {
+            const hasil2 = await Grn.partsByPono(poNo);
+            if (hasil2.ok !== undefined && !hasil.ok) {
+              const res = await hasil2.data;
+              notification.error({
+                message: res.message ? res.message : env.internalError,
+              });
+              // message.error(res.message ? res.message : env.internalError);
+            } else {
+              console.log('hasil part :>> ', hasil2);
+              if (hasil2.ok === undefined) {
+                setParts(hasil2);
+              } else {
+                setParts([]);
+              }
+            }
+          } catch (errorInfo) {
+            throw errorInfo;
+          }
+        }
+      } catch (errorInfo) {
+        const temp = [];
+        if (errorInfo && errorInfo.errorFields) {
+          errorInfo.errorFields.map(e => {
+            temp.push(e.name[0]);
+          });
+        }
+        setErrorFields(temp);
+        console.log('Failed:', errorInfo, errorFields);
+      }
     }
   }, [poNo]);
 
@@ -298,41 +329,52 @@ const GrnWithPoForm = (props) => {
     console.log('grnNo', grnNo);
   }, [grnNo]);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (poNo && parts.length > 0) {
       console.log('masuk');
       console.log('poNo :>> ', poNo);
       console.log('parts :>> ', parts);
       const arr = [];
-      parts.map((el, i) => {
-        let data = Grn.detailByPartNo(poNo, el.partNo, el.poRecSeq);
-        data.then(result => {
+      parts.map(async (el, i) => {
+        console.log('el :>> ', el);
+        const hasil = await Grn.detailByPartNo(poNo, el.partNo, el.poRecSeq);
+        if (hasil.ok !== undefined && !hasil.ok) {
+          const res = await hasil.data;
+          notification.error({
+            message: res.message ? res.message : env.internalError,
+          });
+          // message.error(res.message ? res.message : env.internalError);
+        } else {
           const temp = {
             seqNo: el.seqNo,
             partNo: el.partNo,
-            loc: result.loc,
-            projectNo: result.projectNo,
+            loc: hasil.loc,
+            projectNo: hasil.projectNo,
             poRecSeq: el.poRecSeq,
-            uom: result.uom,
-            invUom: result.invUom,
-            poPrice: result.poPrice,
-            recdPrice: result.poPrice,
-            stdPackQty: result.stdPackQty,
-            remarks: result.remarks,
-            orderQty: result.orderQty,
-            dueDate: result.dueDate,
-            description: result.description,
+            uom: hasil.uom,
+            invUom: hasil.invUom,
+            poPrice: hasil.poPrice,
+            recdPrice: hasil.poPrice,
+            stdPackQty: hasil.stdPackQty,
+            remarks: hasil.remarks,
+            orderQty: hasil.orderQty,
+            dueDate: hasil.dueDate,
+            description: hasil.description,
             recdQty: 0,
             issuedQty: 0,
             labelQty: 0,
-            itemNo: result.itemNo,
-            itemType: result.itemType
+            itemNo: hasil.itemNo,
+            itemType: hasil.itemType
           };
           console.log('temp :>> ', temp);
           // arr.push(temp);
-          setDetails([...arr, temp]);
+          if (grnNo) {
+            setDetails([...arr, temp]);
+          } else {
+            setDetails([]);
+          }
           setReRender(!reRender);
-        });
+        }
       });
       // console.log('arr :>> ', arr);
       // setTempDetails([...arr]);
@@ -357,13 +399,10 @@ const GrnWithPoForm = (props) => {
         details[i]["poNo"] = poNo;
         details[i]["recdDate"] = moment().format();
         details[i]["uom"] = e.invUom;
-
         details[i]["recdQty"] = parseInt(e.recdQty);
         details[i]["issuedQty"] = parseInt(e.issuedQty);
         details[i]["labelQty"] = parseInt(e.labelQty);
         details[i]["orderQty"] = parseInt(e.orderQty);
-
-
       });
 
       console.log('details', details);
@@ -574,12 +613,72 @@ const GrnWithPoForm = (props) => {
                         <Form.Item
                           name={ `DateCode[${ idx }]` }
                           label="Date Code"
+                          rules={ [
+                            {
+                              required: false,
+                              message: "Date Code is required"
+                            },
+                            ({ getFieldValue }) => ({
+                              validator(_, value) {
+                                // if ()
+                                if (value) {
+                                  let year = "";
+                                  let week = "";
+                                  let maxWeek = 53;
+                                  let flag = false;
+
+                                  value.split("").forEach((elm, id) => {
+                                    if (id < 2) {
+                                      year += elm;
+                                    } else {
+                                      week += elm;
+                                    }
+                                  });
+
+                                  // year = parseInt(year);
+                                  // week = parseInt(week);
+
+                                  let momentYear = "";
+                                  (moment().year() + "").split("").forEach((elm, id) => {
+                                    if (id > 1) {
+                                      momentYear += elm;
+                                    }
+                                  });
+                                  momentYear = parseInt(momentYear);
+                                  let momentWeek = moment().week();
+
+                                  console.log("year :>> ", year);
+                                  console.log("week :>> ", week);
+                                  console.log("momentYear :>> ", momentYear);
+                                  console.log("momentWeek :>> ", momentWeek);
+
+                                  if (year < momentYear) {
+                                    if (week > 0 && week <= maxWeek) {
+                                      flag = true;
+                                    }
+                                  }
+
+                                  if (year == momentYear) {
+                                    if (week > 0 && week <= momentWeek) {
+                                      flag = true;
+                                    }
+                                  }
+
+                                  if (!value || flag) {
+                                    return Promise.resolve();
+                                  }
+
+                                  return Promise.reject(new Error("Datecode not valid"));
+                                }
+                              },
+                            }),
+                          ] }
                         >
                           {
                             id ?
                               <span>{ el.dateCode ? el.dateCode : '-' }</span>
                               :
-                              <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' readOnly disabled={ id } />
+                              <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' disabled={ id } />
                           }
                         </Form.Item>
                       }
@@ -678,7 +777,7 @@ const GrnWithPoForm = (props) => {
                             id ?
                               <span>{ el.poNo ? el.poNo : '-' }</span>
                               :
-                              <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' readOnly disabled={ id } />
+                              <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' disabled={ id } />
                           }
                         </Form.Item>
                       }
@@ -725,7 +824,7 @@ const GrnWithPoForm = (props) => {
                           id ?
                             <p>{ el.description ? el.description : '-' }</p>
                             :
-                            <Input.TextArea className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly disabled={ id } />
+                            <Input.TextArea className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly disabled={ id } autoSize />
                         }
                       </Form.Item>
                     }
@@ -828,7 +927,7 @@ const GrnWithPoForm = (props) => {
             :
             <Form form={ form } name="control-hooks" scrollToFirstError>
               <div className="group">
-                <div className="row">
+                <div className="row2">
                   {
                     id
                       ?
@@ -845,6 +944,36 @@ const GrnWithPoForm = (props) => {
                       >
                         <Input hidden />
                         <Input className='smallInput' InitialValue={ grnNo } defaultValue={ grnNo } value={ grnNo } placeholder='Type GRN here...' readOnly disabled={ isDisabled } />
+                      </Form.Item>
+                  }
+
+                  {
+                    id
+                      ?
+                      <Form.Item
+                        name="PO No"
+                        label="PO No"
+                      >
+                        <span>{ poNo }</span>
+                      </Form.Item>
+                      :
+                      <Form.Item
+                        name="PO No"
+                        label="PO No"
+                      >
+                        <Select
+                          showSearch
+                          allowClear
+                          className='normal' disabled={ isDisabled }
+                          defaultValue={ poNo }
+                          value={ poNo }
+                          options={ poNoOpt }
+                          onSelect={ data => { setPoNo(data); clearData(); } }
+                          placeholder={ "Type PO No here..." }
+                          filterOption={ (inputValue, option) =>
+                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                          }
+                        />
                       </Form.Item>
                   }
 
@@ -873,34 +1002,23 @@ const GrnWithPoForm = (props) => {
                   }
                 </div>
 
-                <div className="row">
+                <div className="row2">
                   {
                     id
                       ?
                       <Form.Item
-                        name="PO No"
-                        label="PO No"
+                        name="Supplier Code"
+                        label="Supplier Code"
                       >
-                        <span>{ poNo }</span>
+                        <span>{ supplierCode }</span>
                       </Form.Item>
                       :
                       <Form.Item
-                        name="PO No"
-                        label="PO No"
+                        name="Supplier Code"
+                        label="Supplier Code"
                       >
-                        <Select
-                          showSearch
-                          allowClear
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ poNo }
-                          value={ poNo }
-                          options={ poNoOpt }
-                          onSelect={ data => setPoNo(data) }
-                          placeholder={ "Type PO No here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
+                        <Input hidden />
+                        <Input className='smallInput' value={ supplierCode } placeholder='Type Supplier code here...' readOnly disabled={ isDisabled } />
                       </Form.Item>
                   }
 
@@ -927,28 +1045,31 @@ const GrnWithPoForm = (props) => {
                         />
                       </Form.Item>
                   }
-                </div>
-
-                <div className="row">
                   {
                     id
                       ?
                       <Form.Item
-                        name="Supplier Code"
-                        label="Supplier Code"
+                        name="Release Date"
+                        label="Release Date"
                       >
-                        <span>{ supplierCode }</span>
+                        <span>{ releaseDate ? releaseDate : '-' }</span>
                       </Form.Item>
                       :
                       <Form.Item
-                        name="Supplier Code"
-                        label="Supplier Code"
+                        name="Release Date"
+                        label="Release Date"
                       >
-                        <Input hidden />
-                        <Input className='smallInput' value={ supplierCode } placeholder='Type Supplier code here...' readOnly disabled={ isDisabled } />
+                        <Input
+                          className='normal' disabled={ isDisabled }
+                          defaultValue={ releaseDate }
+                          placeholder={ "Type Release Date here.." }
+                          readOnly
+                        />
                       </Form.Item>
                   }
+                </div>
 
+                <div className="row2">
                   {
                     id
                       ?
@@ -972,9 +1093,7 @@ const GrnWithPoForm = (props) => {
                         />
                       </Form.Item>
                   }
-                </div>
 
-                <div className="row">
                   {
                     id
                       ?
@@ -990,61 +1109,35 @@ const GrnWithPoForm = (props) => {
                         label="PO Remarks"
                       >
                         <Input hidden />
-                        <Input.TextArea rows={ 4 } readOnly value={ poRemarks } />
+                        <Input.TextArea onChange={ e => setPoRemarks(e.target.value) } value={ poRemarks } autoSize />
                       </Form.Item>
                   }
 
-                  <div className="column">
-
-                    {
-                      id
-                        ?
-                        <Form.Item
-                          name="Release Date"
-                          label="Release Date"
-                        >
-                          <span>{ releaseDate ? releaseDate : '-' }</span>
-                        </Form.Item>
-                        :
-                        <Form.Item
-                          name="Release Date"
-                          label="Release Date"
-                        >
-                          <Input
-                            className='normal' disabled={ isDisabled }
-                            defaultValue={ releaseDate }
-                            placeholder={ "Type Release Date here.." }
-                            readOnly
-                          />
-                        </Form.Item>
-                    }
-
-                    {
-                      id
-                        ?
-                        <Form.Item
-                          name="DO No"
-                          label="DO No"
-                          className='red'
-                        >
-                          <span>{ doNo ? doNo : '-' }</span>
-                        </Form.Item>
-                        :
-                        <Form.Item
-                          name="DO No"
-                          label="DO No"
-                          className='red'
-                        >
-                          <Input
-                            className='normal' disabled={ isDisabled }
-                            defaultValue={ doNo }
-                            value={ doNo }
-                            onChange={ e => setDoNo(e.target.value) }
-                            placeholder={ "Type DO No here.." }
-                          />
-                        </Form.Item>
-                    }
-                  </div>
+                  {
+                    id
+                      ?
+                      <Form.Item
+                        name="DO No"
+                        label="DO No"
+                        className='red'
+                      >
+                        <span>{ doNo ? doNo : '-' }</span>
+                      </Form.Item>
+                      :
+                      <Form.Item
+                        name="DO No"
+                        label="DO No"
+                        className='red'
+                      >
+                        <Input
+                          className='normal' disabled={ isDisabled }
+                          defaultValue={ doNo }
+                          value={ doNo }
+                          onChange={ e => setDoNo(e.target.value) }
+                          placeholder={ "Type DO No here.." }
+                        />
+                      </Form.Item>
+                  }
                 </div>
               </div>
 

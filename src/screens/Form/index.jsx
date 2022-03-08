@@ -130,6 +130,7 @@ const FormPage = (props) => {
         result.qoh && setQoh(result.qoh);
         result.refUrl && setRefUrl(result.refUrl);
         result.remarks && setRemarks(result.remarks);
+        result.requestor && setRequestor(result.requestor);
         result.reorder && setReorder(parseFloat(result.reorder));
         result.rev && setRev(result.rev);
         result.rohsStatus && setRohsStatus(result.rohsStatus);
@@ -334,9 +335,9 @@ const FormPage = (props) => {
         loc,
         manufacturer,
         mslCode,
-        // obsoleteCode,
+        obsoleteCode,
         obsoleteItem,
-        // openClose,
+        openClose,
         orderQty: parseInt(orderQty),
         partNo,
         prodnResv: parseInt(prodnResv),
@@ -346,7 +347,7 @@ const FormPage = (props) => {
         refUrl,
         remarks,
         reorder: parseFloat(reorder),
-        // requestor,
+        requestor,
         rev,
         rohsStatus,
         source,

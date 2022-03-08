@@ -235,8 +235,8 @@ const FormPage = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(state.uomFactor).countDecimals() > 4) {
-                            return Promise.reject(new Error('Convertion Factor decimal length must be less than 4 digits '));
+                          if (Number(state.uomFactor).countDecimals() > 6) {
+                            return Promise.reject(new Error('Convertion Factor decimal length must be less than 6 digits '));
                           } else if (Number(state.uomFactor) < 0) {
                             return Promise.reject(new Error('Convertion Factor cannot be negative'));
                           }
@@ -249,7 +249,7 @@ const FormPage = (props) => {
                       ref={ factorRef }
                       min={ 0 }
                       max={ 999991 }
-                      step="0.0001"
+                      step="0.000001"
                       stringMode
                       maxLength={ 14 }
                       style={ { width: "50%" } }

@@ -5,8 +5,8 @@ import { Images } from "../../constant";
 
 const StyledDiv = styled.div`
   .header {
-    position: sticky;
-    top: 69px;
+    /* position: sticky;
+    top: 69px; */
     padding-top: 20px;
     margin-bottom: 40px;
     display: flex;
@@ -32,6 +32,9 @@ const StyledDiv = styled.div`
   }
 
   .formWrapper {
+     height: calc(100vh - 200px);
+    overflow-y: scroll;
+    
     .loading {
       height: 100%;
       display: flex;
@@ -45,8 +48,8 @@ const StyledDiv = styled.div`
 
     .group {
       margin-bottom: 32px;
-      position: sticky;
-      top: 154px;
+      /* position: sticky;
+      top: 154px; */
       border-bottom: 1px dashed black;
       padding-bottom: 10px;
       background: white;
@@ -97,6 +100,9 @@ const StyledDiv = styled.div`
   .detail-wrapper {
     /* background: grey; */
     padding: 40px 0px;
+    /* height: calc(100vh - 450px);
+    overflow-y: scroll; */
+    min-height: 240px;
 
     .full {
       .border {
