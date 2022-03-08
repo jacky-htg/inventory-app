@@ -297,6 +297,7 @@ function PageList(props) {
       { columns }
 
       <Column
+        ellipsis
         title="Action"
         key="action"
         render={ (text, record) => {

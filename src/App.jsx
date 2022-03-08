@@ -47,7 +47,7 @@ const App = () => {
     //     <Router history={ history } />
     //   </PersistGate>
     // </Provider>
-    <div className='App' style={ { overflow: 'hidden' } }>
+    <div className='App' onClick={ () => notification.destroy() } style={ { overflow: 'hidden' } }>
       {/* <Redux> */ }
       {/* <GlobalStyles /> */ }
       <Router />

@@ -481,7 +481,7 @@ const FormPage = (props) => {
                       ref={ itemNoRef }
                       style={ { textTransform: 'uppercase' } }
                       className='normal'
-                      disabled={ isDisabled }
+                      disabled={ isDisabled || id }
                       defaultValue={ itemNo }
                       value={ itemNo }
                       onChange={ e => setItemNo(e.target.value.toUpperCase()) }
