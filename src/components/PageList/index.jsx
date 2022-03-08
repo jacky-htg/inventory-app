@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Table, Button, Space, Select, Form, Input, message, Popconfirm, Modal, Divider, Checkbox, notification } from 'antd';
 import { useHistory } from 'react-router-dom';
+import Draggable from 'react-draggable';
 import { StyledDiv } from './styled';
 import env from '../../env';
 
@@ -22,6 +23,9 @@ function PageList(props) {
   const [optionFilters, setOptionFilters] = useState([]);
   const [lookups, setLookups] = useState([]);
   const [disabledCreate, setDisabledCreate] = useState(false);
+  const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 });
+
+  const draggleRef = useRef();
 
   useEffect(() => {
     if (props.fields.length > 0) {
@@ -393,10 +397,51 @@ function PageList(props) {
     setContentModal(temp);
   };
 
+  const onStart = (event, uiData) => {
+    const { clientWidth, clientHeight } = window.document.documentElement;
+    const targetRect = draggleRef.current?.getBoundingClientRect();
+    if (!targetRect) {
+      return;
+    }
+    setBounds(
+      {
+        left: -targetRect.left + uiData.x,
+        right: clientWidth - (targetRect.right - uiData.x),
+        top: -targetRect.top + uiData.y,
+        bottom: clientHeight - (targetRect.bottom - uiData.y),
+      }
+    );
+  };
+
   const modal = () => {
     return (
-      <Modal title="Coloumn Setting" visible={ isModalVisible } onOk={ handleOk } onCancel={ handleCancel } footer={ [
-        <Button key="submit" type="primary" loading={ loading } onClick={ handleOk }>
+      <Modal title={
+        <div
+          style={{
+            width: '100%',
+            cursor: 'move',
+          }}
+          // fix eslintjsx-a11y/mouse-events-have-key-events
+          // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/mouse-events-have-key-events.md
+          onFocus={() => {}}
+          onBlur={() => {}}
+          // end
+        >
+          Coloumn Setting
+        </div>
+      } 
+      visible={ isModalVisible } onOk={ handleOk } onCancel={ handleCancel } 
+      modalRender={modal => (
+        <Draggable
+          bounds={bounds}
+          onStart={(event, uiData) => onStart(event, uiData)}
+        >
+          <div ref={draggleRef}>{modal}</div>
+        </Draggable>
+      )}
+      footer={ [
+        <Button key="submit" type="primary" loading={ loading } onClick={ handleOk }
+        >
           CLOSE
         </Button>
       ] }>
