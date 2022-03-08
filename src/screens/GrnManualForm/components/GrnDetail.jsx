@@ -307,7 +307,6 @@ function GrnDetail(props) {
                       }),
                     ] }
                   >
-                    <Input hidden />
                     {
                       id ?
                         <span>{ el.labelQty ? el.labelQty : '-' }</span>
