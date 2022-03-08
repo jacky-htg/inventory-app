@@ -168,7 +168,7 @@ function GrnDetail(props) {
                           defaultValue={ el.recdPrice || 0.0000 }
                           value={ el.recdPrice || 0.0000 }
                           onChange={ (e) =>
-                            changeDetail(idx, "recdPrice", parseFloat(e.target.value))
+                            changeDetail(idx, "recdPrice", parseFloat(e))
                           }
                           placeholder="Type Recd Price here..."
                         />
@@ -211,7 +211,7 @@ function GrnDetail(props) {
                           defaultValue={ el.recdQty || 0.0000 }
                           value={ el.recdQty || 0.0000 }
                           onChange={ (e) =>
-                            changeDetail(idx, "recdQty", parseFloat(e.target.value))
+                            changeDetail(idx, "recdQty", parseFloat(e))
                           }
                           placeholder="Type Recd Qty here..."
                         />
@@ -307,7 +307,6 @@ function GrnDetail(props) {
                       }),
                     ] }
                   >
-                    <Input hidden />
                     {
                       id ?
                         <span>{ el.labelQty ? el.labelQty : '-' }</span>
@@ -322,7 +321,7 @@ function GrnDetail(props) {
                           defaultValue={ el.labelQty || 0.0000 }
                           value={ el.labelQty || 0.0000 }
                           onChange={ (e) =>
-                            changeDetail(idx, "labelQty", parseFloat(e.target.value))
+                            changeDetail(idx, "labelQty", parseFloat(e))
                           }
                           placeholder="Type Qty/Label here..."
                         />
