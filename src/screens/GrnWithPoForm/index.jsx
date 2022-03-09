@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Menu, Dropdown, notification } from 'antd';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Menu, Dropdown, notification, Modal } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { MdAddCircle } from 'react-icons/md';
 import { TiDelete } from 'react-icons/ti';
@@ -55,6 +55,7 @@ const GrnWithPoForm = (props) => {
   const [subType, setSubType] = useState(null);
   const [orderNo, setOrderNo] = useState(null);
   const [reRender, setReRender] = useState(false);
+  const [isPoNoClosed, setIsPoNoClosed] = useState();
 
   const [parts, setParts] = useState([]);
 
@@ -271,6 +272,7 @@ const GrnWithPoForm = (props) => {
       setBuyer('');
       setDetails([]);
       setParts([]);
+      setIsPoNoClosed(false);
       try {
         const hasil = await Grn.headerByPono(poNo);
         console.log('hasil :>> ', hasil);
@@ -281,6 +283,12 @@ const GrnWithPoForm = (props) => {
           notification.error({
             message: res.message ? res.message : env.internalError,
           });
+          console.log('res.message :>> ', res.message);
+          if (res.message === 'PO already Closed, Purchase Receipt not allowed.') {
+            setIsPoNoClosed(true);
+            setParts([]);
+            setDetails([]);
+          }
           // message.error(res.message ? res.message : env.internalError);
         } else {
           hasil.grnNo && setGrnNo(hasil.grnNo);
@@ -330,7 +338,11 @@ const GrnWithPoForm = (props) => {
   }, [grnNo]);
 
   useEffect(async () => {
-    if (poNo && parts.length > 0) {
+    console.log('poNo :>> ', poNo);
+    console.log('parts.length :>> ', parts.length);
+    console.log('isPoNoClosed :>> ', isPoNoClosed);
+
+    if (poNo && parts.length > 0 && !isPoNoClosed) {
       console.log('masuk');
       console.log('poNo :>> ', poNo);
       console.log('parts :>> ', parts);
@@ -368,9 +380,11 @@ const GrnWithPoForm = (props) => {
           };
           console.log('temp :>> ', temp);
           // arr.push(temp);
-          if (grnNo) {
+          if (!isPoNoClosed) {
+            console.log('atas');
             setDetails([...arr, temp]);
           } else {
+            console.log('bawah');
             setDetails([]);
           }
           setReRender(!reRender);
@@ -380,7 +394,7 @@ const GrnWithPoForm = (props) => {
       // setTempDetails([...arr]);
       // console.log('success');
     }
-  }, [poNo, parts]);
+  }, [poNo, parts, isPoNoClosed]);
 
   useEffect(() => {
     if (details.length > 0) {
@@ -428,10 +442,10 @@ const GrnWithPoForm = (props) => {
         });
         // message.error(res.message ? res.message : env.internalError);
       } else {
+        showPrintModal();
         notification.success({
           message: 'Record successfully added',
         });
-        history.push('/grn-with-pos');
       }
 
     } catch (errorInfo) {
@@ -459,407 +473,411 @@ const GrnWithPoForm = (props) => {
   };
 
   const renderDetails = () => {
-    return details.length > 0 &&
-      details.map((el, idx) => {
-        return (
-          <div key={ idx } className="detail-card">
-            <div className="border">
-              <Collapsible trigger={ `Serial Number: ${ idx + 1 }` }>
-                <div className="inputs">
-                  <div className="row2">
-                    <div className="dual">
-                      {
-                        <Form.Item
-                          name={ `SN[${ idx }]` }
-                          label="SN"
-                        >
-                          {
-                            id ?
-                              <span>{ idx + 1 }</span>
-                              :
-                              <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
-
-                      {
-                        <Form.Item
-                          name={ `Type[${ idx }]` }
-                          label="Type"
-                        >
-                          {
-                            id ?
-                              <span>{ el.itemType !== undefined ? el.itemType : '-' }</span>
-                              :
-                              <Input className='smallInput' defaultValue={ el.itemType } value={ el.itemType } onChange={ e => changeDetail(idx, 'itemType', e.target.value) } placeholder='Insert type here...' readOnly disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
-                    </div>
-
-                    <div className="dual">
-                      {
-                        <Form.Item
-                          name={ `UOM[${ idx }]` }
-                          label="UOM"
-                        >
-                          {
-                            id ?
-                              <span>{ el.uom ? el.uom : '-' }</span>
-                              :
-                              <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' readOnly disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
-
-                      {
-                        <Form.Item
-                          name={ `MSL[${ idx }]` }
-                          label="MSL"
-                        >
-                          {
-                            id ?
-                              <span>{ el.msl ? el.msl : '-' }</span>
-                              :
-                              <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' readOnly disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
-                    </div>
-
-                    <div className="dual">
-                      {
-                        <Form.Item
-                          name={ `UnitPrice[${ idx }]` }
-                          label="Unit Price"
-                        >
-                          {
-                            id ?
-                              <span>{ el.recdPrice ? el.recdPrice : '-' }</span>
-                              :
-                              <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
-
-                      {
-                        <Form.Item
-                          name={ `GRNQty[${ idx }]` }
-                          label="GRN Qty"
-                          initialValue={ el.recdQty }
-                          rules={ [
+    if (!isPoNoClosed) {
+      return details.length > 0 &&
+        details.map((el, idx) => {
+          return (
+            <div key={ idx } className="detail-card">
+              <div className="border">
+                <Collapsible trigger={ `Serial Number: ${ idx + 1 }` }>
+                  <div className="inputs">
+                    <div className="row2">
+                      <div className="dual">
+                        {
+                          <Form.Item
+                            name={ `SN[${ idx }]` }
+                            label="SN"
+                          >
                             {
-                              required: true,
-                            },
-                            ({ getFieldValue }) => ({
-                              validator(_, value) {
-                                if (value > 0) {
-                                  return Promise.resolve();
-                                }
+                              id ?
+                                <span>{ idx + 1 }</span>
+                                :
+                                <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly disabled={ id } />
+                            }
+                          </Form.Item>
+                        }
 
-                                return Promise.reject(new Error('QTY must more than 0'));
+                        {
+                          <Form.Item
+                            name={ `Type[${ idx }]` }
+                            label="Type"
+                          >
+                            {
+                              id ?
+                                <span>{ el.itemType !== undefined ? el.itemType : '-' }</span>
+                                :
+                                <Input className='smallInput' defaultValue={ el.itemType } value={ el.itemType } onChange={ e => changeDetail(idx, 'itemType', e.target.value) } placeholder='Insert type here...' readOnly disabled={ id } />
+                            }
+                          </Form.Item>
+                        }
+                      </div>
+
+                      <div className="dual">
+                        {
+                          <Form.Item
+                            name={ `UOM[${ idx }]` }
+                            label="UOM"
+                          >
+                            {
+                              id ?
+                                <span>{ el.uom ? el.uom : '-' }</span>
+                                :
+                                <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' readOnly disabled={ id } />
+                            }
+                          </Form.Item>
+                        }
+
+                        {
+                          <Form.Item
+                            name={ `MSL[${ idx }]` }
+                            label="MSL"
+                          >
+                            {
+                              id ?
+                                <span>{ el.msl ? el.msl : '-' }</span>
+                                :
+                                <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' readOnly disabled={ id } />
+                            }
+                          </Form.Item>
+                        }
+                      </div>
+
+                      <div className="dual">
+                        {
+                          <Form.Item
+                            name={ `UnitPrice[${ idx }]` }
+                            label="Unit Price"
+                          >
+                            {
+                              id ?
+                                <span>{ el.recdPrice ? el.recdPrice : '-' }</span>
+                                :
+                                <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly disabled={ id } />
+                            }
+                          </Form.Item>
+                        }
+
+                        {
+                          <Form.Item
+                            name={ `GRNQty[${ idx }]` }
+                            label="GRN Qty"
+                            initialValue={ el.recdQty }
+                            rules={ [
+                              {
+                                required: true,
                               },
-                            }),
-                          ] }
-                        >
-                          {
-                            id ?
-                              <span>{ el.recdQty ? el.recdQty : '-' }</span>
-                              :
-                              <Input type={ 'number' } min={ 0 } className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type GRN Qty here...' disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
-                    </div>
-                  </div>
-
-                  <div className="row2">
-
-                    {
-                      <Form.Item
-                        name={ `ItemNo[${ idx }]` }
-                        label="Item No"
-                      >
-                        {
-                          id ?
-                            <span>{ el.itemNo ? el.itemNo : '-' }</span>
-                            :
-                            <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly disabled={ id } />
-                        }
-                      </Form.Item>
-                    }
-
-                    {
-                      <Form.Item
-                        name={ `Loc[${ idx }]` }
-                        label="Loc"
-                      >
-                        {
-                          id ?
-                            <span>{ el.loc ? el.loc : '-' }</span>
-                            :
-                            <Input
-                              className='smallInput' disabled={ isDisabled }
-                              defaultValue={ el.loc }
-                              value={ el.loc }
-                              readOnly
-                            />
-                        }
-                      </Form.Item>
-                    }
-
-                    <div className="dual">
-                      {
-                        <Form.Item
-                          name={ `DateCode[${ idx }]` }
-                          label="Date Code"
-                          rules={ [
-                            {
-                              required: false,
-                              message: "Date Code is required"
-                            },
-                            ({ getFieldValue }) => ({
-                              validator(_, value) {
-                                // if ()
-                                if (value) {
-                                  let year = "";
-                                  let week = "";
-                                  let maxWeek = 53;
-                                  let flag = false;
-
-                                  value.split("").forEach((elm, id) => {
-                                    if (id < 2) {
-                                      year += elm;
-                                    } else {
-                                      week += elm;
-                                    }
-                                  });
-
-                                  // year = parseInt(year);
-                                  // week = parseInt(week);
-
-                                  let momentYear = "";
-                                  (moment().year() + "").split("").forEach((elm, id) => {
-                                    if (id > 1) {
-                                      momentYear += elm;
-                                    }
-                                  });
-                                  momentYear = parseInt(momentYear);
-                                  let momentWeek = moment().week();
-
-                                  console.log("year :>> ", year);
-                                  console.log("week :>> ", week);
-                                  console.log("momentYear :>> ", momentYear);
-                                  console.log("momentWeek :>> ", momentWeek);
-
-                                  if (year < momentYear) {
-                                    if (week > 0 && week <= maxWeek) {
-                                      flag = true;
-                                    }
-                                  }
-
-                                  if (year == momentYear) {
-                                    if (week > 0 && week <= momentWeek) {
-                                      flag = true;
-                                    }
-                                  }
-
-                                  if (!value || flag) {
+                              ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                  if (value > 0) {
                                     return Promise.resolve();
                                   }
 
-                                  return Promise.reject(new Error("Datecode not valid"));
-                                }
-                              },
-                            }),
-                          ] }
-                        >
-                          {
-                            id ?
-                              <span>{ el.dateCode ? el.dateCode : '-' }</span>
-                              :
-                              <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
-
-                      {
-                        <Form.Item
-                          name={ `QTYLabel[${ idx }]` }
-                          label="QTY/Label"
-                          initialValue={ el.labelQty }
-                          rules={ [
+                                  return Promise.reject(new Error('QTY must more than 0'));
+                                },
+                              }),
+                            ] }
+                          >
                             {
-                              required: true,
-                            },
-                            ({ getFieldValue }) => ({
-                              validator(_, value) {
-                                if (value > 0 && value <= getFieldValue('GRN Qty')) {
-                                  return Promise.resolve();
-                                }
+                              id ?
+                                <span>{ el.recdQty ? el.recdQty : '-' }</span>
+                                :
+                                <Input type={ 'number' } min={ 0 } className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type GRN Qty here...' disabled={ id } />
+                            }
+                          </Form.Item>
+                        }
+                      </div>
+                    </div>
 
-                                if (!value || value === 0) {
-                                  return Promise.reject(new Error('QTY/Label must more than 0'));
-                                }
+                    <div className="row2">
 
-                                if (value > getFieldValue('GRN Qty')) {
-                                  return Promise.reject(new Error("QTY/Label can't be more than GRN QTY"));
-                                }
+                      {
+                        <Form.Item
+                          name={ `ItemNo[${ idx }]` }
+                          label="Item No"
+                        >
+                          {
+                            id ?
+                              <span>{ el.itemNo ? el.itemNo : '-' }</span>
+                              :
+                              <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly disabled={ id } />
+                          }
+                        </Form.Item>
+                      }
 
+                      {
+                        <Form.Item
+                          name={ `Loc[${ idx }]` }
+                          label="Loc"
+                        >
+                          {
+                            id ?
+                              <span>{ el.loc ? el.loc : '-' }</span>
+                              :
+                              <Input
+                                className='smallInput' disabled={ isDisabled }
+                                defaultValue={ el.loc }
+                                value={ el.loc }
+                                readOnly
+                              />
+                          }
+                        </Form.Item>
+                      }
+
+                      <div className="dual">
+                        {
+                          <Form.Item
+                            name={ `DateCode[${ idx }]` }
+                            label="Date Code"
+                            rules={ [
+                              {
+                                required: false,
+                                message: "Date Code is required"
                               },
-                            }),
-                          ] }
-                        >
-                          {
-                            id ?
-                              <span>{ el.labelQty ? el.labelQty : '-' }</span>
-                              :
-                              <Input type={ 'number' } min={ 0 } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
-                    </div>
-                  </div>
+                              ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                  // if ()
+                                  if (value) {
+                                    let year = "";
+                                    let week = "";
+                                    let maxWeek = 53;
+                                    let flag = false;
 
-                  <div className="row2">
-                    <div className="dual">
-                      {
-                        <Form.Item
-                          name={ `PartNo[${ idx }]` }
-                          label="Part No"
-                        >
-                          {
-                            id ?
-                              <span>{ el.partNo ? el.partNo : '-' }</span>
-                              :
-                              <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
+                                    value.split("").forEach((elm, id) => {
+                                      if (id < 2) {
+                                        year += elm;
+                                      } else {
+                                        week += elm;
+                                      }
+                                    });
 
-                      {
-                        <Form.Item
-                          name={ `ProjectNo[${ idx }]` }
-                          label="Project No"
-                        >
-                          {
-                            id ?
-                              <span>{ el.projectNo ? el.projectNo : '-' }</span>
-                              :
-                              <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
-                    </div>
+                                    // year = parseInt(year);
+                                    // week = parseInt(week);
 
-                    <div className="dual">
+                                    let momentYear = "";
+                                    (moment().year() + "").split("").forEach((elm, id) => {
+                                      if (id > 1) {
+                                        momentYear += elm;
+                                      }
+                                    });
+                                    momentYear = parseInt(momentYear);
+                                    let momentWeek = moment().week();
 
-                      {
-                        <Form.Item
-                          name={ `OrderQty[${ idx }]` }
-                          label="Order Qty"
-                        >
-                          {
-                            id ?
-                              <span>{ el.orderQty ? el.orderQty : '-' }</span>
-                              :
-                              <Input className='smallInput' defaultValue={ el.orderQty } value={ el.orderQty } onChange={ e => changeDetail(idx, 'orderQty', e.target.value) } placeholder='Type order qty here...' disabled={ id } readOnly />
-                          }
-                        </Form.Item>
-                      }
+                                    console.log("year :>> ", year);
+                                    console.log("week :>> ", week);
+                                    console.log("momentYear :>> ", momentYear);
+                                    console.log("momentWeek :>> ", momentWeek);
 
-                      {
-                        <Form.Item
-                          name={ `SIVNo[${ idx }]` }
-                          label="SIV No"
-                        >
-                          {
-                            id ?
-                              <span>{ el.poNo ? el.poNo : '-' }</span>
-                              :
-                              <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
-                    </div>
+                                    if (year < momentYear) {
+                                      if (week > 0 && week <= maxWeek) {
+                                        flag = true;
+                                      }
+                                    }
 
-                    <div className="dual">
+                                    if (year == momentYear) {
+                                      if (week > 0 && week <= momentWeek) {
+                                        flag = true;
+                                      }
+                                    }
 
-                      {
-                        <Form.Item
-                          name={ `StdPack[${ idx }]` }
-                          label="Std Pack"
-                        >
-                          {
-                            id ?
-                              <span>{ el.stdPackQty ? el.stdPackQty : '-' }</span>
-                              :
-                              <Input className='smallInput' defaultValue={ el.stdPackQty } value={ el.stdPackQty } onChange={ e => changeDetail(idx, 'stdPackQty', e.target.value) } placeholder='Type std pack here...' readOnly disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
+                                    if (!value || flag) {
+                                      return Promise.resolve();
+                                    }
 
-                      {
-                        <Form.Item
-                          name={ `DueDate[${ idx }]` }
-                          label="Due date"
-                        >
-                          {
-                            id ?
-                              <span>{ el.dueDate ? el.dueDate : '-' }</span>
-                              :
-                              <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' readOnly disabled={ id } />
-                          }
-                        </Form.Item>
-                      }
-                    </div>
-                  </div>
-                  <div className="row">
-                    {
-                      <Form.Item
-                        name={ `Description[${ idx }]` }
-                        label="Description"
-                      >
-                        {
-                          id ?
-                            <p>{ el.description ? el.description : '-' }</p>
-                            :
-                            <Input.TextArea className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly disabled={ id } autoSize />
+                                    return Promise.reject(new Error("Datecode not valid"));
+                                  }
+                                },
+                              }),
+                            ] }
+                          >
+                            {
+                              id ?
+                                <span>{ el.dateCode ? el.dateCode : '-' }</span>
+                                :
+                                <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' disabled={ id } />
+                            }
+                          </Form.Item>
                         }
-                      </Form.Item>
-                    }
 
-                    {
-                      <Form.Item
-                        name={ `Remarks[${ idx }]` }
-                        label="Remarks"
-                      >
                         {
-                          id ?
-                            <p>{ el.remarks ? el.remarks : '-' }</p>
-                            :
-                            <Input.TextArea className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' disabled={ id } />
+                          <Form.Item
+                            name={ `QTYLabel[${ idx }]` }
+                            label="QTY/Label"
+                            initialValue={ el.labelQty }
+                            rules={ [
+                              {
+                                required: true,
+                              },
+                              ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                  if (value > 0 && value <= getFieldValue('GRN Qty')) {
+                                    return Promise.resolve();
+                                  }
+
+                                  if (!value || value === 0) {
+                                    return Promise.reject(new Error('QTY/Label must more than 0'));
+                                  }
+
+                                  if (value > getFieldValue('GRN Qty')) {
+                                    return Promise.reject(new Error("QTY/Label can't be more than GRN QTY"));
+                                  }
+
+                                },
+                              }),
+                            ] }
+                          >
+                            {
+                              id ?
+                                <span>{ el.labelQty ? el.labelQty : '-' }</span>
+                                :
+                                <Input type={ 'number' } min={ 0 } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' disabled={ id } />
+                            }
+                          </Form.Item>
                         }
-                      </Form.Item>
-                    }
+                      </div>
+                    </div>
 
+                    <div className="row2">
+                      <div className="dual">
+                        {
+                          <Form.Item
+                            name={ `PartNo[${ idx }]` }
+                            label="Part No"
+                          >
+                            {
+                              id ?
+                                <span>{ el.partNo ? el.partNo : '-' }</span>
+                                :
+                                <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly disabled={ id } />
+                            }
+                          </Form.Item>
+                        }
+
+                        {
+                          <Form.Item
+                            name={ `ProjectNo[${ idx }]` }
+                            label="Project No"
+                          >
+                            {
+                              id ?
+                                <span>{ el.projectNo ? el.projectNo : '-' }</span>
+                                :
+                                <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly disabled={ id } />
+                            }
+                          </Form.Item>
+                        }
+                      </div>
+
+                      <div className="dual">
+
+                        {
+                          <Form.Item
+                            name={ `OrderQty[${ idx }]` }
+                            label="Order Qty"
+                          >
+                            {
+                              id ?
+                                <span>{ el.orderQty ? el.orderQty : '-' }</span>
+                                :
+                                <Input className='smallInput' defaultValue={ el.orderQty } value={ el.orderQty } onChange={ e => changeDetail(idx, 'orderQty', e.target.value) } placeholder='Type order qty here...' disabled={ id } readOnly />
+                            }
+                          </Form.Item>
+                        }
+
+                        {
+                          <Form.Item
+                            name={ `SIVNo[${ idx }]` }
+                            label="SIV No"
+                          >
+                            {
+                              id ?
+                                <span>{ el.poNo ? el.poNo : '-' }</span>
+                                :
+                                <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' disabled={ id } />
+                            }
+                          </Form.Item>
+                        }
+                      </div>
+
+                      <div className="dual">
+
+                        {
+                          <Form.Item
+                            name={ `StdPack[${ idx }]` }
+                            label="Std Pack"
+                          >
+                            {
+                              id ?
+                                <span>{ el.stdPackQty ? el.stdPackQty : '-' }</span>
+                                :
+                                <Input className='smallInput' defaultValue={ el.stdPackQty } value={ el.stdPackQty } onChange={ e => changeDetail(idx, 'stdPackQty', e.target.value) } placeholder='Type std pack here...' readOnly disabled={ id } />
+                            }
+                          </Form.Item>
+                        }
+
+                        {
+                          <Form.Item
+                            name={ `DueDate[${ idx }]` }
+                            label="Due date"
+                          >
+                            {
+                              id ?
+                                <span>{ el.dueDate ? el.dueDate : '-' }</span>
+                                :
+                                <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' readOnly disabled={ id } />
+                            }
+                          </Form.Item>
+                        }
+                      </div>
+                    </div>
+                    <div className="row">
+                      {
+                        <Form.Item
+                          name={ `Description[${ idx }]` }
+                          label="Description"
+                        >
+                          {
+                            id ?
+                              <p>{ el.description ? el.description : '-' }</p>
+                              :
+                              <Input.TextArea className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly disabled={ id } autoSize />
+                          }
+                        </Form.Item>
+                      }
+
+                      {
+                        <Form.Item
+                          name={ `Remarks[${ idx }]` }
+                          label="Remarks"
+                        >
+                          {
+                            id ?
+                              <p>{ el.remarks ? el.remarks : '-' }</p>
+                              :
+                              <Input.TextArea className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' disabled={ id } />
+                          }
+                        </Form.Item>
+                      }
+
+                    </div>
                   </div>
-                </div>
 
-              </Collapsible>
+                </Collapsible>
+              </div>
+
+              <div className="actions">
+                {
+                  idx !== 0 &&
+                  <TiDelete color='red' size={ 30 } onClick={ () => deleteDetail(idx) } />
+                }
+                {/* <MdAddCircle color='#1990ff' size={ 24 } onClick={ addNewDetail } /> */ }
+              </div>
+
             </div>
-
-            <div className="actions">
-              {
-                idx !== 0 &&
-                <TiDelete color='red' size={ 30 } onClick={ () => deleteDetail(idx) } />
-              }
-              {/* <MdAddCircle color='#1990ff' size={ 24 } onClick={ addNewDetail } /> */ }
-            </div>
-
-          </div>
-        );
-      });
+          );
+        });
+    } else {
+      return null;
+    }
   };
 
   const printReport = (key) => {
@@ -908,6 +926,27 @@ const GrnWithPoForm = (props) => {
       </Menu.Item>
     </Menu>
   );
+
+  const showPrintModal = () => {
+    Modal.info({
+      title: 'Do you want to print ?',
+      content: (
+        <div style={ { display: 'grid', marginLeft: '0px !important', gridTemplateRows: 'auto auto auto', gridGap: '20px' } }>
+          <Button onClick={ () => printReport('GRN') } type="primary">
+            Print Report GRN
+          </Button>
+          <Button onClick={ () => printReport('pickList') } type="primary">
+            Print Pick List
+          </Button>
+          <Button onClick={ () => printReport('label') } type="primary">
+            Print Label
+          </Button>
+        </div>
+      ),
+      okText: 'No',
+      onOk: () => history.push('/grn-with-pos'),
+    });
+  };
 
   return (
     <StyledDiv>

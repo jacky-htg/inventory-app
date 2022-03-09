@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Collapse, Menu, Dropdown, notification } from 'antd';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Collapse, Menu, Dropdown, notification, Modal } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Lov, Location, Item } from '../../services';
@@ -29,9 +29,9 @@ const GrnManualForm = (props) => {
   const [form] = Form.useForm();
   const [details, setDetails] = useState([
     {
-      labelQty: 0.0000,
+      labelQty: 0,
       recdPrice: 0.0000,
-      recdQty: 0.0000
+      recdQty: 0
     }
   ]);
   const [locData, setLocData] = useState([]);
@@ -422,7 +422,7 @@ const GrnManualForm = (props) => {
         notification.success({
           message: 'Record successfully added',
         });
-        history.push('/grn-manuals');
+        showPrintModal();
       }
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
@@ -540,6 +540,27 @@ const GrnManualForm = (props) => {
       </Menu.Item>
     </Menu>
   );
+
+  const showPrintModal = () => {
+    Modal.info({
+      title: 'Do you want to print ?',
+      content: (
+        <div style={ { display: 'grid', marginLeft: '0px !important', gridTemplateRows: 'auto auto auto', gridGap: '20px' } }>
+          <Button onClick={ () => printReport('GRN') } type="primary">
+            Print Report GRN
+          </Button>
+          <Button onClick={ () => printReport('pickList') } type="primary">
+            Print Pick List
+          </Button>
+          <Button onClick={ () => printReport('label') } type="primary">
+            Print Label
+          </Button>
+        </div>
+      ),
+      okText: 'No',
+      onOk: () => history.push('/grn-manuals'),
+    });
+  };
 
   return (
     <StyledDiv>

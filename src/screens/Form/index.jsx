@@ -77,6 +77,10 @@ const FormPage = (props) => {
   const [replace, setReplace] = useState('');
   const [uomName, setUomName] = useState();
   const [version, setVersion] = useState(0);
+  const [entryUser, setEntryUser] = useState('');
+  const [entryDate, setEntryDate] = useState('');
+  const [lastModified, setLastModified] = useState('');
+
 
   const [errorFields, setErrorFields] = useState([]);
 
@@ -135,6 +139,9 @@ const FormPage = (props) => {
         result.rev && setRev(result.rev);
         result.rohsStatus && setRohsStatus(result.rohsStatus);
         result.source && setSource(result.source);
+        result.updatedBy && setEntryUser(result.updatedBy);
+        result.updatedAt && setLastModified(result.updatedAt);
+        result.createdAt && setEntryDate(result.createdAt);
         if (result.source) {
           sourcesData.forEach(el => {
             if (el.codeValue === result.source) {
@@ -1108,7 +1115,7 @@ const FormPage = (props) => {
                       name="Last Modified Date"
                       label="Last Modified Date"
                     >
-                      <Input disabled />
+                      <Input defaultValue={ lastModified } value={ lastModified } disabled />
                     </Form.Item>
                   </div>
                 }
@@ -1117,7 +1124,7 @@ const FormPage = (props) => {
                     name={ isEdit ? "Edit User" : "Entry User" }
                     label={ isEdit ? "Edit User" : "Entry User" }
                   >
-                    <Input disabled />
+                    <Input defaultValue={ entryUser } value={ entryUser } disabled />
                   </Form.Item>
                 </div>
                 <div className="row">
@@ -1125,7 +1132,7 @@ const FormPage = (props) => {
                     name={ isEdit ? "Edit Date" : "Entry Date" }
                     label={ isEdit ? "Edit Date" : "Entry Date" }
                   >
-                    <Input disabled />
+                    <Input defaultValue={ entryDate } value={ entryDate } disabled />
                   </Form.Item>
                 </div>
               </div>

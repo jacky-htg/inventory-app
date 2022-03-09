@@ -187,10 +187,8 @@ function GrnDetail(props) {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(el.recdQty).countDecimals() > 4) {
-                            return Promise.reject(new Error('Recd Qty decimal length must be less than 4 digits '));
-                          } else if (Number(el.recdQty) < 0) {
-                            return Promise.reject(new Error('Recd Qty cannot be negative'));
+                          if (Number(el.recdQty) < 0) {
+                            return Promise.reject(new Error('Recd Qty must be more than 0'));
                           }
                           return Promise.resolve();
                         },
@@ -206,10 +204,9 @@ function GrnDetail(props) {
                           className="smallInput"
                           min={ 0 }
                           max={ 999991 }
-                          step="0.0001"
                           stringMode
-                          defaultValue={ el.recdQty || 0.0000 }
-                          value={ el.recdQty || 0.0000 }
+                          defaultValue={ el.recdQty || 0 }
+                          value={ el.recdQty || 0 }
                           onChange={ (e) =>
                             changeDetail(idx, "recdQty", parseFloat(e))
                           }
@@ -293,10 +290,8 @@ function GrnDetail(props) {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(el.labelQty).countDecimals() > 4) {
-                            return Promise.reject(new Error('QTY/Label decimal length must be less than 4 digits '));
-                          } else if (Number(el.labelQty) < 0) {
-                            return Promise.reject(new Error('QTY/Label cannot be negative'));
+                          if (Number(el.labelQty) <= 0) {
+                            return Promise.reject(new Error('QTY/Label must be more than 0'));
                           } else if (el.labelQty > getFieldValue("GRN Qty")) {
                             return Promise.reject(
                               new Error("QTY/Label can't be more than Recd QTY")
@@ -316,10 +311,9 @@ function GrnDetail(props) {
                           className="smallInput"
                           min={ 0 }
                           max={ 999991 }
-                          step="0.0001"
                           stringMode
-                          defaultValue={ el.labelQty || 0.0000 }
-                          value={ el.labelQty || 0.0000 }
+                          defaultValue={ el.labelQty || 0 }
+                          value={ el.labelQty || 0 }
                           onChange={ (e) =>
                             changeDetail(idx, "labelQty", parseFloat(e))
                           }
