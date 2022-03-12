@@ -9,6 +9,8 @@ import { Images } from '../../constant';
 import { parse } from 'postcss';
 import { formFailedSubmit } from '../../helpers';
 
+const { TextArea } = Input;
+
 const FormPage = (props) => {
   const history = useHistory();
   const { id } = useParams();
@@ -902,7 +904,7 @@ const FormPage = (props) => {
                   name="remark"
                   label="Remark"
                 >
-                  <Input
+                  <TextArea
                     className='normal'
                     maxLength={ 2000 }
                     style={ { textTransform: 'uppercase' } }
