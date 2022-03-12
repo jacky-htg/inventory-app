@@ -829,10 +829,10 @@ const FormPage = (props) => {
                       className='normal' disabled={ isDisabled }
                       defaultValue={ obsoleteCode }
                       value={ obsoleteCode }
-                      onChange={ value => { setObsoleteCode(value); setObsoleteItem(value); } }
+                      onChange={ value => { setObsoleteCode(value);} }
                       allowClear
                     >
-                      <Option value="OBSOLETE">Obsolete</Option>
+                      <Option value="O">Obsolete</Option>
                     </Select>
                   </Form.Item>
 
