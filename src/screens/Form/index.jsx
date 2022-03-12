@@ -41,7 +41,7 @@ const FormPage = (props) => {
   const [isDisabled, setIsDisabled] = useState(id && !isEdit ? true : false);
 
   const [balbfQty, setBalbfQty] = useState(parseFloat(0.0000));
-  const [qtyOnHand, setQtyOnHand] = useState(parseFloat(0.0000));
+  // const [qtyOnHand, setQtyOnHand] = useState(parseFloat(0.0000));
   const [qtyReserved, setQtyReserved] = useState(parseFloat(0.0000));
   const [categoryCode, setCategoryCode] = useState('');
   const [categoryName, setCategoryName] = useState();
@@ -66,6 +66,7 @@ const FormPage = (props) => {
   const [prodnResv, setProdnResv] = useState(0);
   const [productGroup, setProductGroup] = useState('');
   const [qoh, setQoh] = useState(0);
+  const [eoh, setEoh] = useState(0);
   const [qryObsItem, setQryObsItem] = useState('');
   const [refUrl, setRefUrl] = useState('');
   const [remarks, setRemarks] = useState('');
@@ -116,7 +117,7 @@ const FormPage = (props) => {
         result.description && setDescription(result.description);
         result.categoryCode && setCategoryCode(result.categoryCode);
         result.dimension && setDimension(result.dimension);
-        // result.eoh && setEoh(result.categoryCode);
+        result.eoh && setEoh(result.eoh);
         result.issueNo && setIssueNo(result.issueNo);
         result.itemNo && setItemNo(result.itemNo);
         result.leadtime && setLeadtime(parseInt(result.leadtime));
@@ -928,6 +929,7 @@ const FormPage = (props) => {
                   <Form.Item
                     name="stdMaterialPrice"
                     label="Std Material Price"
+                    initialValue={ stdMaterial}
                   >
                     <InputNumber
                       className='right'
@@ -999,15 +1001,15 @@ const FormPage = (props) => {
                   <Form.Item
                     name="QtyOnHand"
                     label="QTY On Hand +"
-                    initialValue={ qtyOnHand }
+                    initialValue={ qoh }
                   >
                     <InputNumber
                       step="0.0001"
                       className='normal right'
                       readOnly
                       disabled={ true }
-                      defaultValue={ qtyOnHand }
-                      value={ qtyOnHand }
+                      defaultValue={ qoh }
+                      value={ qoh }
                     />
                   </Form.Item>
 
@@ -1090,6 +1092,7 @@ const FormPage = (props) => {
                   <Form.Item
                     name="orderQty"
                     label="Order QTY +"
+                    initialValue={orderQty}
                   >
                     <InputNumber className='right' step="0.0001" min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) } placeholder='Type order qty here...' />
                   </Form.Item>
@@ -1114,8 +1117,9 @@ const FormPage = (props) => {
                   <Form.Item
                     name="EOH ="
                     label="EOH ="
+                    initialValue={eoh}
                   >
-                    <Input disabled={ true } className='right' />
+                    <Input disabled={ true } className='right' defaultValue={eoh} value={eoh} />
                   </Form.Item>
                 </div>
                 {
