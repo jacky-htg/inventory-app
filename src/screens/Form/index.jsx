@@ -86,6 +86,7 @@ const FormPage = (props) => {
   const [entryUser, setEntryUser] = useState('');
   const [entryDate, setEntryDate] = useState('');
   const [lastModified, setLastModified] = useState('');
+  const [alternate, setAlternate] = useState();
 
 
   const [errorFields, setErrorFields] = useState([]);
@@ -177,6 +178,7 @@ const FormPage = (props) => {
         if (!result.categorySubCode) {
           setLoadingPage(false);
         }
+        result.alternate && setAlternate(result.alternate);
       });
     }
   }, [id, locData, itemCategoriesData, mslData, sourcesData, uomData]);
@@ -654,8 +656,9 @@ const FormPage = (props) => {
                   <Form.Item
                     name="alternate"
                     label="Alternate"
+                    initialValue={alternate}
                   >
-                    <Input disabled />
+                    <Input disabled value={alternate} defaultValue={alternate}  />
                   </Form.Item>
                 </div>
 
