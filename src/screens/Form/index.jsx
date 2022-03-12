@@ -834,7 +834,7 @@ const FormPage = (props) => {
                       onChange={ value => { setObsoleteCode(value);} }
                       allowClear
                     >
-                      <Option value="O">Obsolete</Option>
+                      <Option value="OBSOLETE">Obsolete</Option>
                     </Select>
                   </Form.Item>
 
