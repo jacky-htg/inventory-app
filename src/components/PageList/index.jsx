@@ -42,6 +42,26 @@ function PageList(props) {
     }
   }, [props.fields]);
 
+  useEffect(() =>{
+    if (props.fields && datas) {
+      datas.forEach((element, index) => {
+        props.fields.forEach(field => {
+          if (field.lov) {
+            datas.forEach((data, index) => {
+              if (data[field.field]) {
+                field.lov.forEach(e => {
+                  if (data[field.field] === e.codeValue) {
+                    datas[index][field.field] = e.codeDesc;
+                  }
+                });
+              }
+            });
+          }
+        });
+      });
+    }
+  }, [props.fields, datas]);
+
   useEffect(() => {
     setLoading(true);
     getData(filterSearch);
@@ -101,6 +121,7 @@ function PageList(props) {
         pageSize: 10,
         total: result.totalRows
       });
+        
       setDatas(myData);
       if (props.addButtonLimit && myData.length >= props.addButtonLimit) {
         setDisabledCreate(true);
@@ -162,30 +183,47 @@ function PageList(props) {
   };
 
   const changeData = (n, data, type) => {
-    if (!filters[n] || !data) {
+    console.log(n, data, type);
+    if (!filters[n]) {
       filters[n] = {
-        field: "",
+        field: null,
         operator: "LIKE",
         value: ""
       };
     }
 
-    if (data) {
-      filters[n][type] = data;
-    }
-
-    setFilters(filters);
+    filters[n][type] = data;
 
     if (type === "field") {
       filters[n].value = "";
-      const [f] = renderFilter();
-      setFilterForm(f);
+      if (typeof(data) === "undefined") {
+        filters[n] = {
+          field: null,
+          operator: "LIKE",
+          value: ""
+        };
+      }
     }
+    
+    if (type === "value" && !data) {
+      filters[n][type] = "";
+    }
+
+    setFilters(filters);
+    const [f] = renderFilter();
+    setFilterForm(f);
   };
+
+  useEffect(()=>{
+    if (filterForm && filterForm.length === 0) {
+      addFilter();
+    }
+  }, [filterForm]);
 
   const renderFilter = () => {
     let temp = [];
     let counter = 0;
+    console.log('filters >>', filters);
     filters.map((e, i) => {
       counter++;
       if (i === 0) {
@@ -251,6 +289,25 @@ function PageList(props) {
       }
     });
 
+    let defaultOperators = ['LIKE', 'EQUALS'];
+    props.fields.map(e => {
+      if (e.field && filters[n] && filters[n].field && e.field === filters[n].field) {
+        if (e.operators) {
+          defaultOperators = e.operators;
+        }
+      }
+    });
+
+    let defaultOperator = defaultOperators[0];
+    if (filters[n] && filters[n].operator) {
+      if (defaultOperators.includes(filters[n].operator)) {
+        defaultOperator = filters[n].operator;
+      } else {
+        filters[n].operator = defaultOperator;
+        setFilters(filters);
+      }
+    }
+
     return (
       <div data-order={ n } style={ { paddingBottom: '0.5%', width: 556 } }>
         <Select
@@ -267,10 +324,10 @@ function PageList(props) {
         <Select
           style={ { width: 100, marginRight: '1%' } }
           onChange={ (data) => changeData(n, data, 'operator') }
-          defaultValue={ filters[n] ? filters[n].operator : "LIKE" }
+          defaultValue={ defaultOperator  }
+          value={ defaultOperator }
         >
-          <Option key="0" value="EQUALS">EQUALS</Option>
-          <Option key="1" value="LIKE">LIKE</Option>
+          { defaultOperators.map((o, i) => (<Option key={ i } value={ o } >{ o }</Option>)) }
         </Select>
 
         { valueForm }
@@ -301,7 +358,6 @@ function PageList(props) {
       { columns }
 
       <Column
-        ellipsis
         title="Action"
         key="action"
         render={ (text, record) => {

@@ -322,14 +322,14 @@ const StockLocationForm = (props) => {
                   name="Region Code"
                   label="Region Code"
                 >
-                  <Input maxLength={ 30 } disabled={ isDisabled } defaultValue={ regionCode } value={ regionCode } onChange={ e => setRegionCode(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type region code here...' } />
+                  <Input maxLength={ 10 } disabled={ isDisabled } defaultValue={ regionCode } value={ regionCode } onChange={ e => setRegionCode(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type region code here...' } />
                 </Form.Item>
 
                 <Form.Item
                   name="State Code"
                   label="State Code"
                 >
-                  <Input maxLength={ 30 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ stateCode } value={ stateCode } onChange={ e => setStateCode(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type state code here...' } />
+                  <Input maxLength={ 10 } style={ { textTransform: 'uppercase' } } disabled={ isDisabled } defaultValue={ stateCode } value={ stateCode } onChange={ e => setStateCode(e.target.value.toUpperCase()) } placeholder={ id && !isEdit ? '' : 'Type state code here...' } />
                 </Form.Item>
 
                 <Form.Item
