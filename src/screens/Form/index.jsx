@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Form, Input, InputNumber, Button, Select, Checkbox, AutoComplete, message, notification } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Lov, Location, Item } from '../../services';
+import moment from 'moment';
 
 import { StyledDiv } from './styled';
 import env from '../../env';
@@ -57,7 +58,9 @@ const FormPage = (props) => {
   const [mslCodeName, setMslCodeName] = useState();
   const [obsoleteCode, setObsoleteCode] = useState();
   const [obsoleteItem, setObsoleteItem] = useState('');
+  const [obsoleteDate, setObsoleteDate] = useState();
   const [openClose, setOpenClose] = useState();
+  const [closeDate, setCloseDate] = useState();
   const [orderQty, setOrderQty] = useState(parseFloat(0.0000));
   const [partNo, setPartNo] = useState('');
   const [prodnResv, setProdnResv] = useState(0);
@@ -142,8 +145,8 @@ const FormPage = (props) => {
         result.rohsStatus && setRohsStatus(result.rohsStatus);
         result.source && setSource(result.source);
         result.updatedBy && setEntryUser(result.updatedBy);
-        result.updatedAt && setLastModified(result.updatedAt);
-        result.createdAt && setEntryDate(result.createdAt);
+        result.updatedAt && setLastModified(moment(result.updatedAt).format("LLL"));
+        result.createdAt && setEntryDate(moment(result.createdAt).format("LLL"));
         if (result.source) {
           sourcesData.forEach(el => {
             if (el.codeValue === result.source) {
@@ -164,9 +167,12 @@ const FormPage = (props) => {
           });
         }
         result.version && setVersion(result.version);
-        result.obsoleteItem && setObsoleteCode(result.obsoleteItem);
+        result.obsoleteCode && setObsoleteCode(result.obsoleteCode);
+        result.obsoleteItem && setObsoleteItem(result.obsoleteItem);
+        result.obsoleteDate && setObsoleteDate(moment(result.obsoleteDate).format("LLL"));
         result.storageShelf && setStorageShelf(result.storageShelf);
-
+        result.openClose && setOpenClose(result.openClose);
+        result.closeDate && setCloseDate(moment(result.closeDate).format("LLL"));
         if (!result.categorySubCode) {
           setLoadingPage(false);
         }
@@ -714,13 +720,14 @@ const FormPage = (props) => {
                   <Form.Item
                     name="closedDate"
                     label="Closed Date"
+                    initialValue={closeDate}
                   // rules={ [
                   //   {
                   //     required: true,
                   //   },
                   // ] }
                   >
-                    <Input disabled />
+                    <Input disabled defaultValue={closeDate} value={closeDate} />
                   </Form.Item>
                 </div>
 
@@ -860,8 +867,9 @@ const FormPage = (props) => {
                   <Form.Item
                     name="obsoletedDate"
                     label="Obsoleted Date"
+                    initialValue={obsoleteDate}
                   >
-                    <Input disabled />
+                    <Input defaultValue={obsoleteDate} value={obsoleteDate} disabled />
                   </Form.Item>
                 </div>
                 <div className="row">
