@@ -42,7 +42,7 @@ const FormPage = (props) => {
 
   const [balbfQty, setBalbfQty] = useState(parseFloat(0.0000));
   // const [qtyOnHand, setQtyOnHand] = useState(parseFloat(0.0000));
-  const [qtyReserved, setQtyReserved] = useState(parseFloat(0.0000));
+  //const [qtyReserved, setQtyReserved] = useState(parseFloat(0.0000));
   const [categoryCode, setCategoryCode] = useState('');
   const [categoryName, setCategoryName] = useState();
   const [categorySubCode, setCategorySubCode] = useState('');
@@ -354,11 +354,11 @@ const FormPage = (props) => {
         obsoleteCode,
         obsoleteItem,
         openClose,
-        orderQty: parseInt(orderQty),
+        orderQty: parseFloat(orderQty),
         partNo,
-        prodnResv: parseInt(prodnResv),
+        prodnResv: parseFloat(prodnResv),
         productGroup,
-        qoh: parseInt(qoh),
+        qoh: parseFloat(qoh),
         qryObsItem,
         refUrl,
         remarks,
@@ -368,7 +368,7 @@ const FormPage = (props) => {
         rohsStatus,
         source,
         // status,
-        stdMaterial: parseInt(stdMaterial),
+        stdMaterial: parseFloat(stdMaterial),
         storageShelf,
         uom,
         // version: parseInt(version),
@@ -1049,14 +1049,15 @@ const FormPage = (props) => {
                   <Form.Item
                     name="reservedQty"
                     label="Reserved QTY -"
+                    initialValue={prodnResv}
                   >
                     <InputNumber
                       step="0.0001"
                       className='normal right'
                       readOnly
                       disabled={ true }
-                      defaultValue={ qtyReserved }
-                      value={ qtyReserved }
+                      defaultValue={ prodnResv }
+                      value={ prodnResv }
                     />
                   </Form.Item>
                 </div>
