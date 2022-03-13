@@ -91,7 +91,7 @@ const GrnManualForm = (props) => {
   const [grnNo, setGrnNo] = useState(null);
   const [msrNo, setMsrNo] = useState(null);
   const [doNo, setDoNo] = useState(null);
-  const [subType, setSubType] = useState(null);
+  const [subType, setSubType] = useState('M');
   const [orderNo, setOrderNo] = useState(null);
   const [projectNo, setProjectNo] = useState(null);
 
@@ -103,6 +103,8 @@ const GrnManualForm = (props) => {
   const [recdDate, setRecdDate] = useState('');
   const [entryUser, setEntryUser] = useState('');
   const [entryDate, setEntryDate] = useState('');
+  const [updatedAt, setUpdatedAt] = useState('');
+  const [updatedBy, setUpdatedBy] = useState('');
 
   useEffect(() => {
     if (id) {
@@ -115,7 +117,10 @@ const GrnManualForm = (props) => {
         result.currencyCode && setCurrencyCode(result.currencyCode);
         result.createdAt && setEntryDate(moment(result.createdAt).format('MM/DD/YYYY'));
         result.updatedAt && setRecdDate(moment(result.updatedAt).format('MM/DD/YYYY'));
+        result.updatedAt && setUpdatedAt(moment(result.updatedAt).format('MM/DD/YYYY'));
+        result.updatedBy && setUpdatedBy(result.updatedBy);
         result.entryUser && setEntryUser(result.entryUser);
+        result.createdBy && setEntryUser(result.createdBy);
         result.subType && setSubType(result.subType);
         result.orderNo && setOrderNo(result.orderNo);
         result.projectNo && setProjectNo(result.projectNo);
@@ -125,6 +130,8 @@ const GrnManualForm = (props) => {
         });
         console.log('arr :>> ', arr);
         setDetails([...arr]);
+
+        console.log('updated byyyy', result, result.updatedBy, updatedAt, updatedBy);
       });
     }
   }, [id]);
@@ -132,6 +139,10 @@ const GrnManualForm = (props) => {
   useEffect(() => {
     console.log('details :>> ', details);
   }, [details]);
+
+  useEffect(() => {
+    console.log('by up :>> ', updatedBy);
+  }, [updatedBy]);
 
 
 
@@ -333,59 +344,6 @@ const GrnManualForm = (props) => {
   };
 
 
-  /*const submit = async () => {
-    try {
-      if (!isEdit) {
-        const values = await form.validateFields();
-        console.log('Success:', values);
-      }
-      let obj = {
-        balbfQty: parseInt(balbfQty),
-        categoryCode,
-        categorySubCode,
-        description,
-        dimension,
-        issueNo,
-        itemNo,
-        leadtime: parseInt(leadtime),
-        loc,
-        manufacturer,
-        mslCode,
-        // obsoleteCode,
-        obsoleteItem,
-        // openClose,
-        orderQty: parseInt(orderQty),
-        partNo,
-        prodnResv: parseInt(prodnResv),
-        productGroup,
-        qoh: parseInt(qoh),
-        qryObsItem,
-        refUrl,
-        remarks,
-        reorder: parseInt(reorder),
-        // requestor,
-        rev,
-        rohsStatus,
-        source,
-        // status,
-        stdMaterial: parseInt(stdMaterial),
-        storageShelf,
-        uom,
-        // version: parseInt(version),
-      };
-      console.log('obj :>> ', obj);
-      if (isEdit) {
-        obj.version = parseInt(version);
-        Item.edit(id, obj);
-      } else {
-        Item.create(obj);
-      }
-      history.push('/grn-manuals');
-    } catch (errorInfo) {
-      console.log('Failed:', errorInfo);
-    }
-  };*/
-
   const submit = async () => {
     try {
       console.log(details);
@@ -510,6 +468,7 @@ const GrnManualForm = (props) => {
       params.type = 'GRN';
     } else if (key === 'pickList') {
       params.grnNo = grnNo;
+      params.subType = subType;
       params.orderNo = orderNo;
       params.projectNo = projectNo;
     } else if (key === 'label') {
@@ -585,163 +544,145 @@ const GrnManualForm = (props) => {
             <Form form={ form } name="control-hooks" scrollToFirstError>
               <div className="group">
                 <div className="row2">
-                  {
-                    !grnNo && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="GRN No"
-                        label="GRN No"
-                      >
-                        <Input hidden />
-                        <Input
-                          className='normal' disabled={ isDisabled }
-                          value={ grnNo }
-                          defaultValue={ grnNo }
-                          readOnly
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="GRN No"
+                    label="GRN No"
+                  >
+                    <Input hidden />
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      value={ grnNo }
+                      defaultValue={ grnNo }
+                      readOnly
+                    />
+                  </Form.Item>
 
-                  {
-                    !currencyCode && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="Currency Code"
-                        label="Currency Code"
-                      >
-                        <Input hidden />
-                        <Input
-                          className='normal' disabled={ isDisabled }
-                          value={ currencyCode }
-                          defaultValue={ currencyCode }
-                          readOnly
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Currency Code"
+                    label="Currency Code"
+                  >
+                    <Input hidden />
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      value={ currencyCode }
+                      defaultValue={ currencyCode }
+                      readOnly
+                    />
+                  </Form.Item>
 
-                  {
-                    !recdDate && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="Recd Date"
-                        label="Recd Date"
-                      >
-                        <Input hidden />
-                        <Input
-                          className='normal' disabled={ isDisabled }
-                          value={ recdDate }
-                          defaultValue={ recdDate }
-                          readOnly
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Recd Date"
+                    label="Recd Date"
+                  >
+                    <Input hidden />
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      value={ recdDate }
+                      defaultValue={ recdDate }
+                      readOnly
+                    />
+                  </Form.Item>
                 </div>
 
                 <div className="row2">
-                  {
-                    !msrNo && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="MSR No"
-                        label="MSR No"
-                      >
-                        <Input
-                          className='normal' disabled={ isDisabled }
-                          value={ msrNo }
-                          defaultValue={ msrNo }
-                          placeholder='Type MSR No here...'
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="MSR No"
+                    label="MSR No"
+                  >
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      value={ msrNo }
+                      defaultValue={ msrNo }
+                    />
+                  </Form.Item>
 
-                  {
-                    !currencyRate && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="Currency Rate"
-                        label="Currency Rate"
-                      >
-                        <Input hidden />
-                        <Input
-                          className='normal' disabled={ isDisabled }
-                          value={ currencyRate }
-                          defaultValue={ currencyRate }
-                          readOnly
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Currency Rate"
+                    label="Currency Rate"
+                  >
+                    <Input hidden />
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      value={ currencyRate }
+                      defaultValue={ currencyRate }
+                      readOnly
+                    />
+                  </Form.Item>
 
-                  {
-                    !currencyCode && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="Entry User"
-                        label="Entry User"
-                      >
-                        <Input hidden />
-                        <Input
-                          className='normal' disabled={ isDisabled }
-                          value={ entryUser }
-                          defaultValue={ entryUser }
-                          readOnly
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Entry User"
+                    label="Entry User"
+                  >
+                    <Input hidden />
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      value={ entryUser }
+                      defaultValue={ entryUser }
+                      readOnly
+                    />
+                  </Form.Item>
                 </div>
 
                 <div className="row2">
-                  {
-                    !doNo && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="DO No"
-                        label="DO No"
-                      >
-                        <Input
-                          className='normal' disabled={ isDisabled }
-                          value={ doNo }
-                          defaultValue={ doNo }
-                          placeholder='Type Do No here...'
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="DO No"
+                    label="DO No"
+                  >
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      value={ doNo }
+                      defaultValue={ doNo }
+                    />
+                  </Form.Item>
 
 
                   <Form.Item></Form.Item>
 
-                  {
-                    !entryDate && id && !isEdit
-                      ?
-                      <></>
-                      :
-                      <Form.Item
-                        name="Entry Date"
-                        label="Entry Date"
-                      >
-                        <Input hidden />
-                        <Input
-                          className='normal' disabled={ isDisabled }
-                          value={ entryDate }
-                          defaultValue={ entryDate }
-                          readOnly
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Entry Date"
+                    label="Entry Date"
+                  >
+                    <Input hidden />
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      value={ entryDate }
+                      defaultValue={ entryDate }
+                      readOnly
+                    />
+                  </Form.Item>
                 </div>
+                { id && 
+                <div className="row2">
+                  <Form.Item
+                    name="UpdatedBy"
+                    label="Updated By"
+                    initialValue={updatedBy}
+                  >
+                    <Input hidden/>
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      value={ updatedBy }
+                      defaultValue={ updatedBy }
+                    />
+                  </Form.Item>
+
+
+                  <Form.Item
+                    name="lastUpdatedAt"
+                    label="Last Updated At"
+                    initialValue={updatedAt}
+                  >
+                    <Input hidden/>
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      value={ updatedAt }
+                      defaultValue={ updatedAt }
+                      readOnly
+                    />
+                  </Form.Item>
+                </div> }
+
+                
               </div>
 
               <div className="detail-wrapper">
