@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Menu, Dropdown, notification, Modal, InputNumber } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { MdAddCircle } from 'react-icons/md';
@@ -375,7 +375,8 @@ const GrnWithPoForm = (props) => {
       console.log('masuk');
       console.log('poNo :>> ', poNo);
       console.log('parts :>> ', parts);
-      const arr = [];
+      addNewDetail();
+      /*const arr = [];
       parts.map(async (el, i) => {
         console.log('el :>> ', el);
         const hasil = await Grn.detailByPartNo(poNo, el.partNo, el.poRecSeq);
@@ -418,7 +419,7 @@ const GrnWithPoForm = (props) => {
           }
           setReRender(!reRender);
         }
-      });
+      }); */
       // console.log('arr :>> ', arr);
       // setTempDetails([...arr]);
       // console.log('success');
@@ -493,13 +494,55 @@ const GrnWithPoForm = (props) => {
     setDetails(arr);
   };
 
-  const changeDetail = (idx, field, value) => {
+  const changeDetail = async (idx, field, value, trigger) => {
     details[idx][field] = value;
     if (field === 'recdQty') {
       details[idx]['issuedQty'] = value;
     }
+
+    if (trigger) {
+      parts.map(async (el, i) => {
+        if (el.partNo === value || el.itemNo === value) {
+          const hasil = await Grn.detailByPartNo(poNo, el.partNo, el.poRecSeq);
+          if (hasil.ok !== undefined && !hasil.ok) {
+            const res = await hasil.data;
+            notification.error({
+              message: res.message ? res.message : env.internalError,
+            });
+          } else {
+            const temp = {
+              seqNo: el.seqNo,
+              partNo: el.partNo,
+              loc: hasil.loc,
+              projectNo: hasil.projectNo,
+              poRecSeq: el.poRecSeq,
+              uom: hasil.uom,
+              invUom: hasil.invUom,
+              poPrice: hasil.poPrice,
+              recdPrice: hasil.poPrice,
+              stdPackQty: hasil.stdPackQty,
+              remarks: hasil.remarks,
+              orderQty: hasil.orderQty,
+              dueDate: hasil.dueDate,
+              description: hasil.description,
+              recdQty: 0,
+              issuedQty: 0,
+              labelQty: 0,
+              itemNo: hasil.itemNo,
+              itemType: hasil.itemType
+            };
+            details[idx] = temp;
+          }
+        }
+      });
+    }
     setDetails(details);
+    setReRender(!reRender);
   };
+
+  useEffect(() => {
+    console.log("details", details);
+  }, [details]);
 
   const renderDetails = () => {
     if (!isPoNoClosed) {
@@ -648,7 +691,7 @@ const GrnWithPoForm = (props) => {
                                 className='normal' disabled={ isDisabled }
                                 defaultValue={ el.itemNo }
                                 value={ el.itemNo }
-                                onChange={ (value) => changeDetail(idx, 'itemNo', value) }
+                                onChange={ (value) => changeDetail(idx, 'itemNo', value, true) }
                                 style={ { textTransform: 'uppercase' } }
                               // filterOption={ (input, option) =>
                               //   option.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -826,7 +869,7 @@ const GrnWithPoForm = (props) => {
                                   className='normal' disabled={ isDisabled }
                                   defaultValue={ el.partNo }
                                   value={ el.partNo }
-                                  onChange={ (value) => changeDetail(idx, 'partNo', value) }
+                                  onChange={ (value) => changeDetail(idx, 'partNo', value, true) }
                                   style={ { textTransform: 'uppercase' } }
                                 // filterOption={ (input, option) =>
                                 //   option.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -946,6 +989,7 @@ const GrnWithPoForm = (props) => {
                         <Form.Item
                           name={ `Remarks[${ idx }]` }
                           label="Remarks"
+                          initialValue={el.remarks}
                         >
                           {
                             id ?
