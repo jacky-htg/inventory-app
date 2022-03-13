@@ -536,13 +536,10 @@ const GrnWithPoForm = (props) => {
         }
       });
     }
+    console.log("details changed >>", details);
     setDetails(details);
     setReRender(!reRender);
   };
-
-  useEffect(() => {
-    console.log("details", details);
-  }, [details]);
 
   const renderDetails = () => {
     if (!isPoNoClosed) {
