@@ -42,7 +42,7 @@ function PageList(props) {
     }
   }, [props.fields]);
 
-  useEffect(() =>{
+  useEffect(() => {
     if (props.fields && datas) {
       datas.forEach((element, index) => {
         props.fields.forEach(field => {
@@ -121,7 +121,7 @@ function PageList(props) {
         pageSize: 10,
         total: result.totalRows
       });
-        
+
       setDatas(myData);
       if (props.addButtonLimit && myData.length >= props.addButtonLimit) {
         setDisabledCreate(true);
@@ -196,7 +196,7 @@ function PageList(props) {
 
     if (type === "field") {
       filters[n].value = "";
-      if (typeof(data) === "undefined") {
+      if (typeof (data) === "undefined") {
         filters[n] = {
           field: null,
           operator: "LIKE",
@@ -204,7 +204,7 @@ function PageList(props) {
         };
       }
     }
-    
+
     if (type === "value" && !data) {
       filters[n][type] = "";
     }
@@ -214,7 +214,7 @@ function PageList(props) {
     setFilterForm(f);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (filterForm && filterForm.length === 0) {
       addFilter();
     }
@@ -324,7 +324,7 @@ function PageList(props) {
         <Select
           style={ { width: 100, marginRight: '1%' } }
           onChange={ (data) => changeData(n, data, 'operator') }
-          defaultValue={ defaultOperator  }
+          defaultValue={ defaultOperator }
           value={ defaultOperator }
         >
           { defaultOperators.map((o, i) => (<Option key={ i } value={ o } >{ o }</Option>)) }
@@ -473,34 +473,34 @@ function PageList(props) {
     return (
       <Modal title={
         <div
-          style={{
+          style={ {
             width: '100%',
             cursor: 'move',
-          }}
+          } }
           // fix eslintjsx-a11y/mouse-events-have-key-events
           // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/mouse-events-have-key-events.md
-          onFocus={() => {}}
-          onBlur={() => {}}
-          // end
+          onFocus={ () => { } }
+          onBlur={ () => { } }
+        // end
         >
           Coloumn Setting
         </div>
-      } 
-      visible={ isModalVisible } onOk={ handleOk } onCancel={ handleCancel } 
-      modalRender={modal => (
-        <Draggable
-          bounds={bounds}
-          onStart={(event, uiData) => onStart(event, uiData)}
-        >
-          <div ref={draggleRef}>{modal}</div>
-        </Draggable>
-      )}
-      footer={ [
-        <Button key="submit" type="primary" loading={ loading } onClick={ handleOk }
-        >
-          CLOSE
-        </Button>
-      ] }>
+      }
+        visible={ isModalVisible } onOk={ handleOk } onCancel={ handleCancel }
+        modalRender={ modal => (
+          <Draggable
+            bounds={ bounds }
+            onStart={ (event, uiData) => onStart(event, uiData) }
+          >
+            <div ref={ draggleRef }>{ modal }</div>
+          </Draggable>
+        ) }
+        footer={ [
+          <Button key="submit" type="primary" loading={ loading } onClick={ handleOk }
+          >
+            CLOSE
+          </Button>
+        ] }>
         { contentModal }
       </Modal>
     );
@@ -509,7 +509,7 @@ function PageList(props) {
   return (
     <StyledDiv>
       { modal() }
-      <h2 style={ { fontSize: '180%', color: '#1990ff', marginBottom: '3%' } }>{ props.title }</h2>
+      <h2 style={ { fontSize: '180%', color: '#ffc401', marginBottom: '3%' } }>{ props.title }</h2>
       { props.filter && filter }
       <div style={ { textAlign: 'right' } }>
         <Button onClick={ showModal }>Column Settings</Button>

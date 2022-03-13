@@ -16,7 +16,7 @@ const StyledDiv = styled.div`
 
     h2 {
       font-size: 18px;
-      color: #1990ff;
+      color: #ffc401;
     }
 
     .right {
@@ -36,8 +36,8 @@ const StyledDiv = styled.div`
   }
 
   .formWrapper {
-    height: calc(100vh - 220px);
-    overflow-y: scroll;
+    /* height: calc(100vh - 220px);
+    overflow-y: scroll; */
 
     .loading {
       height: 100%;
@@ -112,6 +112,18 @@ const StyledDiv = styled.div`
     /* background: grey; */
     padding: 20px 0px;
     min-height: 240px;
+    height: calc(100vh - 460px);
+    overflow-y: scroll;
+
+    .full {
+      .border {
+        width: 100% !important;
+      }
+
+      .Collapsible__trigger {
+        width: 100% !important;
+      }
+    }
 
     .detail-card {
       position: relative;
@@ -129,7 +141,7 @@ const StyledDiv = styled.div`
       .border {
         border-radius: 10px;
         border: 1px solid lightgrey;
-        width: 100$;
+        width: 92%;
       }
       
       .Collapsible {
@@ -141,7 +153,7 @@ const StyledDiv = styled.div`
         align-items: center;
         padding: 20px;
         border-radius: 10px;
-        width: 100%;
+        width: 92%;
         font-weight: 400;
         text-decoration: none;
         position: absolute;

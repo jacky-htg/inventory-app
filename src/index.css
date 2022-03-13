@@ -288,6 +288,13 @@ input:read-only {
 }
 
 .alignRight {
+  text-align: right !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.right {
   text-align: right;
   display: flex;
   flex-direction: column;
@@ -301,4 +308,8 @@ input:read-only {
 
 .ant-modal-confirm-content {
   margin-left: 0px !important;
+}
+
+.center {
+  text-align: center !important;
 }

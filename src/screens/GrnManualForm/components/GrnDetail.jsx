@@ -199,19 +199,21 @@ function GrnDetail(props) {
                       id ?
                         <span>{ el.recdQty ? el.recdQty : '-' }</span>
                         :
-                        <InputNumber
-                          disabled={ id }
-                          className="smallInput"
-                          min={ 0 }
-                          max={ 999991 }
-                          stringMode
-                          defaultValue={ el.recdQty || 0 }
-                          value={ el.recdQty || 0 }
-                          onChange={ (e) =>
-                            changeDetail(idx, "recdQty", parseFloat(e))
-                          }
-                          placeholder="Type Recd Qty here..."
-                        />
+                        <Input type={ 'number' } min={ 0 } className='smallInput alignRight' defaultValue={ el.recdQty || 0 } value={ el.recdQty || 0 } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type GRN Qty here...' disabled={ id } />
+
+                      // <InputNumber
+                      //   disabled={ id }
+                      //   className="normal alignRight"
+                      //   min={ 0 }
+                      //   max={ 999991 }
+                      //   stringMode
+                      //   defaultValue={ el.recdQty || 0 }
+                      //   value={ el.recdQty || 0 }
+                      //   onChange={ (e) =>
+                      //     changeDetail(idx, "recdQty", parseFloat(e))
+                      //   }
+                      //   placeholder="Type Recd Qty here..."
+                      // />
                     }
                   </Form.Item>
                 }
@@ -306,19 +308,20 @@ function GrnDetail(props) {
                       id ?
                         <span>{ el.labelQty ? el.labelQty : '-' }</span>
                         :
-                        <InputNumber
-                          disabled={ id }
-                          className="smallInput"
-                          min={ 0 }
-                          max={ 999991 }
-                          stringMode
-                          defaultValue={ el.labelQty || 0 }
-                          value={ el.labelQty || 0 }
-                          onChange={ (e) =>
-                            changeDetail(idx, "labelQty", parseFloat(e))
-                          }
-                          placeholder="Type Qty/Label here..."
-                        />
+                        <Input type={ 'number' } min={ 0 } className='smallInput alignRight' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' disabled={ id } />
+                      // <InputNumber
+                      //   disabled={ id }
+                      //   className="smallInput"
+                      //   min={ 0 }
+                      //   max={ 999991 }
+                      //   stringMode
+                      //   defaultValue={ el.labelQty || 0 }
+                      //   value={ el.labelQty || 0 }
+                      //   onChange={ (e) =>
+                      //     changeDetail(idx, "labelQty", parseFloat(e))
+                      //   }
+                      //   placeholder="Type Qty/Label here..."
+                      // />
                     }
                   </Form.Item>
                 }
@@ -394,7 +397,7 @@ function GrnDetail(props) {
                         :
                         <Input
                           disabled={ id }
-                          className="smallInput"
+                          className="smallInput center"
                           defaultValue={ el.dateCode }
                           value={ el.dateCode }
                           onChange={ (e) =>

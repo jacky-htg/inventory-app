@@ -16,7 +16,7 @@ const StyledDiv = styled.div`
 
     h2 {
       font-size: 18px;
-      color: #1990ff;
+      color: #ffc401;
     }
 
     .right {
@@ -32,8 +32,8 @@ const StyledDiv = styled.div`
   }
 
   .formWrapper {
-     height: calc(100vh - 200px);
-    overflow-y: scroll;
+     /* height: calc(100vh - 200px);
+    overflow-y: scroll; */
     
     .loading {
       height: 100%;
@@ -100,8 +100,8 @@ const StyledDiv = styled.div`
   .detail-wrapper {
     /* background: grey; */
     padding: 40px 0px;
-    /* height: calc(100vh - 450px);
-    overflow-y: scroll; */
+    height: calc(100vh - 460px);
+    overflow-y: scroll;
     min-height: 240px;
 
     .full {

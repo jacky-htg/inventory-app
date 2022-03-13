@@ -113,8 +113,8 @@ const GrnManualForm = (props) => {
         result.grnNo && setGrnNo(result.grnNo);
         result.currencyRate && setCurrencyRate(result.currencyRate);
         result.currencyCode && setCurrencyCode(result.currencyCode);
-        result.createdAt && setEntryDate(result.createdAt);
-        result.updatedAt && setRecdDate(result.updatedAt);
+        result.createdAt && setEntryDate(moment(result.createdAt).format('MM/DD/YYYY'));
+        result.updatedAt && setRecdDate(moment(result.updatedAt).format('MM/DD/YYYY'));
         result.entryUser && setEntryUser(result.entryUser);
         result.subType && setSubType(result.subType);
         result.orderNo && setOrderNo(result.orderNo);

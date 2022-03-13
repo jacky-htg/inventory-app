@@ -16,7 +16,7 @@ const StyledDiv = styled.div`
 
     h2 {
       font-size: 18px;
-      color: #1990ff;
+      color: #ffc401;
     }
 
     .right {

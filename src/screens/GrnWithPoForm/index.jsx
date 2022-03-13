@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Menu, Dropdown, notification, Modal } from 'antd';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Menu, Dropdown, notification, Modal, InputNumber } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { MdAddCircle } from 'react-icons/md';
 import { TiDelete } from 'react-icons/ti';
 import Collapsible from "react-collapsible";
 import moment from 'moment';
 
-import { Grn } from '../../services';
+import { Grn, Location } from '../../services';
 import { StyledDiv } from './styled';
 import env from '../../env';
 import { Images } from '../../constant';
@@ -27,18 +27,18 @@ const GrnWithPoForm = (props) => {
   const [form] = Form.useForm();
   const [details, setDetails] = useState([]);
   const [tempDetails, setTempDetails] = useState([]);
-  /*const [locData, setLocData] = useState([]);
+  const [locData, setLocData] = useState([]);
   const [locOpt, setLocOpt] = useState([]);
-  const [itemCategoriesData, setItemCategoriesData] = useState([]);
-  const [itemCategoriesOpt, setItemCategoriesOpt] = useState([]);
-  const [subCategoriesData, setSubCategoriesData] = useState([]);
-  const [subCategoriesOpt, setSubCategoriesOpt] = useState([]);
-  const [mslData, setMslData] = useState([]);
-  const [mslOpt, setMslOpt] = useState([]);
-  const [sourcesData, setSourcesData] = useState([]);
-  const [sourcesOpt, setSourcesOpt] = useState([]);
-  const [uomData, setUomData] = useState([]);
-  const [uomOpt, setUomOpt] = useState([]); */
+  // const [itemCategoriesData, setItemCategoriesData] = useState([]);
+  // const [itemCategoriesOpt, setItemCategoriesOpt] = useState([]);
+  // const [subCategoriesData, setSubCategoriesData] = useState([]);
+  // const [subCategoriesOpt, setSubCategoriesOpt] = useState([]);
+  // const [mslData, setMslData] = useState([]);
+  // const [mslOpt, setMslOpt] = useState([]);
+  // const [sourcesData, setSourcesData] = useState([]);
+  // const [sourcesOpt, setSourcesOpt] = useState([]);
+  // const [uomData, setUomData] = useState([]);
+  // const [uomOpt, setUomOpt] = useState([]);
   const [grnNo, setGrnNo] = useState('');
   const [poNo, setPoNo] = useState();
   const [supplierCode, setSupplierCode] = useState('');
@@ -56,6 +56,10 @@ const GrnWithPoForm = (props) => {
   const [orderNo, setOrderNo] = useState(null);
   const [reRender, setReRender] = useState(false);
   const [isPoNoClosed, setIsPoNoClosed] = useState();
+  const [partOpt, setPartOpt] = useState([]);
+  const [itemOpt, setItemOpt] = useState([]);
+  const [updatedBy, setUpdatedBy] = useState('');
+  const [updatedAt, setUpdatedAt] = useState('');
 
   const [parts, setParts] = useState([]);
 
@@ -206,6 +210,20 @@ const GrnWithPoForm = (props) => {
   }, [id, locData, itemCategoriesData, mslData, sourcesData, uomData]); */
 
   useEffect(() => {
+    let data = Location.list({});
+    data.then(result => {
+      console.log('location :>> ', result.rows);
+      setLocData(result.rows);
+
+      let temp = [];
+      result.rows.forEach(el => {
+        temp.push(<Option key={ el.loc } value={ el.loc } >{ el.loc }</Option>);
+      });
+      setLocOpt(temp);
+    });
+  }, []);
+
+  useEffect(() => {
     if (id) {
       let data = Grn.view(id);
       data.then(result => {
@@ -216,7 +234,10 @@ const GrnWithPoForm = (props) => {
         result.poNo && setPoNo(result.poNo);
         result.supplierCode && setSupplierCode(result.supplierCode);
         result.subType && setSubType(result.subType);
-        result.recdDate && setRecdDate(result.recdDate);
+        result.recdDate && setRecdDate(moment(result.recdDate).format('MM/DD/YYYY'));
+        result.updatedBy && setUpdatedBy(result.updatedBy);
+        result.updatedAt && setUpdatedAt(moment(result.updatedAt).format('MM/DD/YYYY'));
+
         let arr = [];
         result.grnDetails && result.grnDetails.length > 0 && result.grnDetails.forEach(el => {
           arr.push(el);
@@ -295,7 +316,7 @@ const GrnWithPoForm = (props) => {
           hasil.supplierCode && setSupplierCode(hasil.supplierCode);
           hasil.currencyCode && setCurrencyCode(hasil.currencyCode);
           hasil.currencyRate && setCurrencyRate(hasil.currencyRate);
-          hasil.recdDate && setRecdDate(hasil.recdDate);
+          hasil.recdDate && setRecdDate(moment(hasil.recdDate).format('MM/DD/YYYY'));
           hasil.poRemarks && setPoRemarks(hasil.poRemarks);
           hasil.orderNo && setOrderNo(hasil.orderNo);
           hasil.buyer && setBuyer(hasil.buyer);
@@ -311,6 +332,14 @@ const GrnWithPoForm = (props) => {
             } else {
               console.log('hasil part :>> ', hasil2);
               if (hasil2.ok === undefined) {
+                let temp = [];
+                let temp2 = [];
+                hasil2.forEach(el => {
+                  el.itemNo && temp.push(<Option key={ el.itemNo } value={ el.itemNo } >{ el.itemNo }</Option>);
+                  el.partNo && temp2.push(<Option key={ el.partNo } value={ el.partNo } >{ el.partNo }</Option>);
+                });
+                setItemOpt(temp);
+                setPartOpt(temp2);
                 setParts(hasil2);
               } else {
                 setParts([]);
@@ -411,7 +440,7 @@ const GrnWithPoForm = (props) => {
         details[i]["subType"] = "N";
         details[i]["grnNo"] = grnNo;
         details[i]["poNo"] = poNo;
-        details[i]["recdDate"] = moment().format();
+        details[i]["recdDate"] = moment().format('MM/DD/YYYY');
         details[i]["uom"] = e.invUom;
         details[i]["recdQty"] = parseInt(e.recdQty);
         details[i]["issuedQty"] = parseInt(e.issuedQty);
@@ -477,7 +506,7 @@ const GrnWithPoForm = (props) => {
       return details.length > 0 &&
         details.map((el, idx) => {
           return (
-            <div key={ idx } className="detail-card">
+            <div key={ idx } className={ `detail-card ${ id ? 'full' : '' }` }>
               <div className="border">
                 <Collapsible trigger={ `Serial Number: ${ idx + 1 }` }>
                   <div className="inputs">
@@ -552,7 +581,19 @@ const GrnWithPoForm = (props) => {
                               id ?
                                 <span>{ el.recdPrice ? el.recdPrice : '-' }</span>
                                 :
-                                <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly disabled={ id } />
+                                // <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly disabled={ id } />
+                                <InputNumber
+                                  className='right'
+                                  min={ 0 }
+                                  max={ 9999999991 }
+                                  step="0.0001"
+                                  stringMode
+                                  maxLength={ 18 }
+                                  disabled={ true }
+                                  defaultValue={ el.recdPrice }
+                                  value={ el.recdPrice }
+                                  onChange={ e => changeDetail(idx, 'recdPrice', e.target.value) }
+                                />
                             }
                           </Form.Item>
                         }
@@ -581,7 +622,7 @@ const GrnWithPoForm = (props) => {
                               id ?
                                 <span>{ el.recdQty ? el.recdQty : '-' }</span>
                                 :
-                                <Input type={ 'number' } min={ 0 } className='smallInput' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type GRN Qty here...' disabled={ id } />
+                                <Input type={ 'number' } min={ 0 } className='smallInput alignRight' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type GRN Qty here...' disabled={ id } />
                             }
                           </Form.Item>
                         }
@@ -599,7 +640,22 @@ const GrnWithPoForm = (props) => {
                             id ?
                               <span>{ el.itemNo ? el.itemNo : '-' }</span>
                               :
-                              <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly disabled={ id } />
+                              // <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly disabled={ id } />
+                              <Select
+                                showSearch
+                                allowClear
+                                // ref={ locationRef }
+                                className='normal' disabled={ isDisabled }
+                                defaultValue={ el.itemNo }
+                                value={ el.itemNo }
+                                onChange={ (value) => changeDetail(idx, 'itemNo', value) }
+                                style={ { textTransform: 'uppercase' } }
+                              // filterOption={ (input, option) =>
+                              //   option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                              // }
+                              >
+                                { itemOpt }
+                              </Select>
                           }
                         </Form.Item>
                       }
@@ -613,12 +669,27 @@ const GrnWithPoForm = (props) => {
                             id ?
                               <span>{ el.loc ? el.loc : '-' }</span>
                               :
-                              <Input
-                                className='smallInput' disabled={ isDisabled }
+                              // <Input
+                              //   className='smallInput' disabled={ isDisabled }
+                              //   defaultValue={ el.loc }
+                              //   value={ el.loc }
+                              //   readOnly
+                              // />
+                              <Select
+                                showSearch
+                                allowClear
+                                // ref={ locationRef }
+                                className='normal' disabled={ isDisabled }
                                 defaultValue={ el.loc }
                                 value={ el.loc }
-                                readOnly
-                              />
+                                onChange={ (value) => changeDetail(idx, 'loc', value) }
+                                style={ { textTransform: 'uppercase' } }
+                              // filterOption={ (input, option) =>
+                              //   option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                              // }
+                              >
+                                { locOpt }
+                              </Select>
                           }
                         </Form.Item>
                       }
@@ -679,7 +750,7 @@ const GrnWithPoForm = (props) => {
                                       }
                                     }
 
-                                    if (!value || flag) {
+                                    if (!value || flag && value.length === 4) {
                                       return Promise.resolve();
                                     }
 
@@ -693,7 +764,7 @@ const GrnWithPoForm = (props) => {
                               id ?
                                 <span>{ el.dateCode ? el.dateCode : '-' }</span>
                                 :
-                                <Input className='smallInput' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' disabled={ id } />
+                                <Input className='smallInput center' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' disabled={ id } />
                             }
                           </Form.Item>
                         }
@@ -729,7 +800,7 @@ const GrnWithPoForm = (props) => {
                               id ?
                                 <span>{ el.labelQty ? el.labelQty : '-' }</span>
                                 :
-                                <Input type={ 'number' } min={ 0 } className='smallInput' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' disabled={ id } />
+                                <Input type={ 'number' } min={ 0 } className='smallInput alignRight' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' disabled={ id } />
                             }
                           </Form.Item>
                         }
@@ -747,21 +818,22 @@ const GrnWithPoForm = (props) => {
                               id ?
                                 <span>{ el.partNo ? el.partNo : '-' }</span>
                                 :
-                                <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly disabled={ id } />
-                            }
-                          </Form.Item>
-                        }
-
-                        {
-                          <Form.Item
-                            name={ `ProjectNo[${ idx }]` }
-                            label="Project No"
-                          >
-                            {
-                              id ?
-                                <span>{ el.projectNo ? el.projectNo : '-' }</span>
-                                :
-                                <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly disabled={ id } />
+                                // <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly disabled={ id } />
+                                <Select
+                                  showSearch
+                                  allowClear
+                                  // ref={ locationRef }
+                                  className='normal' disabled={ isDisabled }
+                                  defaultValue={ el.partNo }
+                                  value={ el.partNo }
+                                  onChange={ (value) => changeDetail(idx, 'partNo', value) }
+                                  style={ { textTransform: 'uppercase' } }
+                                // filterOption={ (input, option) =>
+                                //   option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                // }
+                                >
+                                  { partOpt }
+                                </Select>
                             }
                           </Form.Item>
                         }
@@ -778,7 +850,19 @@ const GrnWithPoForm = (props) => {
                               id ?
                                 <span>{ el.orderQty ? el.orderQty : '-' }</span>
                                 :
-                                <Input className='smallInput' defaultValue={ el.orderQty } value={ el.orderQty } onChange={ e => changeDetail(idx, 'orderQty', e.target.value) } placeholder='Type order qty here...' disabled={ id } readOnly />
+                                // <Input className='smallInput' defaultValue={ el.orderQty } value={ el.orderQty } onChange={ e => changeDetail(idx, 'orderQty', e.target.value) } placeholder='Type order qty here...' disabled={ id } readOnly />
+                                <InputNumber
+                                  className='right'
+                                  min={ 0 }
+                                  max={ 9999999991 }
+                                  step="0.01"
+                                  stringMode
+                                  maxLength={ 18 }
+                                  disabled={ true }
+                                  defaultValue={ el.orderQty }
+                                  value={ el.orderQty }
+                                  onChange={ e => changeDetail(idx, 'orderQty', e.target.value) }
+                                />
                             }
                           </Form.Item>
                         }
@@ -829,7 +913,21 @@ const GrnWithPoForm = (props) => {
                         }
                       </div>
                     </div>
-                    <div className="row">
+                    <div className="row2">
+                      {
+                        <Form.Item
+                          name={ `ProjectNo[${ idx }]` }
+                          label="Project No"
+                        >
+                          {
+                            id ?
+                              <span>{ el.projectNo ? el.projectNo : '-' }</span>
+                              :
+                              <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly disabled={ id } />
+                          }
+                        </Form.Item>
+                      }
+
                       {
                         <Form.Item
                           name={ `Description[${ idx }]` }
@@ -864,13 +962,17 @@ const GrnWithPoForm = (props) => {
                 </Collapsible>
               </div>
 
-              <div className="actions">
-                {
-                  idx !== 0 &&
-                  <TiDelete color='red' size={ 30 } onClick={ () => deleteDetail(idx) } />
-                }
-                {/* <MdAddCircle color='#1990ff' size={ 24 } onClick={ addNewDetail } /> */ }
-              </div>
+              {
+                !id &&
+                <div className="actions">
+                  { details.length > 1 && (
+                    <TiDelete color="red" size={ 30 } onClick={ () => deleteDetail(idx) } />
+                  ) }
+                  { idx === details.length - 1 && (
+                    <MdAddCircle color="#1990ff" size={ 24 } onClick={ addNewDetail } />
+                  ) }
+                </div>
+              }
 
             </div>
           );
@@ -946,6 +1048,11 @@ const GrnWithPoForm = (props) => {
       okText: 'No',
       onOk: () => history.push('/grn-with-pos'),
     });
+  };
+
+  Number.prototype.countDecimals = function () {
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    return this.toString().split(".")[1].length || 0;
   };
 
   return (
@@ -1176,6 +1283,28 @@ const GrnWithPoForm = (props) => {
                           placeholder={ "Type DO No here.." }
                         />
                       </Form.Item>
+                  }
+                </div>
+
+                <div className="row2">
+                  {
+                    id &&
+                    <Form.Item
+                      name="Updated By"
+                      label="Updated By"
+                    >
+                      <span>{ updatedBy }</span>
+                    </Form.Item>
+                  }
+
+                  {
+                    id &&
+                    <Form.Item
+                      name="Last Updated"
+                      label="Last Updated"
+                    >
+                      <span>{ updatedAt }</span>
+                    </Form.Item>
                   }
                 </div>
               </div>
