@@ -454,11 +454,13 @@ const GrnManualForm = (props) => {
   const onSearchPress = (idx, field, value) => {
     console.log('idx, field, value :>> ', idx, field, value);
     clearTimeout(timer);
+    details[idx]["recdQty"] = 1;
+    details[idx]["labelQty"] = 1;
     let temp = [...details];
     temp[idx][field] = value;
     setDetails(temp);
     let body = {
-      "msrNo": msrNo,
+      "subType": "M",
       "grnDetails": details
       // [
       // {
@@ -474,6 +476,10 @@ const GrnManualForm = (props) => {
       let data = Grn.checkNewItem(body);
       data.then(res => {
         console.log('res checkNewItem :>> ', res);
+        details[idx] = {
+          ...details[idx],
+          res
+        };
       });
     }, 1500));
     // Grn.checkNewItem();

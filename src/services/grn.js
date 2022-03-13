@@ -173,6 +173,7 @@ async function checkNewItem(body) {
   return await fetch(`${env.url}/grns/check-next-item`, {
     method: "POST",
     headers: {
+      "Content-Type": "application/json",
       "X-USERNAME": env.username,
       "X-COMPANYCODE": env.companyCode,
       "X-PLANTNO": env.plantNo,
