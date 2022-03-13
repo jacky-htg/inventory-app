@@ -177,7 +177,7 @@ async function checkNewItem(body) {
       "X-COMPANYCODE": env.companyCode,
       "X-PLANTNO": env.plantNo,
     },
-    body: body,
+    body: JSON.stringify(body),
   })
     .then((res) => res.json())
     .catch((err) => console.log("err :>> ", err));
