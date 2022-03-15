@@ -52,7 +52,7 @@ const GrnWithPoForm = (props) => {
   const [loadingPage, setLoadingPage] = useState(id ? true : false);
   const [isDisabled, setIsDisabled] = useState(id ? true : false);
   const [poNoOpt, setPoNoOpt] = useState([]);
-  const [subType, setSubType] = useState(null);
+  const [subType, setSubType] = useState('N');
   const [orderNo, setOrderNo] = useState(null);
   const [reRender, setReRender] = useState(false);
   const [isPoNoClosed, setIsPoNoClosed] = useState();
@@ -1031,6 +1031,7 @@ const GrnWithPoForm = (props) => {
       body.subType = subType;
     } else if (key === 'pickList') {
       body.grnNo = grnNo;
+      body.subType = subType;
     } else if (key === 'label') {
       body.grnNo = grnNo;
     }
@@ -1155,7 +1156,7 @@ const GrnWithPoForm = (props) => {
                           defaultValue={ poNo }
                           value={ poNo }
                           options={ poNoOpt }
-                          onSelect={ data => { setPoNo(data); clearData(); } }
+                          onSelect={ data => { setPoNo(data);  } }
                           placeholder={ "Type PO No here..." }
                           filterOption={ (inputValue, option) =>
                             option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
