@@ -60,8 +60,21 @@ const StyledDiv = styled.div`
       padding-right: 30px;
     }
 
+    .right input[readonly], .right input[disabled]{
+      padding-right:10px;
+    }
+
     .right {
       text-align: right !important;
+    }
+
+    .edit {
+      color: rgba(0, 0, 0, 0.25);
+      background-color: #f5f5f5;
+      border-color: #d9d9d9;
+      box-shadow: none;
+      cursor: not-allowed;
+      opacity: 1;
     }
     
     .normal[disabled] {

@@ -146,7 +146,8 @@ function PageList(props) {
     });
 
     let sorts = [];
-    if (sorter && sorter.field) {
+    console.log('sort', sorter);
+    if (sorter && sorter.field && sorter.order) {
       sorts = [
         {
           "field": sorter.field,

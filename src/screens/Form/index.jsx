@@ -462,6 +462,9 @@ const FormPage = (props) => {
 
   Number.prototype.countDecimals = function () {
     if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    if (!this.toString().split(".")[1]) {
+      return parseInt(this.toString().split("-")[1]);
+    }
     return this.toString().split(".")[1].length || 0;
   };
 
@@ -498,7 +501,7 @@ const FormPage = (props) => {
                       maxLength={ 15 }
                       ref={ itemNoRef }
                       style={ { textTransform: 'uppercase' } }
-                      className='normal'
+                      className={isEdit?'edit':'normal'}
                       disabled={ isDisabled || id }
                       defaultValue={ itemNo }
                       value={ itemNo }
@@ -539,7 +542,7 @@ const FormPage = (props) => {
                       showSearch
                       allowClear
                       ref={ locationRef }
-                      className='normal' disabled={ isDisabled }
+                      className={isEdit?'edit':'normal'} disabled={ isDisabled || id }
                       defaultValue={ loc }
                       value={ loc }
                       onChange={ (value) => setLoc(value) }
@@ -940,6 +943,7 @@ const FormPage = (props) => {
                       max={ 9999999991 }
                       step="0.0001"
                       stringMode
+                      style={{width: '100%'}} 
                       maxLength={ 18 }
                       disabled={ true }
                       defaultValue={ stdMaterial }
@@ -991,6 +995,7 @@ const FormPage = (props) => {
                       max={ 9999999991 }
                       step="0.0001"
                       maxLength={ 18 }
+                      style={{width: '100%'}} 
                       className='normal right'
                       readOnly
                       disabled={ isDisabled }
@@ -1010,6 +1015,7 @@ const FormPage = (props) => {
                       step="0.0001"
                       className='normal right'
                       readOnly
+                      style={{width: '100%'}} 
                       disabled={ true }
                       defaultValue={ qoh }
                       value={ qoh }
@@ -1025,22 +1031,26 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(reorder).countDecimals() > 4) {
-                            return Promise.reject(new Error('Decimal length must be less than 4 digits '));
-                          } else if (Number(reorder) < 0) {
-                            return Promise.reject(new Error('Cannot be negative'));
+                          if (isNaN(reorder)) {
+                            return Promise.reject(new Error('Reorder Qty format mask is 9999999990.0000'));
                           }
+                          if (Number(reorder).countDecimals() > 4) {
+                            return Promise.reject(new Error('Reorder Qty decimal length must be less than 4 digits : 9999999990.0000'));
+                          }
+                          if (Number(reorder) < 0) {
+                            return Promise.reject(new Error('Reorder Qty cannot be negative : 9999999990.0000'));
+                          }
+                          if (Number(reorder) > 9999999990) {
+                            return Promise.reject(new Error('Reorder Qty max 9999999990.0000'));
+                          }
+                        
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
                     <Input hidden />
-                    <InputNumber
-                      min={ 0 }
-                      max={ 9999999990 }
-                      step="0.0001"
-                      maxLength={ 18 }
+                    <Input
                       className='normal right'
                       disabled={ isDisabled }
                       defaultValue={ reorder }
@@ -1058,6 +1068,7 @@ const FormPage = (props) => {
                       step="0.0001"
                       className='normal right'
                       readOnly
+                      style={{width: '100%'}} 
                       disabled={ true }
                       defaultValue={ prodnResv }
                       value={ prodnResv }
@@ -1071,18 +1082,21 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (isNaN(leadtime)) {
+                            return Promise.reject(new Error('Leadtime format mask is 9999'));
+                          }
                           if (Number(leadtime) < 0) {
-                            return Promise.reject(new Error('Cannot be negative'));
+                            return Promise.reject(new Error('Leadtime cannot be negative'));
+                          }
+                          if (Number(leadtime) > 9999) {
+                            return Promise.reject(new Error('Leadtime max 9999'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <InputNumber
-                      min={ 0 }
-                      max={ 9999 }
-                      stringMode
+                    <Input
                       maxLength={ 4 }
                       className='normal right'
                       disabled={ isDisabled }
@@ -1098,7 +1112,7 @@ const FormPage = (props) => {
                     label="Order QTY +"
                     initialValue={orderQty}
                   >
-                    <InputNumber className='right' step="0.0001" min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) } placeholder='Type order qty here...' />
+                    <InputNumber style={{width: '100%'}} className='right' step="0.0001" min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) } placeholder='Type order qty here...' />
                   </Form.Item>
                 </div>
                 <div className="row">
