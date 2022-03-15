@@ -140,6 +140,9 @@ const FormPage = (props) => {
 
   Number.prototype.countDecimals = function () {
     if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    if (!this.toString().split(".")[1]) {
+      return parseInt(this.toString().split("-")[1]);
+    }
     return this.toString().split(".")[1].length || 0;
   };
 
@@ -235,24 +238,28 @@ const FormPage = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (isNaN(state.uomFactor)) {
+                            return Promise.reject(new Error('Convertion Factor format mask is 999990.000000'));
+                          }
                           if (Number(state.uomFactor).countDecimals() > 6) {
-                            return Promise.reject(new Error('Convertion Factor decimal length must be less than 6 digits '));
-                          } else if (Number(state.uomFactor) < 0) {
-                            return Promise.reject(new Error('Convertion Factor cannot be negative'));
+                            return Promise.reject(new Error('Convertion Factor decimal length must be less than 6 digits : 999990.000000'));
+                          }
+                          if (Number(state.uomFactor) == 0) {
+                            return Promise.reject(new Error('Convertion Factor cannot be zero : 999990.000000'));
+                          }
+                          if (Number(state.uomFactor) < 0) {
+                            return Promise.reject(new Error('Convertion Factor cannot be negative : 999990.000000'));
+                          }
+                          if (Number(state.uomFactor) > 999990) {
+                            return Promise.reject(new Error('Convertion Factor max 999990.000000'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <InputNumber
+                    <Input
                       ref={ factorRef }
-                      min={ 0 }
-                      max={ 999991 }
-                      step="0.000001"
-                      stringMode
-                      maxLength={ 14 }
-                      style={ { width: "50%" } }
                       className='normal right' disabled={ isDisabled } defaultValue={ state.uomFactor } value={ state.uomFactor } onBlur={ e => changeData(e.target.value, 'uomFactor') } />
                   </Form.Item>
                 </div>

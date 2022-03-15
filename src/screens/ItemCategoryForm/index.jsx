@@ -147,6 +147,9 @@ const FormPage = (props) => {
 
   Number.prototype.countDecimals = function () {
     if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    if (!this.toString().split(".")[1]) {
+      return parseInt(this.toString().split("-")[1]);
+    }
     return this.toString().split(".")[1].length || 0;
   };
 
@@ -218,7 +221,7 @@ const FormPage = (props) => {
                       }),
                     ] }
                   >
-                    <Input ref={ categorySubCodeRef } maxLength={ 10 } style={ { textTransform: 'uppercase' } } className='normal' disabled={ isDisabled } defaultValue={ state.categorySubCode } value={ state.categorySubCode } onBlur={ e => changeData(e.target.value.toUpperCase(), 'categorySubCode') } />
+                    <Input ref={ categorySubCodeRef } maxLength={ 10 } style={ { textTransform: 'uppercase' } } className='normal' readOnly={ isEdit ? true : false } disabled={ isDisabled } defaultValue={ state.categorySubCode } value={ state.categorySubCode } onBlur={ e => changeData(e.target.value.toUpperCase(), 'categorySubCode') } />
                   </Form.Item>
 
                 </div>
@@ -245,7 +248,8 @@ const FormPage = (props) => {
                     <Select
                       ref={ categoryGroupRef }
                       className='normal'
-                      disabled={ isDisabled }
+                      readOnly={ isEdit ? true : false } 
+                      disabled={ isEdit ? true : isDisabled }
                       defaultValue={ state.categoryGroup }
                       value={ state.categoryGroup }
                       onChange={ e => changeData(e, 'categoryGroup') }
@@ -278,24 +282,25 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (isNaN(state.designQtya)) {
+                            return Promise.reject(new Error('Design Qty A format mask is 999999990.0000'));
+                          }
+                          if (Number(state.designQtya) > 999999990) {
+                            return Promise.reject(new Error('Design Qty A max 999999990.0000'));
+                          }
                           if (Number(state.designQtya).countDecimals() > 4) {
-                            return Promise.reject(new Error('decimal length must be less than 4 digits '));
-                          } else if (Number(state.designQtya) < 0) {
-                            return Promise.reject(new Error('cannot be negative'));
+                            return Promise.reject(new Error('Design Qty A decimal length must be less than 4 digits : 999999990.0000'));
+                          } 
+                          if (Number(state.designQtya) < 0) {
+                            return Promise.reject(new Error('Design Qty A cannot be negative : 999999990.0000'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <InputNumber
+                    <Input
                       disabled={ isDisabled }
-                      min={ 0 }
-                      max={ 999999990 }
-                      step="0.0001"
-                      stringMode
-                      maxLength={ 18 }
-                      style={ { width: "50%" } }
                       className='normal right'
                       defaultValue={ state.designQtya }
                       value={ state.designQtya }
@@ -309,20 +314,22 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (isNaN(state.mifA)) {
+                            return Promise.reject(new Error('MIF A format mask is 99990'));
+                          }
+                          if (Number(state.mifA) > 99990) {
+                            return Promise.reject(new Error('MIF A max 99990'));
+                          }
                           if (Number(state.mifA) < 0) {
-                            return Promise.reject(new Error('cannot be negative'));
+                            return Promise.reject(new Error('MIF A cannot be negative : 99990'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <InputNumber
+                    <Input
                       disabled={ isDisabled }
-                      min={ 0 }
-                      max={ 99990 }
-                      maxLength={ 6 }
-                      style={ { width: "50%" } }
                       className='normal right'
                       defaultValue={ state.mifA }
                       value={ state.mifA }
@@ -338,24 +345,25 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (isNaN(state.designQtyb)) {
+                            return Promise.reject(new Error('Design Qty B format mask is 999999990.0000'));
+                          }
+                          if (Number(state.designQtyb) > 999999990) {
+                            return Promise.reject(new Error('Design Qty B max 999999990.0000'));
+                          }
                           if (Number(state.designQtyb).countDecimals() > 4) {
-                            return Promise.reject(new Error('decimal length must be less than 4 digits '));
-                          } else if (Number(state.designQtyb) < 0) {
-                            return Promise.reject(new Error('cannot be negative'));
+                            return Promise.reject(new Error('Design Qty B decimal length must be less than 4 digits : 999999990.0000'));
+                          } 
+                          if (Number(state.designQtyb) < 0) {
+                            return Promise.reject(new Error('Design Qty B cannot be negative : 999999990.0000'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <InputNumber
+                    <Input
                       disabled={ isDisabled }
-                      min={ 0 }
-                      max={ 999999990 }
-                      step="0.0001"
-                      stringMode
-                      maxLength={ 18 }
-                      style={ { width: "50%" } }
                       className='normal right'
                       defaultValue={ state.designQtyb }
                       value={ state.designQtyb }
@@ -369,20 +377,22 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (isNaN(state.mifB)) {
+                            return Promise.reject(new Error('MIF B format mask is 99990'));
+                          }
+                          if (Number(state.mifB) > 99990) {
+                            return Promise.reject(new Error('MIF B max 99990'));
+                          }
                           if (Number(state.mifB) < 0) {
-                            return Promise.reject(new Error('cannot be negative'));
+                            return Promise.reject(new Error('MIF B cannot be negative : 99990'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <InputNumber
+                    <Input
                       disabled={ isDisabled }
-                      min={ 0 }
-                      max={ 99990 }
-                      maxLength={ 6 }
-                      style={ { width: "50%" } }
                       className='normal right'
                       defaultValue={ state.mifB }
                       value={ state.mifB }
@@ -398,24 +408,25 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (isNaN(state.designQtyc)) {
+                            return Promise.reject(new Error('Design Qty C format mask is 999999990.0000'));
+                          }
+                          if (Number(state.designQtyc) > 999999990) {
+                            return Promise.reject(new Error('Design Qty C max 999999990.0000'));
+                          }
                           if (Number(state.designQtyc).countDecimals() > 4) {
-                            return Promise.reject(new Error('decimal length must be less than 4 digits '));
-                          } else if (Number(state.designQtyc) < 0) {
-                            return Promise.reject(new Error('cannot be negative'));
+                            return Promise.reject(new Error('Design Qty C decimal length must be less than 4 digits : 999999990.0000'));
+                          } 
+                          if (Number(state.designQtyc) < 0) {
+                            return Promise.reject(new Error('Design Qty C cannot be negative : 999999990.0000'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <InputNumber
+                    <Input
                       disabled={ isDisabled }
-                      min={ 0 }
-                      max={ 999999990 }
-                      step="0.0001"
-                      stringMode
-                      maxLength={ 18 }
-                      style={ { width: "50%" } }
                       className='normal right'
                       defaultValue={ state.designQtyc }
                       value={ state.designQtyc }
@@ -429,20 +440,22 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (isNaN(state.mifC)) {
+                            return Promise.reject(new Error('MIF C format mask is 99990'));
+                          }
+                          if (Number(state.mifC) > 99990) {
+                            return Promise.reject(new Error('MIF C max 99990'));
+                          }
                           if (Number(state.mifC) < 0) {
-                            return Promise.reject(new Error('cannot be negative'));
+                            return Promise.reject(new Error('MIF C cannot be negative : 99990'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <InputNumber
+                    <Input
                       disabled={ isDisabled }
-                      min={ 0 }
-                      max={ 99990 }
-                      maxLength={ 6 }
-                      style={ { width: "50%" } }
                       className='normal right'
                       defaultValue={ state.mifC }
                       value={ state.mifC }
@@ -458,24 +471,25 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (isNaN(state.designQtyd)) {
+                            return Promise.reject(new Error('Design Qty D format mask is 999999990.0000'));
+                          }
+                          if (Number(state.designQtyd) > 999999990) {
+                            return Promise.reject(new Error('Design Qty D max 999999990.0000'));
+                          }
                           if (Number(state.designQtyd).countDecimals() > 4) {
-                            return Promise.reject(new Error('decimal length must be less than 4 digits '));
-                          } else if (Number(state.designQtyd) < 0) {
-                            return Promise.reject(new Error('cannot be negative'));
+                            return Promise.reject(new Error('Design Qty D decimal length must be less than 4 digits : 999999990.0000'));
+                          } 
+                          if (Number(state.designQtyd) < 0) {
+                            return Promise.reject(new Error('Design Qty D cannot be negative : 999999990.0000'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <InputNumber
+                    <Input
                       disabled={ isDisabled }
-                      min={ 0 }
-                      max={ 999999990 }
-                      step="0.0001"
-                      stringMode
-                      maxLength={ 18 }
-                      style={ { width: "50%" } }
                       className='normal right'
                       defaultValue={ state.designQtyd }
                       value={ state.designQtyd }
@@ -489,20 +503,22 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (isNaN(state.mifD)) {
+                            return Promise.reject(new Error('MIF D format mask is 99990'));
+                          }
+                          if (Number(state.mifD) > 99990) {
+                            return Promise.reject(new Error('MIF D max 99990'));
+                          }
                           if (Number(state.mifD) < 0) {
-                            return Promise.reject(new Error('cannot be negative'));
+                            return Promise.reject(new Error('MIF D cannot be negative : 99990'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <InputNumber
+                    <Input
                       disabled={ isDisabled }
-                      min={ 0 }
-                      max={ 99990 }
-                      maxLength={ 6 }
-                      style={ { width: "50%" } }
                       className='normal right'
                       defaultValue={ state.mifD }
                       value={ state.mifD }

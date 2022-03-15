@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Form, InputNumber, Button, message, notification } from 'antd';
+import { Form, Input, Button, message, notification } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import env from '../../env';
 import { InventoryControl } from '../../services';
@@ -115,6 +115,9 @@ const FormPage = (props) => {
 
   Number.prototype.countDecimals = function () {
     if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    if (!this.toString().split(".")[1]) {
+      return parseInt(this.toString().split("-")[1]);
+    }
     return this.toString().split(".")[1].length || 0;
   };
 
@@ -146,25 +149,26 @@ const FormPage = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(state.stockDepn).countDecimals() > 2) {
-                            return Promise.reject(new Error('Stock Deprecation decimal length must be less than 2 digits '));
+                          if (isNaN(state.stockDepn)) {
+                            return Promise.reject(new Error('Stock Deprecation format mask is 99990.00'));
                           }
-                          if (state.stockDepn < 0) {
-                            return Promise.reject(new Error('Stock Deprecation cannot be negative'));
+                          if (Number(state.stockDepn).countDecimals() > 2) {
+                            return Promise.reject(new Error('Stock Deprecation decimal length must be less than 2 digits : 99990.00'));
+                          }
+                          if (Number(state.stockDepn) < 0) {
+                            return Promise.reject(new Error('Stock Deprecation cannot be negative : 99990.00'));
+                          }
+                          if (Number(state.stockDepn) > 99990) {
+                            return Promise.reject(new Error('Stock Deprecation max 99990.00'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <InputNumber
+                    <Input
                       ref={ stockDepnRef }
                       className='normal right'
-                      min={ 0 }
-                      max={ 99990 }
-                      maxLength={ 5 }
-                      step="0.01"
-                      style={ { width: "50%" } }
                       disabled={ isDisabled }
                       defaultValue={ state.stockDepn }
                       value={ state.stockDepn }
@@ -185,25 +189,26 @@ const FormPage = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(state.provAge).countDecimals() > 2) {
-                            return Promise.reject(new Error('Stock Provision Age decimal length must be less than 2 digits '));
+                          if (isNaN(state.provAge)) {
+                            return Promise.reject(new Error('Stock Provision Age format mask is 99990.00'));
                           }
-                          if (state.provAge < 0) {
-                            return Promise.reject(new Error('Stock Provision Age cannot be negative'));
+                          if (Number(state.provAge).countDecimals() > 2) {
+                            return Promise.reject(new Error('Stock Provision Age decimal length must be less than 2 digits : 99990.00'));
+                          }
+                          if (Number(state.provAge) < 0) {
+                            return Promise.reject(new Error('Stock Provision Age cannot be negative : 99990.00'));
+                          }
+                          if (Number(state.provAge) > 99990) {
+                            return Promise.reject(new Error('Stock Provision Age max 99990.00'));
                           }
                           return Promise.resolve();
                         },
                       }),
                     ] }
                   >
-                    <InputNumber
+                    <Input
                       ref={ provAgeRef }
                       className='normal right'
-                      min={ 0 }
-                      max={ 99990 }
-                      maxLength={ 5 }
-                      step="0.01"
-                      style={ { width: "50%" } }
                       disabled={ isDisabled }
                       defaultValue={ state.provAge }
                       value={ state.provAge }
