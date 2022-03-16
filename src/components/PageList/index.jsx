@@ -510,9 +510,9 @@ function PageList(props) {
   return (
     <StyledDiv>
       { modal() }
-      <h2 style={ { fontSize: '180%', color: '#ffc401', marginBottom: '3%' } }>{ props.title }</h2>
+      <h2 style={ { fontSize: '180%', color: '#ffc401', marginTop: '-1.5%', marginBottom: '0%' } }>{ props.title }</h2>
       { props.filter && filter }
-      <div style={ { textAlign: 'right' } }>
+      <div style={ { textAlign: 'right', marginTop: '-40px' } }>
         <Button onClick={ showModal }>Column Settings</Button>
         <Divider type="vertical" />
         <Button onClick={ () => history.push(`/${ props.url }/create`) } type="primary" style={ { marginBottom: 16 } } disabled={ disabledCreate }>
