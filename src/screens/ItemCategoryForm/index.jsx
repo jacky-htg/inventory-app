@@ -71,6 +71,10 @@ const FormPage = (props) => {
     ) {
       const data = ItemCategory.view(id);
       data.then(result => {
+        result.designQtya = parseFloat(result.designQtya).toFixed(4);
+        result.designQtyb = parseFloat(result.designQtyb).toFixed(4);
+        result.designQtyc = parseFloat(result.designQtyc).toFixed(4);
+        result.designQtyd = parseFloat(result.designQtyd).toFixed(4);
         setState(result);
 
         if (result.categoryCode) {

@@ -45,6 +45,8 @@ const FormPage = (props) => {
     ) {
       const data = InventoryControl.view();
       data.then(result => {
+        result.stockDepn = parseFloat(result.stockDepn).toFixed(2);
+        result.provAge = parseFloat(result.provAge).toFixed(2);
         setState(result);
 
         if (result.provAge) {

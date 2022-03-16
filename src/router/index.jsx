@@ -204,11 +204,11 @@ const Router = props => {
   const [company, setCompany] = useState('company_name');
   const [loginDate, setLoginDate] = useState(moment().format("LLL"));
   // const dispatch = useDispatch();
-  const [now, setNow] = useState(moment().format("LLL"));
+  const [now, setNow] = useState(moment().format("DD/MM/YYYY hh:mm A"));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setNow(moment().format("LLL"));
+      setNow(moment().format("DD/MM/YYYY hh:mm A"));
     }, 1000);
     return () => clearInterval(interval);
   }, []);

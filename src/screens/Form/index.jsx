@@ -652,7 +652,6 @@ const FormPage = (props) => {
                       defaultValue={ partNo }
                       value={ partNo }
                       onChange={ e => setPartNo(e.target.value.toUpperCase()) }
-                      placeholder='Type part no here...'
                     />
                   </Form.Item>
 
@@ -1112,7 +1111,7 @@ const FormPage = (props) => {
                     label="Order QTY +"
                     initialValue={orderQty}
                   >
-                    <InputNumber style={{width: '100%'}} className='right' step="0.0001" min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) } placeholder='Type order qty here...' />
+                    <InputNumber style={{width: '100%'}} className='right' step="0.0001" min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) }  />
                   </Form.Item>
                 </div>
                 <div className="row">

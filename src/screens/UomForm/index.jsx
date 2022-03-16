@@ -54,6 +54,7 @@ const FormPage = (props) => {
       const data = Uom.view(id);
       data.then(result => {
         console.log('result :>> ', result);
+        result.uomFactor = parseFloat(result.uomFactor).toFixed(6);
         setState(result);
 
         if (result.uomFrom) {
