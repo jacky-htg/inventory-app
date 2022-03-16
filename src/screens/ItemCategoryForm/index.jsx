@@ -61,10 +61,6 @@ const FormPage = (props) => {
   }, []);
 
   const changeData = (value, field) => {
-    const arrInt = ['designQtya', 'designQtyb', 'designQtyc', 'designQtyd', 'mifA', 'mifB', 'mifC', 'mifD'];
-    if (arrInt.includes(field)) {
-      value = parseFloat(value);
-    }
     state[field] = value;
     setState(state);
   };
@@ -86,6 +82,16 @@ const FormPage = (props) => {
 
   const submit = async () => {
     try {
+      
+      state.designQtya = parseFloat(state.designQtya);
+      state.designQtyb = parseFloat(state.designQtyb);
+      state.designQtyc = parseFloat(state.designQtyc);
+      state.designQtyd = parseFloat(state.designQtyd);
+      state.mifA = parseFloat(state.mifA);
+      state.mifB = parseFloat(state.mifB);
+      state.mifC = parseFloat(state.mifC);
+      state.mifD = parseFloat(state.mifD);
+    
       if (!isEdit) {
         const values = await form.validateFields();
       }
