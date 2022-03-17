@@ -142,13 +142,13 @@ const FormPage = (props) => {
         result.refUrl && setRefUrl(result.refUrl);
         result.remarks && setRemarks(result.remarks);
         result.requestor && setRequestor(result.requestor);
-        result.reorder && setReorder(parseFloat(result.reorder));
+        result.reorder && setReorder(parseFloat(result.reorder).toFixed(4));
         result.rev && setRev(result.rev);
         result.rohsStatus && setRohsStatus(result.rohsStatus);
         result.source && setSource(result.source);
         result.updatedBy && setEntryUser(result.updatedBy);
-        result.updatedAt && setLastModified(moment(result.updatedAt).format("LLL"));
-        result.createdAt && setEntryDate(moment(result.createdAt).format("LLL"));
+        result.updatedAt && setLastModified(moment(result.updatedAt).format("DD/MM/YYYY hh:mm A"));
+        result.createdAt && setEntryDate(moment(result.createdAt).format("DD/MM/YYYY hh:mm A"));
         if (result.source) {
           sourcesData.forEach(el => {
             if (el.codeValue === result.source) {
@@ -171,10 +171,10 @@ const FormPage = (props) => {
         result.version && setVersion(result.version);
         result.obsoleteCode && setObsoleteCode(result.obsoleteCode);
         result.obsoleteItem && setObsoleteItem(result.obsoleteItem);
-        result.obsoleteDate && setObsoleteDate(moment(result.obsoleteDate).format("LLL"));
+        result.obsoleteDate && setObsoleteDate(moment(result.obsoleteDate).format("DD/MM/YYYY"));
         result.storageShelf && setStorageShelf(result.storageShelf);
         result.openClose && setOpenClose(result.openClose);
-        result.closeDate && setCloseDate(moment(result.closeDate).format("LLL"));
+        result.closeDate && setCloseDate(moment(result.closeDate).format("DD/MM/YYYY"));
         if (!result.categorySubCode) {
           setLoadingPage(false);
         }
@@ -1054,7 +1054,7 @@ const FormPage = (props) => {
                       disabled={ isDisabled }
                       defaultValue={ reorder }
                       value={ reorder }
-                      onChange={ e => setReorder(parseFloat(e)) }
+                      onChange={ e => setReorder(e.target.value) }
                     />
                   </Form.Item>
 
@@ -1101,7 +1101,7 @@ const FormPage = (props) => {
                       disabled={ isDisabled }
                       defaultValue={ leadtime }
                       value={ leadtime }
-                      onChange={ e => setLeadtime(e) }
+                      onChange={ e => setLeadtime(e.target.value) }
 
                     />
                   </Form.Item>
