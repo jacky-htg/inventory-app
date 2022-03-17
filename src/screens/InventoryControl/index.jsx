@@ -7,8 +7,8 @@ function Page() {
 
   const setupFields = () => {
     setFields([
-      {label: 'Stock Depreciation %', field: 'stockDepn', default: true, align:'right'}, 
-      {label: 'Stock Provision Age (Yrs)', field: 'provAge', default: true, align:'right'}
+      {label: 'Stock Depreciation %', field: 'stockDepn', default: true, align:'right', decimal: 2}, 
+      {label: 'Stock Provision Age (Yrs)', field: 'provAge', default: true, align:'right', decimal: 2}
     ]);
   };
 

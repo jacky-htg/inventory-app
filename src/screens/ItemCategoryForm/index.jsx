@@ -314,7 +314,7 @@ const FormPage = (props) => {
                       className='normal right'
                       defaultValue={ state.designQtya }
                       value={ state.designQtya }
-                      onBlur={ e => changeData(parseFloat(e.target.value), 'designQtya') }
+                      onBlur={ e => changeData(e.target.value, 'designQtya') }
                     />
                   </Form.Item>
 

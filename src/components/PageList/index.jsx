@@ -46,14 +46,18 @@ function PageList(props) {
     if (props.fields && datas) {
       datas.forEach((element, index) => {
         props.fields.forEach(field => {
-          if (field.lov) {
+          if (field.lov || field.decimal) {
             datas.forEach((data, index) => {
-              if (data[field.field]) {
-                field.lov.forEach(e => {
-                  if (data[field.field] === e.codeValue) {
-                    datas[index][field.field] = e.codeDesc;
-                  }
-                });
+              if (data[field.field] || data[field.field] === 0) {
+                if (field.lov) {
+                  field.lov.forEach(e => {
+                    if (data[field.field] === e.codeValue) {
+                      datas[index][field.field] = e.codeDesc;
+                    }
+                  });
+                } else if (field.decimal) {
+                  datas[index][field.field] = parseFloat(datas[index][field.field]).toFixed(field.decimal);
+                }
               }
             });
           }

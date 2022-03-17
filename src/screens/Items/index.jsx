@@ -12,7 +12,7 @@ function Page() {
       { label: 'Item No', field: 'itemNo', default: true, fixed: true, filter: true, sorter: true },
       { label: 'Part No', field: 'partNo', default: true, filter: true, sorter: true },
       { label: 'Description', field: 'description', default: true, filter: true, sorter: true },
-      { label: 'QOH', field: 'qoh', default: true, filter: true, sorter: true },
+      { label: 'QOH', field: 'qoh', default: true, filter: true, sorter: true, decimal:4 },
       { label: 'Loc', field: 'loc', default: true, filter: true, sorter: true },
       { label: 'Source', field: 'source', default: true, filter: true, sorter: true, lov: sourcesData, lookup: sourcesOpt },
       { label: 'Manufacturer', field: 'manufacturer', default: true, filter: true, sorter: true },
