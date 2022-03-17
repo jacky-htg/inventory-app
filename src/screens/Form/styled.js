@@ -69,7 +69,7 @@ const StyledDiv = styled.div`
     }
 
     .edit {
-      color: rgba(0, 0, 0, 0.25);
+      color: rgba(0, 0, 0, 1);
       background-color: #f5f5f5;
       border-color: #d9d9d9;
       box-shadow: none;
@@ -78,7 +78,7 @@ const StyledDiv = styled.div`
     }
     
     .normal[disabled] {
-        color: rgba(0, 0, 0, 0.85);
+        color: rgba(0, 0, 0, 1);
         background-color: transparent;
         border: unset;
         box-shadow: none;
