@@ -61,23 +61,23 @@ const FormPage = (props) => {
   const [obsoleteDate, setObsoleteDate] = useState();
   const [openClose, setOpenClose] = useState();
   const [closeDate, setCloseDate] = useState();
-  const [orderQty, setOrderQty] = useState(parseFloat(0.0000));
+  const [orderQty, setOrderQty] = useState(parseFloat(0).toFixed(4));
   const [partNo, setPartNo] = useState('');
-  const [prodnResv, setProdnResv] = useState(0);
+  const [prodnResv, setProdnResv] = useState(parseFloat(0).toFixed(4));
   const [productGroup, setProductGroup] = useState('');
-  const [qoh, setQoh] = useState(0);
+  const [qoh, setQoh] = useState(parseFloat(0).toFixed(4));
   const [eoh, setEoh] = useState(0);
   const [qryObsItem, setQryObsItem] = useState('');
   const [refUrl, setRefUrl] = useState('');
   const [remarks, setRemarks] = useState('');
-  const [reorder, setReorder] = useState(0.0000);
+  const [reorder, setReorder] = useState(parseFloat(0).toFixed(4));
   const [requestor, setRequestor] = useState('');
   const [rev, setRev] = useState('');
   const [rohsStatus, setRohsStatus] = useState(false);
   const [source, setSource] = useState('');
   const [sourceName, setSourceName] = useState();
   const [status, setStatus] = useState('ACTIVE');
-  const [stdMaterial, setStdMaterial] = useState(0);
+  const [stdMaterial, setStdMaterial] = useState(parseFloat(0).toFixed(4));
   const [storageShelf, setStorageShelf] = useState('');
   const [uom, setUom] = useState('');
   const [replace, setReplace] = useState('');
@@ -103,7 +103,7 @@ const FormPage = (props) => {
       const data = Item.view(id);
       data.then(result => {
         console.log('result :>> ', result);
-        result.balbfQty && setBalbfQty(parseFloat(result.balbfQty));
+        (result.balbfQty || result.balbfQty === 0) && setBalbfQty(parseFloat(result.balbfQty).toFixed(4));
         result.categoryCode && setCategoryCode(result.categoryCode);
         if (result.categoryCode) {
           itemCategoriesData.forEach(el => {
@@ -133,16 +133,16 @@ const FormPage = (props) => {
             }
           });
         }
-        result.orderQty && setOrderQty(result.orderQty);
+        (result.orderQty || result.orderQty === 0) && setOrderQty(parseFloat(result.orderQty).toFixed(4));
         result.mslCode && setMslCode(result.mslCode);
         result.partNo && setPartNo(result.partNo);
-        result.prodnResv && setProdnResv(result.prodnResv);
+        (result.prodnResv || result.prodnResv === 0) && setProdnResv(parseFloat(result.prodnResv).toFixed(4));
         result.productGroup && setProductGroup(result.productGroup);
-        result.qoh && setQoh(result.qoh);
+        (result.qoh || result.qoh === 0) && setQoh(parseFloat(result.qoh).toFixed(4));
         result.refUrl && setRefUrl(result.refUrl);
         result.remarks && setRemarks(result.remarks);
         result.requestor && setRequestor(result.requestor);
-        result.reorder && setReorder(parseFloat(result.reorder).toFixed(4));
+        (result.reorder || result.reorder === 0) && setReorder(parseFloat(result.reorder).toFixed(4));
         result.rev && setRev(result.rev);
         result.rohsStatus && setRohsStatus(result.rohsStatus);
         result.source && setSource(result.source);
@@ -159,7 +159,7 @@ const FormPage = (props) => {
         }
         result.source && setSource(result.source);
         result.status && setStatus(result.status);
-        result.stdMaterial && setStdMaterial(result.stdMaterial);
+        (result.stdMaterial || result.stdMaterial === 0) && setStdMaterial(parseFloat(result.stdMaterial).toFixed(4));
         result.uom && setUom(result.uom);
         if (result.uom) {
           uomData.forEach(el => {
@@ -660,7 +660,12 @@ const FormPage = (props) => {
                     label="Alternate"
                     initialValue={alternate}
                   >
-                    <Input disabled value={alternate} defaultValue={alternate}  />
+                    <Input
+                      className={id && !isEdit?'normal':''}
+                      disabled
+                      defaultValue={ alternate }
+                      value={ alternate }
+                    />
                   </Form.Item>
                 </div>
 
@@ -733,7 +738,7 @@ const FormPage = (props) => {
                   //   },
                   // ] }
                   >
-                    <Input disabled defaultValue={closeDate} value={closeDate} />
+                    <Input className={id && !isEdit?'normal':''} disabled defaultValue={closeDate} value={closeDate} />
                   </Form.Item>
                 </div>
 
@@ -875,7 +880,7 @@ const FormPage = (props) => {
                     label="Obsoleted Date"
                     initialValue={obsoleteDate}
                   >
-                    <Input defaultValue={obsoleteDate} value={obsoleteDate} disabled />
+                    <Input className={id && !isEdit?'normal':''} defaultValue={obsoleteDate} value={obsoleteDate} disabled />
                   </Form.Item>
                 </div>
                 <div className="row">
@@ -936,18 +941,11 @@ const FormPage = (props) => {
                     label="Std Material Price"
                     initialValue={ stdMaterial}
                   >
-                    <InputNumber
-                      className='right'
-                      min={ 0 }
-                      max={ 9999999991 }
-                      step="0.0001"
-                      stringMode
-                      style={{width: '100%'}} 
-                      maxLength={ 18 }
+                    <Input
+                      className={id && !isEdit?'normal right':'right'}
                       disabled={ true }
                       defaultValue={ stdMaterial }
                       value={ stdMaterial }
-                      onChange={ e => setStdMaterial(e.target.value) }
                     />
                   </Form.Item>
 
@@ -989,18 +987,13 @@ const FormPage = (props) => {
                     ] }
                   >
                     <Input hidden />
-                    <InputNumber
-                      min={ 0 }
-                      max={ 9999999991 }
-                      step="0.0001"
-                      maxLength={ 18 }
-                      style={{width: '100%'}} 
-                      className='normal right'
+                    <Input
+                      className={id && !isEdit?'normal right':'right'}
                       readOnly
                       disabled={ isDisabled }
                       defaultValue={ balbfQty }
                       value={ balbfQty }
-                      onChange={ e => { console.log('e :>> ', e); setBalbfQty(parseFloat(e)); } }
+                      onChange={ e => { setBalbfQty(parseFloat(e)); } }
 
                     />
                   </Form.Item>
@@ -1010,11 +1003,8 @@ const FormPage = (props) => {
                     label="QTY On Hand +"
                     initialValue={ qoh }
                   >
-                    <InputNumber
-                      step="0.0001"
-                      className='normal right'
-                      readOnly
-                      style={{width: '100%'}} 
+                    <Input
+                      className={id && !isEdit?'normal right':'right'}
                       disabled={ true }
                       defaultValue={ qoh }
                       value={ qoh }
@@ -1050,7 +1040,7 @@ const FormPage = (props) => {
                   >
                     <Input hidden />
                     <Input
-                      className='normal right'
+                      className={id && !isEdit?'normal right':'right'}
                       disabled={ isDisabled }
                       defaultValue={ reorder }
                       value={ reorder }
@@ -1063,9 +1053,8 @@ const FormPage = (props) => {
                     label="Reserved QTY -"
                     initialValue={prodnResv}
                   >
-                    <InputNumber
-                      step="0.0001"
-                      className='normal right'
+                    <Input
+                      className={id && !isEdit?'normal right':'right'}
                       readOnly
                       style={{width: '100%'}} 
                       disabled={ true }
@@ -1111,7 +1100,7 @@ const FormPage = (props) => {
                     label="Order QTY +"
                     initialValue={orderQty}
                   >
-                    <InputNumber style={{width: '100%'}} className='right' step="0.0001" min={ 0 } disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) }  />
+                    <Input className={id && !isEdit?'normal right':'right'} disabled={ true } defaultValue={ orderQty } value={ orderQty } onChange={ e => setOrderQty(e.target.value) }  />
                   </Form.Item>
                 </div>
                 <div className="row">
@@ -1136,7 +1125,7 @@ const FormPage = (props) => {
                     label="EOH ="
                     initialValue={eoh}
                   >
-                    <Input disabled={ true } className='right' defaultValue={eoh} value={eoh} />
+                    <Input className={id && !isEdit?'normal right':'right'} disabled={ true } defaultValue={eoh} value={eoh} />
                   </Form.Item>
                 </div>
                 {
@@ -1146,7 +1135,7 @@ const FormPage = (props) => {
                       name="Last Modified Date"
                       label="Last Modified Date"
                     >
-                      <Input defaultValue={ lastModified } value={ lastModified } disabled />
+                      <Input className={id && !isEdit?'normal':''} defaultValue={ lastModified } value={ lastModified } disabled />
                     </Form.Item>
                   </div>
                 }
@@ -1155,7 +1144,7 @@ const FormPage = (props) => {
                     name={ isEdit ? "Edit User" : "Entry User" }
                     label={ isEdit ? "Edit User" : "Entry User" }
                   >
-                    <Input defaultValue={ entryUser } value={ entryUser } disabled />
+                    <Input className={id && !isEdit?'normal':''} defaultValue={ entryUser } value={ entryUser } disabled />
                   </Form.Item>
                 </div>
                 <div className="row">
@@ -1163,7 +1152,7 @@ const FormPage = (props) => {
                     name={ isEdit ? "Edit Date" : "Entry Date" }
                     label={ isEdit ? "Edit Date" : "Entry Date" }
                   >
-                    <Input defaultValue={ entryDate } value={ entryDate } disabled />
+                    <Input className={id && !isEdit?'normal':''} defaultValue={ entryDate } value={ entryDate } disabled />
                   </Form.Item>
                 </div>
               </div>
