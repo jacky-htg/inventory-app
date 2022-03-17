@@ -28,7 +28,7 @@ const FormPage = (props) => {
     fromDescription: "",
     uomTo: "",
     toDescription: "",
-    uomFactor: 0,
+    uomFactor: parseFloat(0).toFixed(6),
     version: 0
   });
 
@@ -39,10 +39,6 @@ const FormPage = (props) => {
   const factorRef = useRef();
 
   const changeData = (value, field) => {
-    console.log(field, value, state);
-    if (field === "uomFactor") {
-      value = parseFloat(value);
-    }
     state[field] = value;
     setState(state);
   };
@@ -66,12 +62,11 @@ const FormPage = (props) => {
 
   const submit = async () => {
     try {
-      console.log(state.uomFactor);
       if (!isEdit) {
         const values = await form.validateFields();
       }
+      state.uomFactor = parseFloat(uomFactor);
       let obj = state;
-      console.log('eeeeeeeeeeeeeeeee', obj);
       if (isEdit) {
         obj.version = parseInt(obj.version);
         const hasil = await Uom.edit(id, obj);
@@ -80,28 +75,23 @@ const FormPage = (props) => {
           notification.error({
             message: res.message ? res.message : env.internalError,
           });
-          // message.error(res.message ? res.message : env.internalError);
         } else {
           notification.success({
             message: `Record successfully ${ isEdit ? 'updated' : 'added' }`,
           });
-          // message.success('Record successfully added');
           history.push('/uoms');
         }
       } else {
         const hasil = await Uom.create(obj);
         if (hasil.ok !== undefined && !hasil.ok) {
           const res = await hasil.data;
-          console.log('eeeeeeeeeeeeeeeee create', res);
           notification.error({
             message: res.message ? res.message : env.internalError,
           });
-          // message.error(res.message ? res.message : env.internalError);
         } else {
           notification.success({
             message: `Record successfully ${ isEdit ? 'updated' : 'added' }`,
           });
-          // message.success('Record successfully updated');
           history.push('/uoms');
         }
       }
@@ -129,7 +119,6 @@ const FormPage = (props) => {
   };
 
   useEffect(() => {
-    console.log('errrr', errorFields);
     if (errorFields.includes("uomFrom")) {
       fromRef.current.focus();
     } else if (errorFields.includes("uomTo")) {
