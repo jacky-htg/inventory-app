@@ -410,13 +410,13 @@ const GrnManualForm = (props) => {
   // }
 
   const onSearchPress = (idx, field, value) => {
+    let tempDetails = [...details];
     console.log('idx, field, value :>> ', idx, field, value);
     clearTimeout(timer);
-    details[idx]["recdQty"] = 1;
-    details[idx]["labelQty"] = 1;
-    let temp = [...details];
-    temp[idx][field] = value;
-    setDetails(temp);
+    tempDetails[idx]["recdQty"] = 1;
+    tempDetails[idx]["labelQty"] = 1;
+    tempDetails[idx][field] = value;
+    // setDetails(temp);
     let body = {
       "subType": "M",
       "grnDetails": details
@@ -434,10 +434,11 @@ const GrnManualForm = (props) => {
       let data = Grn.checkNewItem(body);
       data.then(res => {
         console.log('res checkNewItem :>> ', res);
-        details[idx] = {
-          ...details[idx],
-          res
+        tempDetails[idx] = {
+          ...tempDetails[idx],
+          ...res
         };
+        setDetails(tempDetails);
       });
     }, 1500));
     // Grn.checkNewItem();
@@ -651,38 +652,38 @@ const GrnManualForm = (props) => {
                     />
                   </Form.Item>
                 </div>
-                { id && 
-                <div className="row2">
-                  <Form.Item
-                    name="UpdatedBy"
-                    label="Updated By"
-                    initialValue={updatedBy}
-                  >
-                    <Input hidden/>
-                    <Input
-                      className='normal' disabled={ isDisabled }
-                      value={ updatedBy }
-                      defaultValue={ updatedBy }
-                    />
-                  </Form.Item>
+                { id &&
+                  <div className="row2">
+                    <Form.Item
+                      name="UpdatedBy"
+                      label="Updated By"
+                      initialValue={ updatedBy }
+                    >
+                      <Input hidden />
+                      <Input
+                        className='normal' disabled={ isDisabled }
+                        value={ updatedBy }
+                        defaultValue={ updatedBy }
+                      />
+                    </Form.Item>
 
 
-                  <Form.Item
-                    name="lastUpdatedAt"
-                    label="Last Updated At"
-                    initialValue={updatedAt}
-                  >
-                    <Input hidden/>
-                    <Input
-                      className='normal' disabled={ isDisabled }
-                      value={ updatedAt }
-                      defaultValue={ updatedAt }
-                      readOnly
-                    />
-                  </Form.Item>
-                </div> }
+                    <Form.Item
+                      name="lastUpdatedAt"
+                      label="Last Updated At"
+                      initialValue={ updatedAt }
+                    >
+                      <Input hidden />
+                      <Input
+                        className='normal' disabled={ isDisabled }
+                        value={ updatedAt }
+                        defaultValue={ updatedAt }
+                        readOnly
+                      />
+                    </Form.Item>
+                  </div> }
 
-                
+
               </div>
 
               <div className="detail-wrapper">

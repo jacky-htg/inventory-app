@@ -48,6 +48,7 @@ function GrnDetail(props) {
               <div className="dual">
                 {
                   <Form.Item name={ `sn[${ idx }]` } label="SN">
+                    <Input hidden />
                     {
                       id ?
                         <span>{ idx + 1 }</span>
@@ -67,6 +68,7 @@ function GrnDetail(props) {
 
                 {
                   <Form.Item name={ `type[${ idx }]` } label="Type">
+                    <Input hidden />
                     {
                       id ?
                         <span>{ el.itemType !== undefined ? el.itemType : '-' }</span>
@@ -90,6 +92,7 @@ function GrnDetail(props) {
               <div className="dual">
                 {
                   <Form.Item name={ `uom[${ idx }]` } label="UOM">
+                    <Input hidden />
                     {
                       id ?
                         <span>{ el.uom ? el.uom : '-' }</span>
@@ -115,6 +118,7 @@ function GrnDetail(props) {
 
                 {
                   <Form.Item name={ `msl[${ idx }]` } label="MSL">
+                    <Input hidden />
                     {
                       id ?
                         <span>{ el.msl ? el.msl : '-' }</span>
@@ -154,6 +158,7 @@ function GrnDetail(props) {
                       }),
                     ] }
                   >
+                    <Input hidden />
                     {
                       id ?
                         <span>{ el.recdPrice ? el.recdPrice : '-' }</span>
@@ -195,6 +200,7 @@ function GrnDetail(props) {
                       }),
                     ] }
                   >
+                    <Input hidden />
                     {
                       id ?
                         <span>{ el.recdQty ? el.recdQty : '-' }</span>
@@ -304,6 +310,7 @@ function GrnDetail(props) {
                       }),
                     ] }
                   >
+                    <Input hidden />
                     {
                       id ?
                         <span>{ el.labelQty ? el.labelQty : '-' }</span>
@@ -391,6 +398,7 @@ function GrnDetail(props) {
                       }),
                     ] }
                   >
+                    <Input hidden />
                     {
                       id ?
                         <span>{ el.dateCode ? el.dateCode : '-' }</span>
@@ -414,6 +422,7 @@ function GrnDetail(props) {
             <div className="row2">
               {
                 <Form.Item name={ `partNo[${ idx }]` } label="Part No">
+                  <Input hidden />
                   {
                     id ?
                       <span>{ el.partNo ? el.partNo : '-' }</span>
@@ -434,6 +443,7 @@ function GrnDetail(props) {
               <div className="dual">
                 {
                   <Form.Item name={ `projectNo[${ idx }]` } label="Project No">
+                    <Input hidden />
                     {
                       id ?
                         <span>{ el.projectNo ? el.projectNo : '-' }</span>
@@ -455,6 +465,7 @@ function GrnDetail(props) {
 
                 {
                   <Form.Item name={ `poNo[${ idx }]` } label="PO No">
+                    <Input hidden />
                     {
                       id ?
                         <span>{ el.poNo ? el.poNo : '-' }</span>
@@ -475,6 +486,7 @@ function GrnDetail(props) {
             <div className="row">
               {
                 <Form.Item name={ `description[${ idx }]` } label="Description">
+                  <Input hidden />
                   {
                     id ?
                       <p>{ el.description ? el.description : '-' }</p>
@@ -495,6 +507,7 @@ function GrnDetail(props) {
 
               {
                 <Form.Item name={ `remarks[${ idx }]` } label="Remarks">
+                  <Input hidden />
                   {
                     id ?
                       <p>{ el.remarks ? el.remarks : '-' }</p>
