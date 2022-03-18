@@ -1071,13 +1071,13 @@ const FormPage = (props) => {
                       ({ getFieldValue }) => ({
                         validator(_, value) {
                           if (isNaN(leadtime)) {
-                            return Promise.reject(new Error('Leadtime format mask is 9999'));
+                            return Promise.reject(new Error('Leadtime format mask is 999'));
                           }
                           if (Number(leadtime) < 0) {
                             return Promise.reject(new Error('Leadtime cannot be negative'));
                           }
-                          if (Number(leadtime) > 9999) {
-                            return Promise.reject(new Error('Leadtime max 9999'));
+                          if (Number(leadtime) > 999) {
+                            return Promise.reject(new Error('Leadtime max 999'));
                           }
                           return Promise.resolve();
                         },
@@ -1085,7 +1085,7 @@ const FormPage = (props) => {
                     ] }
                   >
                     <Input
-                      maxLength={ 4 }
+                      maxLength={ 3 }
                       className='normal right'
                       disabled={ isDisabled }
                       defaultValue={ leadtime }

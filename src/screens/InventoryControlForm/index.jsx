@@ -24,8 +24,8 @@ const FormPage = (props) => {
   const [isDisabled, setIsDisabled] = useState(id && !isEdit ? true : false);
 
   const [state, setState] = useState({
-    stockDepn: "",
-    provAge: ""
+    stockDepn: parseFloat(0).toFixed(2),
+    provAge: parseFloat(0).toFixed(2)
   });
 
   const [errorFields, setErrorFields] = useState([]);
@@ -34,7 +34,6 @@ const FormPage = (props) => {
   const provAgeRef = useRef();
 
   const changeData = (value, field) => {
-    value = parseFloat(value);
     state[field] = value;
     setState(state);
   };
@@ -59,6 +58,9 @@ const FormPage = (props) => {
   const submit = async () => {
     try {
       const values = await form.validateFields();
+      state.provAge = parseFloat(state.provAge);
+      state.stockDepn = parseFloat(state.stockDepn);
+
       let obj = state;
       console.log('obj :>> ', obj);
       if (isEdit) {
