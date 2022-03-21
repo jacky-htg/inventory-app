@@ -108,7 +108,14 @@ function PageList(props) {
   };
 
   const getData = (filter) => {
-    console.log('getData');
+    if (props.defaultFilter) {
+      if (!filter.filters) {
+        filter = {
+          filters:[]
+        };
+      }
+      filter.filters.push(props.defaultFilter);  
+    }
     let data = props.data.list(filter);
     data.then(result => {
       console.log('result siv:>> ', result.data);
@@ -270,7 +277,7 @@ function PageList(props) {
         style={ { width: 200, marginRight: '1%' } }
         placeholder="input here"
         onBlur={ (data) => changeData(n, data.target.value, 'value') }
-        defaultValue={ filters[n] ? filters[n].value : "" }
+        // defaultValue={ filters[n] ? filters[n].value : "" }
       />
     );
 

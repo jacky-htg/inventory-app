@@ -42,49 +42,37 @@ function GrnDetail(props) {
   return (
     <div className={ `detail-card ${ id ? 'full' : '' }` }>
       <div className="border">
-        <Collapsible trigger={ `Serial Number: ${ idx + 1 }` }>
+        <Collapsible trigger={ `Serial Number: ${ idx + 1 }` } open={true}>
           <div className="inputs">
             <div className="row2">
               <div className="dual">
                 {
                   <Form.Item name={ `sn[${ idx }]` } label="SN">
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ idx + 1 }</span>
-                        :
-                        <Input
-                          readOnly
-                          disabled={ id }
-                          className="smallInput"
-                          defaultValue={ idx + 1 }
-                          value={ idx + 1 }
-                          onChange={ (e) => changeDetail(idx, "seqNo", e.target.value) }
-                          placeholder="Type SN here..."
-                        />
-                    }
+                    <Input
+                      readOnly
+                      disabled={ id }
+                      className={id?"normal smallInput":"smallInput"}
+                      defaultValue={ idx + 1 }
+                      value={ idx + 1 }
+                      onChange={ (e) => changeDetail(idx, "seqNo", e.target.value) }
+                    />
                   </Form.Item>
                 }
 
                 {
                   <Form.Item name={ `type[${ idx }]` } label="Type">
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.itemType !== undefined ? el.itemType : '-' }</span>
-                        :
-                        <Select
-                          disabled={ id }
-                          className="smallInput"
-                          style={ { width: "70px" } }
-                          onChange={ (value) => changeDetail(idx, "itemType", value) }
-                          placeholder="..."
-                          defaultValue={ el.itemType }
-                        >
-                          <Option value={ 0 }>0</Option>
-                          <Option value={ 1 }>1</Option>
-                        </Select>
-                    }
+                    <Select
+                      disabled={ id }
+                      className={id?"normal smallInput":"smallInput"}
+                      style={ { width: "70px" } }
+                      onChange={ (value) => changeDetail(idx, "itemType", value) }
+                      defaultValue={ el.itemType }
+                    >
+                      <Option value={ 0 }>0</Option>
+                      <Option value={ 1 }>1</Option>
+                    </Select>
                   </Form.Item>
                 }
               </div>
@@ -93,11 +81,7 @@ function GrnDetail(props) {
                 {
                   <Form.Item name={ `uom[${ idx }]` } label="UOM">
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.uom ? el.uom : '-' }</span>
-                        :
-                        <Select
+                    <Select
                           disabled={ id }
                           showSearch
                           allowClear
@@ -106,32 +90,24 @@ function GrnDetail(props) {
                           value={ el.uom }
                           options={ uomOpt }
                           onSelect={ (data) => changeDetail(idx, "uom", data) }
-                          placeholder={ "Choose UOM..." }
                           filterOption={ (inputValue, option) =>
                             option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                           }
                           style={ { width: 'auto' } }
                         />
-                    }
                   </Form.Item>
                 }
 
                 {
                   <Form.Item name={ `msl[${ idx }]` } label="MSL">
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.msl ? el.msl : '-' }</span>
-                        :
-                        <Input
-                          disabled
-                          className="smallInput"
-                          defaultValue={ el.msl }
-                          value={ el.msl }
-                          onChange={ (e) => changeDetail(idx, "msl", e.target.value) }
-                          placeholder="Insert MSL here..."
-                        />
-                    }
+                    <Input
+                      disabled
+                      className={id?"normal smallInput":"smallInput"}
+                      defaultValue={ el.msl }
+                      value={ el.msl }
+                      onChange={ (e) => changeDetail(idx, "msl", e.target.value) }
+                    />
                   </Form.Item>
                 }
               </div>
@@ -141,17 +117,21 @@ function GrnDetail(props) {
                   <Form.Item
                     name={ `recdPrice[${ idx }]` }
                     label="Recd Price"
+                    className="required"
                     rules={ [
-                      {
-                        required: true,
-                        message: "Price is required"
-                      },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (isNaN(el.recdPrice)) {
+                            return Promise.reject(new Error('Recd Price format mask is 999990.0000'));
+                          }
                           if (Number(el.recdPrice).countDecimals() > 4) {
                             return Promise.reject(new Error('Recd Price decimal length must be less than 4 digits '));
-                          } else if (Number(el.recdPrice) < 0) {
-                            return Promise.reject(new Error('Recd Price cannot be negative'));
+                          } 
+                          if (Number(el.recdPrice) <= 0) {
+                            return Promise.reject(new Error('Recd Price must be more than 0'));
+                          }
+                          if (Number(el.recdPrice) > 999990) {
+                            return Promise.reject(new Error('Recd Price max 999990.0000'));
                           }
                           return Promise.resolve();
                         },
@@ -159,25 +139,14 @@ function GrnDetail(props) {
                     ] }
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.recdPrice ? el.recdPrice : '-' }</span>
-                        :
-                        <InputNumber
-                          disabled={ id }
-                          className="smallInput"
-                          min={ 0 }
-                          max={ 999991 }
-                          step="0.0001"
-                          stringMode
-                          defaultValue={ el.recdPrice || 0.0000 }
-                          value={ el.recdPrice || 0.0000 }
-                          onChange={ (e) =>
-                            changeDetail(idx, "recdPrice", parseFloat(e))
-                          }
-                          placeholder="Type Recd Price here..."
-                        />
-                    }
+                    <Input
+                      disabled={ id }
+                      className="normal smallInput"
+                      defaultValue={ el.recdPrice || 0.0000 }
+                      onChange={ (e) =>
+                        changeDetail(idx, "recdPrice", e.target.value)
+                      }
+                    />
                   </Form.Item>
                 }
 
@@ -185,14 +154,14 @@ function GrnDetail(props) {
                   <Form.Item
                     name={ `recdQty[${ idx }]` }
                     label="Recd Qty"
+                    className="required"
                     rules={ [
-                      {
-                        required: true,
-                        message: "Recd Qty is required"
-                      },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (Number(el.recdQty) < 0) {
+                          if (isNaN(el.recdQty)) {
+                            return Promise.reject(new Error('Recd Qty must be number'));
+                          }
+                          if (Number(el.recdQty) <= 0) {
                             return Promise.reject(new Error('Recd Qty must be more than 0'));
                           }
                           return Promise.resolve();
@@ -201,26 +170,7 @@ function GrnDetail(props) {
                     ] }
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.recdQty ? el.recdQty : '-' }</span>
-                        :
-                        <Input type={ 'number' } min={ 0 } className='smallInput alignRight' defaultValue={ el.recdQty || 0 } value={ el.recdQty || 0 } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type GRN Qty here...' disabled={ id } />
-
-                      // <InputNumber
-                      //   disabled={ id }
-                      //   className="normal alignRight"
-                      //   min={ 0 }
-                      //   max={ 999991 }
-                      //   stringMode
-                      //   defaultValue={ el.recdQty || 0 }
-                      //   value={ el.recdQty || 0 }
-                      //   onChange={ (e) =>
-                      //     changeDetail(idx, "recdQty", parseFloat(e))
-                      //   }
-                      //   placeholder="Type Recd Qty here..."
-                      // />
-                    }
+                    <Input className='normal smallInput alignRight' defaultValue={ el.recdQty || 0 } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } disabled={ id } />
                   </Form.Item>
                 }
               </div>
@@ -230,45 +180,33 @@ function GrnDetail(props) {
               {
                 <Form.Item name={ `itemNo[${ idx }]` } label="Item No">
                   <Input hidden />
-                  {
-                    id ?
-                      <span>{ el.itemNo ? el.itemNo : '-' }</span>
-                      :
-                      <Input
-                        disabled={ id }
-                        defaultValue={ el.itemNo }
-                        value={ el.itemNo }
-
-                        onChange={ (e) => onSearchPress(idx, "itemNo", e.target.value) }
-                        placeholder="Type item no here..."
-                      />
-                  }
+                  <Input
+                    className="normal"
+                    disabled={ id }
+                    defaultValue={ el.itemNo }
+                    value={ el.itemNo }
+                    onChange={ (e) => onSearchPress(idx, "itemNo", e.target.value) }
+                  />
                 </Form.Item>
               }
 
               {
                 <Form.Item name={ `loc[${ idx }]` } label="Loc">
                   <Input hidden />
-                  {
-                    id ?
-                      <span>{ el.loc ? el.loc : '-' }</span>
-                      :
-                      <Select
-                        disabled={ id }
-                        showSearch
-                        allowClear
-                        className='normal smallInput'
-                        defaultValue={ el.loc }
-                        value={ el.loc }
-                        options={ locOpt }
-                        onSelect={ (data) => changeDetail(idx, "loc", data) }
-                        placeholder={ "Choose Loc..." }
-                        filterOption={ (inputValue, option) =>
-                          option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                        }
-                      // style={ { width: 'auto' } }
-                      />
-                  }
+                  <Select
+                    disabled={ id }
+                    showSearch
+                    allowClear
+                    className='normal smallInput'
+                    defaultValue={ el.loc }
+                    value={ el.loc }
+                    options={ locOpt }
+                    onSelect={ (data) => changeDetail(idx, "loc", data) }
+                    filterOption={ (inputValue, option) =>
+                      option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                    }
+                  // style={ { width: 'auto' } }
+                  />
 
                   {/* <AutoComplete
                     disabled
@@ -291,16 +229,17 @@ function GrnDetail(props) {
                   <Form.Item
                     name={ `qtyLabel[${ idx }]` }
                     label="QTY/Label"
+                    className="required"
                     rules={ [
-                      {
-                        required: true,
-                        message: "QTY/Label is required"
-                      },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (isNaN(el.labelQty)) {
+                            return Promise.reject(new Error('QTY/Label must be number'));
+                          }
                           if (Number(el.labelQty) <= 0) {
                             return Promise.reject(new Error('QTY/Label must be more than 0'));
-                          } else if (el.labelQty > getFieldValue("GRN Qty")) {
+                          } 
+                          if (el.labelQty > getFieldValue("GRN Qty")) {
                             return Promise.reject(
                               new Error("QTY/Label can't be more than Recd QTY")
                             );
@@ -311,25 +250,7 @@ function GrnDetail(props) {
                     ] }
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.labelQty ? el.labelQty : '-' }</span>
-                        :
-                        <Input type={ 'number' } min={ 0 } className='smallInput alignRight' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' disabled={ id } />
-                      // <InputNumber
-                      //   disabled={ id }
-                      //   className="smallInput"
-                      //   min={ 0 }
-                      //   max={ 999991 }
-                      //   stringMode
-                      //   defaultValue={ el.labelQty || 0 }
-                      //   value={ el.labelQty || 0 }
-                      //   onChange={ (e) =>
-                      //     changeDetail(idx, "labelQty", parseFloat(e))
-                      //   }
-                      //   placeholder="Type Qty/Label here..."
-                      // />
-                    }
+                    <Input className='normal smallInput alignRight' defaultValue={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } disabled={ id } />
                   </Form.Item>
                 }
 
@@ -399,21 +320,15 @@ function GrnDetail(props) {
                     ] }
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.dateCode ? el.dateCode : '-' }</span>
-                        :
-                        <Input
-                          disabled={ id }
-                          className="smallInput center"
-                          defaultValue={ el.dateCode }
-                          value={ el.dateCode }
-                          onChange={ (e) =>
-                            changeDetail(idx, "dateCode", e.target.value)
-                          }
-                          placeholder="Insert Date Code here..."
-                        />
-                    }
+                    <Input
+                      disabled={ id }
+                      className="normal smallInput center"
+                      defaultValue={ el.dateCode }
+                      value={ el.dateCode }
+                      onChange={ (e) =>
+                        changeDetail(idx, "dateCode", e.target.value)
+                      }
+                    />
                   </Form.Item>
                 }
               </div>
@@ -423,20 +338,13 @@ function GrnDetail(props) {
               {
                 <Form.Item name={ `partNo[${ idx }]` } label="Part No">
                   <Input hidden />
-                  {
-                    id ?
-                      <span>{ el.partNo ? el.partNo : '-' }</span>
-                      :
-                      <Input
+                  <Input
                         disabled={ id }
-                        className="smallInput"
+                        className="normal smallInput"
                         defaultValue={ el.partNo }
                         value={ el.partNo }
-
                         onChange={ (e) => onSearchPress(idx, "partNo", e.target.value) }
-                        placeholder="Type Part No here..."
                       />
-                  }
                 </Form.Item>
               }
 
@@ -444,41 +352,28 @@ function GrnDetail(props) {
                 {
                   <Form.Item name={ `projectNo[${ idx }]` } label="Project No">
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.projectNo ? el.projectNo : '-' }</span>
-                        :
-                        <Input
-                          disabled={ id }
-                          className="smallInput"
-                          defaultValue={ el.projectNo }
-                          value={ el.projectNo }
-
-                          onChange={ (e) =>
-                            changeDetail(idx, "projectNo", e.target.value)
-                          }
-                          placeholder="Type Project No here..."
-                        />
-                    }
+                    <Input
+                      disabled={ id }
+                      className="normal smallInput"
+                      defaultValue={ el.projectNo }
+                      value={ el.projectNo }
+                      onChange={ (e) =>
+                        changeDetail(idx, "projectNo", e.target.value)
+                      }
+                    />
                   </Form.Item>
                 }
 
                 {
                   <Form.Item name={ `poNo[${ idx }]` } label="PO No">
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.poNo ? el.poNo : '-' }</span>
-                        :
-                        <Input
-                          disabled={ id }
-                          className="smallInput"
-                          defaultValue={ el.poNo }
-                          value={ el.poNo }
-                          onChange={ (e) => changeDetail(idx, "poNo", e.target.value) }
-                          placeholder="Insert PO No here..."
-                        />
-                    }
+                    <Input
+                      disabled={ id }
+                      className="normal smallInput"
+                      defaultValue={ el.poNo }
+                      value={ el.poNo }
+                      onChange={ (e) => changeDetail(idx, "poNo", e.target.value) }
+                    />
                   </Form.Item>
                 }
               </div>
@@ -487,40 +382,28 @@ function GrnDetail(props) {
               {
                 <Form.Item name={ `description[${ idx }]` } label="Description">
                   <Input hidden />
-                  {
-                    id ?
-                      <p>{ el.description ? el.description : '-' }</p>
-                      :
-                      <Input.TextArea
-                        disabled={ id }
-                        className="smallInput"
-                        defaultValue={ el.description }
-                        value={ el.description }
-                        onChange={ (e) =>
-                          changeDetail(idx, "description", e.target.value)
-                        }
-                        placeholder="Type description here..."
-                      />
-                  }
+                  <Input.TextArea
+                    disabled={ id }
+                    className="normal smallInput"
+                    defaultValue={ el.description }
+                    value={ el.description }
+                    onChange={ (e) =>
+                      changeDetail(idx, "description", e.target.value)
+                    }
+                  />
                 </Form.Item>
               }
 
               {
                 <Form.Item name={ `remarks[${ idx }]` } label="Remarks">
                   <Input hidden />
-                  {
-                    id ?
-                      <p>{ el.remarks ? el.remarks : '-' }</p>
-                      :
-                      <Input.TextArea
-                        disabled={ id }
-                        className="smallInput"
-                        defaultValue={ el.remarks }
-                        value={ el.remarks }
-                        onBlur={ (e) => changeDetail(idx, "remarks", e.target.value) }
-                        placeholder="Type remarks here..."
-                      />
-                  }
+                  <Input.TextArea
+                    disabled={ id }
+                    className="normal smallInput"
+                    defaultValue={ el.remarks }
+                    value={ el.remarks }
+                    onBlur={ (e) => changeDetail(idx, "remarks", e.target.value) }
+                  />
                 </Form.Item>
               }
             </div>

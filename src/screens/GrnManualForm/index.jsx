@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Collapse, Menu, Dropdown, notification, Modal } from 'antd';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Collapse, Menu, Dropdown, notification, Modal, Divider } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Lov, Location, Item } from '../../services';
@@ -352,9 +352,12 @@ const GrnManualForm = (props) => {
       details.map((e, i) => {
         details[i]["subType"] = "M";
         details[i]["grnNo"] = grnNo;
-        details[i]["poPrice"] = e.recdPrice;
+        details[i]["poPrice"] = parseFloat(e.recdPrice);
+        details[i]["recdPrice"] = parseFloat(e.recdPrice);
         details[i]["recdDate"] = e.dueDate;
-        details[i]["loc"] = "TE";
+        details[i]["recdQty"] = parseInt(e.recdQty);
+        details[i]["labelQty"] = parseInt(e.labelQty);
+        details[i]["loc"] = e.loc;
         details[i]["seqNo"] = (i + 1);
       });
 
@@ -707,10 +710,16 @@ const GrnManualForm = (props) => {
                 }
               </div>
 
-              {
-                (!id || isEdit) &&
-                <div className="submit">
-                  <Form.Item>
+              <div className="submit">
+                <Form.Item>
+                  <Button onClick={ () => history.push(`/grn-manuals`) } type="default" htmlType="submit">
+                    Back To GRN
+                  </Button>
+                  
+                  <Divider type='vertical' />
+
+                  {
+                    (!id || isEdit) &&
                     <Button onClick={ submit } type="primary" htmlType="submit">
                       {
                         isEdit
@@ -720,30 +729,17 @@ const GrnManualForm = (props) => {
                           "Create GRN"
                       }
                     </Button>
-                  </Form.Item>
-                </div>
-              }
+                  }
 
-              {
-                id &&
-                <div className="submit">
-                  <Form.Item>
+                  {
+                    id &&
                     <Dropdown overlay={ menu } placement="topRight">
                       <Button>Print</Button>
                     </Dropdown>
-                  </Form.Item>
-                </div>
-              }
+                  }
 
-              {
-                <div className="submit">
-                  <Form.Item>
-                    <Button onClick={ () => history.push(`/grn-manuals`) } type="default" htmlType="submit">
-                      Back To GRN
-                    </Button>
-                  </Form.Item>
-                </div>
-              }
+                </Form.Item>
+              </div>
             </Form>
         }
       </div >
