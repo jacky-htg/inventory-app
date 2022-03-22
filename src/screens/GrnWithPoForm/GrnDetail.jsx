@@ -69,6 +69,14 @@ const GrnDetail = (props) => {
     }
   }, [el]);
 
+  Number.prototype.countDecimals = function () {
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    if (!this.toString().split(".")[1]) {
+      return parseInt(this.toString().split("-")[1]);
+    }
+    return this.toString().split(".")[1].length || 0;
+  };
+
   return (
     <div key={ idx } className={ `detail-card ${ id ? 'full' : '' }` }>
       <div className="border">
@@ -232,7 +240,10 @@ const GrnDetail = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          // if ()
+                          if (isNaN(value)) {
+                            console.log('loh', value);
+                            return Promise.reject(new Error("Datecode not valid"));
+                          }
                           if (value) {
                             let year = "";
                             let week = "";

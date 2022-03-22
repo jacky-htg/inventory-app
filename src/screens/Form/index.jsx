@@ -175,10 +175,8 @@ const FormPage = (props) => {
         result.storageShelf && setStorageShelf(result.storageShelf);
         result.openClose && setOpenClose(result.openClose);
         result.closeDate && setCloseDate(moment(result.closeDate).format("DD/MM/YYYY"));
-        if (!result.categorySubCode) {
-          setLoadingPage(false);
-        }
         result.alternate && setAlternate(result.alternate);
+        setLoadingPage(false);
       });
     }
   }, [id, locData, itemCategoriesData, mslData, sourcesData, uomData]);

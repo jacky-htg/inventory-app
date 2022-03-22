@@ -61,6 +61,7 @@ const FormPage = (props) => {
   }, []);
 
   const changeData = (value, field) => {
+    console.log(value);
     state[field] = value;
     setState(state);
   };
@@ -87,14 +88,14 @@ const FormPage = (props) => {
   const submit = async () => {
     try {
       
-      state.designQtya = parseFloat(state.designQtya);
-      state.designQtyb = parseFloat(state.designQtyb);
-      state.designQtyc = parseFloat(state.designQtyc);
-      state.designQtyd = parseFloat(state.designQtyd);
-      state.mifA = parseFloat(state.mifA);
-      state.mifB = parseFloat(state.mifB);
-      state.mifC = parseFloat(state.mifC);
-      state.mifD = parseFloat(state.mifD);
+      if (state.designQtya) state.designQtya = parseFloat(state.designQtya);
+      if (state.designQtyb) state.designQtyb = parseFloat(state.designQtyb);
+      if (state.designQtyc) state.designQtyc = parseFloat(state.designQtyc);
+      if (state.designQtyd) state.designQtyd = parseFloat(state.designQtyd);
+      if (state.mifA) state.mifA = parseFloat(state.mifA);
+      if (state.mifB) state.mifB = parseFloat(state.mifB);
+      if (state.mifC) state.mifC = parseFloat(state.mifC);
+      if (state.mifD) state.mifD = parseFloat(state.mifD);
     
       if (!isEdit) {
         const values = await form.validateFields();

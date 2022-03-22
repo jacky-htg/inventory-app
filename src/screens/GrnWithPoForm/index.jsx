@@ -593,6 +593,9 @@ const GrnWithPoForm = (props) => {
 
   Number.prototype.countDecimals = function () {
     if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    if (!this.toString().split(".")[1]) {
+      return parseInt(this.toString().split("-")[1]);
+    }
     return this.toString().split(".")[1].length || 0;
   };
 
