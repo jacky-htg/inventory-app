@@ -732,7 +732,7 @@ const GrnWithPoForm = (props) => {
                     label="PO Remarks"
                   >
                     <Input hidden />
-                    <Input.TextArea className={id?'normal':''} onChange={ e => setPoRemarks(e.target.value) } value={ poRemarks?poRemarks:'-' } autoSize />
+                    <Input.TextArea disabled={isDisabled} className={id?'normal':''} onChange={ e => setPoRemarks(e.target.value) } value={ poRemarks?poRemarks:'-' } autoSize />
                   </Form.Item>
 
                   {
