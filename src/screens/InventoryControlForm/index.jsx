@@ -153,17 +153,17 @@ const FormPage = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (isNaN(state.stockDepn)) {
-                            return Promise.reject(new Error('Stock Deprecation format mask is 99990.00'));
+                          if (isNaN(state.stockDepn) || (state.stockDepn && state.stockDepn.includes("-"))) {
+                            return Promise.reject(new Error('Stock Deprecation format mask is 999.00'));
                           }
                           if (Number(state.stockDepn).countDecimals() > 2) {
-                            return Promise.reject(new Error('Stock Deprecation decimal length must be less than 2 digits : 99990.00'));
+                            return Promise.reject(new Error('Stock Deprecation decimal length must be less than 2 digits : 999.00'));
                           }
                           if (Number(state.stockDepn) < 0) {
-                            return Promise.reject(new Error('Stock Deprecation cannot be negative : 99990.00'));
+                            return Promise.reject(new Error('Stock Deprecation cannot be negative : 999.00'));
                           }
-                          if (Number(state.stockDepn) > 99990) {
-                            return Promise.reject(new Error('Stock Deprecation max 99990.00'));
+                          if (Number(state.stockDepn) > 999) {
+                            return Promise.reject(new Error('Stock Deprecation max 999.00'));
                           }
                           return Promise.resolve();
                         },
@@ -193,17 +193,17 @@ const FormPage = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (isNaN(state.provAge)) {
-                            return Promise.reject(new Error('Stock Provision Age format mask is 99990.00'));
+                          if (isNaN(state.provAge) || (state.provAge && state.provAge.includes("-"))) {
+                            return Promise.reject(new Error('Stock Provision Age format mask is 999.00'));
                           }
                           if (Number(state.provAge).countDecimals() > 2) {
-                            return Promise.reject(new Error('Stock Provision Age decimal length must be less than 2 digits : 99990.00'));
+                            return Promise.reject(new Error('Stock Provision Age decimal length must be less than 2 digits : 999.00'));
                           }
                           if (Number(state.provAge) < 0) {
-                            return Promise.reject(new Error('Stock Provision Age cannot be negative : 99990.00'));
+                            return Promise.reject(new Error('Stock Provision Age cannot be negative : 999.00'));
                           }
-                          if (Number(state.provAge) > 99990) {
-                            return Promise.reject(new Error('Stock Provision Age max 99990.00'));
+                          if (Number(state.provAge) > 999) {
+                            return Promise.reject(new Error('Stock Provision Age max 999.00'));
                           }
                           return Promise.resolve();
                         },
