@@ -81,7 +81,7 @@ const GrnDetail = (props) => {
     <div key={ idx } className={ `detail-card ${ id ? 'full' : '' }` }>
       <div className="border">
         <Collapsible trigger={ `Serial Number: ${ idx + 1 }` } open={true}>
-          <Form form={ form } name={ `detail-${ idx + 1 }` } className="inputs">
+          <div name={ `detail-${ idx + 1 }` } className="inputs">
             <div className="row2">
               <div className="dual">
                 {
@@ -233,6 +233,7 @@ const GrnDetail = (props) => {
                   <Form.Item
                     name={ `DateCode[${ idx }]` }
                     label="Date Code"
+                    initialValue={el.dateCode}
                     rules={ [
                       {
                         required: false,
@@ -240,8 +241,7 @@ const GrnDetail = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (isNaN(value)) {
-                            console.log('loh', value);
+                          if (isNaN(el.dateCode)) {
                             return Promise.reject(new Error("Datecode not valid"));
                           }
                           if (value) {
@@ -298,7 +298,7 @@ const GrnDetail = (props) => {
                     ] }
                   >
                     <Input hidden />
-                    <Input className={id?'normal smallInput center':'smallInput center'} defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } disabled={ id } />
+                    <Input className={id?'normal smallInput center':'smallInput center'} defaultValue={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } disabled={ id } />
                   </Form.Item>
                 }
 
@@ -451,7 +451,7 @@ const GrnDetail = (props) => {
               }
 
             </div>
-          </Form>
+          </div>
 
         </Collapsible>
       </div>

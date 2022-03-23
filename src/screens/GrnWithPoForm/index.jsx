@@ -209,7 +209,6 @@ const GrnWithPoForm = (props) => {
         });
         console.log('arr :>> ', arr);
         setDetails(arr);
-
         setLoadingPage(false);
       });
     }
@@ -483,7 +482,8 @@ const GrnWithPoForm = (props) => {
               issuedQty: 0,
               labelQty: 0,
               itemNo: hasil.itemNo,
-              itemType: hasil.itemType
+              itemType: hasil.itemType,
+              dateCode: null
             };
             tempDetails[idx] = temp;
             console.log("tempDetails changed >>", tempDetails);
@@ -497,7 +497,7 @@ const GrnWithPoForm = (props) => {
   };
 
   const renderDetails = () => {
-    if (!isPoNoClosed) {
+    if (!isPoNoClosed || id) {
       return details.length > 0 &&
         details.map((el, idx) => {
           console.log('el :>> ', el);
@@ -732,7 +732,7 @@ const GrnWithPoForm = (props) => {
                     label="PO Remarks"
                   >
                     <Input hidden />
-                    <Input.TextArea className={id?'normal':''} onChange={ e => setPoRemarks(e.target.value) } value={ poRemarks?poRemarks:'-' } autoSize />
+                    <Input.TextArea disabled={isDisabled} className={id?'normal':''} onChange={ e => setPoRemarks(e.target.value) } value={ poRemarks?poRemarks:'-' } autoSize />
                   </Form.Item>
 
                   {
