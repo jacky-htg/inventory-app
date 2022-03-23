@@ -258,7 +258,7 @@ const GrnWithPoForm = (props) => {
             setIsPoNoClosed(true);
             setParts([]);
             setDetails([]);
-          } 
+          }
           // message.error(res.message ? res.message : env.internalError);
         } else {
           hasil.grnNo && setGrnNo(hasil.grnNo);
@@ -514,6 +514,7 @@ const GrnWithPoForm = (props) => {
               partOpt={ partOpt }
               itemOpt={ itemOpt }
               isDisabled={ isDisabled }
+              form={ form }
             />
           );
         });
@@ -623,7 +624,7 @@ const GrnWithPoForm = (props) => {
                     label="GRN No"
                   >
                     <Input hidden />
-                    <Input className={id?'normal':'smallInput'} InitialValue={ grnNo } defaultValue={ grnNo } value={ grnNo } readOnly disabled={ isDisabled } />
+                    <Input className={ id ? 'normal' : 'smallInput' } InitialValue={ grnNo } defaultValue={ grnNo } value={ grnNo } readOnly disabled={ isDisabled } />
                   </Form.Item>
 
                   <Form.Item
@@ -649,9 +650,9 @@ const GrnWithPoForm = (props) => {
                     label="Currency Code / Rate"
                   >
                     <div className="currInput">
-                      <Input className={id?'normal':'smallInput2'} value={ currencyCode } readOnly disabled={ isDisabled } />
+                      <Input className={ id ? 'normal' : 'smallInput2' } value={ currencyCode } readOnly disabled={ isDisabled } />
                       <span>/</span>
-                      <Input style={ { width: '95%' } } className={id?'normal':'smallInput2'} value={ currencyRate } readOnly disabled={ isDisabled } />
+                      <Input style={ { width: '95%' } } className={ id ? 'normal' : 'smallInput2' } value={ currencyRate } readOnly disabled={ isDisabled } />
                     </div>
                   </Form.Item>
                 </div>
@@ -662,7 +663,7 @@ const GrnWithPoForm = (props) => {
                     label="Supplier Code"
                   >
                     <Input hidden />
-                    <Input className={id?'normal':'smallInput'} value={ supplierCode } readOnly disabled={ isDisabled } />
+                    <Input className={ id ? 'normal' : 'smallInput' } value={ supplierCode } readOnly disabled={ isDisabled } />
                   </Form.Item>
 
                   <Form.Item
@@ -670,7 +671,7 @@ const GrnWithPoForm = (props) => {
                     label="Supplier Name"
                   >
                     <Input hidden />
-                    <Input className={id?'normal':'smallInput'} value={ supplierName } readOnly disabled={ isDisabled } />
+                    <Input className={ id ? 'normal' : 'smallInput' } value={ supplierName } readOnly disabled={ isDisabled } />
                   </Form.Item>
 
                   <Form.Item
@@ -680,20 +681,20 @@ const GrnWithPoForm = (props) => {
                     <Input hidden />
                     <Input
                       className='normal' disabled={ isDisabled }
-                      value={ recdDate?recdDate:'-' }
+                      value={ recdDate ? recdDate : '-' }
                       readOnly
                     />
                   </Form.Item>
                 </div>
 
                 <div className="row2">
-                <Form.Item
+                  <Form.Item
                     name="Release Date"
                     label="Release Date"
                   >
                     <Input
                       className='normal' disabled={ isDisabled }
-                      defaultValue={ releaseDate?releaseDate:'-' }
+                      defaultValue={ releaseDate ? releaseDate : '-' }
                       readOnly
                     />
                   </Form.Item>
@@ -705,34 +706,34 @@ const GrnWithPoForm = (props) => {
                     <Input hidden />
                     <Input
                       className='normal' disabled={ isDisabled }
-                      value={ buyer?buyer:'/' }
+                      value={ buyer ? buyer : '/' }
                       readOnly
                     />
                   </Form.Item>
 
-                  
-                <Form.Item
+
+                  <Form.Item
                     name="DO No"
                     label="DO No"
                     className='red'
                   >
                     <Input
                       className='normal' disabled={ isDisabled }
-                      defaultValue={ doNo?doNo:'-' }
-                      value={ doNo?doNo:'-' }
+                      defaultValue={ doNo ? doNo : '-' }
+                      value={ doNo ? doNo : '-' }
                       onChange={ e => setDoNo(e.target.value) }
                     />
                   </Form.Item>
-                  
+
                 </div>
 
                 <div className="row2">
-                <Form.Item
+                  <Form.Item
                     name="PO Remarks"
                     label="PO Remarks"
                   >
                     <Input hidden />
-                    <Input.TextArea disabled={isDisabled} className={id?'normal':''} onChange={ e => setPoRemarks(e.target.value) } value={ poRemarks?poRemarks:'-' } autoSize />
+                    <Input.TextArea disabled={ isDisabled } className={ id ? 'normal' : '' } onChange={ e => setPoRemarks(e.target.value) } value={ poRemarks ? poRemarks : '-' } autoSize />
                   </Form.Item>
 
                   {
@@ -779,23 +780,23 @@ const GrnWithPoForm = (props) => {
                     Back To GRN
                   </Button>
 
-                  <Divider type='vertical'/>
-                
+                  <Divider type='vertical' />
+
                   {
                     id &&
-                      <Dropdown overlay={ menu } placement="topRight">
-                        <Button>Print</Button>
-                      </Dropdown>
+                    <Dropdown overlay={ menu } placement="topRight">
+                      <Button>Print</Button>
+                    </Dropdown>
                   }
-                
-                {
-                  (!id) &&
-                    <Button onClick={ submit } type='primary' htmlType="submit" disabled={isPoNoClosed?true:false}>
-                      Create GRN
-                    </Button>  
-                }
 
-                
+                  {
+                    (!id) &&
+                    <Button onClick={ submit } type='primary' htmlType="submit" disabled={ isPoNoClosed ? true : false }>
+                      Create GRN
+                    </Button>
+                  }
+
+
                 </Form.Item>
               </div>
             </Form>
