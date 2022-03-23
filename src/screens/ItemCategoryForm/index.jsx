@@ -294,7 +294,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if ((state.designQtya != null && isNaN(state.designQtya)) || (state.designQtya && state.designQtya.includes("-"))) {
+                          if ((state.designQtya != null && isNaN(state.designQtya)) || (state.designQtya && isNaN(state.designQtya) && state.designQtya.includes("-"))) {
                             return Promise.reject(new Error('Design Qty A format mask is 999999990.0000'));
                           }
                           if (Number(state.designQtya) > 999999990) {
@@ -327,7 +327,7 @@ const FormPage = (props) => {
                       ({ getFieldValue }) => ({
                         validator(_, value) {
                           console.log("hoopla",state.mifA);
-                          if ((state.mifA != null && isNaN(state.mifA)) || (state.mifA && state.mifA.includes("-"))) {
+                          if ((state.mifA != null && isNaN(state.mifA)) || (state.mifA && isNaN(state.mifA) && state.mifA.includes("-"))) {
                             return Promise.reject(new Error('MIF A format mask is 99990'));
                           }
                           if (Number(state.mifA) > 99990) {
@@ -358,7 +358,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if ((state.designQtyb != null && isNaN(state.designQtyb)) || (state.designQtyb && state.designQtyb.includes("-"))) {
+                          if ((state.designQtyb != null && isNaN(state.designQtyb)) || (state.designQtyb && isNaN(state.designQtyb) && state.designQtyb.includes("-"))) {
                             return Promise.reject(new Error('Design Qty B format mask is 999999990.0000'));
                           }
                           if (Number(state.designQtyb) > 999999990) {
@@ -390,7 +390,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if ((state.mifB != null && isNaN(state.mifB)) || (state.mifB && state.mifB.includes("-"))) {
+                          if ((state.mifB != null && isNaN(state.mifB)) || (state.mifB && isNaN(state.mifB) && state.mifB.includes("-"))) {
                             return Promise.reject(new Error('MIF B format mask is 99990'));
                           }
                           if (Number(state.mifB) > 99990) {
@@ -421,7 +421,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if ((state.designQtyc != null && isNaN(state.designQtyc)) || (state.designQtyc && state.designQtyc.includes("-"))) {
+                          if ((state.designQtyc != null && isNaN(state.designQtyc)) || (state.designQtyc && isNaN(state.designQtyc) && state.designQtyc.includes("-"))) {
                             return Promise.reject(new Error('Design Qty C format mask is 999999990.0000'));
                           }
                           if (Number(state.designQtyc) > 999999990) {
@@ -453,7 +453,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if ((state.mifC != null && isNaN(state.mifC)) || (state.mifC && state.mifC.includes("-"))) {
+                          if ((state.mifC != null && isNaN(state.mifC)) || (state.mifC && isNaN(state.mifC) && state.mifC.includes("-"))) {
                             return Promise.reject(new Error('MIF C format mask is 99990'));
                           }
                           if (Number(state.mifC) > 99990) {
@@ -484,7 +484,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if ((state.designQtyd != null && isNaN(state.designQtyd)) || (state.designQtyd && state.designQtyd.includes("-"))) {
+                          if ((state.designQtyd != null && isNaN(state.designQtyd)) || (state.designQtyd && isNaN(state.designQtyd) && state.designQtyd.includes("-"))) {
                             return Promise.reject(new Error('Design Qty D format mask is 999999990.0000'));
                           }
                           if (Number(state.designQtyd) > 999999990) {
@@ -516,7 +516,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if ((state.mifD != null && isNaN(state.mifD)) || (state.mifD && state.mifD.includes("-"))) {
+                          if ((state.mifD != null && isNaN(state.mifD)) || (state.mifD && isNaN(state.mifD) && state.mifD.includes("-"))) {
                             return Promise.reject(new Error('MIF D format mask is 99990'));
                           }
                           if (Number(state.mifD) > 99990) {

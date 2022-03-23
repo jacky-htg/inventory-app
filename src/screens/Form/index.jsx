@@ -236,6 +236,12 @@ const FormPage = (props) => {
     }
   }, [subCategoriesData]);
 
+  useEffect(()=>{
+    if (categorySubCode && categorySubCodeName) {
+      console.log("auuu", categorySubCode, categorySubCodeName);
+    }
+  }, [categorySubCode, categorySubCodeName]);
+
   useEffect(() => {
     const data = Lov.getMsl();
     data.then(res => {
