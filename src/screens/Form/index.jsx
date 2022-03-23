@@ -113,7 +113,12 @@ const FormPage = (props) => {
             }
           });
         }
-        (result.categorySubCode || result.categorySubCode === "0") && setCategorySubCode(result.categorySubCode);
+        if (result.categorySubCode) {
+          form.setFieldsValue({
+            catSubCode: categorySubCode
+          });
+          setCategorySubCode(result.categorySubCode);
+        }
         // get and set subCategories later
         result.description && setDescription(result.description);
         result.categoryCode && setCategoryCode(result.categoryCode);
@@ -225,7 +230,7 @@ const FormPage = (props) => {
   }, [categoryCode]);
 
   useEffect(() => {
-    if (subCategoriesData.length > 0 && id && (categorySubCode || categorySubCode === "0")) {
+    if (subCategoriesData.length > 0 && id && categorySubCode) {
       subCategoriesData.forEach(el => {
         if (el.categorySubCode === categorySubCode) {
           setCategorySubCode(el.categorySubCode);
@@ -234,13 +239,7 @@ const FormPage = (props) => {
       });
       setLoadingPage(false);
     }
-  }, [subCategoriesData]);
-
-  useEffect(()=>{
-    if (categorySubCode && categorySubCodeName) {
-      console.log("auuu", categorySubCode, categorySubCodeName);
-    }
-  }, [categorySubCode, categorySubCodeName]);
+  }, [subCategoriesData, categorySubCode]);
 
   useEffect(() => {
     const data = Lov.getMsl();

@@ -24,8 +24,8 @@ const FormPage = (props) => {
   const [isDisabled, setIsDisabled] = useState(id && !isEdit ? true : false);
 
   const [state, setState] = useState({
-    stockDepn: parseFloat(0).toFixed(2),
-    provAge: parseFloat(0).toFixed(2)
+    stockDepn: null,
+    provAge: null
   });
 
   const [errorFields, setErrorFields] = useState([]);
@@ -44,13 +44,10 @@ const FormPage = (props) => {
     ) {
       const data = InventoryControl.view();
       data.then(result => {
-        result.stockDepn = parseFloat(result.stockDepn).toFixed(2);
-        result.provAge = parseFloat(result.provAge).toFixed(2);
+        if (result.stockDepn) result.stockDepn = parseFloat(result.stockDepn).toFixed(2);
+        if (result.provAge) result.provAge = parseFloat(result.provAge).toFixed(2);
         setState(result);
-
-        if (result.provAge) {
-          setLoadingPage(false);
-        }
+        setLoadingPage(false);
       });
     }
   }, [id]);
@@ -146,13 +143,13 @@ const FormPage = (props) => {
                     name="stockDepn"
                     label="Stock Depreciation (%)"
                     initialValue={ state.stockDepn }
+                    className='required'
                     rules={ [
-                      {
-                        required: true,
-                        message: 'Stock Deprecation cannot be blank!'
-                      },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (state.stockDepn === null  || state.stockDepn === "" || /^\s+$/.test(state.stockDepn)) {
+                            return Promise.reject(new Error('Stock Deprecation cannot be blank!'));
+                          }
                           if (isNaN(state.stockDepn) || (state.stockDepn && state.stockDepn.includes("-"))) {
                             return Promise.reject(new Error('Stock Deprecation format mask is 999.00'));
                           }
@@ -186,13 +183,13 @@ const FormPage = (props) => {
                     name="provAge"
                     label="Stock Provision Age (Yrs)"
                     initialValue={ state.provAge }
+                    className='required'
                     rules={ [
-                      {
-                        required: true,
-                        message: 'Stock Provision Age cannot be blank!'
-                      },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (state.provAge === null || state.provAge === "" ||  /^\s+$/.test(state.provAge)) {
+                            return Promise.reject(new Error('Stock Provision Age cannot be blank!'));
+                          }
                           if (isNaN(state.provAge) || (state.provAge && state.provAge.includes("-"))) {
                             return Promise.reject(new Error('Stock Provision Age format mask is 999.00'));
                           }
