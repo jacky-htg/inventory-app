@@ -61,7 +61,6 @@ const FormPage = (props) => {
   }, []);
 
   const changeData = (value, field) => {
-    console.log(value);
     state[field] = value;
     setState(state);
   };
@@ -88,19 +87,21 @@ const FormPage = (props) => {
   const submit = async () => {
     try {
       
-      if (state.designQtya) state.designQtya = parseFloat(state.designQtya);
-      if (state.designQtyb) state.designQtyb = parseFloat(state.designQtyb);
-      if (state.designQtyc) state.designQtyc = parseFloat(state.designQtyc);
-      if (state.designQtyd) state.designQtyd = parseFloat(state.designQtyd);
-      if (state.mifA) state.mifA = parseFloat(state.mifA);
-      if (state.mifB) state.mifB = parseFloat(state.mifB);
-      if (state.mifC) state.mifC = parseFloat(state.mifC);
-      if (state.mifD) state.mifD = parseFloat(state.mifD);
-    
       if (!isEdit) {
         const values = await form.validateFields();
       }
+
       let obj = state;
+      
+      if (obj.designQtya) obj.designQtya = parseFloat(obj.designQtya);
+      if (obj.designQtyb) obj.designQtyb = parseFloat(obj.designQtyb);
+      if (obj.designQtyc) obj.designQtyc = parseFloat(obj.designQtyc);
+      if (obj.designQtyd) obj.designQtyd = parseFloat(obj.designQtyd);
+      if (obj.mifA) obj.mifA = parseInt(obj.mifA);
+      if (obj.mifB) obj.mifB = parseInt(obj.mifB);
+      if (obj.mifC) obj.mifC = parseInt(obj.mifC);
+      if (obj.mifD) obj.mifD = parseInt(obj.mifD);
+    
       if (isEdit) {
         obj.version = parseInt(obj.version);
         const hasil = await ItemCategory.edit(id, obj);
@@ -325,6 +326,7 @@ const FormPage = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          console.log("hoopla",state.mifA);
                           if ((state.mifA != null && isNaN(state.mifA)) || (state.mifA && state.mifA.includes("-"))) {
                             return Promise.reject(new Error('MIF A format mask is 99990'));
                           }
