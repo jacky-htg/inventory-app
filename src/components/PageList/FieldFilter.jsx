@@ -77,7 +77,7 @@ function FieldFilter(props) {
         style={ { width: 200, marginRight: '1%' } }
         placeholder="Select Field"
         allowClear={ filters[n] ? true : false }
-        onChange={ (data) => changeData(n, data, 'field') }
+        onChange={ (data) => { changeData(n, data, 'field'); form.setFieldsValue({ search: '' }); } }
         defaultValue={ filters[n] ? filters[n].field : null }
         value={ filters[n] ? filters[n].field : null }
         onClear={ () => form.setFieldsValue({ search: '' }) }
