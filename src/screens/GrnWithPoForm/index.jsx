@@ -196,12 +196,14 @@ const GrnWithPoForm = (props) => {
         result.currencyRate && setCurrencyRate(result.currencyRate);
         result.grnNo && setGrnNo(result.grnNo);
         result.poNo && setPoNo(result.poNo);
+        result.buyer && setBuyer(result.buyer);
         result.supplierCode && setSupplierCode(result.supplierCode);
         result.supplierName && setSupplierName(result.supplierName);
         result.subType && setSubType(result.subType);
-        result.recdDate && setRecdDate(moment(result.recdDate).format('MM/DD/YYYY'));
+        result.createdAt && setRecdDate(moment(result.createdAt).format('MM/DD/YYYY'));
         result.updatedBy && setUpdatedBy(result.updatedBy);
         result.updatedAt && setUpdatedAt(moment(result.updatedAt).format('MM/DD/YYYY'));
+        result.poRemarks && setPoRemarks(result.poRemarks);
 
         let arr = [];
         result.grnDetails && result.grnDetails.length > 0 && result.grnDetails.forEach(el => {

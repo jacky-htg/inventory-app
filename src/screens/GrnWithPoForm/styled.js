@@ -61,7 +61,7 @@ const StyledDiv = styled.div`
     }
 
     .group {
-      margin-bottom: 32px;
+      margin-bottom: 22px;
       /* position: sticky;
       top: 154px; */
       border-bottom: 1px dashed black;
@@ -120,7 +120,7 @@ const StyledDiv = styled.div`
 
   .detail-wrapper {
     /* background: grey; */
-    padding: 20px 0px;
+    padding-bottom: 20px;
     min-height: 240px;
     height: calc(100vh - 460px);
     overflow-y: scroll;

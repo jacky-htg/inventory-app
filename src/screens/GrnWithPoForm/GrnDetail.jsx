@@ -24,6 +24,12 @@ const GrnDetail = (props) => {
 
   const [form] = Form.useForm();
 
+  const [recdQty, setRecdQty] = useState(0);
+  const [labelQty, setLabelQty] = useState(0);
+  const [dateCode, setDateCode] = useState('');
+
+
+
   useEffect(() => {
     if (el) {
       let obj = {};
@@ -137,7 +143,7 @@ const GrnDetail = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (value > 0) {
+                          if (recdQty > 0) {
                             return Promise.resolve();
                           }
 
@@ -203,11 +209,11 @@ const GrnDetail = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (isNaN(el.dateCode)) {
+                          if (isNaN(dateCode)) {
                             return Promise.reject(new Error("Datecode not valid"));
                           }
-                          if (value) {
-                            let stringify = value + '';
+                          if (dateCode) {
+                            let stringify = dateCode + '';
                             let year = "";
                             let week = "";
                             let maxWeek = 53;
@@ -250,7 +256,7 @@ const GrnDetail = (props) => {
                               }
                             }
 
-                            if (!value || flag && stringify.length === 4) {
+                            if (!dateCode || flag && stringify.length === 4) {
                               return Promise.resolve();
                             }
 
@@ -261,7 +267,7 @@ const GrnDetail = (props) => {
                     ] }
                   >
                     <Input hidden />
-                    <Input className={ id ? 'normal smallInput center' : 'smallInput center' } maxLength={ 4 } defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } disabled={ id } />
+                    <Input className={ id ? 'normal smallInput center' : 'smallInput center' } maxLength={ 4 } defaultValue={ dateCode } value={ dateCode } onChange={ e => { setDateCode(e.target.value); changeDetail(idx, 'dateCode', e.target.value); } } disabled={ id } />
                   </Form.Item>
                 }
 
@@ -274,15 +280,15 @@ const GrnDetail = (props) => {
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (value > 0 && value <= getFieldValue('GRN Qty')) {
+                          if (labelQty > 0 && labelQty <= recdQty) {
                             return Promise.resolve();
                           }
 
-                          if (!value || value === 0) {
+                          if (!labelQty || labelQty === 0) {
                             return Promise.reject(new Error('QTY/Label must more than 0'));
                           }
 
-                          if (value > getFieldValue('GRN Qty')) {
+                          if (labelQty > recdQty) {
                             return Promise.reject(new Error("QTY/Label can't be more than GRN QTY"));
                           }
 
@@ -291,7 +297,7 @@ const GrnDetail = (props) => {
                     ] }
                   >
                     <Input hidden />
-                    <Input className={ id ? 'normal smallInput alignRight' : 'smallInput alignRight' } defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } disabled={ id } />
+                    <Input className={ id ? 'normal smallInput alignRight' : 'smallInput alignRight' } defaultValue={ labelQty } value={ labelQty } onChange={ e => { setLabelQty(e.target.value); changeDetail(idx, 'labelQty', e.target.value); } } disabled={ id } />
                   </Form.Item>
                 }
               </div>
