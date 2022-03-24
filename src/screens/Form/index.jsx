@@ -497,6 +497,14 @@ const FormPage = (props) => {
                         required: true,
                         message: 'Item No cannot be blank!'
                       },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (/^\s+$/.test(value)) {
+                            return Promise.reject(new Error('Item No cannot be blank!'));
+                          }
+                          return Promise.resolve();
+                        },
+                      }),
                     ] }
                   >
                     <Input
