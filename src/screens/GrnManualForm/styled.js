@@ -26,6 +26,15 @@ const StyledDiv = styled.div`
       justify-content: space-between;
     }
   }
+  .required label::before {
+    display: inline-block;
+    margin-right: 4px;
+    color: #ff4d4f;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+    content: '*';
+  }
 
   label {
     min-width: 120px;

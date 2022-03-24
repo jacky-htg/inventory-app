@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Form, Input, InputNumber, Button, Select, Checkbox, AutoComplete, message, notification } from 'antd';
+import { Form, Input, InputNumber, Button, Select, Checkbox, AutoComplete, message, notification, Divider } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Lov, Location, Item } from '../../services';
 import moment from 'moment';
@@ -113,7 +113,12 @@ const FormPage = (props) => {
             }
           });
         }
-        result.categorySubCode && setCategorySubCode(result.categorySubCode);
+        if (result.categorySubCode) {
+          form.setFieldsValue({
+            catSubCode: categorySubCode
+          });
+          setCategorySubCode(result.categorySubCode);
+        }
         // get and set subCategories later
         result.description && setDescription(result.description);
         result.categoryCode && setCategoryCode(result.categoryCode);
@@ -175,10 +180,8 @@ const FormPage = (props) => {
         result.storageShelf && setStorageShelf(result.storageShelf);
         result.openClose && setOpenClose(result.openClose);
         result.closeDate && setCloseDate(moment(result.closeDate).format("DD/MM/YYYY"));
-        if (!result.categorySubCode) {
-          setLoadingPage(false);
-        }
         result.alternate && setAlternate(result.alternate);
+        setLoadingPage(false);
       });
     }
   }, [id, locData, itemCategoriesData, mslData, sourcesData, uomData]);
@@ -236,7 +239,7 @@ const FormPage = (props) => {
       });
       setLoadingPage(false);
     }
-  }, [subCategoriesData]);
+  }, [subCategoriesData, categorySubCode]);
 
   useEffect(() => {
     const data = Lov.getMsl();
@@ -1157,28 +1160,29 @@ const FormPage = (props) => {
                 </div>
               </div>
 
-              {
-                (!id || isEdit) &&
-                <div className="submit">
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      {
-                        isEdit
-                          ?
-                          "Update Item"
-                          :
-                          "Create Item"
-                      }
-                    </Button>
-                  </Form.Item>
-                </div>
-              }
-
               <div className="submit">
                 <Form.Item>
-                  <Button onClick={ () => history.push(`/items`) } type="primary" htmlType="submit">
+                <Button onClick={ () => history.push(`/items`) }  htmlType="submit">
                     Back To Items
                   </Button>
+                  {
+                  (!id || isEdit) && <Divider type='vertical'/>
+                  }
+                  
+                  {
+                  (!id || isEdit) &&
+                      <Button type="primary" htmlType="submit">
+                        {
+                          isEdit
+                            ?
+                            "Update Item"
+                            :
+                            "Create Item"
+                        }
+                      </Button>
+                  }
+
+                  
                 </Form.Item>
               </div>
             </Form>

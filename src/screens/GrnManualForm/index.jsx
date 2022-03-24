@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Collapse, Menu, Dropdown, notification, Modal } from 'antd';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Collapse, Menu, Dropdown, notification, Modal, Divider } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Lov, Location, Item } from '../../services';
@@ -352,9 +352,12 @@ const GrnManualForm = (props) => {
       details.map((e, i) => {
         details[i]["subType"] = "M";
         details[i]["grnNo"] = grnNo;
-        details[i]["poPrice"] = e.recdPrice;
+        details[i]["poPrice"] = parseFloat(e.recdPrice);
+        details[i]["recdPrice"] = parseFloat(e.recdPrice);
         details[i]["recdDate"] = e.dueDate;
-        details[i]["loc"] = "TE";
+        details[i]["recdQty"] = parseInt(e.recdQty);
+        details[i]["labelQty"] = parseInt(e.labelQty);
+        details[i]["loc"] = e.loc;
         details[i]["seqNo"] = (i + 1);
       });
 
@@ -410,13 +413,13 @@ const GrnManualForm = (props) => {
   // }
 
   const onSearchPress = (idx, field, value) => {
+    let tempDetails = [...details];
     console.log('idx, field, value :>> ', idx, field, value);
     clearTimeout(timer);
-    details[idx]["recdQty"] = 1;
-    details[idx]["labelQty"] = 1;
-    let temp = [...details];
-    temp[idx][field] = value;
-    setDetails(temp);
+    tempDetails[idx]["recdQty"] = 1;
+    tempDetails[idx]["labelQty"] = 1;
+    tempDetails[idx][field] = value;
+    // setDetails(temp);
     let body = {
       "subType": "M",
       "grnDetails": details
@@ -434,10 +437,11 @@ const GrnManualForm = (props) => {
       let data = Grn.checkNewItem(body);
       data.then(res => {
         console.log('res checkNewItem :>> ', res);
-        details[idx] = {
-          ...details[idx],
-          res
+        tempDetails[idx] = {
+          ...tempDetails[idx],
+          ...res
         };
+        setDetails(tempDetails);
       });
     }, 1500));
     // Grn.checkNewItem();
@@ -527,6 +531,14 @@ const GrnManualForm = (props) => {
     });
   };
 
+  Number.prototype.countDecimals = function () {
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    if (!this.toString().split(".")[1]) {
+      return parseInt(this.toString().split("-")[1]);
+    }
+    return this.toString().split(".")[1].length || 0;
+  };
+  
   return (
     <StyledDiv>
       <div className="header">
@@ -651,38 +663,38 @@ const GrnManualForm = (props) => {
                     />
                   </Form.Item>
                 </div>
-                { id && 
-                <div className="row2">
-                  <Form.Item
-                    name="UpdatedBy"
-                    label="Updated By"
-                    initialValue={updatedBy}
-                  >
-                    <Input hidden/>
-                    <Input
-                      className='normal' disabled={ isDisabled }
-                      value={ updatedBy }
-                      defaultValue={ updatedBy }
-                    />
-                  </Form.Item>
+                { id &&
+                  <div className="row2">
+                    <Form.Item
+                      name="UpdatedBy"
+                      label="Updated By"
+                      initialValue={ updatedBy }
+                    >
+                      <Input hidden />
+                      <Input
+                        className='normal' disabled={ isDisabled }
+                        value={ updatedBy }
+                        defaultValue={ updatedBy }
+                      />
+                    </Form.Item>
 
 
-                  <Form.Item
-                    name="lastUpdatedAt"
-                    label="Last Updated At"
-                    initialValue={updatedAt}
-                  >
-                    <Input hidden/>
-                    <Input
-                      className='normal' disabled={ isDisabled }
-                      value={ updatedAt }
-                      defaultValue={ updatedAt }
-                      readOnly
-                    />
-                  </Form.Item>
-                </div> }
+                    <Form.Item
+                      name="lastUpdatedAt"
+                      label="Last Updated At"
+                      initialValue={ updatedAt }
+                    >
+                      <Input hidden />
+                      <Input
+                        className='normal' disabled={ isDisabled }
+                        value={ updatedAt }
+                        defaultValue={ updatedAt }
+                        readOnly
+                      />
+                    </Form.Item>
+                  </div> }
 
-                
+
               </div>
 
               <div className="detail-wrapper">
@@ -706,10 +718,16 @@ const GrnManualForm = (props) => {
                 }
               </div>
 
-              {
-                (!id || isEdit) &&
-                <div className="submit">
-                  <Form.Item>
+              <div className="submit">
+                <Form.Item>
+                  <Button onClick={ () => history.push(`/grn-manuals`) } type="default" htmlType="submit">
+                    Back To GRN
+                  </Button>
+                  
+                  <Divider type='vertical' />
+
+                  {
+                    (!id || isEdit) &&
                     <Button onClick={ submit } type="primary" htmlType="submit">
                       {
                         isEdit
@@ -719,30 +737,17 @@ const GrnManualForm = (props) => {
                           "Create GRN"
                       }
                     </Button>
-                  </Form.Item>
-                </div>
-              }
+                  }
 
-              {
-                id &&
-                <div className="submit">
-                  <Form.Item>
+                  {
+                    id &&
                     <Dropdown overlay={ menu } placement="topRight">
                       <Button>Print</Button>
                     </Dropdown>
-                  </Form.Item>
-                </div>
-              }
+                  }
 
-              {
-                <div className="submit">
-                  <Form.Item>
-                    <Button onClick={ () => history.push(`/grn-manuals`) } type="default" htmlType="submit">
-                      Back To GRN
-                    </Button>
-                  </Form.Item>
-                </div>
-              }
+                </Form.Item>
+              </div>
             </Form>
         }
       </div >

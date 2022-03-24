@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Menu, Dropdown, notification, Modal, InputNumber } from 'antd';
+import { Form, Input, Button, Select, Checkbox, AutoComplete, message, Menu, Dropdown, notification, Modal, InputNumber, Divider } from 'antd';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { MdAddCircle } from 'react-icons/md';
 import { TiDelete } from 'react-icons/ti';
@@ -43,6 +43,7 @@ const GrnWithPoForm = (props) => {
   const [grnNo, setGrnNo] = useState('');
   const [poNo, setPoNo] = useState();
   const [supplierCode, setSupplierCode] = useState('');
+  const [supplierName, setSupplierName] = useState('');
   const [currencyCode, setCurrencyCode] = useState('');
   const [currencyRate, setCurrencyRate] = useState('');
   const [recdDate, setRecdDate] = useState('');
@@ -56,51 +57,13 @@ const GrnWithPoForm = (props) => {
   const [subType, setSubType] = useState('N');
   const [orderNo, setOrderNo] = useState(null);
   const [reRender, setReRender] = useState(false);
-  const [isPoNoClosed, setIsPoNoClosed] = useState();
+  const [isPoNoClosed, setIsPoNoClosed] = useState(true);
   const [partOpt, setPartOpt] = useState([]);
   const [itemOpt, setItemOpt] = useState([]);
   const [updatedBy, setUpdatedBy] = useState('');
   const [updatedAt, setUpdatedAt] = useState('');
 
   const [parts, setParts] = useState([]);
-
-  /*const [balbfQty, setBalbfQty] = useState(0);
-  const [categoryCode, setCategoryCode] = useState('');
-  const [categoryName, setCategoryName] = useState('');
-  const [categorySubCode, setCategorySubCode] = useState('');
-  const [categorySubCodeName, setCategorySubCodeName] = useState('');
-  const [description, setDescription] = useState('');
-  const [dimension, setDimension] = useState('');
-  const [issueNo, setIssueNo] = useState('');
-  const [itemNo, setItemNo] = useState('');
-  const [leadtime, setLeadtime] = useState(0);
-  const [loc, setLoc] = useState('');
-  const [manufacturer, setManufacturer] = useState('');
-  const [mslCode, setMslCode] = useState('');
-  const [mslCodeName, setMslCodeName] = useState('');
-  const [obsoleteCode, setObsoleteCode] = useState('');
-  const [obsoleteItem, setObsoleteItem] = useState('');
-  const [openClose, setOpenClose] = useState('');
-  const [orderQty, setOrderQty] = useState(0);
-  const [partNo, setPartNo] = useState('');
-  const [prodnResv, setProdnResv] = useState(0);
-  const [productGroup, setProductGroup] = useState('');
-  const [qoh, setQoh] = useState(0);
-  const [qryObsItem, setQryObsItem] = useState('');
-  const [refUrl, setRefUrl] = useState('');
-  const [remarks, setRemarks] = useState('');
-  const [reorder, setReorder] = useState(0);
-  const [requestor, setRequestor] = useState('');
-  const [rev, setRev] = useState('');
-  const [rohsStatus, setRohsStatus] = useState(false);
-  const [source, setSource] = useState('');
-  const [sourceName, setSourceName] = useState('');
-  const [status, setStatus] = useState('ACTIVE');
-  const [stdMaterial, setStdMaterial] = useState(0);
-  const [storageShelf, setStorageShelf] = useState('');
-  const [uom, setUom] = useState('');
-  const [uomName, setUomName] = useState('');
-  const [version, setVersion] = useState(0); */
 
   /*useEffect(() => {
     if (
@@ -234,6 +197,7 @@ const GrnWithPoForm = (props) => {
         result.grnNo && setGrnNo(result.grnNo);
         result.poNo && setPoNo(result.poNo);
         result.supplierCode && setSupplierCode(result.supplierCode);
+        result.supplierName && setSupplierName(result.supplierName);
         result.subType && setSubType(result.subType);
         result.recdDate && setRecdDate(moment(result.recdDate).format('MM/DD/YYYY'));
         result.updatedBy && setUpdatedBy(result.updatedBy);
@@ -245,22 +209,6 @@ const GrnWithPoForm = (props) => {
         });
         console.log('arr :>> ', arr);
         setDetails(arr);
-
-
-        // createdAt: "2022-01-24T13:16:43.702248Z";
-        // createdBy: "tsagita";
-        // currencyCode: "USD";
-        // currencyRate: 1;
-        // grnDetails: [{… }];
-        // grnNo: "GRN2022-00004";
-        // id: 48;
-        // poNo: "100044-2021";
-        // status: "ACTIVE";
-        // subType: "N";
-        // supplierCode: "DSE01";
-        // updatedAt: "2022-01-24T13:16:43.702253Z";
-        // updatedBy: "tsagita";
-        // version: 0
         setLoadingPage(false);
       });
     }
@@ -287,6 +235,7 @@ const GrnWithPoForm = (props) => {
     if (poNo && !id) {
       setGrnNo('');
       setSupplierCode('');
+      setSupplierName('');
       setCurrencyCode('');
       setCurrencyRate('');
       setRecdDate('');
@@ -294,7 +243,6 @@ const GrnWithPoForm = (props) => {
       setBuyer('');
       setDetails([]);
       setParts([]);
-      setIsPoNoClosed(false);
       try {
         const hasil = await Grn.headerByPono(poNo);
         console.log('hasil :>> ', hasil);
@@ -315,12 +263,14 @@ const GrnWithPoForm = (props) => {
         } else {
           hasil.grnNo && setGrnNo(hasil.grnNo);
           hasil.supplierCode && setSupplierCode(hasil.supplierCode);
+          hasil.supplierName && setSupplierName(hasil.supplierName);
           hasil.currencyCode && setCurrencyCode(hasil.currencyCode);
           hasil.currencyRate && setCurrencyRate(hasil.currencyRate);
           hasil.recdDate && setRecdDate(moment(hasil.recdDate).format('MM/DD/YYYY'));
           hasil.poRemarks && setPoRemarks(hasil.poRemarks);
           hasil.orderNo && setOrderNo(hasil.orderNo);
           hasil.buyer && setBuyer(hasil.buyer);
+          setIsPoNoClosed(false);
 
           try {
             const hasil2 = await Grn.partsByPono(poNo);
@@ -532,7 +482,8 @@ const GrnWithPoForm = (props) => {
               issuedQty: 0,
               labelQty: 0,
               itemNo: hasil.itemNo,
-              itemType: hasil.itemType
+              itemType: hasil.itemType,
+              dateCode: null
             };
             tempDetails[idx] = temp;
             console.log("tempDetails changed >>", tempDetails);
@@ -546,7 +497,7 @@ const GrnWithPoForm = (props) => {
   };
 
   const renderDetails = () => {
-    if (!isPoNoClosed) {
+    if (!isPoNoClosed || id) {
       return details.length > 0 &&
         details.map((el, idx) => {
           console.log('el :>> ', el);
@@ -563,6 +514,7 @@ const GrnWithPoForm = (props) => {
               partOpt={ partOpt }
               itemOpt={ itemOpt }
               isDisabled={ isDisabled }
+              form={ form }
             />
           );
         });
@@ -642,6 +594,9 @@ const GrnWithPoForm = (props) => {
 
   Number.prototype.countDecimals = function () {
     if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    if (!this.toString().split(".")[1]) {
+      return parseInt(this.toString().split("-")[1]);
+    }
     return this.toString().split(".")[1].length || 0;
   };
 
@@ -664,226 +619,133 @@ const GrnWithPoForm = (props) => {
             <Form form={ form } name="control-hooks" scrollToFirstError>
               <div className="group">
                 <div className="row2">
-                  {
-                    id
-                      ?
-                      <Form.Item
-                        name="GRN No"
-                        label="GRN No"
-                      >
-                        <span>{ grnNo }</span>
-                      </Form.Item>
-                      :
-                      <Form.Item
-                        name="GRN No"
-                        label="GRN No"
-                      >
-                        <Input hidden />
-                        <Input className='smallInput' InitialValue={ grnNo } defaultValue={ grnNo } value={ grnNo } placeholder='Type GRN here...' readOnly disabled={ isDisabled } />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="GRN No"
+                    label="GRN No"
+                  >
+                    <Input hidden />
+                    <Input className={ id ? 'normal' : 'smallInput' } InitialValue={ grnNo } defaultValue={ grnNo } value={ grnNo } readOnly disabled={ isDisabled } />
+                  </Form.Item>
 
-                  {
-                    id
-                      ?
-                      <Form.Item
-                        name="PO No"
-                        label="PO No"
-                      >
-                        <span>{ poNo }</span>
-                      </Form.Item>
-                      :
-                      <Form.Item
-                        name="PO No"
-                        label="PO No"
-                      >
-                        <Select
-                          showSearch
-                          allowClear
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ poNo }
-                          value={ poNo }
-                          options={ poNoOpt }
-                          onSelect={ data => { setPoNo(data); } }
-                          placeholder={ "Type PO No here..." }
-                          filterOption={ (inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                          }
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="PO No"
+                    label="PO No"
+                  >
+                    <Select
+                      showSearch
+                      allowClear
+                      className='normal' disabled={ isDisabled }
+                      defaultValue={ poNo }
+                      value={ poNo }
+                      options={ poNoOpt }
+                      onSelect={ data => { setPoNo(data); } }
+                      filterOption={ (inputValue, option) =>
+                        option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                      }
+                    />
+                  </Form.Item>
 
-                  {
-                    id
-                      ?
-                      <Form.Item
-                        name="Currency Code / Rate"
-                        label="Currency Code / Rate"
-                      >
-                        <div className="currInput">
-                          <span>{ currencyCode } / { currencyRate }</span>
-                        </div>
-                      </Form.Item>
-                      :
-                      <Form.Item
-                        name="Currency Code / Rate"
-                        label="Currency Code / Rate"
-                      >
-                        <div className="currInput">
-                          <Input className='smallInput2' value={ currencyCode } placeholder='Type Currency code here...' readOnly disabled={ isDisabled } />
-                          <span>/</span>
-                          <Input style={ { width: '95%' } } className='smallInput2' value={ currencyRate } placeholder='Type rate here...' readOnly disabled={ isDisabled } />
-                        </div>
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Currency Code / Rate"
+                    label="Currency Code / Rate"
+                  >
+                    <div className="currInput">
+                      <Input className={ id ? 'normal' : 'smallInput2' } value={ currencyCode } readOnly disabled={ isDisabled } />
+                      <span>/</span>
+                      <Input style={ { width: '95%' } } className={ id ? 'normal' : 'smallInput2' } value={ currencyRate } readOnly disabled={ isDisabled } />
+                    </div>
+                  </Form.Item>
                 </div>
 
                 <div className="row2">
-                  {
-                    id
-                      ?
-                      <Form.Item
-                        name="Supplier Code"
-                        label="Supplier Code"
-                      >
-                        <span>{ supplierCode }</span>
-                      </Form.Item>
-                      :
-                      <Form.Item
-                        name="Supplier Code"
-                        label="Supplier Code"
-                      >
-                        <Input hidden />
-                        <Input className='smallInput' value={ supplierCode } placeholder='Type Supplier code here...' readOnly disabled={ isDisabled } />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Supplier Code"
+                    label="Supplier Code"
+                  >
+                    <Input hidden />
+                    <Input className={ id ? 'normal' : 'smallInput' } value={ supplierCode } readOnly disabled={ isDisabled } />
+                  </Form.Item>
 
-                  {
-                    id
-                      ?
-                      <Form.Item
-                        name="Recd Date"
-                        label="Recd Date"
-                      >
-                        <span>{ recdDate ? recdDate : '-' }</span>
-                      </Form.Item>
-                      :
-                      <Form.Item
-                        name="Recd Date"
-                        label="Recd Date"
-                      >
-                        <Input hidden />
-                        <Input
-                          className='normal' disabled={ isDisabled }
-                          value={ recdDate }
-                          placeholder={ "Type recd date here..." }
-                          readOnly
-                        />
-                      </Form.Item>
-                  }
-                  {
-                    id
-                      ?
-                      <Form.Item
-                        name="Release Date"
-                        label="Release Date"
-                      >
-                        <span>{ releaseDate ? releaseDate : '-' }</span>
-                      </Form.Item>
-                      :
-                      <Form.Item
-                        name="Release Date"
-                        label="Release Date"
-                      >
-                        <Input
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ releaseDate }
-                          placeholder={ "Type Release Date here.." }
-                          readOnly
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Supplier Name"
+                    label="Supplier Name"
+                  >
+                    <Input hidden />
+                    <Input className={ id ? 'normal' : 'smallInput' } value={ supplierName } readOnly disabled={ isDisabled } />
+                  </Form.Item>
+
+                  <Form.Item
+                    name="Recd Date"
+                    label="Recd Date"
+                  >
+                    <Input hidden />
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      value={ recdDate ? recdDate : '-' }
+                      readOnly
+                    />
+                  </Form.Item>
                 </div>
 
                 <div className="row2">
-                  {
-                    id
-                      ?
-                      <Form.Item
-                        name="Buyer"
-                        label="Buyer"
-                      >
-                        <span>{ buyer ? buyer : '/' }</span>
-                      </Form.Item>
-                      :
-                      <Form.Item
-                        name="Buyer"
-                        label="Buyer"
-                      >
-                        <Input hidden />
-                        <Input
-                          className='normal' disabled={ isDisabled }
-                          value={ buyer }
-                          placeholder={ "Type buyer here.." }
-                          readOnly
-                        />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Release Date"
+                    label="Release Date"
+                  >
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      defaultValue={ releaseDate ? releaseDate : '-' }
+                      readOnly
+                    />
+                  </Form.Item>
 
-                  {
-                    id
-                      ?
-                      <Form.Item
-                        name="PO Remarks"
-                        label="PO Remarks"
-                      >
-                        <p>{ poRemarks ? poRemarks : '-' }</p>
-                      </Form.Item>
-                      :
-                      <Form.Item
-                        name="PO Remarks"
-                        label="PO Remarks"
-                      >
-                        <Input hidden />
-                        <Input.TextArea onChange={ e => setPoRemarks(e.target.value) } value={ poRemarks } autoSize />
-                      </Form.Item>
-                  }
+                  <Form.Item
+                    name="Buyer"
+                    label="Buyer"
+                  >
+                    <Input hidden />
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      value={ buyer ? buyer : '/' }
+                      readOnly
+                    />
+                  </Form.Item>
 
-                  {
-                    id
-                      ?
-                      <Form.Item
-                        name="DO No"
-                        label="DO No"
-                        className='red'
-                      >
-                        <span>{ doNo ? doNo : '-' }</span>
-                      </Form.Item>
-                      :
-                      <Form.Item
-                        name="DO No"
-                        label="DO No"
-                        className='red'
-                      >
-                        <Input
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ doNo }
-                          value={ doNo }
-                          onChange={ e => setDoNo(e.target.value) }
-                          placeholder={ "Type DO No here.." }
-                        />
-                      </Form.Item>
-                  }
+
+                  <Form.Item
+                    name="DO No"
+                    label="DO No"
+                    className='red'
+                  >
+                    <Input
+                      className='normal' disabled={ isDisabled }
+                      defaultValue={ doNo ? doNo : '-' }
+                      value={ doNo ? doNo : '-' }
+                      onChange={ e => setDoNo(e.target.value) }
+                    />
+                  </Form.Item>
+
                 </div>
 
                 <div className="row2">
+                  <Form.Item
+                    name="PO Remarks"
+                    label="PO Remarks"
+                  >
+                    <Input hidden />
+                    <Input.TextArea disabled={ isDisabled } className={ id ? 'normal' : '' } onChange={ e => setPoRemarks(e.target.value) } value={ poRemarks ? poRemarks : '-' } autoSize />
+                  </Form.Item>
+
                   {
                     id &&
                     <Form.Item
                       name="Updated By"
                       label="Updated By"
                     >
-                      <span>{ updatedBy }</span>
+                      <Input
+                        className='normal' disabled={ isDisabled }
+                        defaultValue={ updatedBy }
+                      />
                     </Form.Item>
                   }
 
@@ -893,7 +755,10 @@ const GrnWithPoForm = (props) => {
                       name="Last Updated"
                       label="Last Updated"
                     >
-                      <span>{ updatedAt }</span>
+                      <Input
+                        className='normal' disabled={ isDisabled }
+                        defaultValue={ moment(updatedAt).format("DD/MM/YYYY hh:mm A") }
+                      />
                     </Form.Item>
                   }
                 </div>
@@ -909,37 +774,31 @@ const GrnWithPoForm = (props) => {
                 }
               </div>
 
-              {
-                (!id) &&
-                <div className="submit">
-                  <Form.Item>
-                    <Button onClick={ submit } type="primary" htmlType="submit">
-                      Create GRN
-                    </Button>
-                  </Form.Item>
-                </div>
-              }
+              <div className="submit">
+                <Form.Item>
+                  <Button onClick={ () => history.push(`/grn-with-pos`) } type="default" htmlType="submit">
+                    Back To GRN
+                  </Button>
 
-              {
-                id &&
-                <div className="submit">
-                  <Form.Item>
+                  <Divider type='vertical' />
+
+                  {
+                    id &&
                     <Dropdown overlay={ menu } placement="topRight">
                       <Button>Print</Button>
                     </Dropdown>
-                  </Form.Item>
-                </div>
-              }
+                  }
 
-              {
-                <div className="submit">
-                  <Form.Item>
-                    <Button onClick={ () => history.push(`/grn-with-pos`) } type="default" htmlType="submit">
-                      Back To GRN
+                  {
+                    (!id) &&
+                    <Button onClick={ submit } type='primary' htmlType="submit" disabled={ isPoNoClosed ? true : false }>
+                      Create GRN
                     </Button>
-                  </Form.Item>
-                </div>
-              }
+                  }
+
+
+                </Form.Item>
+              </div>
             </Form>
         }
       </div >

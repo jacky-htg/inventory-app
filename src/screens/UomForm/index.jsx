@@ -65,7 +65,7 @@ const FormPage = (props) => {
       if (!isEdit) {
         const values = await form.validateFields();
       }
-      state.uomFactor = parseFloat(uomFactor);
+      state.uomFactor = parseFloat(state.uomFactor);
       let obj = state;
       if (isEdit) {
         obj.version = parseInt(obj.version);
@@ -165,7 +165,7 @@ const FormPage = (props) => {
                       ({ getFieldValue }) => ({
                         validator(_, value) {
                           if (/^\s+$/.test(value)) {
-                            return Promise.reject(new Error('From can not empty'));
+                            return Promise.reject(new Error('From cannot be blank'));
                           }
                           return Promise.resolve();
                         },
@@ -220,21 +220,21 @@ const FormPage = (props) => {
                   <Form.Item
                     name="uomFactor"
                     label="Convertion Factor"
+                    className='required'
                     initialValue={ state.uomFactor }
                     rules={ [
-                      {
-                        required: true,
-                        message: 'Convertion Factor cannot be blank!'
-                      },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
+                          if (/^\s+$/.test(value)) {
+                            return Promise.reject(new Error('Convertion Factor cannot be blank!'));
+                          }
                           if (isNaN(state.uomFactor)) {
                             return Promise.reject(new Error('Convertion Factor format mask is 999990.000000'));
                           }
                           if (Number(state.uomFactor).countDecimals() > 6) {
                             return Promise.reject(new Error('Convertion Factor decimal length must be less than 6 digits : 999990.000000'));
                           }
-                          if (Number(state.uomFactor) == 0) {
+                          if (Number(state.uomFactor) === 0) {
                             return Promise.reject(new Error('Convertion Factor cannot be zero : 999990.000000'));
                           }
                           if (Number(state.uomFactor) < 0) {

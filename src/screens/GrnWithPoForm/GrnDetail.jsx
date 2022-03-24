@@ -17,63 +17,38 @@ const GrnDetail = (props) => {
     locOpt,
     partOpt,
     itemOpt,
-    isDisabled
+    isDisabled,
+    form
   } = props;
   // const { TextArea } = Input;
 
-  const [form] = Form.useForm();
+  // const [form] = Form.useForm();
 
   useEffect(() => {
     if (el) {
       console.log('el :>> ', el);
-      // description: "TIM, 99.99IN 3.74\" X 0.048\" X 0.006\" W/AL CLAD";
-      // dueDate: "2018-06-30T00:00:00.000+00:00";
-      // invUom: "PKT";
-      // issuedQty: 0;
-      // itemNo: "301-90005-01";
-      // itemType: 0;
-      // labelQty: 0;
-      // loc: "TE";
-      // orderQty: 1;
-      // partNo: "301-90005-01";
-      // poPrice: 2401.25;
-      // poRecSeq: 1;
-      // projectNo: "S20180002KT";
-      // recdPrice: 2401.25;
-      // recdQty: 0;
-      // remarks: "TIM, 99.99IN 3.74\" X 0.048\" X 0.006\" W/AL CLAD";
-      // seqNo: 1;
-      // stdPackQty: 1;
-      // uom: "PACKET"
-      form.setFieldsValue({
-        description: el.description,
-        // dueDate: el.dueDate,
-        // invUom: el.invUom,
-        // issuedQty: el.issuedQty,
-        // itemNo: el.itemNo,
-        // itemType: el.itemType,
-        // labelQty: el.labelQty,
-        // loc: el.loc,
-        // orderQty: el.orderQty,
-        // partNo: el.partNo,
-        // poPrice: el.poPrice,
-        // poRecSeq: el.poRecSeq,
-        // projectNo: el.projectNo,
-        // recdPrice: el.recdPrice,
-        // recdQty: el.recdQty,
-        // remarks: el.remarks,
-        // seqNo: el.seqNo,
-        // stdPackQty: el.stdPackQty,
-        // uom: el.uom
-      });
+      // let obj = {};
+      // obj[`labelQty[${ idx }]`] = el.labelQty || 1;
+      // obj[`datecode[${ idx }]`] = el.datecode || '';
+      // obj[`recdQty[${ idx }]`] = el.recdQty || 1;
+      // console.log('obj :>> ', obj);
+      // form.setFieldsValue(obj);
     }
   }, [el]);
+
+  Number.prototype.countDecimals = function () {
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    if (!this.toString().split(".")[1]) {
+      return parseInt(this.toString().split("-")[1]);
+    }
+    return this.toString().split(".")[1].length || 0;
+  };
 
   return (
     <div key={ idx } className={ `detail-card ${ id ? 'full' : '' }` }>
       <div className="border">
-        <Collapsible trigger={ `Serial Number: ${ idx + 1 }` }>
-          <Form form={ form } name={ `detail-${ idx + 1 }` } className="inputs">
+        <Collapsible trigger={ `Serial Number: ${ idx + 1 }` } open={ true }>
+          <div name={ `detail-${ idx + 1 }` } className="inputs">
             <div className="row2">
               <div className="dual">
                 {
@@ -81,12 +56,7 @@ const GrnDetail = (props) => {
                     name={ `SN[${ idx }]` }
                     label="SN"
                   >
-                    {
-                      id ?
-                        <span>{ idx + 1 }</span>
-                        :
-                        <Input className='smallInput' defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } placeholder='Type SN here...' readOnly disabled={ id } />
-                    }
+                    <Input className={ id ? 'normal smallInput' : 'smallInput' } defaultValue={ idx + 1 } value={ idx + 1 } onChange={ e => changeDetail(idx, 'sn', e.target.value) } readOnly disabled={ id } />
                   </Form.Item>
                 }
 
@@ -96,12 +66,7 @@ const GrnDetail = (props) => {
                     label="Type"
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.itemType !== undefined ? el.itemType : '-' }</span>
-                        :
-                        <Input className='smallInput' defaultValue={ el.itemType } value={ el.itemType } onChange={ e => changeDetail(idx, 'itemType', e.target.value) } placeholder='Insert type here...' readOnly disabled={ id } />
-                    }
+                    <Input className={ id ? 'normal smallInput' : 'smallInput' } defaultValue={ el.itemType } value={ el.itemType } onChange={ e => changeDetail(idx, 'itemType', e.target.value) } readOnly disabled={ id } />
                   </Form.Item>
                 }
               </div>
@@ -113,12 +78,7 @@ const GrnDetail = (props) => {
                     label="UOM"
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.uom ? el.uom : '-' }</span>
-                        :
-                        <Input className='smallInput' defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } placeholder='Type UOM here...' readOnly disabled={ id } />
-                    }
+                    <Input className={ id ? 'normal smallInput' : 'smallInput' } defaultValue={ el.uom } value={ el.uom } onChange={ e => changeDetail(idx, 'uom', e.target.value) } readOnly disabled={ id } />
                   </Form.Item>
                 }
 
@@ -128,12 +88,7 @@ const GrnDetail = (props) => {
                     label="MSL"
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.msl ? el.msl : '-' }</span>
-                        :
-                        <Input className='smallInput' defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } placeholder='Insert MSL here...' readOnly disabled={ id } />
-                    }
+                    <Input className={ id ? 'normal smallInput' : 'smallInput' } defaultValue={ el.msl } value={ el.msl } onChange={ e => changeDetail(idx, 'msl', e.target.value) } readOnly disabled={ id } />
                   </Form.Item>
                 }
               </div>
@@ -143,38 +98,45 @@ const GrnDetail = (props) => {
                   <Form.Item
                     name={ `UnitPrice[${ idx }]` }
                     label="Unit Price"
+                    rules={ [
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (isNaN(el.recdPrice)) {
+                            return Promise.reject(new Error('Unit Price format mask is 9999999990.0000'));
+                          }
+                          if (Number(el.recdPrice).countDecimals() > 4) {
+                            return Promise.reject(new Error('Unit Price decimal length must be less than 4 digits : 9999999990.0000'));
+                          }
+                          if (Number(el.recdPrice) < 0) {
+                            return Promise.reject(new Error('Unit Price cannot be negative : 9999999990.0000'));
+                          }
+                          if (Number(el.recdPrice) > 9999999990) {
+                            return Promise.reject(new Error('Unit Price max 9999999990.0000'));
+                          }
+
+                          return Promise.resolve();
+                        },
+                      }),
+                    ] }
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.recdPrice ? el.recdPrice : '-' }</span>
-                        :
-                        // <Input className='smallInput' defaultValue={ el.recdPrice } value={ el.recdPrice } onChange={ e => changeDetail(idx, 'unitPrice', e.target.value) } placeholder='Type Unit Price here...' readOnly disabled={ id } />
-                        <InputNumber
-                          className='right'
-                          min={ 0 }
-                          max={ 9999999991 }
-                          step="0.0001"
-                          stringMode
-                          maxLength={ 18 }
-                          disabled={ true }
-                          defaultValue={ el.recdPrice }
-                          value={ el.recdPrice }
-                          onChange={ e => changeDetail(idx, 'recdPrice', e.target.value) }
-                        />
-                    }
+                    <Input
+                      className={ id ? 'normal right' : 'right' }
+                      disabled={ true }
+                      defaultValue={ el.recdPrice }
+                      value={ el.recdPrice }
+                      onChange={ e => changeDetail(idx, 'recdPrice', e.target.value) }
+                    />
                   </Form.Item>
                 }
 
                 {
                   <Form.Item
-                    name={ `GRNQty[${ idx }]` }
+                    name={ `recdQty[${ idx }]` }
                     label="GRN Qty"
+                    className='required'
                     initialValue={ el.recdQty }
                     rules={ [
-                      {
-                        required: true,
-                      },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
                           if (value > 0) {
@@ -187,12 +149,8 @@ const GrnDetail = (props) => {
                     ] }
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.recdQty ? el.recdQty : '-' }</span>
-                        :
-                        <Input type={ 'number' } min={ 0 } className='smallInput alignRight' defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } placeholder='Type GRN Qty here...' disabled={ id } />
-                    }
+                    <Input className={ id ? 'normal smallInput alignRight' : 'smallInput alignRight' } defaultValue={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } disabled={ id } />
+
                   </Form.Item>
                 }
               </div>
@@ -206,27 +164,10 @@ const GrnDetail = (props) => {
                   label="Item No"
                 >
                   <Input hidden />
-                  {
-                    id ?
-                      <span>{ el.itemNo ? el.itemNo : '-' }</span>
-                      :
-                      // <Input defaultValue={ el.itemNo } value={ el.itemNo } onChange={ e => changeDetail(idx, 'itemNo', e.target.value) } placeholder='Type item no here...' readOnly disabled={ id } />
-                      <Select
-                        showSearch
-                        allowClear
-                        // ref={ locationRef }
-                        className='normal' disabled={ isDisabled }
-                        defaultValue={ el.itemNo }
-                        value={ el.itemNo }
-                        onChange={ (value) => changeDetail(idx, 'itemNo', value, true) }
-                        style={ { textTransform: 'uppercase' } }
-                      // filterOption={ (input, option) =>
-                      //   option.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      // }
-                      >
-                        { itemOpt }
-                      </Select>
-                  }
+                  <Input className='normal' disabled={ isDisabled } readOnly={ true }
+                    defaultValue={ el.itemNo }
+                    value={ el.itemNo }
+                  />
                 </Form.Item>
               }
 
@@ -236,40 +177,30 @@ const GrnDetail = (props) => {
                   label="Loc"
                 >
                   <Input hidden />
-                  {
-                    id ?
-                      <span>{ el.loc ? el.loc : '-' }</span>
-                      :
-                      // <Input
-                      //   className='smallInput' disabled={ isDisabled }
-                      //   defaultValue={ el.loc }
-                      //   value={ el.loc }
-                      //   readOnly
-                      // />
-                      <Select
-                        showSearch
-                        allowClear
-                        // ref={ locationRef }
-                        className='normal' disabled={ isDisabled }
-                        defaultValue={ el.loc }
-                        value={ el.loc }
-                        onChange={ (value) => changeDetail(idx, 'loc', value) }
-                        style={ { textTransform: 'uppercase' } }
-                      // filterOption={ (input, option) =>
-                      //   option.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      // }
-                      >
-                        { locOpt }
-                      </Select>
-                  }
+                  <Select
+                    showSearch
+                    allowClear
+                    // ref={ locationRef }
+                    className='normal' disabled={ isDisabled }
+                    defaultValue={ el.loc }
+                    value={ el.loc }
+                    onChange={ (value) => changeDetail(idx, 'loc', value) }
+                    style={ { textTransform: 'uppercase' } }
+                  // filterOption={ (input, option) =>
+                  //   option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  // }
+                  >
+                    { locOpt }
+                  </Select>
                 </Form.Item>
               }
 
               <div className="dual">
                 {
                   <Form.Item
-                    name={ `DateCode[${ idx }]` }
+                    name={ `dateCode[${ idx }]` }
                     label="Date Code"
+                    initialValue={ el.dateCode }
                     rules={ [
                       {
                         required: false,
@@ -277,14 +208,17 @@ const GrnDetail = (props) => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          // if ()
+                          if (isNaN(el.dateCode)) {
+                            return Promise.reject(new Error("Datecode not valid"));
+                          }
                           if (value) {
+                            let stringify = value + '';
                             let year = "";
                             let week = "";
                             let maxWeek = 53;
                             let flag = false;
 
-                            value.split("").forEach((elm, id) => {
+                            stringify.split("").forEach((elm, id) => {
                               if (id < 2) {
                                 year += elm;
                               } else {
@@ -321,7 +255,7 @@ const GrnDetail = (props) => {
                               }
                             }
 
-                            if (!value || flag && value.length === 4) {
+                            if (!value || flag && stringify.length === 4) {
                               return Promise.resolve();
                             }
 
@@ -332,24 +266,17 @@ const GrnDetail = (props) => {
                     ] }
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.dateCode ? el.dateCode : '-' }</span>
-                        :
-                        <Input className='smallInput center' defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } placeholder='Insert Date Code here...' disabled={ id } />
-                    }
+                    <Input className={ id ? 'normal smallInput center' : 'smallInput center' } maxLength={ 4 } defaultValue={ el.dateCode } value={ el.dateCode } onChange={ e => changeDetail(idx, 'dateCode', e.target.value) } disabled={ id } />
                   </Form.Item>
                 }
 
                 {
                   <Form.Item
-                    name={ `QTYLabel[${ idx }]` }
+                    name={ `labelQty[${ idx }]` }
                     label="QTY/Label"
                     initialValue={ el.labelQty }
+                    className="required"
                     rules={ [
-                      {
-                        required: true,
-                      },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
                           if (value > 0 && value <= getFieldValue('GRN Qty')) {
@@ -369,12 +296,7 @@ const GrnDetail = (props) => {
                     ] }
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.labelQty ? el.labelQty : '-' }</span>
-                        :
-                        <Input type={ 'number' } min={ 0 } className='smallInput alignRight' defaultValue={ el.labelQty } value={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } placeholder='Type Qty/Label here...' disabled={ id } />
-                    }
+                    <Input className={ id ? 'normal smallInput alignRight' : 'smallInput alignRight' } defaultValue={ el.labelQty } onChange={ e => changeDetail(idx, 'labelQty', e.target.value) } disabled={ id } />
                   </Form.Item>
                 }
               </div>
@@ -388,27 +310,21 @@ const GrnDetail = (props) => {
                     label="Part No"
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.partNo ? el.partNo : '-' }</span>
-                        :
-                        // <Input className='smallInput' defaultValue={ el.partNo } value={ el.partNo } onChange={ e => changeDetail(idx, 'partNo', e.target.value) } placeholder='Type Part No here...' readOnly disabled={ id } />
-                        <Select
-                          showSearch
-                          allowClear
-                          // ref={ locationRef }
-                          className='normal' disabled={ isDisabled }
-                          defaultValue={ el.partNo }
-                          value={ el.partNo }
-                          onChange={ (value) => changeDetail(idx, 'partNo', value, true) }
-                          style={ { textTransform: 'uppercase' } }
-                        // filterOption={ (input, option) =>
-                        //   option.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        // }
-                        >
-                          { partOpt }
-                        </Select>
-                    }
+                    <Select
+                      showSearch
+                      allowClear
+                      // ref={ locationRef }
+                      className='normal' disabled={ isDisabled }
+                      defaultValue={ el.partNo }
+                      value={ el.partNo }
+                      onChange={ (value) => changeDetail(idx, 'partNo', value, true) }
+                      style={ { textTransform: 'uppercase' } }
+                    // filterOption={ (input, option) =>
+                    //   option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    // }
+                    >
+                      { partOpt }
+                    </Select>
                   </Form.Item>
                 }
               </div>
@@ -421,24 +337,18 @@ const GrnDetail = (props) => {
                     label="Order Qty"
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.orderQty ? el.orderQty : '-' }</span>
-                        :
-                        // <Input className='smallInput' defaultValue={ el.orderQty } value={ el.orderQty } onChange={ e => changeDetail(idx, 'orderQty', e.target.value) } placeholder='Type order qty here...' disabled={ id } readOnly />
-                        <InputNumber
-                          className='right'
-                          min={ 0 }
-                          max={ 9999999991 }
-                          step="0.01"
-                          stringMode
-                          maxLength={ 18 }
-                          disabled={ true }
-                          defaultValue={ el.orderQty }
-                          value={ el.orderQty }
-                          onChange={ e => changeDetail(idx, 'orderQty', e.target.value) }
-                        />
-                    }
+                    <Input
+                      className={ id ? 'normal right' : 'right' }
+                      min={ 0 }
+                      max={ 9999999990 }
+                      step="0.01"
+                      stringMode
+                      maxLength={ 18 }
+                      disabled={ true }
+                      defaultValue={ el.orderQty }
+                      value={ el.orderQty }
+                      onChange={ e => changeDetail(idx, 'orderQty', e.target.value) }
+                    />
                   </Form.Item>
                 }
 
@@ -448,12 +358,7 @@ const GrnDetail = (props) => {
                     label="SIV No"
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.poNo ? el.poNo : '-' }</span>
-                        :
-                        <Input className='smallInput' defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } placeholder='Insert SIV No here...' disabled={ id } />
-                    }
+                    <Input className={ id ? 'normal smallInput' : 'smalllInput' } defaultValue={ el.poNo } value={ el.poNo } onChange={ e => changeDetail(idx, 'sivNo', e.target.value) } disabled={ id } />
                   </Form.Item>
                 }
               </div>
@@ -466,12 +371,7 @@ const GrnDetail = (props) => {
                     label="Std Pack"
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.stdPackQty ? el.stdPackQty : '-' }</span>
-                        :
-                        <Input className='smallInput' defaultValue={ el.stdPackQty } value={ el.stdPackQty } onChange={ e => changeDetail(idx, 'stdPackQty', e.target.value) } placeholder='Type std pack here...' readOnly disabled={ id } />
-                    }
+                    <Input className={ id ? 'normal smallInput' : 'smallInput' } defaultValue={ el.stdPackQty } value={ el.stdPackQty } onChange={ e => changeDetail(idx, 'stdPackQty', e.target.value) } readOnly disabled={ id } />
                   </Form.Item>
                 }
 
@@ -481,12 +381,7 @@ const GrnDetail = (props) => {
                     label="Due date"
                   >
                     <Input hidden />
-                    {
-                      id ?
-                        <span>{ el.dueDate ? el.dueDate : '-' }</span>
-                        :
-                        <Input className='smallInput' defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } placeholder='Type due date here...' readOnly disabled={ id } />
-                    }
+                    <Input className={ id ? 'normal smallInput' : 'smallInput' } defaultValue={ el.dueDate } value={ el.dueDate } onChange={ e => changeDetail(idx, 'dueDate', e.target.value) } readOnly disabled={ id } />
                   </Form.Item>
                 }
               </div>
@@ -498,12 +393,7 @@ const GrnDetail = (props) => {
                   label="Project No"
                 >
                   <Input hidden />
-                  {
-                    id ?
-                      <span>{ el.projectNo ? el.projectNo : '-' }</span>
-                      :
-                      <Input className='smallInput' defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } placeholder='Type Project No here...' readOnly disabled={ id } />
-                  }
+                  <Input className={ id ? 'normal smallInput' : 'smallInput' } defaultValue={ el.projectNo } value={ el.projectNo } onChange={ e => changeDetail(idx, 'projectNo', e.target.value) } readOnly disabled={ id } />
                 </Form.Item>
               }
 
@@ -513,12 +403,7 @@ const GrnDetail = (props) => {
                   label="Description"
                 >
                   <Input hidden />
-                  {
-                    id ?
-                      <p>{ el.description ? el.description : '-' }</p>
-                      :
-                      <Input.TextArea className='smallInput' defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } placeholder='Type description here...' readOnly disabled={ id } autoSize />
-                  }
+                  <Input.TextArea className={ id ? 'normal smallInput' : 'smallInput' } defaultValue={ el.description } value={ el.description } onChange={ e => changeDetail(idx, 'description', e.target.value) } readOnly disabled={ id } autoSize />
                 </Form.Item>
               }
 
@@ -529,17 +414,12 @@ const GrnDetail = (props) => {
                   initialValue={ el.remarks }
                 >
                   <Input hidden />
-                  {
-                    id ?
-                      <p>{ el.remarks ? el.remarks : '-' }</p>
-                      :
-                      <Input.TextArea className='smallInput' defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } placeholder='Type remarks here...' disabled={ id } />
-                  }
+                  <Input.TextArea className={ id ? 'normal smallInput' : 'smallInput' } defaultValue={ el.remarks } value={ el.remarks } onChange={ e => changeDetail(idx, 'remarks', e.target.value) } disabled={ id } />
                 </Form.Item>
               }
 
             </div>
-          </Form>
+          </div>
 
         </Collapsible>
       </div>

@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import Draggable from 'react-draggable';
 import { StyledDiv } from './styled';
 import env from '../../env';
+import FieldFilter from './FieldFilter';
 
 function PageList(props) {
   const { Option } = Select;
@@ -24,8 +25,10 @@ function PageList(props) {
   const [lookups, setLookups] = useState([]);
   const [disabledCreate, setDisabledCreate] = useState(false);
   const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 });
+  const [inputValue, setInputValue] = useState('');
 
   const draggleRef = useRef();
+  const inputRef = useRef();
 
   useEffect(() => {
     if (props.fields.length > 0) {
@@ -108,7 +111,14 @@ function PageList(props) {
   };
 
   const getData = (filter) => {
-    console.log('getData');
+    if (props.defaultFilter) {
+      if (!filter.filters) {
+        filter = {
+          filters: []
+        };
+      }
+      filter.filters.push(props.defaultFilter);
+    }
     let data = props.data.list(filter);
     data.then(result => {
       console.log('result siv:>> ', result.data);
@@ -177,11 +187,11 @@ function PageList(props) {
             message: res.message ? res.message : env.internalError,
           });
         });
+      } else {
+        notification.success({
+          message: 'Record successfully deleted',
+        });  
       }
-      // message.success('Record successfully deleted');
-      notification.success({
-        message: 'Record successfully deleted',
-      });
       setLoading(true);
       getData(filterSearch);
     });
@@ -189,6 +199,7 @@ function PageList(props) {
 
   const changeData = (n, data, type) => {
     console.log(n, data, type);
+    // form.setFieldsValue({ search: '' });
     if (!filters[n]) {
       filters[n] = {
         field: null,
@@ -216,6 +227,7 @@ function PageList(props) {
 
     setFilters(filters);
     const [f] = renderFilter();
+    console.log('f :>> ', f);
     setFilterForm(f);
   };
 
@@ -264,14 +276,31 @@ function PageList(props) {
     setFilterForm(temp);
   };
 
+  const [form] = Form.useForm();
+
   const fieldFilter = (n, useDelete = false) => {
+    return <FieldFilter
+      n={ n }
+      useDelete={ useDelete }
+      filters={ filters }
+      fields={ fields }
+      lookups={ lookups }
+      optionFilters={ optionFilters }
+      changeData={ changeData }
+      setFilters={ setFilters }
+      removeFilter={ removeFilter }
+    />;
     let valueForm = (
-      <Input
-        style={ { width: 200, marginRight: '1%' } }
-        placeholder="input here"
-        onBlur={ (data) => changeData(n, data.target.value, 'value') }
-        defaultValue={ filters[n] ? filters[n].value : "" }
-      />
+      <Form form={ form } ref={ inputRef } style={ { display: 'contents' } }>
+        <Form.Item name='search' noStyle >
+          <Input
+            style={ { width: 200, marginRight: '1%' } }
+            placeholder="input here"
+            onBlur={ (data) => changeData(n, data.target.value, 'value') }
+          // defaultValue={ filters[n] ? filters[n].value : "" }
+          />
+        </Form.Item>
+      </Form>
     );
 
     lookups.map(el => {
@@ -322,6 +351,7 @@ function PageList(props) {
           onChange={ (data) => changeData(n, data, 'field') }
           defaultValue={ filters[n] ? filters[n].field : null }
           value={ filters[n] ? filters[n].field : null }
+          onClear={ () => form.setFieldsValue({ search: '' }) }
         >
           { optionFilters.map((o, i) => (<Option key={ i } value={ o.field } >{ o.label }</Option>)) }
         </Select>
