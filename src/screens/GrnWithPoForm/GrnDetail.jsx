@@ -18,11 +18,11 @@ const GrnDetail = (props) => {
     partOpt,
     itemOpt,
     isDisabled,
-    form
+    // form
   } = props;
   // const { TextArea } = Input;
 
-  // const [form] = Form.useForm();
+  const [form] = Form.useForm();
 
   const [recdQty, setRecdQty] = useState(0);
   const [labelQty, setLabelQty] = useState(0);
@@ -32,16 +32,9 @@ const GrnDetail = (props) => {
 
   useEffect(() => {
     if (el) {
-      console.log('el :>> ', el);
-      setRecdQty(el.recdQty);
-      setLabelQty(el.labelQty);
-      setDateCode(el.dateCode);
-      // let obj = {};
-      // obj[`labelQty[${ idx }]`] = el.labelQty || 1;
-      // obj[`datecode[${ idx }]`] = el.datecode || '';
-      // obj[`recdQty[${ idx }]`] = el.recdQty || 1;
-      // console.log('obj :>> ', obj);
-      // form.setFieldsValue(obj);
+      let obj = {};
+      obj[`recdQty[${ idx }]`] = el.recdQty;
+      form.setFieldsValue(obj);
     }
   }, [el]);
 
@@ -57,6 +50,7 @@ const GrnDetail = (props) => {
     <div key={ idx } className={ `detail-card ${ id ? 'full' : '' }` }>
       <div className="border">
         <Collapsible trigger={ `Serial Number: ${ idx + 1 }` } open={ true }>
+        <Form form={form}>
           <div name={ `detail-${ idx + 1 }` } className="inputs">
             <div className="row2">
               <div className="dual">
@@ -138,13 +132,14 @@ const GrnDetail = (props) => {
                     />
                   </Form.Item>
                 }
-
-                {
                   <Form.Item
                     name={ `recdQty[${ idx }]` }
                     label="GRN Qty"
                     className='required'
                     initialValue={ el.recdQty }
+                    shouldUpdate={(prevValues, currentValues) => {
+                      return prevValues[`recdQty[${ idx }]`] !== currentValues[`recdQty[${ idx }]`]
+                    }}
                     rules={ [
                       ({ getFieldValue }) => ({
                         validator(_, value) {
@@ -157,11 +152,8 @@ const GrnDetail = (props) => {
                       }),
                     ] }
                   >
-                    <Input hidden />
-                    <Input className={ id ? 'normal smallInput alignRight' : 'smallInput alignRight' } defaultValue={ recdQty } value={ recdQty } onChange={ e => { setRecdQty(e.target.value); changeDetail(idx, 'recdQty', e.target.value); } } disabled={ id } />
-
+                    <Input className={ id ? 'normal smallInput alignRight' : 'smallInput alignRight' } defaultValue={ el.recdQty } value={ el.recdQty } onChange={ e => changeDetail(idx, 'recdQty', e.target.value) } disabled={ id } />
                   </Form.Item>
-                }
               </div>
             </div>
 
@@ -429,6 +421,7 @@ const GrnDetail = (props) => {
 
             </div>
           </div>
+        </Form>
 
         </Collapsible>
       </div>
