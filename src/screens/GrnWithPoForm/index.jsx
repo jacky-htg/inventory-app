@@ -196,6 +196,7 @@ const GrnWithPoForm = (props) => {
         result.currencyRate && setCurrencyRate(result.currencyRate);
         result.grnNo && setGrnNo(result.grnNo);
         result.poNo && setPoNo(result.poNo);
+        result.buyer && setBuyer(result.buyer);
         result.supplierCode && setSupplierCode(result.supplierCode);
         result.supplierName && setSupplierName(result.supplierName);
         result.subType && setSubType(result.subType);

@@ -187,11 +187,11 @@ function PageList(props) {
             message: res.message ? res.message : env.internalError,
           });
         });
+      } else {
+        notification.success({
+          message: 'Record successfully deleted',
+        });  
       }
-      // message.success('Record successfully deleted');
-      notification.success({
-        message: 'Record successfully deleted',
-      });
       setLoading(true);
       getData(filterSearch);
     });
